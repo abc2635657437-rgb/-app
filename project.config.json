@@ -1,0 +1,15 @@
+{
+  "description": "Travel World - The World is Your Playground",
+  "miniprogramRoot": "./",
+  "compileType": "miniprogram",
+  "libVersion": "3.7.3",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": false,
+    "urlCheck": false,
+    "compileHotReLoad": true
+  },
+  "condition": {}
+}

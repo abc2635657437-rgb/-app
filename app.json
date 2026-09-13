@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/discover/discover",
+    "pages/friends/friends",
+    "pages/ai/ai",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarTitleText": "Travel World",
+    "navigationBarBackgroundColor": "#F7F5F0",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F7F5F0"
+  },
+  "tabBar": {
+    "color": "#8A8F98",
+    "selectedColor": "#173F4F",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/discover/discover", "text": "发现" },
+      { "pagePath": "pages/friends/friends", "text": "旅友" },
+      { "pagePath": "pages/ai/ai", "text": "AI" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  }
+}
