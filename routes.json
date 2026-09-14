@@ -1,0 +1,20 @@
+{
+  "version": "demo-2026-09",
+  "routes": [
+    {"id":"cn-beijing-culture","title":"北京人文 4 日","destination":"北京","country":"中国","type":"文化旅行","days":4,"tags":["故宫","长城","胡同","美食"],"summary":"从故宫与胡同开始，留一天给长城和京味小馆。"},
+    {"id":"cn-chengdu-food","title":"成都慢食 3 日","destination":"成都","country":"中国","type":"美食旅行","days":3,"tags":["火锅","茶馆","熊猫","街巷"],"summary":"茶馆、街巷和当地小吃，节奏轻松。"},
+    {"id":"cn-dali-nature","title":"大理山海 5 日","destination":"大理","country":"中国","type":"自然风景","days":5,"tags":["洱海","苍山","喜洲","日落"],"summary":"洱海骑行、苍山徒步与喜洲古镇，留出看日落的时间。"},
+    {"id":"cn-xiamen-photo","title":"厦门海风 3 日","destination":"厦门","country":"中国","type":"摄影旅行","days":3,"tags":["海边","街拍","咖啡","日落"],"summary":"鼓浪屿、环岛路和城市咖啡店的轻摄影路线。"},
+    {"id":"cn-xinjiang-outdoor","title":"新疆风景 7 日","destination":"新疆","country":"中国","type":"户外旅行","days":7,"tags":["草原","湖泊","公路","摄影"],"summary":"适合自驾与摄影的开阔自然路线。"},
+    {"id":"jp-tokyo-city","title":"东京城市 5 日","destination":"东京","country":"日本","type":"城市旅行","days":5,"tags":["浅草","涩谷","美食","动漫"],"summary":"城市地标、街区美食与夜景，保留自由探索时间。"},
+    {"id":"kr-seoul-food","title":"首尔街头 4 日","destination":"首尔","country":"韩国","type":"美食旅行","days":4,"tags":["市场","咖啡","韩食","街拍"],"summary":"市场、咖啡店和城市街区的组合。"},
+    {"id":"th-chiangmai-slow","title":"清迈慢生活 4 日","destination":"清迈","country":"泰国","type":"独自旅行","days":4,"tags":["夜市","寺庙","咖啡","自然"],"summary":"寺庙、夜市和山野体验，适合慢节奏旅行。"},
+    {"id":"sg-city-family","title":"新加坡亲子 4 日","destination":"新加坡","country":"新加坡","type":"家庭旅行","days":4,"tags":["花园","动物园","美食","城市"],"summary":"城市景观、亲子体验和轻松交通。"},
+    {"id":"vn-hanoi-culture","title":"河内文化 4 日","destination":"河内","country":"越南","type":"文化旅行","days":4,"tags":["老街","咖啡","市场","美食"],"summary":"老城区、咖啡和当地市场。"},
+    {"id":"au-sydney-coast","title":"悉尼海岸 5 日","destination":"悉尼","country":"澳大利亚","type":"自然风景","days":5,"tags":["海岸","歌剧院","徒步","日落"],"summary":"城市地标与海岸徒步结合。"},
+    {"id":"fr-paris-art","title":"巴黎艺术 5 日","destination":"巴黎","country":"法国","type":"文化旅行","days":5,"tags":["博物馆","咖啡","街巷","摄影"],"summary":"卢浮宫、左岸街巷与塞纳河边散步。"},
+    {"id":"it-rome-history","title":"罗马历史 4 日","destination":"罗马","country":"意大利","type":"文化旅行","days":4,"tags":["古迹","广场","意面","摄影"],"summary":"古迹、广场和当地餐桌。"},
+    {"id":"us-nyc-city","title":"纽约城市 5 日","destination":"纽约","country":"美国","type":"城市旅行","days":5,"tags":["博物馆","街区","公园","建筑"],"summary":"城市地标与不同街区的日常观察。"},
+    {"id":"uk-london-solo","title":"伦敦独行 4 日","destination":"伦敦","country":"英国","type":"独自旅行","days":4,"tags":["博物馆","公园","书店","建筑"],"summary":"博物馆、公园和街区漫步。"}
+  ]
+}
