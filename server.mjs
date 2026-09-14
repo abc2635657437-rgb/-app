@@ -58,8 +58,13 @@ const allowedOrigins = new Set([publicAppUrl, ...(process.env.CORS_ORIGINS || ''
 app.use(cors({ origin(origin, callback) { if (!origin || allowedOrigins.has(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true); callback(new Error('Origin not allowed')); } }));
 app.use(express.json({ limit: '2mb' }));
 const backendDir = path.dirname(fileURLToPath(import.meta.url));
-const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmarks.json');
-app.use(express.static(path.resolve(backendDir, '..')));
+const appRoot = backendDir;
+const landmarkFile = path.resolve(appRoot, 'landmarks.json');
+app.use((req, res, next) => {
+  if (/^\/(backend|migrations)(\/|$)/.test(req.path) || /^\/(server\.mjs|package\.json|render\.yaml)$/.test(req.path)) return res.status(404).end();
+  next();
+});
+app.use(express.static(appRoot));
 
 const normalizeText = value => String(value || '').trim().toLowerCase();
 async function relevantLandmarks(request = {}, context = {}) {
