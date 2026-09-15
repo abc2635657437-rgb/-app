@@ -1,6 +1,7 @@
 App({
   globalData: {
     brand: 'Travel World',
+    apiBase: '',
     currency: 'CNY',
     exchangeRates: { CNY: 1, USD: 0.138, EUR: 0.127, JPY: 20.4, THB: 4.92 },
     paymentMethods: [

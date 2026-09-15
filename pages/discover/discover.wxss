@@ -4,3 +4,4 @@
 .active { background:#173f4f; color:white; }
 .destination { margin-bottom:18rpx; }
 .pay-row { margin-top:18rpx; }
+.route-mini { margin-bottom:14rpx; }

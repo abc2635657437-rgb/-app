@@ -1,0 +1,1 @@
+export const api={aiPlan:'/api/ai/plan',aiMessage:'/api/ai/plan/{planId}/messages',quota:'/api/ai/quota',landmarks:'/api/landmarks',merchants:'/api/merchants',orders:'/api/orders',payments:'/api/payments'}; export const paymentStates=['pending','paid','confirmed','refunded','cancelled','awaiting_cash'];

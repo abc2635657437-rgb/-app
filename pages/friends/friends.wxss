@@ -1,3 +1,4 @@
 .tabs { display:flex; gap:28rpx; margin:34rpx 0 22rpx; border-bottom:1rpx solid #e4e7e2; }
 .tab { padding:0 0 18rpx; color:#8a9699; font-size:26rpx; }.selected { color:#173f4f; font-weight:700; border-bottom:4rpx solid #d17d57; }
 .match-card { background:#eaf1ed; }.buddy { display:flex; margin-bottom:16rpx; }.avatar { width:92rpx; height:92rpx; border-radius:50%; margin-right:18rpx; }.buddy-main { flex:1; }.small { height:54rpx; line-height:52rpx; margin:18rpx 0 0 auto; font-size:23rpx; display:block; width:170rpx; }
+.note { min-height:140rpx; padding-top:18rpx; }
