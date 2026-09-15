@@ -75,6 +75,9 @@ app.use(cors((req, callback) => {
 app.use(express.json({ limit: '2mb' }));
 const backendDir = path.dirname(fileURLToPath(import.meta.url));
 const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmarks.json');
+// Serve the small runtime directly from the repository so deployments remain
+// independent of the package manager's node_modules layout.
+app.use('/vendor/leaflet', express.static(path.resolve(backendDir, '..', 'modules', 'vendor', 'leaflet'), { maxAge: '30d', immutable: true }));
 app.use('/vendor/leaflet', express.static(path.resolve(backendDir, 'node_modules', 'leaflet', 'dist'), { maxAge: '30d', immutable: true }));
 app.use(express.static(path.resolve(backendDir, '..')));
 
