@@ -1,0 +1,248 @@
+{
+  "version": "demo-2026-09",
+  "updatedAt": "2026-09-14",
+  "landmarks": [
+    {
+      "id": "cn-great-wall",
+      "name": "长城",
+      "country": "中国",
+      "city": "北京",
+      "latitude": 40.43,
+      "longitude": 116.57,
+      "description": "蜿蜒山脊上的世界遗产，适合清晨慢行。",
+      "category": "history",
+      "image": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=600",
+      "icon": "🏯",
+      "bestSeason": "春秋",
+      "rating": 4.9,
+      "tags": [
+        "历史",
+        "摄影",
+        "自然"
+      ]
+    },
+    {
+      "id": "jp-fuji",
+      "name": "富士山",
+      "country": "日本",
+      "city": "东京",
+      "latitude": 35.36,
+      "longitude": 138.73,
+      "description": "日本代表性山景，晴天适合远眺与拍照。",
+      "category": "nature",
+      "image": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600",
+      "icon": "🗻",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "自然",
+        "摄影"
+      ]
+    },
+    {
+      "id": "jp-kiyomizu",
+      "name": "清水寺",
+      "country": "日本",
+      "city": "京都",
+      "latitude": 34.99,
+      "longitude": 135.78,
+      "description": "京都山腰古寺与城市景观的经典组合。",
+      "category": "temple",
+      "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600",
+      "icon": "⛩️",
+      "bestSeason": "秋季",
+      "rating": 4.8,
+      "tags": [
+        "寺庙",
+        "摄影",
+        "文化"
+      ]
+    },
+    {
+      "id": "fr-eiffel",
+      "name": "埃菲尔铁塔",
+      "country": "法国",
+      "city": "巴黎",
+      "latitude": 48.86,
+      "longitude": 2.29,
+      "description": "从塞纳河畔感受巴黎城市天际线。",
+      "category": "landmark",
+      "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
+      "icon": "🗼",
+      "bestSeason": "春夏",
+      "rating": 4.7,
+      "tags": [
+        "建筑",
+        "摄影",
+        "城市"
+      ]
+    },
+    {
+      "id": "us-liberty",
+      "name": "自由女神像",
+      "country": "美国",
+      "city": "纽约",
+      "latitude": 40.69,
+      "longitude": -74.04,
+      "description": "纽约港的城市象征，可结合轮渡游览。",
+      "category": "landmark",
+      "image": "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600",
+      "icon": "🗽",
+      "bestSeason": "春秋",
+      "rating": 4.7,
+      "tags": [
+        "历史",
+        "城市"
+      ]
+    },
+    {
+      "id": "au-opera",
+      "name": "悉尼歌剧院",
+      "country": "澳大利亚",
+      "city": "悉尼",
+      "latitude": -33.86,
+      "longitude": 151.21,
+      "description": "海港边的建筑地标，日落时分体验最佳。",
+      "category": "landmark",
+      "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d4?w=600",
+      "icon": "🎭",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "建筑",
+        "摄影"
+      ]
+    },
+    {
+      "id": "sg-merlion",
+      "name": "鱼尾狮公园",
+      "country": "新加坡",
+      "city": "新加坡",
+      "latitude": 1.286,
+      "longitude": 103.85,
+      "description": "滨海湾城市景观与美食步行的起点。",
+      "category": "city",
+      "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600",
+      "icon": "🦁",
+      "bestSeason": "全年",
+      "rating": 4.6,
+      "tags": [
+        "城市",
+        "美食",
+        "摄影"
+      ]
+    },
+    {
+      "id": "cn-forbidden-city", "name": "故宫", "country": "中国", "city": "北京", "latitude": 39.9163, "longitude": 116.3972,
+      "description": "中国明清皇家宫殿建筑群，适合历史文化与建筑摄影。", "category": "history", "image": "https://images.unsplash.com/photo-1584646098378-0874589d76b1?w=800", "icon": "🏯", "bestSeason": "春秋", "rating": 4.9, "tags": ["历史", "建筑", "摄影"]
+    },
+    {
+      "id": "cn-oriental-pearl", "name": "东方明珠", "country": "中国", "city": "上海", "latitude": 31.2397, "longitude": 121.4998,
+      "description": "浦东天际线代表地标，可俯瞰黄浦江与外滩。", "category": "city", "image": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800", "icon": "🗼", "bestSeason": "春秋", "rating": 4.7, "tags": ["城市", "夜景", "摄影"]
+    },
+    {
+      "id": "cn-west-lake", "name": "西湖", "country": "中国", "city": "杭州", "latitude": 30.2431, "longitude": 120.1503,
+      "description": "湖山与古迹相融的世界文化遗产，适合步行和骑行。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "🌿", "bestSeason": "春秋", "rating": 4.8, "tags": ["自然", "文化", "慢旅行"]
+    },
+    {
+      "id": "cn-zhangjiajie", "name": "张家界国家森林公园", "country": "中国", "city": "张家界", "latitude": 29.315, "longitude": 110.434,
+      "description": "石英砂岩峰林景观，云雾天气尤其适合风光摄影。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "⛰️", "bestSeason": "春秋", "rating": 4.9, "tags": ["自然", "徒步", "摄影"]
+    },
+    {
+      "id": "cn-erhai", "name": "洱海", "country": "中国", "city": "大理", "latitude": 25.785, "longitude": 100.191,
+      "description": "苍山脚下的高原湖泊，环湖骑行、日出和村落摄影体验丰富。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "🚲", "bestSeason": "秋冬", "rating": 4.8, "tags": ["自然", "骑行", "摄影"]
+    },
+    {
+      "id": "jp-tokyo-tower", "name": "东京塔", "country": "日本", "city": "东京", "latitude": 35.6586, "longitude": 139.7454,
+      "description": "东京经典城市地标，傍晚至夜间适合天际线摄影。", "category": "city", "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800", "icon": "🗼", "bestSeason": "全年", "rating": 4.7, "tags": ["城市", "夜景", "摄影"]
+    },
+    {
+      "id": "kr-gyeongbokgung", "name": "景福宫", "country": "韩国", "city": "首尔", "latitude": 37.5796, "longitude": 126.977,
+      "description": "首尔中心的朝鲜王朝宫殿，可结合北村与传统服饰体验。", "category": "history", "image": "https://images.unsplash.com/photo-1538485399081-7c897e8fb98c?w=800", "icon": "🏯", "bestSeason": "春秋", "rating": 4.7, "tags": ["历史", "文化", "摄影"]
+    },
+    {
+      "id": "th-grand-palace", "name": "大皇宫", "country": "泰国", "city": "曼谷", "latitude": 13.75, "longitude": 100.4914,
+      "description": "曼谷代表性宫殿与寺庙建筑群，建议清晨到访并注意着装。", "category": "history", "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800", "icon": "🛕", "bestSeason": "11月至2月", "rating": 4.7, "tags": ["寺庙", "文化", "建筑"]
+    },
+    {
+      "id": "vn-ha-long", "name": "下龙湾", "country": "越南", "city": "下龙", "latitude": 20.9101, "longitude": 107.1839,
+      "description": "海上喀斯特地貌世界遗产，适合乘船与海湾摄影。", "category": "nature", "image": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800", "icon": "⛵", "bestSeason": "春秋", "rating": 4.7, "tags": ["海湾", "自然", "摄影"]
+    },
+    {
+      "id": "id-borobudur", "name": "婆罗浮屠", "country": "印度尼西亚", "city": "日惹", "latitude": -7.6079, "longitude": 110.2038,
+      "description": "大型佛教遗址，以清晨火山背景与石刻闻名。", "category": "history", "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800", "icon": "🛕", "bestSeason": "5月至9月", "rating": 4.8, "tags": ["历史", "日出", "摄影"]
+    },
+    {
+      "id": "in-taj-mahal", "name": "泰姬陵", "country": "印度", "city": "阿格拉", "latitude": 27.1751, "longitude": 78.0421,
+      "description": "白色大理石陵墓建筑，日出时光线柔和、游客较少。", "category": "history", "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800", "icon": "🕌", "bestSeason": "10月至3月", "rating": 4.9, "tags": ["建筑", "历史", "摄影"]
+    },
+    {
+      "id": "ae-burj-khalifa", "name": "哈利法塔", "country": "阿联酋", "city": "迪拜", "latitude": 25.1972, "longitude": 55.2744,
+      "description": "全球知名摩天建筑，可俯瞰迪拜城市与沙漠边缘。", "category": "city", "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800", "icon": "🏙️", "bestSeason": "11月至3月", "rating": 4.7, "tags": ["建筑", "城市", "夜景"]
+    },
+    {
+      "id": "fr-louvre", "name": "卢浮宫", "country": "法国", "city": "巴黎", "latitude": 48.8606, "longitude": 2.3376,
+      "description": "世界级艺术博物馆，馆藏丰富，建议提前选择重点展区。", "category": "museum", "image": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800", "icon": "🎨", "bestSeason": "全年", "rating": 4.9, "tags": ["艺术", "建筑", "文化"]
+    },
+    {
+      "id": "it-colosseum", "name": "罗马斗兽场", "country": "意大利", "city": "罗马", "latitude": 41.8902, "longitude": 12.4922,
+      "description": "古罗马文明代表遗址，可与古罗马广场安排同日步行。", "category": "history", "image": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800", "icon": "🏛️", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "城市"]
+    },
+    {
+      "id": "gb-big-ben", "name": "大本钟", "country": "英国", "city": "伦敦", "latitude": 51.5007, "longitude": -0.1246,
+      "description": "威斯敏斯特宫钟楼，泰晤士河两岸有多处经典拍摄机位。", "category": "landmark", "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800", "icon": "🕰️", "bestSeason": "春夏", "rating": 4.7, "tags": ["建筑", "城市", "摄影"]
+    },
+    {
+      "id": "es-sagrada", "name": "圣家堂", "country": "西班牙", "city": "巴塞罗那", "latitude": 41.4036, "longitude": 2.1744,
+      "description": "高迪未完杰作，以独特立面和彩色光影闻名。", "category": "architecture", "image": "https://images.unsplash.com/photo-1583779457094-ab6f4f969e5a?w=800", "icon": "⛪", "bestSeason": "春秋", "rating": 4.9, "tags": ["建筑", "艺术", "摄影"]
+    },
+    {
+      "id": "gr-acropolis", "name": "雅典卫城", "country": "希腊", "city": "雅典", "latitude": 37.9715, "longitude": 23.7257,
+      "description": "古希腊建筑遗址群，日落前后可俯瞰雅典。", "category": "history", "image": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800", "icon": "🏛️", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "日落"]
+    },
+    {
+      "id": "tr-hagia-sophia", "name": "圣索菲亚大教堂", "country": "土耳其", "city": "伊斯坦布尔", "latitude": 41.0086, "longitude": 28.98,
+      "description": "横跨多种文明历史的穹顶建筑，与蓝色清真寺相邻。", "category": "history", "image": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800", "icon": "🕌", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "文化"]
+    },
+    {
+      "id": "us-golden-gate", "name": "金门大桥", "country": "美国", "city": "旧金山", "latitude": 37.8199, "longitude": -122.4783,
+      "description": "跨越金门海峡的红色悬索桥，多处观景台适合城市摄影。", "category": "landmark", "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800", "icon": "🌉", "bestSeason": "秋季", "rating": 4.8, "tags": ["建筑", "海湾", "摄影"]
+    },
+    {
+      "id": "us-grand-canyon", "name": "大峡谷", "country": "美国", "city": "亚利桑那", "latitude": 36.1069, "longitude": -112.1129,
+      "description": "科罗拉多河切割形成的巨大峡谷，日出日落层次鲜明。", "category": "nature", "image": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800", "icon": "🏜️", "bestSeason": "春秋", "rating": 4.9, "tags": ["自然", "徒步", "摄影"]
+    },
+    {
+      "id": "ca-niagara", "name": "尼亚加拉瀑布", "country": "加拿大", "city": "尼亚加拉瀑布城", "latitude": 43.0962, "longitude": -79.0377,
+      "description": "跨越加拿大与美国边界的大型瀑布群，可乘船近距离体验。", "category": "nature", "image": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800", "icon": "🌊", "bestSeason": "夏秋", "rating": 4.8, "tags": ["自然", "瀑布", "家庭"]
+    },
+    {
+      "id": "mx-chichen-itza", "name": "奇琴伊察", "country": "墨西哥", "city": "尤卡坦", "latitude": 20.6843, "longitude": -88.5678,
+      "description": "玛雅文明重要遗址，以库库尔坎金字塔闻名。", "category": "history", "image": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800", "icon": "🔺", "bestSeason": "11月至4月", "rating": 4.8, "tags": ["历史", "文化", "建筑"]
+    },
+    {
+      "id": "br-christ", "name": "基督山", "country": "巴西", "city": "里约热内卢", "latitude": -22.9519, "longitude": -43.2105,
+      "description": "科尔科瓦多山顶城市地标，可俯瞰里约海湾与城区。", "category": "landmark", "image": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800", "icon": "🌅", "bestSeason": "5月至10月", "rating": 4.8, "tags": ["城市", "山景", "摄影"]
+    },
+    {
+      "id": "pe-machu-picchu", "name": "马丘比丘", "country": "秘鲁", "city": "库斯科", "latitude": -13.1631, "longitude": -72.545,
+      "description": "安第斯山中的印加古城，需提前规划交通和入场时段。", "category": "history", "image": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800", "icon": "⛰️", "bestSeason": "5月至9月", "rating": 4.9, "tags": ["历史", "徒步", "自然"]
+    },
+    {
+      "id": "eg-pyramids", "name": "吉萨金字塔", "country": "埃及", "city": "吉萨", "latitude": 29.9792, "longitude": 31.1342,
+      "description": "古埃及代表性建筑群，清晨和傍晚气温更适合游览。", "category": "history", "image": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800", "icon": "🔺", "bestSeason": "10月至4月", "rating": 4.8, "tags": ["历史", "建筑", "沙漠"]
+    },
+    {
+      "id": "za-table-mountain", "name": "桌山", "country": "南非", "city": "开普敦", "latitude": -33.9628, "longitude": 18.4098,
+      "description": "俯瞰开普敦与大西洋的平顶山，可徒步或乘缆车。", "category": "nature", "image": "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800", "icon": "⛰️", "bestSeason": "11月至3月", "rating": 4.8, "tags": ["自然", "徒步", "海景"]
+    },
+    {
+      "id": "au-great-barrier", "name": "大堡礁", "country": "澳大利亚", "city": "凯恩斯", "latitude": -18.2871, "longitude": 147.6992,
+      "description": "世界最大的珊瑚礁生态系统，可通过持牌运营商参加浮潜体验。", "category": "nature", "image": "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800", "icon": "🐠", "bestSeason": "6月至10月", "rating": 4.9, "tags": ["海岛", "潜水", "自然"]
+    },
+    {
+      "id": "nz-milford", "name": "米尔福德峡湾", "country": "新西兰", "city": "峡湾国家公园", "latitude": -44.6716, "longitude": 167.926,
+      "description": "冰川塑造的峡湾与瀑布景观，阴雨天也具有独特氛围。", "category": "nature", "image": "https://images.unsplash.com/photo-1469521669194-babb45599def?w=800", "icon": "🏔️", "bestSeason": "11月至4月", "rating": 4.9, "tags": ["自然", "游船", "摄影"]
+    }
+  ]
+}
