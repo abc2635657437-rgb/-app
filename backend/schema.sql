@@ -146,6 +146,26 @@ create table if not exists public.notifications (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.user_settings (
+  user_id uuid primary key references public.profiles(id) on delete cascade,
+  language text not null default 'zh' check (language in ('zh','en')),
+  notifications jsonb not null default '{"likes":true,"comments":true,"follows":true,"buddy":true,"chat":true}'::jsonb,
+  privacy jsonb not null default '{"publicProfile":true,"showTrips":true,"allowFollow":true}'::jsonb,
+  messages jsonb not null default '{"buddyMessages":true,"communityMessages":true}'::jsonb,
+  content_preferences jsonb not null default '{"domestic":true,"international":true,"photography":true}'::jsonb,
+  general jsonb not null default '{"autoplayVideo":false,"saveData":false}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.blocked_users (
+  blocker_id uuid not null references public.profiles(id) on delete cascade,
+  blocked_id uuid not null references public.profiles(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (blocker_id, blocked_id),
+  check (blocker_id <> blocked_id)
+);
+
+
 create table if not exists public.ai_conversations (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,

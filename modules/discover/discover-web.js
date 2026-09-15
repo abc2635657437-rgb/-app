@@ -1,5 +1,8 @@
 (function () {
   const fields = { dest: ['输入目的地，例如大理', ''], budget: ['预算（CNY）', ''], date: ['出发日期', ''], days: ['旅行天数', ''], interest: ['兴趣，例如自然、美食、摄影', ''] };
+  const auth = () => window.TravelWorldAuth;
+  const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+  let communityRoutes = [], routeFavoriteIds = new Set();
   function setup() {
     const style = document.createElement('style');
     style.textContent = '.route-filters{display:flex;flex-wrap:wrap;gap:4px;margin:12px 0}.route-grid{display:grid;grid-template-columns:1fr;gap:12px}.route-card{background:#fff;border-radius:14px;padding:15px;box-shadow:0 7px 20px #203a410c}.route-card-top{display:flex;justify-content:space-between;align-items:center}.route-card h3{margin:12px 0 4px;color:#173f4f}.route-card p{color:#53656b;line-height:1.5;font-size:14px}.route-tags{color:#477064;font-size:12px;margin-bottom:12px}.map-controls{display:flex;gap:7px;align-items:center;margin-bottom:10px}.map-controls input{flex:1;padding:10px;border:1px solid #dfe6e1;border-radius:999px;font:inherit}.leaflet-container{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}';
@@ -9,9 +12,10 @@
     if (!section || document.getElementById('routeLibrary')) return;
     const library = document.createElement('div');
     library.id = 'routeLibrary';
-    library.innerHTML = '<div class="head"><h2>参考路线</h2><span class="muted">国内 · 海外</span></div><div id="routeFilters" class="route-filters"></div><div id="routeGrid" class="route-grid"></div>';
+    library.innerHTML = '<div class="head"><h2>参考路线</h2><span class="muted">国内 · 海外</span></div><div id="routeFilters" class="route-filters"></div><div id="routeGrid" class="route-grid"></div><div class="head"><h2>旅行者路线</h2><span class="muted">真实发布</span></div><div id="communityRouteGrid" class="route-grid"></div>';
     section.appendChild(library);
     fetch('modules/data/routes.json').then(response => response.json()).then(data => { window.travelRoutes = data.routes; renderRoutes('全部'); }).catch(() => { document.getElementById('routeGrid').textContent = '参考路线暂时无法加载，请检查网络后重试。'; });
+    loadCommunityRoutes();
   }
   function renderRoutes(type) {
     const routes = window.travelRoutes || [];
@@ -20,6 +24,10 @@
     document.getElementById('routeGrid').innerHTML = filtered.map(route => '<article class="route-card"><div class="route-card-top"><span class="pill">' + route.country + '</span><span class="muted">' + route.days + ' 天</span></div><h3>' + route.title + '</h3><div class="muted">' + route.destination + ' · ' + route.type + '</div><p>' + route.summary + '</p><div class="route-tags">' + route.tags.map(tag => '<span>#' + tag + '</span>').join(' ') + '</div><button class="btn alt small" onclick="useTravelRoute(\'' + route.destination + '\',' + route.days + ',\'' + route.tags.join('、') + '\')">用这条路线规划</button></article>').join('');
   }
   window.filterTravelRoutes = renderRoutes;
+  async function loadCommunityRoutes() { const target = document.getElementById('communityRouteGrid'); if (!target) return; try { communityRoutes = await auth().request('/api/routes'); routeFavoriteIds = new Set(auth().session?.() ? await auth().request('/api/routes/favorites') : []); target.innerHTML = communityRoutes.length ? communityRoutes.map(route => { const liked = (route.route_likes || []).some(item => item.user_id === auth().session?.()?.user?.id), comments = route.route_comments || []; return '<article class="route-card"><div class="route-card-top"><span class="pill">' + safe(route.owner?.display_name || '旅行者') + '</span><span class="muted">' + (route.trip_days?.length || 0) + ' 天</span></div><h3>' + safe(route.title) + '</h3><div class="muted">' + safe(route.destination) + '</div><div class="post-actions"><button onclick="toggleRouteLike(\'' + route.id + '\')">' + (liked ? '♥' : '♡') + ' ' + (route.route_likes?.length || 0) + '</button><button onclick="toggleRouteFavorite(\'' + route.id + '\')">' + (routeFavoriteIds.has(route.id) ? '★ 已收藏' : '☆ 收藏') + '</button><button onclick="commentRoute(\'' + route.id + '\')">评论 ' + comments.length + '</button></div>' + (comments.length ? '<div class="route-comments">' + comments.slice(-3).map(item => '<div>' + safe(item.author?.display_name || '旅行者') + '：' + safe(item.content) + '</div>').join('') + '</div>' : '') + '</article>'; }).join('') : '<div class="muted">还没有旅行者发布公开路线。</div>'; } catch (error) { target.innerHTML = '<div class="muted">旅行者路线暂时无法加载：' + safe(error.message) + '</div>'; } }
+  window.toggleRouteLike = async id => { if (!auth().requireLogin()) return; try { await auth().request('/api/routes/' + id + '/like', { method: 'POST' }); await loadCommunityRoutes(); } catch (error) { alert(error.message); } };
+  window.toggleRouteFavorite = async id => { if (!auth().requireLogin()) return; try { await auth().request('/api/routes/' + id + '/favorite', { method: 'POST' }); await loadCommunityRoutes(); } catch (error) { alert(error.message); } };
+  window.commentRoute = async id => { if (!auth().requireLogin()) return; const content = prompt('写下对这条路线的评论：'); if (!content?.trim()) return; try { await auth().request('/api/routes/' + id + '/comments', { method: 'POST', body: JSON.stringify({ content: content.trim() }) }); await loadCommunityRoutes(); } catch (error) { alert(error.message); } };
   window.useTravelRoute = (destination, days, interest) => { document.getElementById('aiDest').value = destination; document.getElementById('aiDays').value = days; document.getElementById('aiInterest').value = interest; go('ai'); makePlan(); };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup); else setup();
+  window.addEventListener('tw-auth-change', loadCommunityRoutes); if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup); else setup();
 }());

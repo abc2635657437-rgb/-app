@@ -3,6 +3,7 @@
   let markers = [];
   let routeLayer;
   let routeMarkers = [];
+  let userMarker;
   let data;
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
   async function loadData() {
@@ -69,6 +70,7 @@
     if (!item) return;
     if (map) map.setView([item.latitude, item.longitude], 11);
     if (window.showLandmark) window.showLandmark(item);
+    status('已定位：' + item.name + ' · ' + item.city + '，可点击地标查看详情。');
   }
   async function searchPlace(providedQuery) {
     const input = document.getElementById('mapSearch');
@@ -91,7 +93,7 @@
       status('在线地图已定位：' + result.displayName);
     } catch (_) { status('在线搜索暂时不可用；仍可浏览已缓存的 ' + (data?.landmarks?.length || 0) + ' 个地标。'); }
   }
-  function locateUser() { if (!navigator.geolocation) return status('当前设备不支持定位。'); navigator.geolocation.getCurrentPosition(position => { if (map) map.setView([position.coords.latitude, position.coords.longitude], 12); status('已定位到当前位置；位置仅在本次页面使用。'); }, () => status('定位未获授权，地图仍可正常浏览。')); }
+  function locateUser() { if (!navigator.geolocation) return status('当前设备不支持定位，仍可搜索和浏览地图。'); status('正在获取当前位置…'); navigator.geolocation.getCurrentPosition(position => { const point = [position.coords.latitude, position.coords.longitude]; if (map) { map.setView(point, 14); if (userMarker) userMarker.remove(); const icon = L.divIcon({ className: 'tw-user-pin', html: '<div class="tw-user-pin__arrow">➤</div><div class="tw-user-pin__pulse"></div>', iconSize: [34, 34], iconAnchor: [17, 17] }); userMarker = L.marker(point, { icon, title: '我的位置', zIndexOffset: 1000 }).addTo(map).bindPopup('<strong>我的位置</strong><br>定位精度约 ' + Math.round(position.coords.accuracy || 0) + ' 米').openPopup(); } status('已定位到当前位置；位置仅在本次页面使用。'); }, error => { const reason = error.code === 1 ? '未获得定位权限' : '暂时无法获取位置'; status(reason + '，仍可搜索地点和浏览地图。'); }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }); }
   window.initTravelMap = initMap;
   window.searchTravelMap = searchPlace;
   window.locateTravelMap = locateUser;

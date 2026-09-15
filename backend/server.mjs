@@ -75,6 +75,7 @@ app.use(cors((req, callback) => {
 app.use(express.json({ limit: '2mb' }));
 const backendDir = path.dirname(fileURLToPath(import.meta.url));
 const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmarks.json');
+app.use('/vendor/leaflet', express.static(path.resolve(backendDir, 'node_modules', 'leaflet', 'dist'), { maxAge: '30d', immutable: true }));
 app.use(express.static(path.resolve(backendDir, '..')));
 
 const normalizeText = value => String(value || '').trim().toLowerCase();
@@ -208,6 +209,20 @@ function publicPostQuery() {
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'travel-world-api' }));
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
+app.get('/api/map/tiles/:z/:x/:y.png', async (req, res) => {
+  const z = Number(req.params.z), x = Number(req.params.x), y = Number(req.params.y);
+  const max = 2 ** z;
+  if (!Number.isInteger(z) || !Number.isInteger(x) || !Number.isInteger(y) || z < 0 || z > 19 || x < 0 || y < 0 || x >= max || y >= max) return res.status(400).json({ error: '地图瓦片坐标无效' });
+  try {
+    const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 10_000);
+    const upstream = await fetch(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`, { signal: controller.signal, headers: { 'User-Agent': `TravelWorld/1.0 (${publicAppUrl})`, Accept: 'image/png' } });
+    clearTimeout(timer);
+    if (!upstream.ok) return res.status(502).json({ error: '地图瓦片服务暂时不可用' });
+    res.set({ 'Content-Type': upstream.headers.get('content-type') || 'image/png', 'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800', 'X-Map-Attribution': 'OpenStreetMap contributors' });
+    res.send(Buffer.from(await upstream.arrayBuffer()));
+  } catch (_) { res.status(502).json({ error: '地图瓦片服务暂时不可用' }); }
+});
+
 app.get('/api/map/search', async (req, res) => {
   const query = String(req.query.q || '').trim().slice(0, 160);
   if (query.length < 2) return res.status(400).json({ error: '请输入至少两个字符的地点名称' });
@@ -296,6 +311,50 @@ app.patch('/api/users/me', requireUser, async (req, res) => {
   res.json(data);
 });
 
+app.put('/api/users/me/password', requireUser, async (req, res) => {
+  const password = String(req.body?.password || '');
+  if (password.length < 8) return res.status(400).json({ error: '新密码至少需要 8 位' });
+  const { error } = await admin.auth.admin.updateUserById(req.user.id, { password });
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
+app.get('/api/users/me/settings', requireUser, async (req, res) => {
+  const defaults = { user_id: req.user.id, language: 'zh', notifications: { likes: true, comments: true, follows: true, buddy: true, chat: true }, privacy: { publicProfile: true, showTrips: true, allowFollow: true }, messages: { buddyMessages: true, communityMessages: true }, content_preferences: { domestic: true, international: true, photography: true }, general: { autoplayVideo: false, saveData: false } };
+  const { data, error } = await admin.from('user_settings').select('*').eq('user_id', req.user.id).maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || defaults);
+});
+
+app.patch('/api/users/me/settings', requireUser, async (req, res) => {
+  const allowed = ['language', 'notifications', 'privacy', 'messages', 'content_preferences', 'general'];
+  const payload = { user_id: req.user.id, ...Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowed.includes(key))), updated_at: new Date().toISOString() };
+  if (payload.language && !['zh', 'en'].includes(payload.language)) return res.status(400).json({ error: '语言设置无效' });
+  const { data, error } = await admin.from('user_settings').upsert(payload, { onConflict: 'user_id' }).select().single();
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+app.get('/api/users/me/blocked', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('blocked_users').select('created_at, profile:blocked_id(id,username,display_name,bio,avatar_url)').eq('blocker_id', req.user.id).order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => ({ ...item.profile, blocked_at: item.created_at })).filter(item => item.id));
+});
+
+app.post('/api/users/me/blocked/:userId', requireUser, async (req, res) => {
+  if (req.params.userId === req.user.id) return res.status(400).json({ error: '不能屏蔽自己' });
+  const { error } = await admin.from('blocked_users').upsert({ blocker_id: req.user.id, blocked_id: req.params.userId }, { onConflict: 'blocker_id,blocked_id' });
+  if (error) return res.status(400).json({ error: error.message });
+  await admin.from('follows').delete().or(`and(follower_id.eq.${req.user.id},following_id.eq.${req.params.userId}),and(follower_id.eq.${req.params.userId},following_id.eq.${req.user.id})`);
+  res.status(201).json({ blocked: true });
+});
+
+app.delete('/api/users/me/blocked/:userId', requireUser, async (req, res) => {
+  const { error } = await admin.from('blocked_users').delete().eq('blocker_id', req.user.id).eq('blocked_id', req.params.userId);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
 app.post('/api/users/me/avatar', requireUser, upload.single('file'), async (req, res) => {
   if (!req.file || !req.file.mimetype.startsWith('image/')) return res.status(400).json({ error: '请选择有效头像图片' });
   const ext = (req.file.originalname.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -351,10 +410,12 @@ app.post('/api/community/posts/:postId/like', requireUser, async (req, res) => {
   if (!post) return res.status(404).json({ error: '帖子不存在' });
   const { data: existing } = await admin.from('post_likes').select('post_id').eq('post_id', postId).eq('user_id', req.user.id).maybeSingle();
   if (existing) {
-    await admin.from('post_likes').delete().eq('post_id', postId).eq('user_id', req.user.id);
+    const { error } = await admin.from('post_likes').delete().eq('post_id', postId).eq('user_id', req.user.id);
+    if (error) return res.status(400).json({ error: error.message });
     await admin.from('notifications').delete().eq('recipient_id', post.author_id).eq('actor_id', req.user.id).eq('type', 'like').eq('post_id', postId);
   } else {
-    await admin.from('post_likes').insert({ post_id: postId, user_id: req.user.id });
+    const { error } = await admin.from('post_likes').insert({ post_id: postId, user_id: req.user.id });
+    if (error) return res.status(400).json({ error: error.message });
     if (post.author_id !== req.user.id) await admin.from('notifications').insert({ recipient_id: post.author_id, actor_id: req.user.id, type: 'like', post_id: postId, message: `赞了你的内容${post.title ? `「${post.title}」` : ''}` });
   }
   const { count } = await admin.from('post_likes').select('*', { count: 'exact', head: true }).eq('post_id', postId);
@@ -371,13 +432,40 @@ app.post('/api/community/posts/:postId/comments', requireUser, async (req, res) 
   res.status(201).json(data);
 });
 
+app.delete('/api/community/comments/:id', requireUser, async (req, res) => {
+  const { data: comment } = await admin.from('comments').select('id,author_id,post:post_id(author_id)').eq('id', req.params.id).single();
+  if (!comment) return res.status(404).json({ error: '评论不存在' });
+  if (comment.author_id !== req.user.id && comment.post?.author_id !== req.user.id) return res.status(403).json({ error: '无权删除该评论' });
+  const { error } = await admin.from('comments').delete().eq('id', req.params.id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
+app.patch('/api/community/posts/:postId', requireUser, async (req, res) => {
+  const allowed = ['title', 'content', 'location_name', 'country', 'city', 'latitude', 'longitude'];
+  const patch = { ...Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowed.includes(key))), updated_at: new Date().toISOString() };
+  const { data, error } = await admin.from('posts').update(patch).eq('id', req.params.postId).eq('author_id', req.user.id).select().single();
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+app.delete('/api/community/posts/:postId', requireUser, async (req, res) => {
+  const { data: media } = await admin.from('post_media').select('storage_path').eq('post_id', req.params.postId);
+  const { error } = await admin.from('posts').delete().eq('id', req.params.postId).eq('author_id', req.user.id);
+  if (error) return res.status(400).json({ error: error.message });
+  if (media?.length) await admin.storage.from('media').remove(media.map(item => item.storage_path));
+  res.status(204).end();
+});
+
 app.post('/api/community/posts/:postId/favorite', requireUser, async (req, res) => {
   const postId = req.params.postId;
   const { data: post } = await admin.from('posts').select('id').eq('id', postId).single();
   if (!post) return res.status(404).json({ error: '帖子不存在' });
   const { data: existing } = await admin.from('favorites').select('post_id').eq('post_id', postId).eq('user_id', req.user.id).maybeSingle();
-  if (existing) await admin.from('favorites').delete().eq('post_id', postId).eq('user_id', req.user.id);
-  else await admin.from('favorites').insert({ post_id: postId, user_id: req.user.id });
+  const result = existing
+    ? await admin.from('favorites').delete().eq('post_id', postId).eq('user_id', req.user.id)
+    : await admin.from('favorites').insert({ post_id: postId, user_id: req.user.id });
+  if (result.error) return res.status(400).json({ error: result.error.message });
   res.json({ favorited: !existing });
 });
 
@@ -387,14 +475,48 @@ app.get('/api/community/favorites', requireUser, async (req, res) => {
   res.json((data || []).map(item => item.posts).filter(Boolean));
 });
 
+app.get('/api/community/me/posts', requireUser, async (req, res) => {
+  const { data, error } = await publicPostQuery().eq('author_id', req.user.id).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
+app.get('/api/community/me/routes', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('routes').select('*, trip_days(*, trip_places(*))').eq('owner_id', req.user.id).order('updated_at', { ascending: false }).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
+app.get('/api/community/following', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('follows').select('created_at, profile:following_id(id,username,display_name,bio,avatar_url)').eq('follower_id', req.user.id).order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => ({ ...item.profile, followed_at: item.created_at })).filter(item => item.id));
+});
+
+app.get('/api/community/followers', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('follows').select('created_at, profile:follower_id(id,username,display_name,bio,avatar_url)').eq('following_id', req.user.id).order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => ({ ...item.profile, followed_at: item.created_at })).filter(item => item.id));
+});
+
+app.get('/api/community/interactions', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('notifications').select('id,type,message,post_id,read_at,created_at,actor:actor_id(id,username,display_name,bio,avatar_url),post:post_id(id,title)').eq('recipient_id', req.user.id).in('type', ['like', 'comment', 'follow']).order('created_at', { ascending: false }).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
 app.post('/api/community/users/:userId/follow', requireUser, async (req, res) => {
   if (req.user.id === req.params.userId) return res.status(400).json({ error: '不能关注自己' });
+  const { data: blocks } = await admin.from('blocked_users').select('blocker_id').or(`and(blocker_id.eq.${req.user.id},blocked_id.eq.${req.params.userId}),and(blocker_id.eq.${req.params.userId},blocked_id.eq.${req.user.id})`).limit(1);
+  if (blocks?.length) return res.status(403).json({ error: '当前用户关系不允许关注' });
   const { data: existing } = await admin.from('follows').select('follower_id').eq('follower_id', req.user.id).eq('following_id', req.params.userId).maybeSingle();
   if (existing) {
-    await admin.from('follows').delete().eq('follower_id', req.user.id).eq('following_id', req.params.userId);
+    const { error } = await admin.from('follows').delete().eq('follower_id', req.user.id).eq('following_id', req.params.userId);
+    if (error) return res.status(400).json({ error: error.message });
     await admin.from('notifications').delete().eq('recipient_id', req.params.userId).eq('actor_id', req.user.id).eq('type', 'follow');
   } else {
-    await admin.from('follows').insert({ follower_id: req.user.id, following_id: req.params.userId });
+    const { error } = await admin.from('follows').insert({ follower_id: req.user.id, following_id: req.params.userId });
+    if (error) return res.status(400).json({ error: error.message });
     await admin.from('notifications').insert({ recipient_id: req.params.userId, actor_id: req.user.id, type: 'follow', message: '关注了你' });
   }
   res.json({ following: !existing });
@@ -425,6 +547,81 @@ app.post('/api/trips', requireUser, async (req, res) => {
   const { data, error } = await admin.from('trips').insert(payload).select().single();
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json(data);
+});
+
+app.patch('/api/trips/:tripId', requireUser, async (req, res) => {
+  const fields = { title: req.body?.title, destination: req.body?.destination, start_date: req.body?.startDate, end_date: req.body?.endDate, description: req.body?.description, status: req.body?.status };
+  const patch = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined));
+  const { data, error } = await admin.from('trips').update(patch).eq('id', req.params.tripId).eq('owner_id', req.user.id).select().single();
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+app.delete('/api/trips/:tripId', requireUser, async (req, res) => {
+  const { error } = await admin.from('trips').delete().eq('id', req.params.tripId).eq('owner_id', req.user.id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
+app.get('/api/routes', async (_req, res) => {
+  const { data, error } = await admin.from('routes').select('*, owner:owner_id(id,username,display_name,bio,avatar_url), trip_days(*,trip_places(*)), posts!posts_route_id_fkey(id,post_likes(user_id),comments(id,author_id,content,created_at,author:author_id(id,display_name,avatar_url)))').eq('is_public', true).order('updated_at', { ascending: false }).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(route => ({ ...route, interaction_post_id: route.posts?.[0]?.id || null, route_likes: route.posts?.[0]?.post_likes || [], route_comments: route.posts?.[0]?.comments || [], posts: undefined })));
+});
+
+app.get('/api/routes/favorites', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('favorites').select('post:post_id!inner(route_id)').eq('user_id', req.user.id).not('post.route_id', 'is', null);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => item.post?.route_id).filter(Boolean));
+});
+
+app.get('/api/routes/favorite-items', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('favorites').select('created_at, post:post_id!inner(route:route_id(*,owner:owner_id(id,display_name,avatar_url),trip_days(*,trip_places(*))))').eq('user_id', req.user.id).not('post.route_id', 'is', null).order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => item.post?.route).filter(Boolean));
+});
+
+app.patch('/api/routes/:id', requireUser, async (req, res) => {
+  const allowed = ['title', 'destination', 'days', 'is_public'];
+  const patch = { ...Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowed.includes(key))), updated_at: new Date().toISOString() };
+  const { data, error } = await admin.from('routes').update(patch).eq('id', req.params.id).eq('owner_id', req.user.id).select().single();
+  if (error) return res.status(400).json({ error: error.message });
+  const { data: linked } = await admin.from('posts').select('id').eq('route_id', data.id).eq('author_id', req.user.id).maybeSingle();
+  if (data.is_public) {
+    const postPayload = { author_id: req.user.id, route_id: data.id, type: 'route', title: data.title, content: `公开旅行路线：${data.destination}`, location_name: data.destination, city: data.destination, updated_at: new Date().toISOString() };
+    const postResult = linked ? await admin.from('posts').update(postPayload).eq('id', linked.id) : await admin.from('posts').insert(postPayload);
+    if (postResult.error) return res.status(400).json({ error: postResult.error.message });
+  } else if (linked) await admin.from('posts').delete().eq('id', linked.id);
+  res.json(data);
+});
+
+app.delete('/api/routes/:id', requireUser, async (req, res) => {
+  await admin.from('posts').delete().eq('route_id', req.params.id).eq('author_id', req.user.id);
+  const { error } = await admin.from('routes').delete().eq('id', req.params.id).eq('owner_id', req.user.id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
+app.post('/api/routes/:id/like', requireUser, async (req, res) => {
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data: existing } = await admin.from('post_likes').select('post_id').eq('post_id', post.id).eq('user_id', req.user.id).maybeSingle();
+  const result = existing ? await admin.from('post_likes').delete().eq('post_id', post.id).eq('user_id', req.user.id) : await admin.from('post_likes').insert({ post_id: post.id, user_id: req.user.id });
+  if (result.error) return res.status(400).json({ error: result.error.message });
+  const { count } = await admin.from('post_likes').select('*', { count: 'exact', head: true }).eq('post_id', post.id); res.json({ liked: !existing, count: count || 0 });
+});
+
+app.post('/api/routes/:id/favorite', requireUser, async (req, res) => {
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data: existing } = await admin.from('favorites').select('post_id').eq('post_id', post.id).eq('user_id', req.user.id).maybeSingle();
+  const result = existing ? await admin.from('favorites').delete().eq('post_id', post.id).eq('user_id', req.user.id) : await admin.from('favorites').insert({ post_id: post.id, user_id: req.user.id });
+  if (result.error) return res.status(400).json({ error: result.error.message }); res.json({ favorited: !existing });
+});
+
+app.post('/api/routes/:id/comments', requireUser, async (req, res) => {
+  const content = String(req.body?.content || '').trim(); if (!content) return res.status(400).json({ error: '评论不能为空' });
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data, error } = await admin.from('comments').insert({ post_id: post.id, author_id: req.user.id, content }).select('*,author:author_id(id,display_name,avatar_url)').single();
+  if (error) return res.status(400).json({ error: error.message }); res.status(201).json(data);
 });
 
 app.post('/api/trips/:tripId/applications', requireUser, async (req, res) => {
