@@ -54,8 +54,24 @@ async function enforceAiQuota(req, res, next) {
   usage.recent.push(now); aiUsage.set(key, usage); next();
 }
 
-const allowedOrigins = new Set([publicAppUrl, ...(process.env.CORS_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean)]);
-app.use(cors({ origin(origin, callback) { if (!origin || allowedOrigins.has(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true); callback(new Error('Origin not allowed')); } }));
+const normalizeOrigin = value => {
+  try { return new URL(String(value || '')).origin; }
+  catch (_) { return ''; }
+};
+const allowedOrigins = new Set([
+  publicAppUrl,
+  process.env.RENDER_EXTERNAL_URL,
+  ...(process.env.CORS_ORIGINS || '').split(',')
+].map(normalizeOrigin).filter(Boolean));
+app.use(cors((req, callback) => {
+  const origin = normalizeOrigin(req.get('Origin'));
+  const forwardedHost = String(req.get('x-forwarded-host') || req.get('host') || '').split(',')[0].trim();
+  const forwardedProtocol = String(req.get('x-forwarded-proto') || req.protocol || 'https').split(',')[0].trim();
+  const requestOrigin = normalizeOrigin(`${forwardedProtocol}://${forwardedHost}`);
+  const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  const isAllowed = !origin || isLocal || allowedOrigins.has(origin) || origin === requestOrigin;
+  callback(null, { origin: isAllowed, credentials: true });
+}));
 app.use(express.json({ limit: '2mb' }));
 const backendDir = path.dirname(fileURLToPath(import.meta.url));
 const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmarks.json');
