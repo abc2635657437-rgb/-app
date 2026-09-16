@@ -724,6 +724,30 @@ app.patch('/api/buddy/applications/:id', requireUser, async (req, res) => {
   res.json({ status: statusValue, chatId: fallbackChatId, transactional: false });
 });
 
+app.post('/api/direct-chats/:userId', requireUser, async (req, res) => {
+  const otherId = req.params.userId;
+  if (otherId === req.user.id) return res.status(400).json({ error: '不能和自己私聊' });
+  const { data: other } = await admin.from('profiles').select('id,display_name,username,avatar_url,bio').eq('id', otherId).maybeSingle();
+  if (!other) return res.status(404).json({ error: '用户不存在' });
+  const { data: mine } = await admin.from('chat_members').select('chat_id').eq('user_id', req.user.id);
+  const myIds = (mine || []).map(item => item.chat_id);
+  if (myIds.length) {
+    const { data: shared } = await admin.from('chat_members').select('chat_id').eq('user_id', otherId).in('chat_id', myIds);
+    for (const row of shared || []) {
+      const { count } = await admin.from('chat_members').select('*', { count: 'exact', head: true }).eq('chat_id', row.chat_id);
+      if (count === 2) return res.json({ chatId: row.chat_id, user: other, existing: true });
+    }
+  }
+  const title = '与' + (other.display_name || other.username || '旅行者') + '的私聊';
+  const { data: trip, error: tripError } = await admin.from('trips').insert({ owner_id: req.user.id, title, destination: 'Travel World', description: '地图在线用户私聊', status: 'closed' }).select().single();
+  if (tripError) return res.status(400).json({ error: tripError.message });
+  const { data: chat, error: chatError } = await admin.from('chats').insert({ trip_id: trip.id }).select().single();
+  if (chatError) return res.status(400).json({ error: chatError.message });
+  const { error: memberError } = await admin.from('chat_members').insert([{ chat_id: chat.id, user_id: req.user.id }, { chat_id: chat.id, user_id: otherId }]);
+  if (memberError) return res.status(400).json({ error: memberError.message });
+  res.status(201).json({ chatId: chat.id, user: other, existing: false });
+});
+
 app.get('/api/chats', requireUser, async (req, res) => {
   const { data: memberships, error } = await admin.from('chat_members').select('chat_id').eq('user_id', req.user.id);
   if (error) return res.status(500).json({ error: error.message }); const ids = (memberships || []).map(item => item.chat_id); if (!ids.length) return res.json([]);
