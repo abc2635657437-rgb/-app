@@ -778,7 +778,11 @@ app.post('/api/direct-chats/:userId', requireUser, async (req, res) => {
 });
 
 app.get('/api/chats', requireUser, async (req, res) => {
-  const { data: memberships, error } = await admin.from('chat_members').select('chat_id,last_read_at').eq('user_id', req.user.id);
+  let { data: memberships, error } = await admin.from('chat_members').select('chat_id,last_read_at').eq('user_id', req.user.id);
+  if (error && /last_read_at|column/i.test(error.message || '')) {
+    const fallback = await admin.from('chat_members').select('chat_id').eq('user_id', req.user.id);
+    memberships = (fallback.data || []).map(item => ({ ...item, last_read_at: null })); error = fallback.error;
+  }
   if (error) return res.status(500).json({ error: error.message }); const ids = (memberships || []).map(item => item.chat_id); if (!ids.length) return res.json([]);
   const { data, error: chatError } = await admin.from('chats').select('*, trip:trip_id(*), chat_members(user_id, profiles:user_id(id,display_name,avatar_url))').in('id', ids).order('created_at', { ascending: false });
   if (chatError) return res.status(500).json({ error: chatError.message });
@@ -794,6 +798,7 @@ app.get('/api/chats', requireUser, async (req, res) => {
 
 app.patch('/api/chats/:id/read', requireUser, async (req, res) => {
   const { data, error } = await admin.from('chat_members').update({ last_read_at: new Date().toISOString() }).eq('chat_id', req.params.id).eq('user_id', req.user.id).select('chat_id').maybeSingle();
+  if (error && /last_read_at|column/i.test(error.message || '')) return res.json({ read: true, pendingMigration: true });
   if (error || !data) return res.status(403).json({ error: '你不是该聊天室成员' });
   res.json({ read: true });
 });
