@@ -318,6 +318,19 @@ app.post('/api/auth/login', async (req, res) => {
   res.json({ user: data.user, session: data.session });
 });
 
+app.post('/api/auth/refresh', async (req, res) => {
+  const refreshToken = String(req.body?.refreshToken || '');
+  if (!refreshToken) return res.status(400).json({ error: '缺少会话刷新凭证' });
+  const { data, error } = await authClient.auth.refreshSession({ refresh_token: refreshToken });
+  if (error || !data.session) return res.status(401).json({ error: '登录已过期，请重新登录' });
+  res.json({ user: data.user, session: data.session });
+});
+
+app.get('/api/auth/session', requireUser, async (req, res) => {
+  const { data: profile } = await admin.from('profiles').select('id,username,display_name,bio,avatar_url').eq('id', req.user.id).maybeSingle();
+  res.json({ user: req.user, profile });
+});
+
 app.post('/api/auth/logout', requireUser, async (req, res) => {
   await admin.auth.admin.signOut(req.accessToken);
   res.status(204).end();
