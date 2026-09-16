@@ -31,5 +31,10 @@
     controls.className = 'map-controls';
     controls.innerHTML = '<input id="mapSearch" placeholder="搜索城市或地标"><button class="btn alt small" onclick="searchTravelMap()">搜索</button><button class="btn alt small" onclick="locateTravelMap()">定位</button>';
     card.insertBefore(controls, card.firstChild);
+    const presence = document.createElement('div');
+    presence.className = 'row';
+    presence.style.cssText = 'margin:0 0 10px;align-items:center';
+    presence.innerHTML = '<label class="muted" style="font-size:12px"><input id="mapShareLocation" type="checkbox" onchange="toggleMapLocationSharing(this.checked)"> 共享我的位置</label><button class="btn alt small" onclick="loadMapOnlineUsers()">在线用户</button>';
+    card.insertBefore(presence, controls.nextSibling);
   });
 }());

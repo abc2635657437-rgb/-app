@@ -252,6 +252,17 @@ create table if not exists public.ai_daily_usage (
   primary key (user_id, usage_date)
 );
 
+create table if not exists public.live_locations (
+  user_id uuid primary key references public.profiles(id) on delete cascade,
+  latitude double precision not null check (latitude between -90 and 90),
+  longitude double precision not null check (longitude between -180 and 180),
+  country text not null default '',
+  city text not null default '',
+  sharing_enabled boolean not null default false,
+  updated_at timestamptz not null default now()
+);
+create index if not exists live_locations_visible_idx on public.live_locations (sharing_enabled, updated_at desc, country);
+
 create or replace function public.consume_ai_quota(p_user_id uuid, p_daily_limit integer default 5)
 returns integer language plpgsql security definer set search_path = public as $$
 declare next_count integer;
@@ -332,6 +343,7 @@ alter table public.trip_preferences enable row level security;
 alter table public.trip_days enable row level security;
 alter table public.trip_places enable row level security;
 alter table public.ai_daily_usage enable row level security;
+alter table public.live_locations enable row level security;
 
 create policy profiles_read on public.profiles for select using (true);
 create policy profiles_update_self on public.profiles for update using (auth.uid() = id) with check (auth.uid() = id);
@@ -372,6 +384,7 @@ create policy trip_days_route_owner_write on public.trip_days for all using (exi
 create policy trip_places_route_access on public.trip_places for select using (exists (select 1 from public.trip_days d join public.routes r on r.id = d.route_id where d.id = trip_day_id and (r.is_public or r.owner_id = auth.uid())));
 create policy trip_places_route_owner_write on public.trip_places for all using (exists (select 1 from public.trip_days d join public.routes r on r.id = d.route_id where d.id = trip_day_id and r.owner_id = auth.uid())) with check (exists (select 1 from public.trip_days d join public.routes r on r.id = d.route_id where d.id = trip_day_id and r.owner_id = auth.uid()));
 create policy ai_daily_usage_owner_read on public.ai_daily_usage for select using (auth.uid() = user_id);
+create policy live_locations_owner on public.live_locations for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 grant execute on function public.consume_ai_quota(uuid, integer) to authenticated, service_role;
 grant execute on function public.respond_buddy_application(uuid, uuid, text) to service_role;

@@ -27,7 +27,7 @@ if (!supabaseUrl || !anonKey || !serviceRoleKey) {
 
 const admin = createClient(supabaseUrl, serviceRoleKey, { auth: { autoRefreshToken: false, persistSession: false } });
 const authClient = createClient(supabaseUrl, anonKey, { auth: { autoRefreshToken: false, persistSession: false } });
-const allowedUploadTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm', 'video/quicktime']);
+const allowedUploadTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif', 'video/mp4', 'video/webm', 'video/quicktime', 'video/heic']);
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 }, fileFilter: (_req, file, callback) => callback(allowedUploadTypes.has(file.mimetype) ? null : new Error('仅支持 JPG、PNG、WebP、GIF、MP4、WebM 或 MOV'), allowedUploadTypes.has(file.mimetype)) });
 const aiUsage = new Map();
 const responseCache = new Map();
@@ -253,6 +253,31 @@ app.post('/api/map/route', async (req, res) => {
   } catch (error) { res.status(502).json({ error: '道路路线服务暂时不可用', detail: error.message }); }
 });
 
+app.post('/api/map/presence', requireUser, async (req, res) => {
+  const latitude = Number(req.body?.latitude), longitude = Number(req.body?.longitude);
+  const sharing_enabled = req.body?.sharing_enabled === true;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return res.status(400).json({ error: '位置坐标无效' });
+  const payload = { user_id: req.user.id, latitude, longitude, country: String(req.body?.country || '').slice(0, 80), city: String(req.body?.city || '').slice(0, 80), sharing_enabled, updated_at: new Date().toISOString() };
+  const { data, error } = await admin.from('live_locations').upsert(payload, { onConflict: 'user_id' }).select('sharing_enabled,updated_at').single();
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+});
+
+app.delete('/api/map/presence', requireUser, async (req, res) => {
+  const { error } = await admin.from('live_locations').delete().eq('user_id', req.user.id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+});
+
+app.get('/api/map/online-users', async (req, res) => {
+  const country = String(req.query.country || '').trim().slice(0, 80);
+  let query = admin.from('live_locations').select('latitude,longitude,country,city,updated_at,profiles:user_id(id,username,display_name,bio,avatar_url)').eq('sharing_enabled', true).gte('updated_at', new Date(Date.now() - 5 * 60 * 1000).toISOString()).order('updated_at', { ascending: false }).limit(200);
+  if (country) query = query.ilike('country', country);
+  const { data, error } = await query;
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ expiresInSeconds: 300, users: data || [] });
+});
+
 app.get('/api/weather', async (req, res) => {
   const latitude = Number(req.query.latitude), longitude = Number(req.query.longitude);
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return res.status(400).json({ error: '经纬度无效' });
@@ -267,7 +292,8 @@ app.get('/api/weather', async (req, res) => {
 app.post('/api/auth/register', async (req, res) => {
   const { email, password, displayName = '', username = '' } = req.body || {};
   if (!email || !password || password.length < 8) return res.status(400).json({ error: '请输入邮箱和至少 8 位密码' });
-  const { data, error } = await authClient.auth.signUp({ email, password, options: { data: { display_name: displayName, username } } });
+  const isChinaMailbox = /@(qq\.com|163\.com|126\.com|sina\.com|foxmail\.com|aliyun\.com)$/i.test(email);
+  const { data, error } = await authClient.auth.signUp({ email, password, options: { emailRedirectTo: publicAppUrl, data: { display_name: displayName, username, email_locale: isChinaMailbox ? 'zh-CN' : 'en' } } });
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json({ user: data.user, session: data.session });
 });
