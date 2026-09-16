@@ -239,6 +239,19 @@ app.get('/api/map/search', async (req, res) => {
   } catch (error) { res.status(502).json({ error: '地点搜索服务暂时不可用', detail: error.message }); }
 });
 
+app.get('/api/map/reverse', async (req, res) => {
+  const latitude = Number(req.query.latitude), longitude = Number(req.query.longitude);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return res.status(400).json({ error: '位置坐标无效' });
+  const cacheKey = `reverse:${latitude.toFixed(3)}:${longitude.toFixed(3)}`;
+  const cached = cacheGet(cacheKey); if (cached) return res.json(cached);
+  try {
+    const place = await fetchJson(`${nominatimBaseUrl}/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`, { headers: { 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.6', 'User-Agent': `TravelWorld/1.0 (${publicAppUrl})` } });
+    const address = place.address || {};
+    const result = { country: String(address.country || '').slice(0, 80), city: String(address.city || address.town || address.village || address.state || '').slice(0, 80) };
+    cacheSet(cacheKey, result, 24 * 60 * 60 * 1000); res.json(result);
+  } catch (_) { res.json({ country: '', city: '' }); }
+});
+
 app.post('/api/map/route', async (req, res) => {
   const points = Array.isArray(req.body?.points) ? req.body.points.slice(0, 25) : [];
   const valid = points.map(point => ({ latitude: Number(point.latitude), longitude: Number(point.longitude), name: String(point.name || '') })).filter(point => Number.isFinite(point.latitude) && Number.isFinite(point.longitude) && Math.abs(point.latitude) <= 90 && Math.abs(point.longitude) <= 180);

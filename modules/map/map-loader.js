@@ -34,7 +34,7 @@
     const presence = document.createElement('div');
     presence.className = 'row';
     presence.style.cssText = 'margin:0 0 10px;align-items:center';
-    presence.innerHTML = '<label class="muted" style="font-size:12px"><input id="mapShareLocation" type="checkbox" onchange="toggleMapLocationSharing(this.checked)"> 共享我的位置</label><button class="btn alt small" onclick="loadMapOnlineUsers()">在线用户</button>';
+    presence.innerHTML = '<label class="muted" style="font-size:12px"><input id="mapShareLocation" type="checkbox" onchange="toggleMapLocationSharing(this.checked)"> 共享我的位置</label><input id="mapOnlineCountry" aria-label="在线用户国家筛选" placeholder="国家筛选" style="width:84px;border:1px solid #dfe6e1;border-radius:8px;padding:7px"><button class="btn alt small" onclick="loadMapOnlineUsers()">在线用户</button>';
     card.insertBefore(presence, controls.nextSibling);
   });
 }());
