@@ -603,7 +603,7 @@ app.post('/api/direct-chats/:userId', requireUser, async (req, res) => {
     const complete = (rows || []).filter(row => memberIds.includes(row.user_id)).reduce((map, row) => {
       map[row.chat_id] = (map[row.chat_id] || 0) + 1; return map;
     }, {});
-    const chatId = Object.keys(complete).find(id => complete[id] === 2);
+    const chatId = Object.keys(complete).find(id => complete[id] === 2 && rows.filter(row => row.chat_id === id).length === 2);
     if (chatId) chat = { id: chatId };
   }
   if (!chat) {
