@@ -576,6 +576,35 @@ app.patch('/api/notifications/:id/read', requireUser, async (req, res) => {
   res.json(data);
 });
 
+app.post('/api/direct-chats/:userId', requireUser, async (req, res) => {
+  const targetId = String(req.params.userId || '');
+  if (!targetId || targetId === req.user.id) return res.status(400).json({ error: '不能和自己私聊' });
+  const { data: target } = await admin.from('profiles').select('id,display_name,avatar_url,bio').eq('id', targetId).maybeSingle();
+  if (!target) return res.status(404).json({ error: '用户不存在' });
+  const memberIds = [req.user.id, target.id].sort();
+  const { data: existingMembers } = await admin.from('chat_members').select('chat_id,user_id').in('user_id', memberIds);
+  const candidates = [...new Set((existingMembers || []).map(row => row.chat_id))];
+  let chat = null;
+  if (candidates.length) {
+    const { data: rows } = await admin.from('chat_members').select('chat_id,user_id').in('chat_id', candidates);
+    const complete = (rows || []).filter(row => memberIds.includes(row.user_id)).reduce((map, row) => {
+      map[row.chat_id] = (map[row.chat_id] || 0) + 1; return map;
+    }, {});
+    const chatId = Object.keys(complete).find(id => complete[id] === 2);
+    if (chatId) chat = { id: chatId };
+  }
+  if (!chat) {
+    const { data: created, error: tripError } = await admin.from('trips').insert({ owner_id: req.user.id, title: `与 ${target.display_name || '旅行者'} 的私聊`, destination: '', description: 'Travel World 私聊会话', status: 'closed' }).select('id').single();
+    if (tripError) return res.status(400).json({ error: tripError.message });
+    const { data: createdChat, error: chatError } = await admin.from('chats').insert({ trip_id: created.id }).select('id').single();
+    if (chatError) return res.status(400).json({ error: chatError.message });
+    const { error: membersError } = await admin.from('chat_members').insert([{ chat_id: createdChat.id, user_id: req.user.id }, { chat_id: createdChat.id, user_id: target.id }]);
+    if (membersError) return res.status(400).json({ error: membersError.message });
+    chat = createdChat;
+  }
+  res.status(201).json({ chatId: chat.id, user: target });
+});
+
 app.get('/api/trips', async (_req, res) => {
   const { data, error } = await admin.from('trips').select('*, owner:owner_id(id,display_name,avatar_url,bio), buddy_applications(id,status), buddy_relations(user_id)').eq('status', 'open').order('created_at', { ascending: false }).limit(50);
   if (error) return res.status(500).json({ error: error.message });
@@ -712,10 +741,24 @@ app.patch('/api/buddy/applications/:id', requireUser, async (req, res) => {
 });
 
 app.get('/api/chats', requireUser, async (req, res) => {
-  const { data: memberships, error } = await admin.from('chat_members').select('chat_id').eq('user_id', req.user.id);
+  const { data: memberships, error } = await admin.from('chat_members').select('chat_id,last_read_at').eq('user_id', req.user.id);
   if (error) return res.status(500).json({ error: error.message }); const ids = (memberships || []).map(item => item.chat_id); if (!ids.length) return res.json([]);
   const { data, error: chatError } = await admin.from('chats').select('*, trip:trip_id(*), chat_members(user_id, profiles:user_id(id,display_name,avatar_url))').in('id', ids).order('created_at', { ascending: false });
-  if (chatError) return res.status(500).json({ error: chatError.message }); res.json(data || []);
+  if (chatError) return res.status(500).json({ error: chatError.message });
+  const reads = new Map((memberships || []).map(item => [item.chat_id, item.last_read_at]));
+  const enriched = await Promise.all((data || []).map(async chat => {
+    let query = admin.from('chat_messages').select('*', { count: 'exact', head: true }).eq('chat_id', chat.id).neq('sender_id', req.user.id);
+    if (reads.get(chat.id)) query = query.gt('created_at', reads.get(chat.id));
+    const { count } = await query;
+    return { ...chat, unread_count: count || 0 };
+  }));
+  res.json(enriched);
+});
+
+app.patch('/api/chats/:id/read', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('chat_members').update({ last_read_at: new Date().toISOString() }).eq('chat_id', req.params.id).eq('user_id', req.user.id).select('chat_id').maybeSingle();
+  if (error || !data) return res.status(403).json({ error: '你不是该聊天室成员' });
+  res.json({ read: true });
 });
 
 app.get('/api/chats/:id/messages', requireUser, async (req, res) => {

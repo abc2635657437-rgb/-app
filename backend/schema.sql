@@ -122,6 +122,7 @@ create table if not exists public.chat_members (
   chat_id uuid not null references public.chats(id) on delete cascade,
   user_id uuid not null references public.profiles(id) on delete cascade,
   created_at timestamptz not null default now(),
+  last_read_at timestamptz not null default now(),
   primary key (chat_id, user_id)
 );
 
