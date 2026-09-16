@@ -108,5 +108,39 @@
   async function toggleSharing(enabled) { const auth = window.TravelWorldAuth; if (!enabled) { if (presenceWatchId !== null) navigator.geolocation.clearWatch(presenceWatchId); clearInterval(presenceTimer); presenceWatchId = null; presenceTimer = null; try { if (auth?.session()) await auth.request('/api/map/presence', { method: 'DELETE' }); clearOnlineMarkers(); status('位置共享已关闭，其他用户将立即看不到你。'); } catch (error) { status('关闭共享失败：' + error.message); } return; } if (!navigator.geolocation) return status('当前设备不支持定位。'); locateUser(); presenceWatchId = navigator.geolocation.watchPosition(position => { lastPosition = position; publishPresence(); }, () => {}, { enableHighAccuracy: true, maximumAge: 60_000, timeout: 15_000 }); clearInterval(presenceTimer); presenceTimer = setInterval(() => publishPresence(true), 120_000); }
   async function openOnlineUser(userId) { const auth = window.TravelWorldAuth; if (!auth?.requireLogin()) return; try { const result = await auth.request('/api/direct-chats/' + encodeURIComponent(userId), { method: 'POST' }); const text = prompt('给 ' + (result.user?.display_name || result.user?.username || '旅行者') + ' 发送私聊消息（取消可稍后发送）'); if (!text?.trim()) return status('私聊已建立，可在旅友页面继续聊天。'); await auth.request('/api/chats/' + result.chatId + '/messages', { method: 'POST', body: JSON.stringify({ content: text.trim() }) }); status('私聊消息已发送，可在旅友页面继续聊天。'); if (window.go) window.go('friends'); } catch (error) { status('无法发起私聊：' + error.message); } }
   async function followOnlineUser(userId) { const auth = window.TravelWorldAuth; if (!auth?.requireLogin()) return; try { const result = await auth.request('/api/community/users/' + encodeURIComponent(userId) + '/follow', { method: 'POST' }); status(result.following ? '已关注该旅行者。' : '已取消关注。'); } catch (error) { status('关注操作失败：' + error.message); } }
-  async function loadOnlineUsers() { try { const country = document.getElementById('mapOnlineCountry')?.value.trim() || ''; const response = await fetch('/api/map/online-users' + (country ? '?country=' + encodeURIComponent(country) : '')); const payload = await response.json(); if (!response.ok) throw new Error(payload.error || '无法读取在线用户'); if (!map || !window.L) return; clearOnlineMarkers(); payload.users.forEach(entry => { const profile = entry.profiles || {}; const name = String(profile.display_name || profile.username || '旅行者').replace(/[<>'"]/g, ''); const place = String(entry.city || entry.country || '公开位置').replace(/[<>'"]/g, ''); const bio = String(profile.bio || '这位旅行者还没有填写简介').replace(/[<>'"]/g, ''); const avatar = String(profile.avatar_url || '').replace(/[<>'"]/g, ''); const id = String(profile.id || '').replace(/[^a-zA-Z0-9-]/g, ''); const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">🧭</span><span class="tw-q-pin__label">' + name + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] }); const card = (avatar ? '<img src="' + avatar + '" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">' : '') + '<strong>' + name + '</strong><br><small>' + place + '</small><p style="margin:6px 0">' + bio + '</p><button onclick="window.followMapUser(\'' + id + '\')">关注/取消关注</button> <button onclick="window.openMapDirectChat(\'' + id + '\')">私聊</button>'; onlineMarkers.push(L.marker([entry.latitude, entry.longitude], { icon, title: name }).addTo(map).bindPopup(card)); }); status((country ? country + ' · ' : '') + '已显示 ' + payload.users.length + ' 位主动共享位置的在线用户；点击 Q 版标识可互动。'); } catch (error) { status('在线用户暂时不可用：' + error.message); } };
+  async function loadOnlineUsers() { try { const country = document.getElementById('mapOnlineCountry')?.value.trim() || ''; const response = await fetch('/api/map/online-users' + (country ? '?country=' + encodeURIComponent(country) : '')); const payload = await response.json(); if (!response.ok) throw new Error(payload.error || '无法读取在线用户'); if (!map || !window.L) return; clearOnlineMarkers(); payload.users.forEach(entry => { const profile = entry.profiles || {}; const name = String(profile.display_name || profile.username || '旅行者').replace(/[<>'"]/g, ''); const place = String(entry.city || entry.country || '公开位置').replace(/[<>'"]/g, ''); const bio = String(profile.bio || '这位旅行者还没有填写简介').replace(/[<>'"]/g, ''); const avatar = String(profile.avatar_url || '').replace(/[<>'"]/g, ''); const id = String(profile.id || '').replace(/[^a-zA-Z0-9-]/g, ''); const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">🧭</span><span class="tw-q-pin__label">' + name + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] }); const card = (avatar ? '<img src="' + avatar + '" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">' : '') + '<strong>' + name + '</strong><br><small>' + place + '</small><p style="margin:6px 0">' + bio + '</p><button onclick="window.followMapUser(\'' + id + '\')">关注/取消关注</button> <button onclick="window.openMapDirectChat(\'' + id + '\')">私聊</button>'; onlineMarkers.push(L.marker([entry.latitude, entry.longitude], { icon, title: name }).addTo(map).bindPopup(card)); }); status((country ? country + ' · ' : '') + '已显示 ' + payload.users.length + ' 位主动共享位置的在线用户；点击 Q 版标识可互动。'); } catch (error) { status('在线用户暂时不可用：' + error.message); } }
+  window.initTravelMap = initMap;
+  window.searchTravelMap = searchPlace;
+  window.locateTravelMap = locateUser;
+  window.toggleMapLocationSharing = toggleSharing;
+  window.loadMapOnlineUsers = loadOnlineUsers;
+  window.openMapDirectChat = openOnlineUser;
+  window.followMapUser = followOnlineUser;
+  window.openMapLandmark = openLandmark;
+  window.showTravelRoute = async function (points) {
+    if (!map || !Array.isArray(points)) return;
+    const coords = points.map(point => Array.isArray(point) ? point : [point.latitude, point.longitude]).filter(point => point.length === 2 && point.every(Number.isFinite));
+    if (coords.length < 2) return status('路线至少需要两个有效地点。');
+    if (routeLayer) routeLayer.remove();
+    routeMarkers.forEach(marker => marker.remove()); routeMarkers = [];
+    let routeCoords = coords, routeDetail = '';
+    try {
+      const response = await fetch('/api/map/route', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ points }) });
+      if (!response.ok) throw new Error('route ' + response.status);
+      const result = await response.json();
+      routeCoords = (result.geometry?.coordinates || []).map(coord => [Number(coord[1]), Number(coord[0])]).filter(coord => coord.every(Number.isFinite));
+      routeDetail = ' · 约 ' + (result.distanceMeters / 1000).toFixed(1) + ' km / ' + Math.max(1, Math.round(result.durationSeconds / 60)) + ' 分钟';
+    } catch (_) { routeDetail = ' · 道路服务不可用，当前显示地点连线'; }
+    routeLayer = L.polyline(routeCoords.length > 1 ? routeCoords : coords, { color: '#d17d57', weight: 5, opacity: .85, dashArray: routeDetail.includes('地点连线') ? '9 7' : null }).addTo(map);
+    points.forEach((point, index) => {
+      const coord = coords[index]; if (!coord) return;
+      const label = String(index + 1);
+      const icon = L.divIcon({ className: 'tw-route-pin', html: '<div class="tw-route-pin__body">' + label + '</div>', iconSize: [28, 28], iconAnchor: [14, 14] });
+      const title = point.name ? '<strong>' + String(point.name).replace(/[<>]/g, '') + '</strong><br>' : '';
+      const detail = point.day ? 'Day ' + Number(point.day) + (point.time ? ' · ' + String(point.time).replace(/[<>]/g, '') : '') : '';
+      routeMarkers.push(L.marker(coord, { icon }).addTo(map).bindPopup(title + detail));
+    });
+    map.fitBounds(routeLayer.getBounds(), { padding: [30, 30] });
+    status('已在地图显示旅行路线，共 ' + coords.length + ' 个地点' + routeDetail + '。');
+  };
 }());
