@@ -79,7 +79,7 @@ const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmark
 // independent of the package manager's node_modules layout.
 app.use('/vendor/leaflet', express.static(path.resolve(backendDir, '..', 'modules', 'vendor', 'leaflet'), { maxAge: '30d', immutable: true }));
 app.use('/vendor/leaflet', express.static(path.resolve(backendDir, 'node_modules', 'leaflet', 'dist'), { maxAge: '30d', immutable: true }));
-app.use(express.static(path.resolve(backendDir, '..')));
+app.use(express.static(path.resolve(backendDir, '..'), { setHeaders(res, filePath) { if (/\.(?:html|js|css)$/.test(filePath) || filePath.endsWith('sw.js')) res.setHeader('Cache-Control', 'no-cache, must-revalidate'); } }));
 
 const normalizeText = value => String(value || '').trim().toLowerCase();
 async function relevantLandmarks(request = {}, context = {}) {
