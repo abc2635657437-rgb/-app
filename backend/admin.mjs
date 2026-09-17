@@ -48,6 +48,17 @@ export async function installAdmin(app, db, requireUser, rootDir) {
     const p=page(req),s=size(req),q=safeSearch(req.query.q),sort=allowedSort.has(req.query.sort)?req.query.sort:'created_at'; let query=db.from('posts').select('*,profiles:author_id(id,display_name,username,avatar_url),post_media(*),comments(id,content,created_at,profiles:author_id(id,display_name,username)),post_likes(user_id)',{count:'exact'}).order(sort,{ascending:req.query.order==='asc'}).range((p-1)*s,p*s-1);
     if(q)query=query.or(`title.ilike.%${q}%,content.ilike.%${q}%`); if(req.query.user)query=query.eq('author_id',req.query.user); if(iso(req.query.from))query=query.gte('created_at',iso(req.query.from)); if(iso(req.query.to))query=query.lte('created_at',iso(req.query.to)); const {data,error,count}=await query; if(error)return res.status(503).json({error:error.message});res.json({items:data,total:count,page:p,pageSize:s});
   });
+  app.delete('/api/admin/posts/:id', ...(await requireAdmin('delete_content')), async(req,res)=>{
+    const {data:post,error:findError}=await db.from('posts').select('id,title').eq('id',req.params.id).maybeSingle();
+    if(findError)return res.status(503).json({error:findError.message});
+    if(!post)return res.status(404).json({error:'帖子不存在'});
+    const {data:media}=await db.from('post_media').select('storage_path').eq('post_id',post.id);
+    const {error}=await db.from('posts').delete().eq('id',post.id);
+    if(error){await audit(req,'delete_post','post',post.id,'failure',{error:error.message});return res.status(400).json({error:error.message});}
+    if(media?.length)await db.storage.from('media').remove(media.map(x=>x.storage_path).filter(Boolean));
+    await audit(req,'delete_post','post',post.id,'success',{title:post.title});
+    res.status(204).end();
+  });
   app.get('/api/admin/users', ...(await requireAdmin('users')), async(req,res)=>{const p=page(req),s=size(req),q=safeSearch(req.query.q),sort=allowedSort.has(req.query.sort)?req.query.sort:'created_at';let query=db.from('profiles').select('*,posts(count),comments(count),admin_users(role)',{count:'exact'}).order(sort,{ascending:req.query.order==='asc'}).range((p-1)*s,p*s-1);if(q)query=query.or(`display_name.ilike.%${q}%,username.ilike.%${q}%`);if(req.query.status)query=query.eq('account_status',req.query.status);const {data,error,count}=await query;if(error)return res.status(503).json({error:error.message});res.json({items:data,total:count,page:p,pageSize:s});});
   app.get('/api/admin/audit', ...(await requireAdmin('audit')), async(req,res)=>{const p=page(req),s=size(req),q=safeSearch(req.query.q);let query=db.from('admin_audit_log').select('*,profiles:admin_id(display_name,username)',{count:'exact'}).order('created_at',{ascending:false}).range((p-1)*s,p*s-1);if(q)query=query.or(`action.ilike.%${q}%,target_id.ilike.%${q}%`);const {data,error,count}=await query;if(error)return res.status(503).json({error:error.message});res.json({items:data,total:count,page:p,pageSize:s});});
 }
