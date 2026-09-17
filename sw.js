@@ -1,5 +1,5 @@
-const CACHE = 'travel-world-offline-v9-admin';
-const ASSETS = ['/modules/chat/chat-web.js?v=2', '/modules/theme/ukiyoe.js?v=3', '/modules/theme/ukiyoe.css?v=4', '/assets/ukiyoe-journey.svg', '/', '/index.html', '/admin.html', '/admin.css?v=1', '/admin.js?v=1', '/modules/data/landmarks.json', '/modules/data/routes.json', '/modules/auth/auth-web.js', '/modules/community/home-api.js', '/modules/ai/ai-planner.js', '/modules/map/map-web.js', '/modules/map/map-actions.js', '/modules/buddies/buddy-web.js', '/modules/profile/profile-web.js'];
+const CACHE = 'travel-world-offline-v8-journal';
+const ASSETS = ['/modules/chat/chat-web.js?v=1', '/modules/theme/ukiyoe.js?v=2', '/modules/theme/ukiyoe.css?v=2', '/assets/ukiyoe-journey.svg', '/', '/index.html', '/modules/data/landmarks.json', '/modules/data/routes.json', '/modules/auth/auth-web.js', '/modules/community/home-api.js', '/modules/ai/ai-planner.js', '/modules/map/map-web.js', '/modules/map/map-actions.js', '/modules/buddies/buddy-web.js', '/modules/profile/profile-web.js'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(Promise.all([caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))), self.clients.claim()])));
 self.addEventListener('fetch', event => {

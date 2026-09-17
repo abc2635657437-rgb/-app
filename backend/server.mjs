@@ -205,8 +205,6 @@ async function requireUser(req, res, next) {
   if (!token) return res.status(401).json({ error: '登录后才能操作' });
   const { data, error } = await admin.auth.getUser(token);
   if (error || !data.user) return res.status(401).json({ error: '登录已过期，请重新登录' });
-  const { data: profile } = await admin.from('profiles').select('account_status').eq('id', data.user.id).maybeSingle();
-  if (profile?.account_status === 'suspended') return res.status(403).json({ error: '账号已被暂停' });
   req.user = data.user;
   req.accessToken = token;
   next();
@@ -282,7 +280,6 @@ app.post('/api/map/presence', requireUser, async (req, res) => {
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return res.status(400).json({ error: '位置坐标无效' });
   const payload = { user_id: req.user.id, latitude, longitude, country: String(req.body?.country || '').slice(0, 80), city: String(req.body?.city || '').slice(0, 80), sharing_enabled, updated_at: new Date().toISOString() };
   const { data, error } = await admin.from('live_locations').upsert(payload, { onConflict: 'user_id' }).select('sharing_enabled,updated_at').single();
-  await admin.from('profiles').update({ last_active_at: payload.updated_at, country: payload.country || null, city: payload.city || null }).eq('id', req.user.id);
   if (error) return res.status(400).json({ error: error.message });
   res.json(data);
 });
