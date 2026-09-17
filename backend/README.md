@@ -8,7 +8,7 @@
 - GET /api/ai/conversations/:id：读取会话和完整消息上下文。
 - 路线保存到 routes、trip_days、trip_places；地图使用返回坐标绘制路线。地点验证状态区分 verified、provider 与 unverified。
 
-AI_PROVIDER、AI_MODEL、AI_API_KEY、AI_BASE_URL 仅配置在服务端。生产部署仍需增加按 userId/IP 限流、每日额度、token 上限、超时和审计日志。
+AI_PROVIDER、AI_MODEL、AI_API_KEY、AI_BASE_URL 仅配置在服务端。默认可使用 OpenRouter 的 `openrouter/free` 路由；服务端已按用户限制每日 5 次、每分钟 3 次，并设置 token 上限和 45 秒超时。
 
 ## 用户与旅友
 - /api/users/me、/api/buddies/search、/api/buddies/applications。匹配字段包括目的地、日期、兴趣、预算与同行偏好。

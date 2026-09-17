@@ -30,6 +30,8 @@
       const result = await window.TravelWorldAuth.request('/api/ai/plan', { method: 'POST', body: JSON.stringify({ request, context, conversationId: conversationId || undefined, message: message || request.message }) });
       conversationId = result.conversationId || conversationId; localStorage.setItem('tw-ai-conversation-id', conversationId);
       if (result.plan?.needsClarification) return chat(result.plan.clarifyingQuestion || '还需要补充目的地和旅行天数。');
+      if (result.plan?.answer) chat(result.plan.answer);
+      if (!result.plan?.daysPlan?.length) return;
       context = { ...request, plan: result.plan, routeId: result.routeId }; localStorage.setItem('tw-ai-context', JSON.stringify(context));
       render(result.plan); syncPlanToMap(result.plan); chat(message ? '路线已根据你的要求更新，并同步保存。' : '路线已经生成并保存，可以继续告诉我怎么调整。');
     } catch (error) { chat('真实 AI 服务暂时不可用：' + error.message); }

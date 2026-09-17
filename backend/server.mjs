@@ -9,6 +9,7 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import { installDirectChat } from './direct-chat.mjs';
 import { installAdmin } from './admin.mjs';
+import { parseAiResponse } from './ai-response.mjs';
 
 dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 
@@ -18,7 +19,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const anonKey = process.env.SUPABASE_ANON_KEY;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const aiProvider = String(process.env.AI_PROVIDER || '').toLowerCase();
-const aiModel = process.env.AI_MODEL || 'gpt-4o-mini';
+const aiModel = process.env.AI_MODEL || (aiProvider === 'openrouter' ? 'openrouter/free' : 'gpt-4o-mini');
 const aiApiKey = process.env.AI_API_KEY || '';
 const aiBaseUrl = (process.env.AI_BASE_URL || 'https://api.openai.com/v1').replace(/\/$/, '');
 const nominatimBaseUrl = (process.env.NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '');
@@ -893,17 +894,19 @@ app.post('/api/ai/plan', requireUser, enforceAiQuota, async (req, res) => {
   const weather = await weatherForCandidates(candidates);
   const message = String(req.body?.message || request.extra || '生成一份旅行计划').trim();
   await admin.from('ai_messages').insert({ conversation_id: conversation.id, user_id: req.user.id, role: 'user', content: message, structured_data: request });
-  const system = `你是 Travel World 的专业旅行顾问。你的核心任务是生成或修改真实可执行的旅行计划，不说空泛套话。综合目的地、日期、天数、人数、总预算、币种、兴趣、厌恶、节奏、步行承受度、交通、饮食和住宿偏好。每天通常安排 2-4 个主要活动，并为交通、排队、吃饭和休息留出时间。总估算不得无理由超过预算；预算不足时必须解释并主动降级。只可使用候选地点或用户已确认的地点；候选之外的地点必须标为 unverified，绝不能虚构坐标、营业时间、价格或评分。无法确认的实时信息写入 warnings。返回严格 JSON，不要 Markdown，结构为 {tripTitle,destination,days,budget,currency,estimated,remainingBudget,summary,season,warnings:[],needsClarification:boolean,clarifyingQuestion:string,daysPlan:[{day,title,note,estimatedCost,slots:[{period,time,place,address,category,duration,durationMinutes,transport,transportMinutes,cost,reason,latitude,longitude,verificationStatus,externalPlaceId,provider,sourceUrl}]}]}。若信息不足但仍可合理规划，应采用清晰假设并写入 warnings；仅在缺少目的地或天数时提出最多两个问题。`;
+  const system = `你是 Travel World 的旅行助手，品牌气质是可靠、克制、有人情味，像熟悉目的地的同行者。使用用户的语言回答，先给有用结论，不说营销套话。你可以回答旅行问题，也可以生成或修改真实可执行的路线。涉及签证、安全、开放时间、价格、天气等易变化信息时明确提醒用户出发前核实，绝不编造实时事实。规划路线时综合目的地、日期、天数、人数、总预算、币种、兴趣、节奏、步行承受度、交通、饮食和住宿偏好；每天安排 2-4 个主要活动并留出交通、排队、吃饭和休息时间，总估算不得无理由超预算。只可使用候选地点或用户已确认的地点；候选之外的地点标为 unverified，绝不虚构坐标、价格或评分。返回严格 JSON，不要 Markdown，结构为 {intent:"answer"|"plan",answer:string,tripTitle,destination,days,budget,currency,estimated,remainingBudget,summary,season,warnings:[],needsClarification:boolean,clarifyingQuestion:string,daysPlan:[{day,title,note,estimatedCost,slots:[{period,time,place,address,category,duration,durationMinutes,transport,transportMinutes,cost,reason,latitude,longitude,verificationStatus,externalPlaceId,provider,sourceUrl}]}]}。普通问答使用 intent=answer、填写 answer、daysPlan=[]；用户明确要求规划或修改路线时使用 intent=plan。规划信息不足但仍可合理完成时采用清晰假设并写入 warnings；仅在缺少目的地或天数且无法合理推断时提出最多两个问题。`;
   const historyResult = await admin.from('ai_messages').select('role,content,structured_data').eq('conversation_id', conversation.id).eq('user_id', req.user.id).order('created_at', { ascending: true }).limit(20);
   const history = (historyResult.data || []).slice(0, -1).map(item => ({ role: item.role === 'assistant' ? 'assistant' : 'user', content: item.role === 'assistant' && item.structured_data ? JSON.stringify(item.structured_data) : item.content }));
   const user = JSON.stringify({ currentRequest: request, savedContext: context, verifiedCandidatePlaces: candidates, weather, instruction: context.plan ? '根据最新要求增量修改当前计划，保留未被要求改变的部分。' : '生成首版完整计划。' });
   try {
-    const response = await fetch(aiBaseUrl + '/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + aiApiKey }, body: JSON.stringify({ model: aiModel, temperature: 0.2, max_tokens: 6000, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: system }, ...history, { role: 'user', content: user }] }) });
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);
+    const response = await fetch(aiBaseUrl + '/chat/completions', { method: 'POST', signal:controller.signal, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + aiApiKey, ...(aiProvider==='openrouter'?{'HTTP-Referer':publicAppUrl,'X-Title':'Travel World'}:{}) }, body: JSON.stringify({ model: aiModel, temperature: 0.25, max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: system }, ...history, { role: 'user', content: user }] }) });
+    clearTimeout(timer);
     const body = await response.json().catch(() => ({}));
     if (!response.ok) return res.status(502).json({ error: body?.error?.message || '云端 AI 请求失败', conversationId: conversation.id });
-    const plan = await verifyPlanPlaces(cleanPlan(JSON.parse(body.choices?.[0]?.message?.content || '{}'), candidates));
+    const plan = await verifyPlanPlaces(cleanPlan(parseAiResponse(body.choices?.[0]?.message?.content), candidates));
     await saveTripPreferences(req.user.id, conversation.id, { ...request, destination: plan.destination || request.destination, days: plan.days || request.days, budget: plan.budget ?? request.budget, currency: plan.currency || request.currency }, context);
-    await admin.from('ai_messages').insert({ conversation_id: conversation.id, user_id: req.user.id, role: 'assistant', content: plan.summary || plan.tripTitle || '旅行计划已更新', structured_data: plan });
+    await admin.from('ai_messages').insert({ conversation_id: conversation.id, user_id: req.user.id, role: 'assistant', content: plan.answer || plan.summary || plan.tripTitle || '旅行计划已更新', structured_data: plan });
     let route = null;
     if (!plan.needsClarification && plan.daysPlan?.length) route = await saveAiPlan(req.user.id, conversation.id, request, plan);
     return res.json({ plan, conversationId: conversation.id, routeId: route?.id || null, provider: aiProvider, model: aiModel, candidatesUsed: candidates.length, remainingToday: req.aiRemaining });
