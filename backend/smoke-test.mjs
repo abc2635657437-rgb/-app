@@ -22,12 +22,17 @@ try {
   await api('/api/users/me', a, { method: 'PATCH', body: JSON.stringify({ display_name: '旅行测试 A', bio: '自动测试账号' }) });
   const avatarForm = new FormData(); avatarForm.append('file', new Blob([Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64')], { type: 'image/png' }), 'avatar.png');
   const avatar = await api('/api/users/me/avatar', a, { method: 'POST', body: avatarForm }); storagePaths.push(avatar.storage_path);
-  const post = await api('/api/community/posts', a, { method: 'POST', body: JSON.stringify({ title: '测试旅行内容', content: '真实数据链路测试', location_name: '杭州, 中国', city: '杭州', country: '中国', type: 'photo' }) });
+  const clientRequestId = crypto.randomUUID();
+  const postPayload = { title: '测试旅行内容', content: '真实数据链路测试', location_name: '杭州, 中国', city: '杭州', country: '中国', type: 'photo', clientRequestId };
+  const post = await api('/api/community/posts', a, { method: 'POST', headers: { 'Idempotency-Key': clientRequestId }, body: JSON.stringify(postPayload) });
+  const repeatedPost = await api('/api/community/posts', a, { method: 'POST', headers: { 'Idempotency-Key': clientRequestId }, body: JSON.stringify(postPayload) });
+  if (repeatedPost.id !== post.id || !repeatedPost.idempotent) throw new Error('发布幂等保护失败');
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64'); const form = new FormData(); form.append('file', new Blob([png], { type: 'image/png' }), 'smoke.png');
   const media = await api(`/api/community/posts/${post.id}/media`, a, { method: 'POST', body: form }); storagePaths.push(media.storage_path);
   await api(`/api/community/posts/${post.id}/like`, b, { method: 'POST' }); const comment = await api(`/api/community/posts/${post.id}/comments`, b, { method: 'POST', body: JSON.stringify({ content: '测试评论' }) }); await api(`/api/community/posts/${post.id}/favorite`, b, { method: 'POST' }); await api(`/api/community/users/${created[0]}/follow`, b, { method: 'POST' });
   await api(`/api/community/posts/${post.id}`, a, { method: 'PATCH', body: JSON.stringify({ title: '已编辑的旅行内容' }) });
   const stats = await api('/api/users/me/stats', a); if (stats.posts !== 1 || stats.followers !== 1 || stats.likes !== 1) throw new Error('个人统计不正确');
+  const publicProfile = await api(`/api/community/users/${created[0]}`, b); if (publicProfile.profile?.id !== created[0] || publicProfile.posts?.[0]?.id !== post.id || !publicProfile.isFollowing) throw new Error('公开用户主页不正确');
   const [myPosts, favorites, following, followers, interactions] = await Promise.all([api('/api/community/me/posts', a), api('/api/community/favorites', b), api('/api/community/following', b), api('/api/community/followers', a), api('/api/community/interactions', a)]);
   if (myPosts[0]?.id !== post.id || favorites[0]?.id !== post.id || following[0]?.id !== created[0] || followers[0]?.id !== created[1]) throw new Error('个人社区列表不正确');
   if (!interactions.some(item => item.type === 'like') || !interactions.some(item => item.type === 'follow')) throw new Error('互动明细不正确');
@@ -48,7 +53,7 @@ try {
   await api(`/api/community/comments/${comment.id}`, a, { method: 'DELETE' });
   await api(`/api/users/me/blocked/${created[1]}`, a, { method: 'POST' }); const blocked = await api('/api/users/me/blocked', a); if (!blocked.some(item => item.id === created[1])) throw new Error('黑名单保存失败'); await api(`/api/users/me/blocked/${created[1]}`, a, { method: 'DELETE' });
   const routes = await api('/api/community/me/routes', a); if (!Array.isArray(routes)) throw new Error('路线列表不正确');
-  console.log(JSON.stringify({ ok: true, checks: ['auth', 'profile', 'avatar', 'stats', 'post', 'post-edit', 'media', 'like', 'comment', 'comment-delete', 'favorite', 'follow', 'block', 'unblock', 'my-posts', 'favorites-list', 'following-list', 'followers-list', 'interactions', 'settings', 'routes-list', 'route-publish', 'route-like', 'route-comment', 'route-favorite', 'trip', 'trip-edit', 'application', 'relation', 'chat', 'notifications'] }));
+  console.log(JSON.stringify({ ok: true, checks: ['auth', 'profile', 'public-profile', 'avatar', 'stats', 'post', 'post-idempotency', 'post-edit', 'media', 'like', 'comment', 'comment-delete', 'favorite', 'follow', 'block', 'unblock', 'my-posts', 'favorites-list', 'following-list', 'followers-list', 'interactions', 'settings', 'routes-list', 'route-publish', 'route-like', 'route-comment', 'route-favorite', 'trip', 'trip-edit', 'application', 'relation', 'chat', 'notifications'] }));
 } finally {
   if (storagePaths.length) await admin.storage.from('media').remove(storagePaths);
   for (const id of created) await admin.auth.admin.deleteUser(id);

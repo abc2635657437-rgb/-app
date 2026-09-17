@@ -211,6 +211,12 @@ async function requireUser(req, res, next) {
   next();
 }
 
+async function optionalUser(req, _res, next) {
+  const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  if (token) { const { data } = await admin.auth.getUser(token); req.user = data?.user || null; }
+  next();
+}
+
 function publicPostQuery() {
   return admin.from('posts').select('*, profiles:author_id(id,username,display_name,bio,avatar_url), post_media(*), post_likes(user_id), comments(id,author_id,content,created_at,profiles:author_id(id,display_name,avatar_url))').order('created_at', { ascending: false });
 }
@@ -315,7 +321,7 @@ app.post('/api/auth/register', async (req, res) => {
   const { email, password, displayName = '', username = '' } = req.body || {};
   if (!email || !password || password.length < 8) return res.status(400).json({ error: '请输入邮箱和至少 8 位密码' });
   const isChinaMailbox = /@(qq\.com|163\.com|126\.com|sina\.com|foxmail\.com|aliyun\.com)$/i.test(email);
-  const { data, error } = await authClient.auth.signUp({ email, password, options: { emailRedirectTo: publicAppUrl, data: { display_name: displayName, username, email_locale: isChinaMailbox ? 'zh-CN' : 'en' } } });
+  const { data, error } = await authClient.auth.signUp({ email, password, options: { emailRedirectTo: `${publicAppUrl.replace(/\/$/,'')}/auth-confirm.html`, data: { display_name: displayName, username, email_locale: isChinaMailbox ? 'zh-CN' : 'en' } } });
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json({ user: data.user, session: data.session });
 });
@@ -325,6 +331,12 @@ app.post('/api/auth/login', async (req, res) => {
   const { data, error } = await authClient.auth.signInWithPassword({ email, password });
   if (error) return res.status(401).json({ error: error.message });
   res.json({ user: data.user, session: data.session });
+});
+
+app.post('/api/auth/resend', async(req,res)=>{
+  const email=String(req.body?.email||'').trim();if(!/^\S+@\S+\.\S+$/.test(email))return res.status(400).json({error:'请输入有效邮箱'});
+  const{error}=await authClient.auth.resend({type:'signup',email,options:{emailRedirectTo:`${publicAppUrl.replace(/\/$/,'')}/auth-confirm.html`}});
+  if(error)return res.status(400).json({error:error.message});res.status(204).end();
 });
 
 app.post('/api/auth/refresh', async (req, res) => {
@@ -365,6 +377,22 @@ app.get('/api/users/me/stats', requireUser, async (req, res) => {
   const failed = [posts, followers, following, likes, trips, favorites].find(result => result.error);
   if (failed) return res.status(500).json({ error: failed.error.message });
   res.json({ posts: posts.count || 0, followers: followers.count || 0, following: following.count || 0, likes: likes.count || 0, trips: trips.count || 0, favorites: favorites.count || 0 });
+});
+
+app.get('/api/community/users/:userId', optionalUser, async (req,res)=>{
+  const id=String(req.params.userId||'');
+  const [profileResult,settingsResult,postsResult,followers,following,likes]=await Promise.all([
+    admin.from('profiles').select('id,username,display_name,bio,avatar_url,created_at').eq('id',id).maybeSingle(),
+    admin.from('user_settings').select('privacy').eq('user_id',id).maybeSingle(),
+    publicPostQuery().eq('author_id',id).limit(30),
+    admin.from('follows').select('*',{count:'exact',head:true}).eq('following_id',id),
+    admin.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',id),
+    admin.from('post_likes').select('post_id,posts!inner(author_id)',{count:'exact',head:true}).eq('posts.author_id',id)
+  ]);
+  if(!profileResult.data)return res.status(404).json({error:'用户不存在'});
+  if(settingsResult.data?.privacy?.publicProfile===false&&req.user?.id!==id)return res.status(403).json({error:'该用户未公开个人主页'});
+  let isFollowing=false;if(req.user&&req.user.id!==id){const{data}=await admin.from('follows').select('follower_id').eq('follower_id',req.user.id).eq('following_id',id).maybeSingle();isFollowing=!!data;}
+  res.json({profile:profileResult.data,stats:{posts:postsResult.data?.length||0,followers:followers.count||0,following:following.count||0,likes:likes.count||0},posts:postsResult.data||[],isFollowing,isSelf:req.user?.id===id});
 });
 
 app.patch('/api/users/me', requireUser, async (req, res) => {
@@ -449,7 +477,10 @@ app.get('/api/community/feed/following', requireUser, async (req, res) => {
 
 app.post('/api/community/posts', requireUser, async (req, res) => {
   const { title = '', content = '', type = 'story', location_name = null, country = null, city = null, latitude = null, longitude = null, route_id = null } = req.body || {};
-  const { data, error } = await admin.from('posts').insert({ author_id: req.user.id, title, content, type, location_name, country, city, latitude, longitude, route_id }).select().single();
+  const clientRequestId=String(req.body?.clientRequestId||req.get('Idempotency-Key')||'');
+  if(clientRequestId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(clientRequestId))return res.status(400).json({error:'无效的发布请求标识'});
+  const { data, error } = await admin.from('posts').insert({ author_id: req.user.id, title, content, type, location_name, country, city, latitude, longitude, route_id,client_request_id:clientRequestId||null }).select().single();
+  if(error?.code==='23505'&&clientRequestId){const{data:existing}=await admin.from('posts').select('*').eq('author_id',req.user.id).eq('client_request_id',clientRequestId).single();return res.status(200).json({...existing,idempotent:true});}
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json(data);
 });

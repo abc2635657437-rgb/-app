@@ -211,3 +211,21 @@ body #profile .profile-links button { border-radius:0; background:transparent; b
 body .nav { box-shadow:0 -12px 35px #243e4609; }
 body .nav::before { content:""; position:absolute; top:-1px; left:18px; right:18px; height:1px; background:linear-gradient(90deg,transparent,#a9864c 20% 80%,transparent); }
 @media(min-width:900px) { body .app::after { content:"TRAVEL WORLD · 旅途手帖"; position:fixed; left:calc(50% + var(--app-width)/2 + 24px); top:50%; color:#53675f80; font:9px Georgia,serif; letter-spacing:4px; writing-mode:vertical-rl; transform:translateY(-50%); } }
+
+/* Q atlas using the original Leaflet engine and geographic data. */
+body #map .map-card-primary { margin:18px -5px 24px; padding:12px; border:1px solid #b9ad96; box-shadow:9px 9px 0 #ddd4c3,0 18px 40px #213f4a12; }
+body #map .map-card-primary::before { display:none; }
+body #map .map-card-primary::after { content:"Q ATLAS"; position:absolute; z-index:500; right:17px; top:116px; padding:5px 8px; color:#f9f1df; background:#a84e3d; font:9px Georgia,serif; letter-spacing:1.5px; pointer-events:none; }
+body #map .map-card-primary .map-canvas { min-height:480px; border:1px solid #c8bda7; border-radius:4px; background:#dce8df; }
+body #map .leaflet-tile-pane { filter:saturate(.72) sepia(.08) brightness(1.03) contrast(.92); }
+body #map .leaflet-popup-content-wrapper,body #map .leaflet-popup-tip { background:#fffaf0; color:#173f4f; }
+body #map .leaflet-popup-content-wrapper { border:1px solid #bcae94; border-radius:8px; box-shadow:0 12px 30px #173f4f25; }
+body #map .tw-q-pin__body { border-color:#9c513f; background:#fff6df; box-shadow:0 7px 16px #173f4f38; }
+body #map .tw-q-pin__icon { background:#efc77e; box-shadow:inset 0 0 0 2px #fff8; }
+body #map .tw-online-pin .tw-q-pin__body { position:relative; z-index:2000; border-color:#367a73; background:#eef8ee; }
+body #map .map-compact-labels .tw-q-pin__label { display:none; }
+body #map .map-compact-labels .tw-q-pin__body { width:36px; padding:4px; transform:translate(-8px,-8px); }
+#mapExplore { margin-top:26px; }
+#mapExplore>.card:first-child { border-top:2px solid #b39464; background:linear-gradient(145deg,#fffdf8,#f3ede0); }
+body .post-author-identity[role=button] { cursor:pointer; }
+@media(max-width:520px) { body #map .map-card-primary { margin-inline:-10px; } body #map .map-card-primary .map-canvas { min-height:430px; } }

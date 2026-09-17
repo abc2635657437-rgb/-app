@@ -12,5 +12,6 @@
   async function logout() { let failed = false; try { if (session) await request('/api/auth/logout', { method: 'POST' }); } catch (_) { failed = true; } saveSession(null); render(); window.dispatchEvent(new Event('tw-auth-change')); toast(failed ? '已退出此设备；服务端退出未确认' : '退出成功'); }
   function render() { const top = document.querySelector('.community-top'); if (!top) return; let button = document.getElementById('authEntry'); if (!button) { button = document.createElement('button'); button.id = 'authEntry'; button.className = 'post-map'; top.insertBefore(button, top.lastElementChild); } button.textContent = session ? '账号' : '登录'; button.onclick = session ? async () => { if (confirm('退出当前账号？')) await logout(); } : () => show('login'); }
   window.TravelWorldAuth = { request, session: () => session, requireLogin: () => session ? true : (show('login'), false), showLogin: () => show('login'), logout, toast }; render();
-  if (location.hash.includes('access_token=') || new URLSearchParams(location.search).get('type') === 'signup') { history.replaceState({}, '', location.pathname); toast('邮箱验证成功，请登录'); setTimeout(() => show('login'), 450); }
+  const verified=new URLSearchParams(location.search).get('verified');if(verified){history.replaceState({},'',location.pathname);toast('邮箱验证成功，请登录');setTimeout(()=>show('login'),450)}
+  else if (location.hash.includes('access_token=') || new URLSearchParams(location.search).get('type') === 'signup') location.replace('/auth-confirm.html'+location.search+location.hash);
 }());
