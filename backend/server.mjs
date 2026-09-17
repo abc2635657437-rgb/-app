@@ -6,6 +6,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
 import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+import { installDirectChat } from './direct-chat.mjs';
+
+dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
@@ -209,6 +213,8 @@ function publicPostQuery() {
   return admin.from('posts').select('*, profiles:author_id(id,username,display_name,bio,avatar_url), post_media(*), post_likes(user_id), comments(id,author_id,content,created_at,profiles:author_id(id,display_name,avatar_url))').order('created_at', { ascending: false });
 }
 
+installDirectChat(app, admin, requireUser);
+
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'travel-world-api' }));
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
@@ -332,7 +338,8 @@ app.get('/api/auth/session', requireUser, async (req, res) => {
 });
 
 app.post('/api/auth/logout', requireUser, async (req, res) => {
-  await admin.auth.admin.signOut(req.accessToken);
+  const { error } = await admin.auth.admin.signOut(req.accessToken);
+  if (error) return res.status(503).json({ error: '服务端退出失败，请重试' });
   res.status(204).end();
 });
 
