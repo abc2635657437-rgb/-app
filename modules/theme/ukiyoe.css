@@ -179,3 +179,35 @@ body .dm-row:hover::before,body .dm-row:focus-visible::before { transform:scaleY
 @media(max-width:520px) { body .dm-window { padding-inline:14px; } body .dm-header { margin-inline:-14px; padding-inline:14px; } body .dm-compose { margin-inline:-14px; padding-inline:14px; padding-bottom:max(14px,env(safe-area-inset-bottom)); } .dm-private-mark { margin-top:21px; font-size:11px; } }
 
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }
+
+/* Editorial chapters: quiet ukiyo-e cues shared by every primary screen. */
+body .app::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.28; background-image:linear-gradient(90deg,#7d72570a 1px,transparent 1px),linear-gradient(#7d725706 1px,transparent 1px); background-size:28px 28px; mask-image:linear-gradient(to bottom,#000,transparent 48%); }
+body .screen { isolation:isolate; }
+body .uk-chapter { padding-top:7px; }
+body .uk-chapter::before { content:attr(data-chapter); position:absolute; z-index:-1; top:-16px; right:-4px; color:#a9864c12; font:400 96px/1 Georgia,var(--serif); }
+body .uk-chapter>.eyebrow:first-child::after,.dm-page-head .eyebrow::after { content:"  /  " attr(data-chapter-label); color:#9b8d72; letter-spacing:1px; }
+body #friends>.eyebrow:first-child::after { content:"  /  同路人名录"; }
+body #profile>.eyebrow:first-child::after { content:"  /  我的旅册"; }
+body .uk-chapter>.title,body .dm-page-head .title { position:relative; max-width:88%; margin-top:14px; padding-bottom:19px; }
+body .uk-chapter>.title::after,body .dm-page-head .title::after { content:""; position:absolute; left:0; bottom:0; width:68px; height:2px; background:linear-gradient(90deg,var(--accent) 0 18px,var(--gold) 18px 100%); }
+body #discover>.card:first-of-type,body #friends>.card:first-of-type { position:relative; overflow:hidden; border-top:2px solid #b39464; background:linear-gradient(145deg,#fffdf8,#f3ede0); }
+body #discover>.card:first-of-type::after,body #friends>.card:first-of-type::after { content:"旅"; position:absolute; right:16px; top:14px; display:grid; place-items:center; width:27px; height:27px; border:1px solid #ad604f66; color:#a34b3c66; font-family:var(--serif); transform:rotate(3deg); }
+body #discover .photo { filter:saturate(.82) contrast(1.03); border:1px solid #c8bda7; box-shadow:7px 7px 0 #e6dcc9; margin-bottom:8px; }
+body #discover>.card:has(.photo) { padding:12px 12px 18px; }
+body #map .map-card { position:relative; border-color:#bfb59f; box-shadow:8px 8px 0 #ded7c8; background:#fdfaf2; }
+body #map .map-card::before { content:"世界游览"; position:absolute; z-index:500; top:16px; left:16px; padding:5px 8px; background:#f9f4e8e8; border:1px solid #b7aa90; color:#665f50; font:10px var(--serif); letter-spacing:2px; pointer-events:none; }
+body #map .leaflet-control-zoom a { color:#284b57; background:#fbf7ed; border-color:#c9bda5; }
+body #messages .dm-page-head { position:relative; margin-bottom:18px; background:linear-gradient(135deg,#f8f2e6 0 52%,transparent 52%); padding:18px 15px 22px; border:1px solid var(--line); }
+body #messages .dm-page-head::after { content:"文"; position:absolute; right:22px; bottom:14px; color:#a34a39; border:1px solid #a34a3970; padding:4px; font:15px var(--serif); transform:rotate(-4deg); }
+body #messages .dm-private-mark { border-radius:0; box-shadow:3px 3px 0 #e5dac7; }
+body #friends .head { position:relative; }
+body #friends .head::after { content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); box-shadow:10px 0 0 #c39a57; }
+body #friends #buddyPlans>.card { border-left:2px solid #a9864c; }
+body #profile .profile-hero { position:relative; padding:20px; background:linear-gradient(150deg,#fdfaf3,#eee6d8); border:1px solid #d7cdbb; }
+body #profile .profile-hero::after { content:"旅"; position:absolute; right:17px; top:16px; color:#a64a38; border:1px solid #a64a3875; padding:4px; font:15px var(--serif); transform:rotate(5deg); }
+body #profile .profile-stats { border-radius:0; border-inline:0; background:transparent; }
+body #profile .profile-links { background:#fdfaf4; border-color:#d8cfbd; }
+body #profile .profile-links button { border-radius:0; background:transparent; border-color:#e2daca; }
+body .nav { box-shadow:0 -12px 35px #243e4609; }
+body .nav::before { content:""; position:absolute; top:-1px; left:18px; right:18px; height:1px; background:linear-gradient(90deg,transparent,#a9864c 20% 80%,transparent); }
+@media(min-width:900px) { body .app::after { content:"TRAVEL WORLD · 旅途手帖"; position:fixed; left:calc(50% + var(--app-width)/2 + 24px); top:50%; color:#53675f80; font:9px Georgia,serif; letter-spacing:4px; writing-mode:vertical-rl; transform:translateY(-50%); } }

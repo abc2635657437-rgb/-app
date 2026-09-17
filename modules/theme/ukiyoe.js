@@ -1,6 +1,6 @@
 (function () {
   if (!document.querySelector('link[href*="ukiyoe.css"]')) {
-    const theme = document.createElement('link'); theme.rel = 'stylesheet'; theme.href = '/modules/theme/ukiyoe.css?v=4'; document.head.appendChild(theme);
+    const theme = document.createElement('link'); theme.rel = 'stylesheet'; theme.href = '/modules/theme/ukiyoe.css?v=5'; document.head.appendChild(theme);
   }
   const hero = document.createElement('div');
   hero.className = 'uk-hero';
@@ -19,4 +19,6 @@
     const node = button.querySelector('.nav-icon');
     if(node && icons[button.dataset.id])node.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+icons[button.dataset.id]+'</svg>';
   });
+  const chapters={discover:['壱','目的地选集'],map:['弐','世界游览图'],messages:['参','旅途书信'],friends:['肆','同路人名录'],profile:['伍','我的旅册']};
+  Object.entries(chapters).forEach(([id,[number,label]])=>{const screen=document.getElementById(id);if(!screen)return;screen.classList.add('uk-chapter');screen.dataset.chapter=number;screen.dataset.chapterLabel=label;const eyebrow=screen.querySelector('.eyebrow');if(eyebrow)eyebrow.dataset.chapterLabel=label;});
 }());
