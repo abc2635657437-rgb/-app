@@ -4,9 +4,9 @@
   }
   const hero = document.createElement('div');
   hero.className = 'uk-hero';
-  hero.innerHTML = '<div class="uk-editorial"><div><span class="uk-kicker">旅途手帖</span><h1>山海之间</h1></div><span class="uk-edition">TRAVEL JOURNAL</span></div><figure class="uk-art" style="margin:0"><img src="/assets/ukiyoe-journey.svg" width="960" height="600" fetchpriority="high" alt="浮世绘风格的海浪、远山与朱红落日"><span class="uk-seal" aria-hidden="true">旅</span><figcaption>山 · 海 · 日</figcaption></figure><div class="uk-caption"><span><i aria-hidden="true"></i> 沿途风景，日常记录。</span><button type="button" class="uk-explore">探索目的地 <span aria-hidden="true">↗</span></button></div>';
+  hero.innerHTML = '<div class="uk-editorial"><div><span class="uk-kicker">旅途手帖</span><h1>山海之间</h1></div><span class="uk-edition">TRAVEL JOURNAL</span></div><figure class="uk-art" style="margin:0"><img src="/assets/ukiyoe-journey.svg" width="960" height="600" fetchpriority="high" alt="浮世绘风格的海浪、远山与朱红落日"><div class="tw-world-orbit" aria-hidden="true"><div class="tw-globe"><i></i><b>✦</b><span>⌁</span></div><em>🚶</em></div><span class="uk-seal" aria-hidden="true">旅</span><figcaption>山 · 海 · 日</figcaption></figure><div class="uk-caption"><span><i aria-hidden="true"></i> 沿途风景，日常记录。</span><button type="button" class="uk-explore">探索目的地 <span aria-hidden="true">↗</span></button></div>';
   document.querySelector('.community-top').after(hero);
-  hero.querySelector('.uk-explore').onclick = () => window.go('discover');
+  hero.querySelector('.uk-explore').onclick = () => { window.go('map'); window.loadMap?.(); };
   const icons = {
     home:'<path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9"/>',
     discover:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5z"/>',

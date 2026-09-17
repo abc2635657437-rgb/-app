@@ -218,7 +218,27 @@ async function optionalUser(req, _res, next) {
 }
 
 function publicPostQuery() {
-  return admin.from('posts').select('*, profiles:author_id(id,username,display_name,bio,avatar_url), post_media(*), post_likes(user_id), comments(id,author_id,content,created_at,profiles:author_id(id,display_name,avatar_url))').order('created_at', { ascending: false });
+  return admin.from('posts').select('*, profiles:author_id(id,username,display_name,bio,avatar_url), post_media(*), post_likes(user_id), comments(id,author_id,content,created_at,profiles:author_id(id,display_name,avatar_url)), route:route_id(*,trip_days(*,trip_places(*)))').order('created_at', { ascending: false });
+}
+
+function routePoints(body) {
+  return (Array.isArray(body?.points) ? body.points : []).slice(0, 25).map((point, index) => ({
+    external_place_id: String(point.id || point.external_place_id || '').slice(0, 160) || null,
+    provider: String(point.provider || 'OpenStreetMap').slice(0, 80),
+    name: String(point.name || '').trim().slice(0, 160),
+    address: String(point.address || point.displayName || '').slice(0, 500) || null,
+    category: String(point.category || '').slice(0, 80) || null,
+    latitude: Number(point.latitude), longitude: Number(point.longitude), sort_order: index
+  })).filter(point => point.name && Number.isFinite(point.latitude) && Number.isFinite(point.longitude) && Math.abs(point.latitude) <= 90 && Math.abs(point.longitude) <= 180);
+}
+
+async function replaceRoutePlaces(routeId, points) {
+  const { error: deleteError } = await admin.from('trip_days').delete().eq('route_id', routeId);
+  if (deleteError) throw deleteError;
+  const { data: day, error: dayError } = await admin.from('trip_days').insert({ route_id: routeId, day_number: 1, title: '路线行程', sort_order: 0 }).select('id').single();
+  if (dayError) throw dayError;
+  const { error: placesError } = await admin.from('trip_places').insert(points.map(point => ({ ...point, trip_day_id: day.id })));
+  if (placesError) throw placesError;
 }
 
 installDirectChat(app, admin, requireUser);
@@ -254,6 +274,18 @@ app.get('/api/map/search', async (req, res) => {
   } catch (error) { res.status(502).json({ error: '地点搜索服务暂时不可用', detail: error.message }); }
 });
 
+app.get('/api/map/place-photos', async (req, res) => {
+  const query = String(req.query.q || '').trim().slice(0, 120);
+  if (query.length < 2) return res.status(400).json({ error: '地点名称无效' });
+  const cacheKey = `photos:${normalizeText(query)}`; const cached = cacheGet(cacheKey); if (cached) return res.json({ photos: cached, cached: true, provider: 'Wikimedia Commons' });
+  try {
+    const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch=${encodeURIComponent(query)}&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=960`;
+    const payload = await fetchJson(url, { headers: { 'User-Agent': `TravelWorld/1.0 (${publicAppUrl})` } });
+    const photos = Object.values(payload.query?.pages || {}).map(page => { const info = page.imageinfo?.[0] || {}, meta = info.extmetadata || {}; return { url: info.thumburl || info.url, fullUrl: info.descriptionurl, title: String(meta.ObjectName?.value || page.title || '').replace(/^File:/, ''), author: String(meta.Artist?.value || '').replace(/<[^>]+>/g, '').slice(0, 120), license: meta.LicenseShortName?.value || '', source: 'Wikimedia Commons' }; }).filter(photo => photo.url && /\.(jpe?g|png|webp)(\?|$)/i.test(photo.url)).slice(0, 6);
+    cacheSet(cacheKey, photos, 24 * 60 * 60 * 1000); res.json({ photos, cached: false, provider: 'Wikimedia Commons' });
+  } catch (error) { res.status(502).json({ error: '景点图片服务暂时不可用', detail: error.message }); }
+});
+
 app.get('/api/map/reverse', async (req, res) => {
   const latitude = Number(req.query.latitude), longitude = Number(req.query.longitude);
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return res.status(400).json({ error: '位置坐标无效' });
@@ -269,14 +301,17 @@ app.get('/api/map/reverse', async (req, res) => {
 
 app.post('/api/map/route', async (req, res) => {
   const points = Array.isArray(req.body?.points) ? req.body.points.slice(0, 25) : [];
+  const requestedProfile = ['walking','cycling','driving','transit'].includes(req.body?.mode) ? req.body.mode : 'driving';
   const valid = points.map(point => ({ latitude: Number(point.latitude), longitude: Number(point.longitude), name: String(point.name || '') })).filter(point => Number.isFinite(point.latitude) && Number.isFinite(point.longitude) && Math.abs(point.latitude) <= 90 && Math.abs(point.longitude) <= 180);
   if (valid.length < 2) return res.status(400).json({ error: '路线至少需要两个有效地点' });
   const coords = valid.map(point => `${point.longitude},${point.latitude}`).join(';');
-  const cacheKey = `route:${coords}`; const cached = cacheGet(cacheKey); if (cached) return res.json({ ...cached, cached: true });
+  const cacheKey = `route:${requestedProfile}:${coords}`; const cached = cacheGet(cacheKey); if (cached) return res.json({ ...cached, cached: true });
   try {
-    const route = await fetchJson(`${osrmBaseUrl}/route/v1/driving/${coords}?overview=full&geometries=geojson&steps=false`);
+    const profileBase = requestedProfile === 'walking' ? 'https://routing.openstreetmap.de/routed-foot' : requestedProfile === 'cycling' ? 'https://routing.openstreetmap.de/routed-bike' : osrmBaseUrl;
+    const actualProfile = requestedProfile === 'transit' ? 'driving' : requestedProfile;
+    const route = await fetchJson(`${profileBase}/route/v1/driving/${coords}?overview=full&geometries=geojson&steps=false`);
     const first = route.routes?.[0]; if (!first) return res.status(404).json({ error: '没有找到可用路线' });
-    const result = { geometry: first.geometry, distanceMeters: Math.round(first.distance), durationSeconds: Math.round(first.duration), waypoints: valid, provider: 'OSRM / OpenStreetMap', profile: 'driving' };
+    const result = { geometry: first.geometry, distanceMeters: Math.round(first.distance), durationSeconds: Math.round(first.duration), waypoints: valid, provider: 'OSRM / OpenStreetMap', profile: actualProfile, requestedProfile, fallback: requestedProfile === 'transit' };
     cacheSet(cacheKey, result, 6 * 60 * 60 * 1000); res.json({ ...result, cached: false });
   } catch (error) { res.status(502).json({ error: '道路路线服务暂时不可用', detail: error.message }); }
 });
@@ -381,10 +416,11 @@ app.get('/api/users/me/stats', requireUser, async (req, res) => {
 
 app.get('/api/community/users/:userId', optionalUser, async (req,res)=>{
   const id=String(req.params.userId||'');
-  const [profileResult,settingsResult,postsResult,followers,following,likes]=await Promise.all([
+  const [profileResult,settingsResult,postsResult,routesResult,followers,following,likes]=await Promise.all([
     admin.from('profiles').select('id,username,display_name,bio,avatar_url,created_at').eq('id',id).maybeSingle(),
     admin.from('user_settings').select('privacy').eq('user_id',id).maybeSingle(),
     publicPostQuery().eq('author_id',id).limit(30),
+    admin.from('routes').select('*,trip_days(*,trip_places(*))').eq('owner_id',id).eq('is_public',true).order('updated_at',{ascending:false}).limit(30),
     admin.from('follows').select('*',{count:'exact',head:true}).eq('following_id',id),
     admin.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',id),
     admin.from('post_likes').select('post_id,posts!inner(author_id)',{count:'exact',head:true}).eq('posts.author_id',id)
@@ -392,7 +428,7 @@ app.get('/api/community/users/:userId', optionalUser, async (req,res)=>{
   if(!profileResult.data)return res.status(404).json({error:'用户不存在'});
   if(settingsResult.data?.privacy?.publicProfile===false&&req.user?.id!==id)return res.status(403).json({error:'该用户未公开个人主页'});
   let isFollowing=false;if(req.user&&req.user.id!==id){const{data}=await admin.from('follows').select('follower_id').eq('follower_id',req.user.id).eq('following_id',id).maybeSingle();isFollowing=!!data;}
-  res.json({profile:profileResult.data,stats:{posts:postsResult.data?.length||0,followers:followers.count||0,following:following.count||0,likes:likes.count||0},posts:postsResult.data||[],isFollowing,isSelf:req.user?.id===id});
+  res.json({profile:profileResult.data,stats:{posts:postsResult.data?.length||0,routes:routesResult.data?.length||0,followers:followers.count||0,following:following.count||0,likes:likes.count||0},posts:postsResult.data||[],routes:routesResult.data||[],isFollowing,isSelf:req.user?.id===id});
 });
 
 app.patch('/api/users/me', requireUser, async (req, res) => {
@@ -467,6 +503,13 @@ app.get('/api/community/feed', async (req, res) => {
   res.json(data || []);
 });
 
+app.get('/api/community/posts/:postId', optionalUser, async (req, res) => {
+  const { data, error } = await publicPostQuery().eq('id', req.params.postId).maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  if (!data) return res.status(404).json({ error: '帖子不存在' });
+  res.json(data);
+});
+
 app.get('/api/community/feed/following', requireUser, async (req, res) => {
   const { data: follows, error: followError } = await admin.from('follows').select('following_id').eq('follower_id', req.user.id);
   if (followError) return res.status(500).json({ error: followError.message });
@@ -479,6 +522,11 @@ app.post('/api/community/posts', requireUser, async (req, res) => {
   const { title = '', content = '', type = 'story', location_name = null, country = null, city = null, latitude = null, longitude = null, route_id = null } = req.body || {};
   const clientRequestId=String(req.body?.clientRequestId||req.get('Idempotency-Key')||'');
   if(clientRequestId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(clientRequestId))return res.status(400).json({error:'无效的发布请求标识'});
+  if (!String(title).trim() && !String(content).trim() && !route_id && !['photo','video'].includes(type)) return res.status(400).json({ error: '请添加文字、媒体或路线' });
+  if (route_id) {
+    const { data: ownedRoute } = await admin.from('routes').select('id').eq('id', route_id).eq('owner_id', req.user.id).maybeSingle();
+    if (!ownedRoute) return res.status(403).json({ error: '只能绑定自己的路线' });
+  }
   const { data, error } = await admin.from('posts').insert({ author_id: req.user.id, title, content, type, location_name, country, city, latitude, longitude, route_id,client_request_id:clientRequestId||null }).select().single();
   if(error?.code==='23505'&&clientRequestId){const{data:existing}=await admin.from('posts').select('*').eq('author_id',req.user.id).eq('client_request_id',clientRequestId).single();return res.status(200).json({...existing,idempotent:true});}
   if (error) return res.status(400).json({ error: error.message });
@@ -689,9 +737,9 @@ app.delete('/api/trips/:tripId', requireUser, async (req, res) => {
 });
 
 app.get('/api/routes', async (_req, res) => {
-  const { data, error } = await admin.from('routes').select('*, owner:owner_id(id,username,display_name,bio,avatar_url), trip_days(*,trip_places(*)), posts!posts_route_id_fkey(id,post_likes(user_id),comments(id,author_id,content,created_at,author:author_id(id,display_name,avatar_url)))').eq('is_public', true).order('updated_at', { ascending: false }).limit(100);
+  const { data, error } = await admin.from('routes').select('*, owner:owner_id(id,username,display_name,bio,avatar_url), trip_days(*,trip_places(*)), posts!posts_route_id_fkey(id,type,post_likes(user_id),comments(id,author_id,content,created_at,author:author_id(id,display_name,avatar_url)))').eq('is_public', true).order('updated_at', { ascending: false }).limit(100);
   if (error) return res.status(500).json({ error: error.message });
-  res.json((data || []).map(route => ({ ...route, interaction_post_id: route.posts?.[0]?.id || null, route_likes: route.posts?.[0]?.post_likes || [], route_comments: route.posts?.[0]?.comments || [], posts: undefined })));
+  res.json((data || []).map(route => { const interaction=route.posts?.find(post=>post.type==='route'); return { ...route, interaction_post_id: interaction?.id || null, route_likes: interaction?.post_likes || [], route_comments: interaction?.comments || [], posts: undefined }; }));
 });
 
 app.get('/api/routes/favorites', requireUser, async (req, res) => {
@@ -706,29 +754,52 @@ app.get('/api/routes/favorite-items', requireUser, async (req, res) => {
   res.json((data || []).map(item => item.post?.route).filter(Boolean));
 });
 
+app.get('/api/routes/:id', optionalUser, async (req, res) => {
+  const { data, error } = await admin.from('routes').select('*,owner:owner_id(id,username,display_name,bio,avatar_url),trip_days(*,trip_places(*)),posts!posts_route_id_fkey(id,title,content,created_at,post_media(*),post_likes(user_id),comments(id,author_id,content,created_at,profiles:author_id(id,display_name,avatar_url)))').eq('id', req.params.id).maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  if (!data || (!data.is_public && data.owner_id !== req.user?.id)) return res.status(404).json({ error: '路线不存在或未公开' });
+  res.json(data);
+});
+
+app.post('/api/routes', requireUser, async (req, res) => {
+  const points = routePoints(req.body), title = String(req.body?.title || '').trim();
+  if (!title) return res.status(400).json({ error: '请填写路线名称' });
+  if (points.length < 2) return res.status(400).json({ error: '路线至少需要两个有效地点' });
+  const mode = ['walking','cycling','driving','transit'].includes(req.body?.transport_mode) ? req.body.transport_mode : 'driving';
+  const payload = { owner_id: req.user.id, title: title.slice(0, 120), destination: String(req.body?.destination || points.at(-1).name).slice(0, 120), is_public: req.body?.is_public === true, transport_mode: mode, geometry: req.body?.geometry || null, distance_meters: Math.max(0, Number(req.body?.distance_meters) || 0), duration_seconds: Math.max(0, Number(req.body?.duration_seconds) || 0), days: [{ day: 1, places: points.map(point => point.name) }] };
+  const { data, error } = await admin.from('routes').insert(payload).select().single();
+  if (error) return res.status(400).json({ error: error.message });
+  try { await replaceRoutePlaces(data.id, points); } catch (placeError) { await admin.from('routes').delete().eq('id', data.id); return res.status(400).json({ error: placeError.message }); }
+  const { data: full } = await admin.from('routes').select('*,trip_days(*,trip_places(*))').eq('id', data.id).single();
+  res.status(201).json(full);
+});
+
 app.patch('/api/routes/:id', requireUser, async (req, res) => {
-  const allowed = ['title', 'destination', 'days', 'is_public'];
+  const allowed = ['title', 'destination', 'days', 'is_public', 'transport_mode', 'geometry', 'distance_meters', 'duration_seconds'];
   const patch = { ...Object.fromEntries(Object.entries(req.body || {}).filter(([key]) => allowed.includes(key))), updated_at: new Date().toISOString() };
   const { data, error } = await admin.from('routes').update(patch).eq('id', req.params.id).eq('owner_id', req.user.id).select().single();
   if (error) return res.status(400).json({ error: error.message });
-  const { data: linked } = await admin.from('posts').select('id').eq('route_id', data.id).eq('author_id', req.user.id).maybeSingle();
+  if (Array.isArray(req.body?.points)) {
+    const points = routePoints(req.body); if (points.length < 2) return res.status(400).json({ error: '路线至少需要两个有效地点' });
+    try { await replaceRoutePlaces(data.id, points); } catch (placeError) { return res.status(400).json({ error: placeError.message }); }
+  }
+  const { data: linked } = await admin.from('posts').select('id,type').eq('route_id', data.id).eq('author_id', req.user.id).eq('type','route').limit(1).maybeSingle();
   if (data.is_public) {
     const postPayload = { author_id: req.user.id, route_id: data.id, type: 'route', title: data.title, content: `公开旅行路线：${data.destination}`, location_name: data.destination, city: data.destination, updated_at: new Date().toISOString() };
-    const postResult = linked ? await admin.from('posts').update(postPayload).eq('id', linked.id) : await admin.from('posts').insert(postPayload);
+    const postResult = linked ? (linked.type === 'route' ? await admin.from('posts').update(postPayload).eq('id', linked.id) : { error: null }) : await admin.from('posts').insert(postPayload);
     if (postResult.error) return res.status(400).json({ error: postResult.error.message });
-  } else if (linked) await admin.from('posts').delete().eq('id', linked.id);
+  } else if (linked?.type === 'route') await admin.from('posts').delete().eq('id', linked.id);
   res.json(data);
 });
 
 app.delete('/api/routes/:id', requireUser, async (req, res) => {
-  await admin.from('posts').delete().eq('route_id', req.params.id).eq('author_id', req.user.id);
   const { error } = await admin.from('routes').delete().eq('id', req.params.id).eq('owner_id', req.user.id);
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).end();
 });
 
 app.post('/api/routes/:id/like', requireUser, async (req, res) => {
-  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).eq('type','route').limit(1).maybeSingle(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
   const { data: existing } = await admin.from('post_likes').select('post_id').eq('post_id', post.id).eq('user_id', req.user.id).maybeSingle();
   const result = existing ? await admin.from('post_likes').delete().eq('post_id', post.id).eq('user_id', req.user.id) : await admin.from('post_likes').insert({ post_id: post.id, user_id: req.user.id });
   if (result.error) return res.status(400).json({ error: result.error.message });
@@ -736,7 +807,7 @@ app.post('/api/routes/:id/like', requireUser, async (req, res) => {
 });
 
 app.post('/api/routes/:id/favorite', requireUser, async (req, res) => {
-  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).eq('type','route').limit(1).maybeSingle(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
   const { data: existing } = await admin.from('favorites').select('post_id').eq('post_id', post.id).eq('user_id', req.user.id).maybeSingle();
   const result = existing ? await admin.from('favorites').delete().eq('post_id', post.id).eq('user_id', req.user.id) : await admin.from('favorites').insert({ post_id: post.id, user_id: req.user.id });
   if (result.error) return res.status(400).json({ error: result.error.message }); res.json({ favorited: !existing });
@@ -744,7 +815,7 @@ app.post('/api/routes/:id/favorite', requireUser, async (req, res) => {
 
 app.post('/api/routes/:id/comments', requireUser, async (req, res) => {
   const content = String(req.body?.content || '').trim(); if (!content) return res.status(400).json({ error: '评论不能为空' });
-  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).single(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
+  const { data: post } = await admin.from('posts').select('id').eq('route_id', req.params.id).eq('type','route').limit(1).maybeSingle(); if (!post) return res.status(404).json({ error: '公开路线不存在' });
   const { data, error } = await admin.from('comments').insert({ post_id: post.id, author_id: req.user.id, content }).select('*,author:author_id(id,display_name,avatar_url)').single();
   if (error) return res.status(400).json({ error: error.message }); res.status(201).json(data);
 });

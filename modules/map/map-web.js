@@ -78,12 +78,18 @@
       if (savedRoute.length > 1) setTimeout(() => window.showTravelRoute(savedRoute), 80);
     } catch (error) { status('地图数据加载失败：' + error.message); }
   }
-  function openLandmark(id) {
+  async function openLandmark(id) {
     const item = (data && data.landmarks || []).find(entry => entry.id === id);
     if (!item) return;
     if (map) map.setView([item.latitude, item.longitude], 11);
     if (window.showLandmark) window.showLandmark(item);
-    status('已定位：' + item.name + ' · ' + item.city + '，可点击地标查看详情。');
+    status('正在加载 ' + item.name + ' 的热门实景图片…');
+    try {
+      const response = await fetch('/api/map/place-photos?q=' + encodeURIComponent(item.name + ' ' + item.city));
+      const payload = await response.json();
+      if (response.ok && window.showLandmark) window.showLandmark({ ...item, photos: payload.photos || [] });
+      status('已打开：' + item.name + ' · ' + item.city + '。');
+    } catch (_) { status('已打开：' + item.name + '；热门图片暂时无法加载。'); }
   }
   async function searchPlace(providedQuery) {
     const input = document.getElementById('mapSearch');

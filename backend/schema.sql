@@ -72,10 +72,16 @@ create table if not exists public.routes (
   title text not null,
   destination text not null default '',
   days jsonb not null default '[]'::jsonb,
+  transport_mode text not null default 'driving' check (transport_mode in ('walking','cycling','driving','transit')),
+  geometry jsonb,
+  distance_meters integer check (distance_meters is null or distance_meters >= 0),
+  duration_seconds integer check (duration_seconds is null or duration_seconds >= 0),
   is_public boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+create index if not exists routes_owner_updated_idx on public.routes (owner_id, updated_at desc);
+create index if not exists routes_public_updated_idx on public.routes (is_public, updated_at desc);
 
 alter table public.posts drop constraint if exists posts_route_id_fkey;
 alter table public.posts add constraint posts_route_id_fkey foreign key (route_id) references public.routes(id) on delete set null;
