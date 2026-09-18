@@ -253,3 +253,36 @@ body #map .map-compact-labels .tw-q-pin__body { width:36px; padding:4px; transfo
 #mapExplore>.card:first-child { border-top:2px solid #b39464; background:linear-gradient(145deg,#fffdf8,#f3ede0); }
 body .post-author-identity[role=button] { cursor:pointer; }
 @media(max-width:520px) { body #map .map-card-primary { margin-inline:-10px; } body #map .map-card-primary .map-canvas { min-height:430px; } }
+
+/* Curated reference routes: photographic covers and practical day-by-day stories. */
+.route-reference-card{position:relative;isolation:isolate;min-height:340px;overflow:hidden;border:1px solid #b9ae98;background:#d9d1c0;color:#fff;box-shadow:8px 8px 0 #e2d9c8,0 18px 38px #213c4717}
+.route-reference-cover,.route-detail-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s,transform .8s cubic-bezier(.22,1,.36,1)}
+.route-reference-card:hover .route-reference-cover{transform:scale(1.035)}
+.route-reference-shade{position:absolute;inset:0;background:linear-gradient(180deg,#16384440 0%,#102d3850 38%,#10252ee8 100%)}
+.route-reference-copy{position:relative;z-index:1;min-height:340px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;text-shadow:0 1px 16px #10252e88}
+.route-reference-copy .route-card-top{font:10px Georgia,var(--serif);letter-spacing:1.8px;text-transform:uppercase}
+.route-country{padding-bottom:5px;border-bottom:1px solid #eedfb6aa}
+.route-reference-main>p{margin:0 0 5px;color:#f0d9a7;font-size:11px;letter-spacing:2px}
+.route-reference-main h3{margin:0 0 9px;color:#fff;font:500 31px/1.2 var(--serif);letter-spacing:2px}
+.route-reference-main .route-tags{display:flex;flex-wrap:wrap;gap:7px;color:#f8f0df;font-size:11px}
+.route-reference-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:17px;padding-top:15px;border-top:1px solid #fff5}
+.route-reference-footer>b{font:400 12px Georgia,var(--serif);letter-spacing:.5px}
+.route-view-button{border:0;border-bottom:1px solid #f3d7a4;background:transparent;color:#fff;padding:4px 0 6px;font:12px var(--serif);letter-spacing:1px;cursor:pointer}
+.route-view-button span{display:inline-block;margin-left:7px;transition:transform .2s}.route-view-button:hover span{transform:translateX(3px)}
+.route-photo-loading{background:linear-gradient(105deg,#d7cfbd 25%,#eee8dc 43%,#d7cfbd 62%);background-size:250% 100%;animation:route-shimmer 1.7s linear infinite}
+.route-photo-loading img{opacity:0}.route-detail-open{overflow:hidden}
+.route-detail-overlay{overflow:auto;padding:20px;align-items:flex-start}
+.route-detail{width:min(820px,100%);margin:auto;background:var(--cream);border:1px solid #bdb29d;box-shadow:0 30px 90px #142e3980}
+.route-detail-hero{position:relative;isolation:isolate;min-height:390px;display:flex;align-items:flex-end;padding:34px;color:#fff;overflow:hidden;background:#d6cebd}
+.route-detail-hero>img{z-index:-2}.route-detail-gradient{position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,#102e3940,#102832e8)}
+.route-detail-back{position:absolute;top:22px;left:22px;border:1px solid #fff8;background:#f8f2e6e8;color:#203f49;padding:9px 13px;font:12px var(--serif);cursor:pointer;backdrop-filter:blur(9px)}
+.route-detail-hero span{color:#efd49e;font:10px Georgia,serif;letter-spacing:2px}.route-detail-hero h2{margin:9px 0 5px;color:#fff;font:500 40px/1.15 var(--serif);letter-spacing:3px}.route-detail-hero p{margin:0;color:#f3eee2;font-size:13px}
+.route-detail-intro{padding:29px 34px;border-bottom:1px solid var(--line)}.route-detail-intro>p{font-size:14px;line-height:1.9;color:#4f625e}
+.route-detail-facts{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:20px}.route-detail-facts span{padding:12px 14px;border-left:2px solid var(--gold);background:#fbf7ed}.route-detail-facts small,.route-detail-facts b{display:block}.route-detail-facts small,.route-day-notes small{color:#9a624d;font-size:9px;letter-spacing:1px}.route-detail-facts b{margin-top:5px;font:500 12px var(--serif)}
+.route-days{padding:7px 34px 20px}.route-day{padding:30px 0;border-bottom:1px solid #d8cfbd}.route-day>header{display:grid;grid-template-columns:auto 1fr auto;gap:15px;align-items:start;margin-bottom:18px}.route-day>header>span{padding:7px 8px;background:var(--accent);color:#fff;font:10px Georgia,serif;letter-spacing:1px}.route-day>header h3{margin:0 0 5px;font:500 24px var(--serif)}.route-day>header p{margin:0;color:var(--muted);font-size:12px}.route-day>header>b{color:#8a6940;font:400 11px Georgia,serif;white-space:nowrap}
+.route-activity{display:grid;grid-template-columns:42% 1fr;margin:15px 0;background:var(--paper);border:1px solid var(--line);overflow:hidden}.route-activity-image{position:relative;min-height:290px;background:#d8d1c2}.route-activity-image img{width:100%;height:100%;object-fit:cover}.route-activity-image>span{position:absolute;top:12px;left:12px;padding:6px 8px;background:#f8f2e6ed;color:var(--ink);font:11px Georgia,serif}.route-activity-copy{padding:20px}.route-activity-copy h4{margin:0 0 10px;font:500 20px var(--serif)}.route-activity-copy>p{margin:0 0 15px;color:#53645f;font-size:12px;line-height:1.8}.route-activity-copy dl{margin:0}.route-activity-copy dl>div{display:grid;grid-template-columns:66px 1fr;gap:8px;padding:6px 0;border-top:1px solid #e7dfd0;font-size:10px}.route-activity-copy dt{color:#9a624d}.route-activity-copy dd{margin:0;color:#53645f}.route-activity-copy aside{margin-top:13px;padding:10px 11px;background:#f1eadc;color:#615d50;font-size:10px;line-height:1.6}.route-activity-copy aside b{display:block;color:#9a4c39;margin-bottom:2px}
+.route-day-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.route-day-notes>div{padding:11px;background:#ede7da}.route-day-notes p{margin:5px 0 0;font-size:10px;line-height:1.55;color:#58655f}
+.route-detail-actions{display:flex;gap:9px;padding:7px 34px 16px}.route-detail-actions .btn{flex:1}.route-photo-credit{margin:0;padding:0 34px 28px;color:#898274;font-size:9px;text-align:center}
+.route-activity-image img{position:absolute;inset:0}
+@keyframes route-shimmer{to{background-position:-250% 0}}
+@media(max-width:620px){.route-detail-overlay{padding:0}.route-detail{border:0}.route-detail-hero{min-height:330px;padding:26px 22px}.route-detail-hero h2{font-size:34px}.route-detail-intro,.route-days{padding-inline:20px}.route-detail-facts{grid-template-columns:1fr}.route-activity{grid-template-columns:1fr}.route-activity-image{min-height:210px}.route-day-notes{grid-template-columns:1fr}.route-day>header{grid-template-columns:auto 1fr}.route-day>header>b{grid-column:2}.route-detail-actions{padding-inline:20px;flex-direction:column}.route-photo-credit{padding-inline:20px}.route-reference-card,.route-reference-copy{min-height:310px}}

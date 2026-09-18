@@ -1,20 +1,85 @@
 {
-  "version": "demo-2026-09",
+  "version": "curated-2026-09",
   "routes": [
-    {"id":"cn-beijing-culture","title":"北京人文 4 日","destination":"北京","country":"中国","type":"文化旅行","days":4,"tags":["故宫","长城","胡同","美食"],"summary":"从故宫与胡同开始，留一天给长城和京味小馆。"},
-    {"id":"cn-chengdu-food","title":"成都慢食 3 日","destination":"成都","country":"中国","type":"美食旅行","days":3,"tags":["火锅","茶馆","熊猫","街巷"],"summary":"茶馆、街巷和当地小吃，节奏轻松。"},
-    {"id":"cn-dali-nature","title":"大理山海 5 日","destination":"大理","country":"中国","type":"自然风景","days":5,"tags":["洱海","苍山","喜洲","日落"],"summary":"洱海骑行、苍山徒步与喜洲古镇，留出看日落的时间。"},
-    {"id":"cn-xiamen-photo","title":"厦门海风 3 日","destination":"厦门","country":"中国","type":"摄影旅行","days":3,"tags":["海边","街拍","咖啡","日落"],"summary":"鼓浪屿、环岛路和城市咖啡店的轻摄影路线。"},
-    {"id":"cn-xinjiang-outdoor","title":"新疆风景 7 日","destination":"新疆","country":"中国","type":"户外旅行","days":7,"tags":["草原","湖泊","公路","摄影"],"summary":"适合自驾与摄影的开阔自然路线。"},
-    {"id":"jp-tokyo-city","title":"东京城市 5 日","destination":"东京","country":"日本","type":"城市旅行","days":5,"tags":["浅草","涩谷","美食","动漫"],"summary":"城市地标、街区美食与夜景，保留自由探索时间。"},
-    {"id":"kr-seoul-food","title":"首尔街头 4 日","destination":"首尔","country":"韩国","type":"美食旅行","days":4,"tags":["市场","咖啡","韩食","街拍"],"summary":"市场、咖啡店和城市街区的组合。"},
-    {"id":"th-chiangmai-slow","title":"清迈慢生活 4 日","destination":"清迈","country":"泰国","type":"独自旅行","days":4,"tags":["夜市","寺庙","咖啡","自然"],"summary":"寺庙、夜市和山野体验，适合慢节奏旅行。"},
-    {"id":"sg-city-family","title":"新加坡亲子 4 日","destination":"新加坡","country":"新加坡","type":"家庭旅行","days":4,"tags":["花园","动物园","美食","城市"],"summary":"城市景观、亲子体验和轻松交通。"},
-    {"id":"vn-hanoi-culture","title":"河内文化 4 日","destination":"河内","country":"越南","type":"文化旅行","days":4,"tags":["老街","咖啡","市场","美食"],"summary":"老城区、咖啡和当地市场。"},
-    {"id":"au-sydney-coast","title":"悉尼海岸 5 日","destination":"悉尼","country":"澳大利亚","type":"自然风景","days":5,"tags":["海岸","歌剧院","徒步","日落"],"summary":"城市地标与海岸徒步结合。"},
-    {"id":"fr-paris-art","title":"巴黎艺术 5 日","destination":"巴黎","country":"法国","type":"文化旅行","days":5,"tags":["博物馆","咖啡","街巷","摄影"],"summary":"卢浮宫、左岸街巷与塞纳河边散步。"},
-    {"id":"it-rome-history","title":"罗马历史 4 日","destination":"罗马","country":"意大利","type":"文化旅行","days":4,"tags":["古迹","广场","意面","摄影"],"summary":"古迹、广场和当地餐桌。"},
-    {"id":"us-nyc-city","title":"纽约城市 5 日","destination":"纽约","country":"美国","type":"城市旅行","days":5,"tags":["博物馆","街区","公园","建筑"],"summary":"城市地标与不同街区的日常观察。"},
-    {"id":"uk-london-solo","title":"伦敦独行 4 日","destination":"伦敦","country":"英国","type":"独自旅行","days":4,"tags":["博物馆","公园","书店","建筑"],"summary":"博物馆、公园和街区漫步。"}
+    {
+      "id":"cn-beijing-culture","title":"北京人文 4 日","destination":"北京","country":"中国","type":"文化旅行","days":4,"budget":"¥2,800–4,500 / 人","audience":"第一次到北京、喜欢历史建筑与城市漫步的旅行者","coverQuery":"Forbidden City Beijing panorama","tags":["故宫","长城","胡同","京味"],
+      "summary":"从中轴线读懂古都格局，再走进胡同与城墙，把宏大的历史和真实的北京日常放进同一段旅程。节奏留有余地，适合步行与公共交通。",
+      "daysPlan":[
+        {"dayNumber":1,"title":"沿中轴线走进古都","summary":"用故宫与景山建立对北京城的第一印象。","food":"东华门附近京味馆；晚餐尝炸酱面或铜锅涮肉。","stay":"王府井、东四一带，地铁方便。","transport":"地铁 1/8 号线 + 步行，约 8 公里。","cost":"¥260–420","activities":[
+          {"name":"故宫博物院","time":"08:30","imageQuery":"Forbidden City Beijing Hall of Supreme Harmony","description":"沿午门、太和殿、乾清宫至御花园，观察皇家建筑的轴线、色彩与空间层次。建议预约上午场，避开午后最密集的人流。","duration":"3.5–4 小时","ticket":"旺季约 ¥60，珍宝馆另购","transport":"地铁天安门东站，步行约 12 分钟","tips":"携带身份证件，馆内路程长，轻装穿舒适鞋。"},
+          {"name":"景山公园","time":"15:30","imageQuery":"Jingshan Park Beijing Wanchun Pavilion view","description":"登万春亭俯瞰紫禁城屋顶与北京中轴线。傍晚光线更柔和，是理解古城格局的最佳视角之一。","duration":"1–1.5 小时","ticket":"约 ¥2","transport":"故宫神武门向北步行 5 分钟","tips":"日落前 40 分钟登顶，雨雪天注意石阶。"}
+        ]},
+        {"dayNumber":2,"title":"长城与山野天际线","summary":"把一整天留给慕田峪，在山脊上慢慢行走。","food":"自备水和轻食，返城后到簋街用晚餐。","stay":"继续住东城，减少搬运行李。","transport":"市区直通车往返，单程约 1.5–2 小时。","cost":"¥350–520","activities":[
+          {"name":"慕田峪长城","time":"09:30","imageQuery":"Mutianyu Great Wall Beijing autumn","description":"城墙沿山势舒展，敌楼密集且保存完整。可从 14 号敌楼附近开始，按体力向 20 号敌楼攀登。","duration":"4–5 小时","ticket":"门票、摆渡与缆车约 ¥180–260","transport":"东直门公交换乘或市区直通车","tips":"山上温差与风力明显，工作日体验更好。"},
+          {"name":"簋街夜食","time":"19:30","imageQuery":"Guijie Ghost Street Beijing night","description":"返城后补充体力，从传统京味到夜宵小馆选择丰富，适合多人共享菜品。","duration":"1.5 小时","ticket":"人均 ¥100–180","transport":"地铁 5 号线北新桥站","tips":"热门店排队较久，可避开 19:00 高峰。"}
+        ]},
+        {"dayNumber":3,"title":"寺坛、胡同与北京日常","summary":"上午看礼制建筑，下午钻进胡同放慢速度。","food":"午餐选卤煮、爆肚或清真小吃。","stay":"东四或鼓楼区域，适合晚间散步。","transport":"地铁 5 号线 + 骑行/步行。","cost":"¥220–380","activities":[
+          {"name":"天坛公园","time":"08:00","imageQuery":"Temple of Heaven Beijing Hall of Prayer Good Harvests","description":"从祈年殿走到圜丘与回音壁，了解明清祭天礼制和古代建筑对声学、比例的运用。","duration":"2.5–3 小时","ticket":"联票旺季约 ¥34","transport":"地铁 5 号线天坛东门站","tips":"东门进入路线最顺，开门后先看祈年殿。"},
+          {"name":"南锣鼓巷与什刹海","time":"15:00","imageQuery":"Shichahai Beijing hutong lake","description":"从雨儿胡同、帽儿胡同穿行至前海和后海，观察四合院门楼、胡同尺度与新旧生活。","duration":"3–4 小时","ticket":"免费","transport":"地铁 6/8 号线南锣鼓巷站","tips":"尊重居民生活，日落前抵达银锭桥。"}
+        ]},
+        {"dayNumber":4,"title":"皇家园林与城市告别","summary":"在颐和园的湖山之间收尾，下午留给老城南部。","food":"西苑用午餐，前门以北京菜结束行程。","stay":"返程日优先住交通便利的地铁沿线。","transport":"地铁 4 号线往返。","cost":"¥180–320","activities":[
+          {"name":"颐和园","time":"08:30","imageQuery":"Summer Palace Beijing Kunming Lake Longevity Hill","description":"从北宫门经苏州街、佛香阁下行至长廊和昆明湖，慢慢理解皇家园林的山水与借景设计。","duration":"3.5–4 小时","ticket":"联票旺季约 ¥60","transport":"地铁 4 号线北宫门站","tips":"体力有限可从东宫门进入；游船受天气影响。"},
+          {"name":"前门与大栅栏","time":"15:00","imageQuery":"Qianmen Dashilar Beijing street","description":"在老字号、会馆遗存与更新街区之间散步，适合买伴手礼，也方便安排返程前晚餐。","duration":"2–3 小时","ticket":"免费","transport":"地铁 2/8 号线前门站","tips":"商业主街之外，可顺路走杨梅竹斜街。"}
+        ]}
+      ]
+    },
+    {
+      "id":"cn-chengdu-food","title":"成都慢食 3 日","destination":"成都","country":"中国","type":"美食旅行","days":3,"budget":"¥1,900–3,200 / 人","audience":"喜欢美食、动物与松弛城市节奏的旅行者","coverQuery":"Chengdu giant panda Sichuan","tags":["熊猫","茶馆","川菜","街巷"],
+      "summary":"早起看熊猫，午后坐茶馆，晚上把胃口交给火锅与小吃。路线不过度塞满景点，用三天感受成都真正迷人的松弛感。",
+      "daysPlan":[
+        {"dayNumber":1,"title":"熊猫与老成都烟火","summary":"抓住熊猫最活跃的上午，下午转入人民公园。","food":"钟水饺、甜水面；晚餐安排鸳鸯火锅。","stay":"春熙路或天府广场附近。","transport":"地铁 3 号线 + 接驳车。","cost":"¥320–480","activities":[
+          {"name":"成都大熊猫繁育研究基地","time":"07:30","imageQuery":"Chengdu Research Base giant panda","description":"先看成年熊猫活动区，再前往幼年熊猫与产房区域。气温升高后熊猫多会休息，早到直接决定体验质量。","duration":"3–4 小时","ticket":"约 ¥55","transport":"地铁熊猫大道站后换乘接驳车","tips":"提前购票；园区坡路较多，不建议拖箱。"},
+          {"name":"人民公园鹤鸣茶社","time":"15:00","imageQuery":"Heming Teahouse People's Park Chengdu","description":"找一张竹椅喝盖碗茶，看聊天与树影构成的成都日常，留出时间真正坐下来。","duration":"2 小时","ticket":"盖碗茶约 ¥25–50","transport":"地铁 2 号线人民公园站","tips":"靠水位置更安静，贵重物品不要离开视线。"}
+        ]},
+        {"dayNumber":2,"title":"寺院、街巷与川味餐桌","summary":"从文殊院的安静走到宽窄巷子的热闹。","food":"凉粉或素斋；晚餐尝回锅肉、麻婆豆腐。","stay":"继续住市中心。","transport":"地铁 1/4 号线 + 步行。","cost":"¥260–460","activities":[
+          {"name":"文殊院","time":"09:00","imageQuery":"Wenshu Monastery Chengdu","description":"红墙、古树与香火形成安静空间，参观后可沿周边老街寻找传统点心和素食。","duration":"1.5–2 小时","ticket":"免费","transport":"地铁 1 号线文殊院站","tips":"寺院内保持安静，拍摄前留意提示。"},
+          {"name":"宽窄巷子与泡桐树街","time":"14:30","imageQuery":"Kuanzhai Alley Chengdu Sichuan","description":"先看宽窄巷子的院落格局，再走到泡桐树街、奎星楼街，体验更日常的餐饮与街区生活。","duration":"3 小时","ticket":"免费","transport":"地铁 4 号线宽窄巷子站","tips":"主巷适合看建筑，吃饭更推荐外围。"}
+        ]},
+        {"dayNumber":3,"title":"三国古意与现代夜色","summary":"武侯祠读三国，最后在太古里看城市夜景。","food":"钵钵鸡或担担面；晚餐选太古里外围川菜馆。","stay":"春熙路一带，方便取行李。","transport":"地铁 3 号线 + 步行。","cost":"¥300–520","activities":[
+          {"name":"武侯祠","time":"09:00","imageQuery":"Wuhou Shrine Chengdu red wall bamboo","description":"以三国历史为线索参观汉昭烈庙、武侯祠与惠陵，红墙竹影之外更值得慢读碑刻与人物脉络。","duration":"2–2.5 小时","ticket":"约 ¥50","transport":"公交或打车","tips":"提前了解三国人物关系，参观会更完整。"},
+          {"name":"春熙路与太古里","time":"16:00","imageQuery":"Chengdu Taikoo Li Daci Temple night","description":"从大慈寺穿到太古里，再步行至春熙路，看传统屋顶与现代商业并置的城市景观。","duration":"3 小时","ticket":"免费","transport":"地铁 2/3 号线春熙路站","tips":"热门机位人多，拍照不要占用通道。"}
+        ]}
+      ]
+    },
+    {
+      "id":"cn-dali-nature","title":"大理山海 4 日","destination":"大理","country":"中国","type":"自然风景","days":4,"budget":"¥2,400–4,200 / 人","audience":"喜欢湖景、古镇、骑行与轻户外的旅行者","coverQuery":"Erhai Lake Dali Cangshan Yunnan","tags":["洱海","苍山","喜洲","日落"],
+      "summary":"苍山作屏、洱海作镜。路线分开安排古城、海西骑行与海东风光，既看到代表性景观，也避免把环湖变成疲惫的打卡竞赛。",
+      "daysPlan":[
+        {"dayNumber":1,"title":"古城初见与苍山晚照","summary":"抵达后不赶路，以古城街巷建立方向感。","food":"乳扇、饵块与白族家常菜。","stay":"大理古城南门或东门外。","transport":"接驳车 + 古城步行。","cost":"¥220–380","activities":[
+          {"name":"大理古城","time":"14:00","imageQuery":"Dali Old Town Yunnan city gate","description":"从南门沿复兴路到洋人街，再拐入支巷，看棋盘街巷、白族民居与远处苍山。","duration":"3 小时","ticket":"免费","transport":"大理站乘公交或打车约 40 分钟","tips":"石板路不适合大件行李，主街之外更安静。"},
+          {"name":"五华楼夜景","time":"19:00","imageQuery":"Wuhua Tower Dali night","description":"华灯初上后在周边散步，屋檐灯光与街道生活交织，轻松适应海拔与昼夜温差。","duration":"1–1.5 小时","ticket":"以现场信息为准","transport":"古城内步行","tips":"入夜准备薄外套。"}
+        ]},
+        {"dayNumber":2,"title":"海西田园骑行","summary":"从龙龛向北，穿过湿地、村落与开阔湖面。","food":"喜洲粑粑与白族菜，骑行备水。","stay":"古城或喜洲。","transport":"自行车 15–30 公里。","cost":"¥260–450","activities":[
+          {"name":"龙龛码头","time":"07:30","imageQuery":"Longkan Wharf Erhai Dali sunrise","description":"水杉、木栈道与洱海晨雾层次丰富，日出后沿生态廊道骑行，光线和体感都更舒适。","duration":"1.5 小时","ticket":"免费","transport":"古城打车约 20 分钟","tips":"日出前人多，生态廊道仅允许指定车辆。"},
+          {"name":"喜洲古镇","time":"12:30","imageQuery":"Xizhou Old Town Dali Bai architecture","description":"看白族建筑，也到古镇外围的田野与村路走走，四季农作物让景观不断变化。","duration":"3–4 小时","ticket":"古镇免费，部分院落收费","transport":"骑行或乘车抵达","tips":"扎染体验选择正规工坊并预留制作时间。"}
+        ]},
+        {"dayNumber":3,"title":"苍山云径与溪谷","summary":"天气合适时上山，按体力选择索道与步道。","food":"自备能量食物；下山后吃菌菇或砂锅鱼。","stay":"大理古城。","transport":"打车至索道下站。","cost":"¥380–620","activities":[
+          {"name":"苍山洗马潭索道","time":"08:30","imageQuery":"Cangshan Mountain Dali Ximatan cableway","description":"快速进入高山景观带，天气通透时可俯瞰洱海与坝区；路线以当天开放情况为准。","duration":"3–5 小时","ticket":"套票约 ¥260–320","transport":"古城打车至游客中心","tips":"准备防晒、雨具与保暖层，高反人群谨慎。"},
+          {"name":"寂照庵","time":"15:30","imageQuery":"Jizhao An Dali temple succulents","description":"苍山脚下的安静庭院，以松林与植物景观闻名，适合作为下山后的缓冲。","duration":"1–1.5 小时","ticket":"免费","transport":"接驳后步行上坡","tips":"保持安静，不触碰植物；雨后石阶湿滑。"}
+        ]},
+        {"dayNumber":4,"title":"海东公路与日落","summary":"从双廊到小普陀，看洱海另一侧的开阔视角。","food":"双廊午餐，选择明码标价餐厅。","stay":"早班车可改住大理站附近。","transport":"包车或正规租车。","cost":"¥420–720","activities":[
+          {"name":"双廊古镇","time":"10:00","imageQuery":"Shuanglang Old Town Erhai Dali","description":"从码头与临水巷道看苍山洱海的完整横向景观，往北侧村巷走更从容。","duration":"2.5–3 小时","ticket":"古镇免费","transport":"海东包车或班车","tips":"临水注意安全，不进入私人客栈拍照。"},
+          {"name":"小普陀与海东日落","time":"16:30","imageQuery":"Xiaoputuo Erhai Dali sunset","description":"小岛与湖面构成海东标志画面，继续沿湖等待日落，看苍山逐渐转为剪影。","duration":"2 小时","ticket":"观景免费，登岛另购船票","transport":"沿环海东路乘车","tips":"只在安全区停车，不随意投喂野生鸟类。"}
+        ]}
+      ]
+    },
+    {
+      "id":"cn-shanghai-city","title":"上海城市 3 日","destination":"上海","country":"中国","type":"城市旅行","days":3,"budget":"¥2,300–4,000 / 人","audience":"偏爱建筑、街区、展览与城市摄影的旅行者","coverQuery":"Shanghai Bund skyline night","tags":["外滩","武康路","博物馆","夜景"],
+      "summary":"从黄浦江两岸的城市天际线，到梧桐区的建筑细节和弄堂生活，用步行与地铁串起上海的历史层次与现代节奏。",
+      "daysPlan":[
+        {"dayNumber":1,"title":"外滩与浦东天际线","summary":"上午读万国建筑，下午跨江看现代上海。","food":"江西中路周边本帮菜；晚餐选陆家嘴。","stay":"人民广场、南京东路或静安寺。","transport":"地铁 2 号线 + 轮渡。","cost":"¥300–520","activities":[
+          {"name":"外滩历史建筑群","time":"09:00","imageQuery":"The Bund Shanghai historic buildings morning","description":"从外白渡桥向南步行，观察和平饭店、海关大楼等建筑立面。上午人少，更适合边走边读城市史。","duration":"2.5 小时","ticket":"免费","transport":"地铁南京东路站","tips":"滨江风大，过街从正规路口通行。"},
+          {"name":"陆家嘴滨江与上海中心","time":"16:00","imageQuery":"Lujiazui Shanghai Tower skyline sunset","description":"乘轮渡跨黄浦江，从滨江步道仰望超高层建筑；天气通透时可登高看城市纹理。","duration":"3 小时","ticket":"滨江免费，观光厅约 ¥180","transport":"东金线轮渡或地铁 2 号线","tips":"登高前查看能见度，日落时客流最大。"}
+        ]},
+        {"dayNumber":2,"title":"梧桐区建筑漫步","summary":"从武康大楼走到复兴公园，读上海街区尺度。","food":"街区小馆或面馆，下午安排咖啡休息。","stay":"静安或淮海中路一带。","transport":"地铁 10/11 号线 + 步行约 7 公里。","cost":"¥260–500","activities":[
+          {"name":"武康路与武康大楼","time":"09:00","imageQuery":"Wukang Mansion Shanghai Wukang Road","description":"沿武康路北行，留意不同年代的公寓、花园住宅与行道树，价值在连续街景而非单一机位。","duration":"2.5 小时","ticket":"免费","transport":"地铁交通大学站","tips":"建筑多为住宅，请勿进入私人院落。"},
+          {"name":"思南公馆与复兴公园","time":"14:30","imageQuery":"Sinan Mansions Shanghai architecture","description":"从思南路进入花园住宅区，再到复兴公园观察公共生活，法式园林与里弄形成有趣对照。","duration":"2.5–3 小时","ticket":"公共区域免费","transport":"地铁 13 号线淮海中路站","tips":"周末活动较多，傍晚侧光适合摄影。"}
+        ]},
+        {"dayNumber":3,"title":"博物馆与苏州河岸","summary":"上午看馆藏，下午沿苏州河看工业遗产更新。","food":"人民广场午餐；晚餐可在静安或北外滩。","stay":"按返程交通选择人民广场或虹桥方向。","transport":"地铁 1/8/12 号线 + 步行。","cost":"¥220–420","activities":[
+          {"name":"上海博物馆人民广场馆","time":"09:00","imageQuery":"Shanghai Museum People's Square","description":"青铜、陶瓷、书画馆藏体系完整，建议选两三个专题深入参观，避免每层匆匆扫过。","duration":"3 小时","ticket":"常设展通常免费，需预约","transport":"地铁人民广场站","tips":"提前查看开放安排，大件行李需寄存。"},
+          {"name":"苏州河与四行仓库","time":"15:00","imageQuery":"Suzhou Creek Shanghai Sihang Warehouse","description":"从四行仓库沿河向东，经过桥梁、旧仓库与新公共空间，看工业遗产如何进入当代城市生活。","duration":"3 小时","ticket":"河岸免费，纪念馆需预约","transport":"地铁曲阜路站","tips":"傍晚灯光更有层次，步道可随时从地铁结束。"}
+        ]}
+      ]
+    }
   ]
 }
