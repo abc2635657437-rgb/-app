@@ -343,6 +343,7 @@ body #map .tw-user-pin__arrow{width:22px;height:22px;border-width:2px;font-size:
 body #map .map-compact-labels .tw-q-pin__body{width:28px;padding:2px;transform:translate(-4px,-4px)}
 .global-back{position:fixed;z-index:18;left:max(14px,calc((100vw - var(--app-width))/2 + 16px));bottom:calc(82px + env(safe-area-inset-bottom));padding:9px 12px;border:1px solid #b9ad96;border-radius:3px;background:#faf5e9eb;color:#294b56;font:11px var(--serif);letter-spacing:1px;box-shadow:0 5px 18px #203b4618;backdrop-filter:blur(10px);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s}
 .global-back.visible{opacity:1;visibility:visible;transform:none}
+.ai-agent-screen{padding:0!important;max-width:none!important;height:calc(100vh - 72px);overflow:hidden;background:#e8eeea}.ai-agent-screen iframe{display:block;width:100%;height:100%;border:0;background:#e8eeea}
 .landmark-sheet-overlay{position:fixed;inset:0;z-index:48;overflow:auto;padding:20px;background:#18384482;backdrop-filter:blur(8px)}
 .landmark-sheet{width:min(820px,100%);margin:auto;background:var(--cream);border:1px solid #b9ad96;box-shadow:0 28px 80px #18384460;padding:32px}
 .landmark-sheet-back{border:0;border-bottom:1px solid #a9864c;background:transparent;color:#294b56;padding:5px 0;font:12px var(--serif)}

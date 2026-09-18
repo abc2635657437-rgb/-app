@@ -9,6 +9,8 @@
   };
   window.planLandmarkWithAi = landmarkId => {
     const landmark = window.currentMapLandmark;
-    go('ai'); setTimeout(() => { const natural = document.getElementById('aiRequest'), destination = document.getElementById('aiDest'); if (destination && landmark) destination.value = landmark.city || landmark.country || ''; if (natural && landmark) natural.value = `我想围绕${landmark.name}规划一次旅行，请结合附近真实地点安排。`; }, 0);
+    if (landmark) localStorage.setItem('tw-ai-pending-prompt', `我想围绕${landmark.name}规划一次旅行，请结合附近真实地点安排。`);
+    go('ai');
   };
+  window.generate = () => { const destination=document.getElementById('dest')?.value.trim(), days=document.getElementById('days')?.value; if(destination)localStorage.setItem('tw-ai-pending-prompt',`请为我规划${destination}${days?` ${days} 天`:''}的旅行路线。`); go('ai'); };
 }());
