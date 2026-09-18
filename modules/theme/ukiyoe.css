@@ -286,3 +286,43 @@ body .post-author-identity[role=button] { cursor:pointer; }
 .route-activity-image img{position:absolute;inset:0}
 @keyframes route-shimmer{to{background-position:-250% 0}}
 @media(max-width:620px){.route-detail-overlay{padding:0}.route-detail{border:0}.route-detail-hero{min-height:330px;padding:26px 22px}.route-detail-hero h2{font-size:34px}.route-detail-intro,.route-days{padding-inline:20px}.route-detail-facts{grid-template-columns:1fr}.route-activity{grid-template-columns:1fr}.route-activity-image{min-height:210px}.route-day-notes{grid-template-columns:1fr}.route-day>header{grid-template-columns:auto 1fr}.route-day>header>b{grid-column:2}.route-detail-actions{padding-inline:20px;flex-direction:column}.route-photo-credit{padding-inline:20px}.route-reference-card,.route-reference-copy{min-height:310px}}
+
+/* Explore page: a quiet ukiyo-e travel folio, without adding more UI. */
+body #map{padding-bottom:34px}
+body #map>.eyebrow{color:#a54a38;letter-spacing:3.5px}
+body #map>.title{max-width:520px;margin:13px 0 0;color:#244a57;font:400 clamp(34px,7vw,48px)/1.35 var(--serif);letter-spacing:5px}
+body #map>.sub{max-width:560px;margin:24px 0 28px;padding-left:14px;border-left:2px solid #b3915d;color:#68736a;font-size:12px;line-height:1.9}
+body #map .map-card-primary{margin:0 0 42px;padding:10px;border:1px solid #b9ad96;background:#eee6d6;box-shadow:7px 7px 0 #ddd3c0}
+body #map .map-card-primary::after{display:none}
+body #map .map-card-primary .map-canvas{min-height:450px;border-color:#aa9d85;filter:saturate(.84) sepia(.06)}
+body #map #mapStatus{padding:12px 4px 2px;color:#777365;font:10px/1.6 var(--serif);letter-spacing:.4px}
+body #map .map-controls{gap:8px;margin:0 0 11px;padding:3px;background:transparent}
+body #map .map-controls input{border:0;border-bottom:1px solid #b9ad96;border-radius:0;background:#f8f3e8;color:#284954}
+body #map .map-controls button{border:1px solid #b9ad96;border-radius:0;background:#f8f3e8;color:#284954;font:11px var(--serif)}
+body #mapExplore{margin-top:0}
+body #mapExplore>.card:first-child{margin:0 0 42px;padding:24px;border:1px solid #c9bda8;border-top:2px solid #a44938;border-radius:0;background:linear-gradient(135deg,#fbf7ed,#f1e9da);box-shadow:none}
+body #mapExplore>.card:first-child>b{display:flex;align-items:center;gap:10px;margin-bottom:17px;color:#274c58;font:500 20px var(--serif);letter-spacing:2px}
+body #mapExplore>.card:first-child>b::before{content:"旅";display:grid;place-items:center;width:27px;height:27px;border:1px solid #a44938;color:#a44938;font-size:14px;transform:rotate(-3deg)}
+body #mapExplore>.card:first-child .grid{gap:5px 14px}
+body #mapExplore>.card:first-child label{font-size:9px;letter-spacing:1px;color:#887c68}
+body #mapExplore>.card:first-child .input{margin:7px 0 12px;padding:11px 2px;border:0;border-bottom:1px solid #c9bda8;border-radius:0;background:transparent;color:#294b56;font-size:13px}
+body #mapExplore>.card:first-child .input:focus{border-color:#a44938;outline:0;box-shadow:none}
+body #mapExplore>.card:first-child>.btn{margin-top:8px;border-radius:0;background:#284c58;font:500 12px var(--serif);letter-spacing:1.5px}
+body #routeLibrary{padding-top:2px}
+body #routeLibrary>.head{margin:0 0 14px;padding:0 0 13px;border-bottom:1px solid #cfc4b0}
+body #routeLibrary>.head h2{color:#274b57;font:500 25px var(--serif);letter-spacing:2px}
+body #routeLibrary>.head .muted{font:9px Georgia,serif;letter-spacing:1.5px;text-transform:uppercase}
+body #routeFilters{display:flex;flex-wrap:nowrap;gap:7px;margin:0 -2px 20px;padding:1px 2px 7px;overflow-x:auto;scrollbar-width:none}
+body #routeFilters::-webkit-scrollbar{display:none}
+body #routeFilters .pill{flex:none;margin:0;padding:7px 11px;border:1px solid #d2c7b3;border-radius:0;background:transparent;color:#706c60;font:10px var(--serif);letter-spacing:.5px}
+body #routeFilters .pill.active{border-color:#a44938;background:#a44938;color:#fff5e6}
+body #routeGrid{gap:24px;margin-bottom:46px}
+body .route-reference-card{border-color:#aa9d86;box-shadow:6px 6px 0 #dfd5c4}
+body .route-reference-cover{filter:saturate(.74) sepia(.13) contrast(1.04)}
+body .route-reference-shade{background:linear-gradient(180deg,#1c3f4940 0%,#18384535 34%,#132c36e8 100%)}
+body .route-reference-copy{padding:23px}
+body .route-reference-main h3{font-weight:400;letter-spacing:4px}
+body .route-reference-footer{border-color:#e7d6b780}
+body #communityRouteGrid{margin-bottom:30px}
+body #routeLibrary>.head:nth-of-type(2){margin-top:4px}
+@media(max-width:520px){body #map>.title{font-size:36px;letter-spacing:4px}body #map .map-card-primary .map-canvas{min-height:410px}body #mapExplore>.card:first-child{padding:20px}body #mapExplore>.card:first-child .grid{grid-template-columns:1fr}body .route-reference-copy{padding:19px}body #routeGrid{gap:20px}}
