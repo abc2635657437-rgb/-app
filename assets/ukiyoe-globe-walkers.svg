@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 440" role="img" aria-labelledby="title desc">
+  <title id="title">浮世绘风格的世界地球与背包旅行者</title>
+  <desc id="desc">三位背包旅行者沿着蓝色地球行走，各洲分布着世界地标。</desc>
+  <defs>
+    <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#efe3c9"/><stop offset="1" stop-color="#f8f0dd"/></linearGradient>
+    <radialGradient id="ocean" cx="38%" cy="22%"><stop stop-color="#376c92"/><stop offset=".62" stop-color="#214f76"/><stop offset="1" stop-color="#102f4d"/></radialGradient>
+    <linearGradient id="land" x2="0" y2="1"><stop stop-color="#a7b66e"/><stop offset="1" stop-color="#66824e"/></linearGradient>
+    <pattern id="fibers" width="28" height="18" patternUnits="userSpaceOnUse"><path d="M3 5l10-1M17 13l8-1M6 17l7-1" stroke="#c9b992" stroke-width="1" opacity=".34"/></pattern>
+    <clipPath id="frame"><rect x="24" y="24" width="632" height="392" rx="7"/></clipPath>
+    <clipPath id="globe"><circle cx="340" cy="520" r="351"/></clipPath>
+    <filter id="soft"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#172735" flood-opacity=".25"/></filter>
+    <g id="pin"><path d="M0 5v-24" stroke="#292c2b" stroke-width="2"/><circle cy="-22" r="5" fill="#d14b38" stroke="#292c2b" stroke-width="2"/></g>
+    <g id="walker">
+      <ellipse cy="3" rx="20" ry="4" fill="#162d3d" opacity=".18"/>
+      <path d="M-7-30q-12 8-8 21l8 2z" fill="#9b4939" stroke="#242625" stroke-width="2"/>
+      <circle cy="-42" r="10" fill="#d9a67d" stroke="#242625" stroke-width="2"/>
+      <path d="M-9-47q7-13 17-3v6q-9-6-17-3" fill="#202827"/>
+      <path d="M-4-31q13 2 12 18L5-2H-8l-1-22z" fill="#477c86" stroke="#242625" stroke-width="2"/>
+      <path d="M-7-2l-6 16M5-2l8 14M-8-23l-12 11M7-21l13 9" fill="none" stroke="#242625" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <style>
+      .ink{stroke:#252826;stroke-width:2.5;stroke-linejoin:round}.shore{stroke:#91afae;stroke-width:12;stroke-linejoin:round;opacity:.55}.mark{filter:url(#soft)}
+      .walk1{animation:w1 8s ease-in-out infinite}.walk2{animation:w2 8s ease-in-out infinite}.walk3{animation:w3 8s ease-in-out infinite}.worldmarks{animation:breathe 7s ease-in-out infinite;transform-origin:340px 520px}.spark{animation:twinkle 2.8s ease-in-out infinite}
+      @keyframes w1{0%,100%{transform:translate(0 0) rotate(-9deg)}50%{transform:translate(80px -26px) rotate(2deg)}}
+      @keyframes w2{0%,100%{transform:translate(0 0) rotate(-2deg)}50%{transform:translate(76px -10px) rotate(7deg)}}
+      @keyframes w3{0%,100%{transform:translate(0 0) rotate(5deg)}50%{transform:translate(65px 10px) rotate(11deg)}}
+      @keyframes breathe{50%{transform:rotate(.8deg) scale(1.006)}}@keyframes twinkle{50%{opacity:.25;transform:scale(.7)}}
+      @media(prefers-reduced-motion:reduce){.walk1,.walk2,.walk3,.worldmarks,.spark{animation:none}}
+    </style>
+  </defs>
+  <rect width="680" height="440" fill="url(#paper)"/>
+  <rect width="680" height="440" fill="url(#fibers)"/>
+  <rect x="24" y="24" width="632" height="392" rx="7" fill="none" stroke="#28302e" stroke-width="3"/>
+  <rect x="33" y="33" width="614" height="374" rx="4" fill="none" stroke="#8a806e"/>
+  <circle cx="102" cy="78" r="29" fill="#c84235"/><circle cx="94" cy="69" r="18" fill="#e15b49" opacity=".35"/>
+  <g class="spark" fill="#b69049"><path d="M244 83l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M571 89l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></g>
+  <g clip-path="url(#frame)">
+    <circle cx="340" cy="520" r="351" fill="url(#ocean)" class="ink"/>
+    <g clip-path="url(#globe)" class="worldmarks">
+      <g opacity=".22" fill="none" stroke="#bcd1d4"><path d="M-5 315Q340 235 685 315M-8 368Q340 290 688 368"/><path d="M175 155q-55 175 0 330M340 150q-30 180 0 340M510 160q55 175 0 330"/></g>
+      <g fill="url(#land)" class="ink">
+        <path class="shore" d="M58 286l32-34 55-27 57 7 29 34-8 39-37 35-47 4-33-25z"/><path d="M58 286l32-34 55-27 57 7 29 34-8 39-37 35-47 4-33-25z"/>
+        <path class="shore" d="M223 339l34-26 45 12 24 43-17 73-35 48-21-34 6-54z"/><path d="M223 339l34-26 45 12 24 43-17 73-35 48-21-34 6-54z"/>
+        <path class="shore" d="M235 221l21-27 29 6 10 27-19 26-33-5z"/><path d="M235 221l21-27 29 6 10 27-19 26-33-5z" fill="#a9b98b"/>
+        <path class="shore" d="M324 280l23-45 48-24 42 15 15 38-24 43-42 11-22-17z"/><path d="M324 280l23-45 48-24 42 15 15 38-24 43-42 11-22-17z"/>
+        <path class="shore" d="M334 334l48-35 68 5 32 40-13 72-42 74-38-17-14-72z"/><path d="M334 334l48-35 68 5 32 40-13 72-42 74-38-17-14-72z"/>
+        <path class="shore" d="M465 254l37-43 67 9 53 43 23 53-32 71-38-20-22-60-22 61-43-28-24-49z"/><path d="M465 254l37-43 67 9 53 43 23 53-32 71-38-20-22-60-22 61-43-28-24-49z"/>
+        <path class="shore" d="M548 402l32-30 30 8 22-14 29 31-15 25-43-5-28 8z"/><path d="M548 402l32-30 30 8 22-14 29 31-15 25-43-5-28 8z"/>
+      </g>
+      <g class="mark" font-family="serif" text-anchor="middle">
+        <g transform="translate(133 295)"><use href="#pin"/><text y="-28" font-size="28">🗽</text></g>
+        <g transform="translate(271 394)"><use href="#pin"/><text y="-28" font-size="27">✟</text></g>
+        <g transform="translate(376 275)"><use href="#pin"/><text y="-28" font-size="27">🗼</text></g>
+        <g transform="translate(411 390)"><use href="#pin"/><text y="-28" font-size="27">△</text></g>
+        <g transform="translate(520 302)"><use href="#pin"/><text y="-28" font-size="27">⌂</text></g>
+        <g transform="translate(571 338)"><use href="#pin"/><text y="-28" font-size="27">⛩</text></g>
+        <g transform="translate(604 401)"><use href="#pin"/><text y="-28" font-size="26">◒</text></g>
+      </g>
+    </g>
+    <g class="walk1" transform="translate(174 203) scale(.76)"><use href="#walker"/></g>
+    <g class="walk2" transform="translate(265 174) scale(.68)"><use href="#walker"/><path d="M-3-52q7-4 13 0" stroke="#d6b24b" stroke-width="3"/></g>
+    <g class="walk3" transform="translate(348 165) scale(.8)"><use href="#walker"/><path d="M-9-47q6-11 18-1" fill="#111"/></g>
+  </g>
+  <g transform="translate(598 62)"><rect width="32" height="60" rx="2" fill="#f7efdb" stroke="#292c2b" stroke-width="2"/><path d="M16 8v43M8 20h16M10 35h13" stroke="#292c2b" stroke-width="2"/><rect y="66" width="32" height="32" rx="3" fill="#b84034"/><path d="M8 76h16M8 82h16M8 88h16" stroke="#f8e8cf" stroke-width="3"/></g>
+</svg>
