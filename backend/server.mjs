@@ -18,10 +18,11 @@ const port = Number(process.env.PORT || 8787);
 const supabaseUrl = process.env.SUPABASE_URL;
 const anonKey = process.env.SUPABASE_ANON_KEY;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const aiProvider = String(process.env.AI_PROVIDER || '').toLowerCase();
-const aiModel = process.env.AI_MODEL || (aiProvider === 'openrouter' ? 'openrouter/free' : 'gpt-4o-mini');
-const aiApiKey = process.env.AI_API_KEY || '';
-const aiBaseUrl = (process.env.AI_BASE_URL || 'https://api.openai.com/v1').replace(/\/$/, '');
+// Same OpenAI-compatible model used by the owner's AgentOS travel assistant.
+const aiProvider = 'agentos-pollinations';
+const aiModel = 'openai-fast';
+const aiApiKey = '';
+const aiBaseUrl = 'https://text.pollinations.ai';
 const nominatimBaseUrl = (process.env.NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '');
 const osrmBaseUrl = (process.env.OSRM_BASE_URL || 'https://router.project-osrm.org').replace(/\/$/, '');
 const openMeteoBaseUrl = (process.env.OPEN_METEO_BASE_URL || 'https://api.open-meteo.com').replace(/\/$/, '');
@@ -975,7 +976,6 @@ app.post('/api/routes/map-place', requireUser, async (req, res) => {
 });
 
 app.post('/api/ai/plan', requireUser, enforceAiQuota, async (req, res) => {
-  if (!aiApiKey || !aiProvider) return res.status(503).json({ error: '云端 AI 尚未配置。请在后端环境变量设置 AI_PROVIDER、AI_MODEL、AI_API_KEY；系统不会用固定模板冒充在线 AI。' });
   const request = req.body?.request || {};
   if (JSON.stringify(request).length > 12_000) return res.status(413).json({ error: '旅行需求内容过长，请精简后重试' });
   const suppliedContext = req.body?.context || {};
@@ -1001,8 +1001,8 @@ app.post('/api/ai/plan', requireUser, enforceAiQuota, async (req, res) => {
   const history = (historyResult.data || []).slice(0, -1).map(item => ({ role: item.role === 'assistant' ? 'assistant' : 'user', content: item.role === 'assistant' && item.structured_data ? JSON.stringify(item.structured_data) : item.content }));
   const user = JSON.stringify({ currentRequest: request, savedContext: context, verifiedCandidatePlaces: candidates, weather, instruction: context.plan ? '根据最新要求增量修改当前计划，保留未被要求改变的部分。' : '生成首版完整计划。' });
   try {
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45_000);
-    const response = await fetch(aiBaseUrl + '/chat/completions', { method: 'POST', signal:controller.signal, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + aiApiKey, ...(aiProvider==='openrouter'?{'HTTP-Referer':publicAppUrl,'X-Title':'Travel World'}:{}) }, body: JSON.stringify({ model: aiModel, temperature: 0.25, max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: system }, ...history, { role: 'user', content: user }] }) });
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),75_000);
+    const response = await fetch(aiBaseUrl + '/openai', { method: 'POST', signal:controller.signal, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: aiModel, temperature: 0.25, max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: system }, ...history, { role: 'user', content: user }] }) });
     clearTimeout(timer);
     const body = await response.json().catch(() => ({}));
     if (!response.ok) return res.status(502).json({ error: body?.error?.message || '云端 AI 请求失败', conversationId: conversation.id });

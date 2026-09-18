@@ -13,7 +13,7 @@
   let data;
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
   async function loadData() {
-    const key = 'tw-map-cache-v2';
+    const key = 'tw-map-cache-v3';
     try {
       const cached = localStorage.getItem(key);
       if (cached) return JSON.parse(cached);
@@ -52,12 +52,12 @@
     if (!map || !data) return;
     clearMarkers();
     data.landmarks.forEach(item => {
-      const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">' + item.icon + '</span><span class="tw-q-pin__label">' + item.name + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
-      const marker = L.marker([item.latitude, item.longitude], { icon, title: item.name }).addTo(map).bindPopup('<strong>' + item.icon + ' ' + item.name + '</strong><br>' + item.country + ' · ' + item.city + '<br><button onclick="window.openMapLandmark(\'' + item.id + '\')">查看详情</button>');
+      const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">' + item.icon + '</span><span class="tw-q-pin__label">' + item.name + '</span></div>', iconSize: [30, 30], iconAnchor: [15, 15] });
+      const marker = L.marker([item.latitude, item.longitude], { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup('<strong>' + item.icon + ' ' + item.name + '</strong><br>' + item.country + ' · ' + item.city + '<br><button onclick="window.openMapLandmark(\'' + item.id + '\')">查看详情</button>');
       markers.push(marker);
     });
   }
-  function updateMarkerDensity() { document.getElementById('mapCanvas')?.classList.toggle('map-compact-labels', Boolean(map && map.getZoom() < 4)); }
+  function updateMarkerDensity() { document.getElementById('mapCanvas')?.classList.toggle('map-compact-labels', Boolean(map && map.getZoom() < 5)); }
   async function initMap() {
     const canvas = document.getElementById('mapCanvas');
     if (!canvas) return;
