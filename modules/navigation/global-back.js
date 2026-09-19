@@ -8,7 +8,7 @@
   const sync=()=>button.classList.toggle('visible',scrollTop()>180&&Boolean(overlay()||stack.length));
   const closeOverlay=()=>{const layer=overlay();if(!layer)return false;const close=layer.querySelector('[data-close],#dmProfileBack,#dmBack,.landmark-sheet-back');if(close){close.click();return true}return false;};
   button.onclick=()=>{if(!closeOverlay()){const target=stack.pop();if(target)originalGo(target);else history.back();scrollTo({top:0,behavior:'smooth'});}sync();};
-  document.addEventListener('scroll',sync,{passive:true,capture:true});addEventListener('resize',sync);new MutationObserver(sync).observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('scroll',sync,{passive:true,capture:true});addEventListener('resize',sync);try{new MutationObserver(sync).observe(document.documentElement,{childList:true,subtree:true});}catch(_){}
   document.addEventListener('gesturestart',event=>{if(!event.target.closest('#mapCanvas'))event.preventDefault();},{passive:false});
   addEventListener('wheel',event=>{if(event.ctrlKey&&!event.target.closest('#mapCanvas'))event.preventDefault();},{passive:false});sync();
 }());

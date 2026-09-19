@@ -1,5 +1,5 @@
 (function () {
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=7', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=8', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
   window.loadMap = function () { if (window.initTravelMap) window.initTravelMap(); else { const status = document.getElementById('mapStatus'); if (status) status.textContent = '正在加载在线地图…'; } };
   const css = document.createElement('link');
   css.rel = 'stylesheet';
@@ -15,7 +15,7 @@
     leaflet.src = '/vendor/leaflet/leaflet.js';
     const loadRuntime = () => {
       const runtime = document.createElement('script');
-      runtime.src = 'modules/map/map-web.js?v=6';
+      runtime.src = 'modules/map/map-web.js?v=7';
       runtime.onload = () => { window.loadMap = window.initTravelMap; };
       document.body.appendChild(runtime);
     };
@@ -37,6 +37,7 @@
     presence.innerHTML = '<label class="muted" style="font-size:12px"><input id="mapShareLocation" type="checkbox" onchange="toggleMapLocationSharing(this.checked)"> 共享我的位置</label><input id="mapOnlineCountry" aria-label="在线用户国家筛选" placeholder="国家筛选" style="width:84px;border:1px solid #dfe6e1;border-radius:8px;padding:7px"><button class="btn alt small" onclick="loadMapOnlineUsers()">在线用户</button>';
     card.insertBefore(presence, controls.nextSibling);
     const detail = card.closest('.map-detail');
+    const canvas=document.getElementById('mapCanvas');if(canvas&&!canvas.querySelector('.map-gesture-guard')){const guard=document.createElement('button');guard.type='button';guard.className='map-gesture-guard';guard.textContent='点击探索地图';guard.onclick=event=>{event.stopPropagation();window.activateTravelMap?.();guard.hidden=true;};canvas.appendChild(guard);}
     if (detail) detail.addEventListener('toggle', () => { if (detail.open) setTimeout(() => window.initTravelMap?.(), 0); });
   });
 }());

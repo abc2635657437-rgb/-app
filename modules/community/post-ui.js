@@ -19,7 +19,7 @@
   function media(post) {
     const items=(post.post_media||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
     if(!items.length)return '';
-    return '<div class="post-gallery '+(items.length>1?'is-multiple':'')+'">'+items.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'">').join('')+'</div>';
+    return '<div class="post-gallery '+(items.length>1?'is-multiple':'')+'">'+items.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<button type="button" onclick="openPostMedia(\''+safe(item.public_url)+'\')" aria-label="查看完整图片"><img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'"></button>').join('')+'</div>';
   }
   function routeCard(route) {
     if(!route)return '';
@@ -39,5 +39,6 @@
     dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button><div class="muted">正在加载完整内容…</div>';dialog.showModal();
     try{const item=await window.TravelWorldAuth.request('/api/community/posts/'+id);dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button>'+card(item,{showFollow:false});}catch(error){dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button><p>'+safe(error.message)+'</p>';}
   };
+  window.openPostMedia=url=>{let dialog=document.getElementById('postMediaDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='postMediaDialog';dialog.className='post-media-dialog';dialog.onclick=event=>{if(event.target===dialog)dialog.close();};document.body.appendChild(dialog);}dialog.innerHTML='<button aria-label="关闭" onclick="postMediaDialog.close()">×</button><img src="'+safe(url)+'" alt="完整旅行图片">';dialog.showModal();};
   window.TravelPostUI={safe,card,routeCard,routeStats,points,get:id=>registry.get(id)};
 }());

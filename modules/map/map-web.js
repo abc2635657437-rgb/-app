@@ -11,6 +11,8 @@
   let onlineRefreshTimer = null;
   let lastPresenceAt = 0;
   let data;
+  const coarse=matchMedia('(pointer:coarse)').matches;
+  const langText=(zh,en)=>window.TravelWorldI18n?.language?.()==='en'?en:zh;
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
   async function loadData() {
     const key = 'tw-map-cache-v3';
@@ -65,7 +67,7 @@
     try {
       data = await loadData();
       if (!window.L) { renderFallback(); status('离线地图 · 使用已缓存地标数据；联网后可启用拖动、缩放和搜索。'); return; }
-      if (!map) { map = L.map(canvas, { zoomControl: true, worldCopyJump: true }).setView([25, 105], 2); map.on('zoomend', updateMarkerDensity); }
+      if (!map) { map = L.map(canvas, { zoomControl: true, worldCopyJump: true,dragging:!coarse,touchZoom:!coarse,scrollWheelZoom:!coarse,doubleClickZoom:!coarse,boxZoom:!coarse }).setView([25, 105], 2); map.on('zoomend', updateMarkerDensity); }
       if (!map._twTileLayer) { map._twTileLayer = L.tileLayer(TravelMapProviders.get().tile, { attribution: TravelMapProviders.get().attribution, maxZoom: 19 }).addTo(map); }
       renderMarkers();
       updateMarkerDensity();
@@ -119,6 +121,7 @@
   async function followOnlineUser(userId) { const auth = window.TravelWorldAuth; if (!auth?.requireLogin()) return; try { const result = await auth.request('/api/community/users/' + encodeURIComponent(userId) + '/follow', { method: 'POST' }); status(result.following ? '已关注该旅行者。' : '已取消关注。'); } catch (error) { status('关注操作失败，请重试'); } }
   async function loadOnlineUsers() { try { const country = document.getElementById('mapOnlineCountry')?.value.trim() || ''; const response = await fetch('/api/map/online-users' + (country ? '?country=' + encodeURIComponent(country) : '')); const payload = await response.json(); if (!response.ok) throw new Error(payload.error || '无法读取在线用户'); if (!map || !window.L) return; clearOnlineMarkers(); payload.users.forEach(entry => { const profile = entry.profiles || {}; const name = String(profile.display_name || profile.username || '旅行者').replace(/[<>'"]/g, ''); const place = String(entry.city || entry.country || '公开位置').replace(/[<>'"]/g, ''); const bio = String(profile.bio || '这位旅行者还没有填写简介').replace(/[<>'"]/g, ''); const avatar = String(profile.avatar_url || '').replace(/[<>'"]/g, ''); const id = String(profile.id || '').replace(/[^a-zA-Z0-9-]/g, ''); const icon = L.divIcon({ className: 'tw-q-pin tw-online-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">🧭</span><span class="tw-q-pin__label">' + name + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] }); const card = (avatar ? '<img src="' + avatar + '" alt="" style="width:42px;height:42px;border-radius:50%;object-fit:cover">' : '') + '<strong>' + name + '</strong><br><small>' + place + '</small><p style="margin:6px 0">' + bio + '</p><button onclick="window.followMapUser(\'' + id + '\')">关注/取消关注</button> <button onclick="window.openMapDirectChat(\'' + id + '\')">私聊</button>'; onlineMarkers.push(L.marker([entry.latitude, entry.longitude], { icon, title: name, zIndexOffset: 2000 }).addTo(map).bindPopup(card)); }); status((country ? country + ' · ' : '') + '已显示 ' + payload.users.length + ' 位主动共享位置的在线用户；点击 Q 版标识可互动。'); } catch (error) { status('在线用户暂时不可用：' + error.message); } }
   window.initTravelMap = initMap;
+  window.activateTravelMap=()=>{if(!map)return;['dragging','touchZoom','scrollWheelZoom','doubleClickZoom','boxZoom','keyboard'].forEach(name=>map[name]?.enable());status(langText('地图交互已开启；现在可以拖动、缩放和点击地标。','Map interaction is active. You can now pan, zoom and open markers.'));};
   window.searchTravelMap = searchPlace;
   window.locateTravelMap = locateUser;
   window.toggleMapLocationSharing = toggleSharing;
