@@ -23,8 +23,8 @@
     library.id = 'routeLibrary';
     library.innerHTML = '<div class="head"><h2>参考路线</h2><span class="muted">中国 · 全球 · 徒步</span></div><div id="routeFilters" class="route-filters"></div><div id="routeGrid" class="route-grid"></div><div class="head"><h2>旅行者路线</h2><span class="muted">真实发布</span></div><div id="communityRouteGrid" class="route-grid"></div>';
     section.appendChild(library);
-    const seasonal=document.createElement('section');seasonal.id='whereNow';seasonal.className='where-now';seasonal.innerHTML='<div class="head"><div><small>SEASONAL EDIT</small><h2>现在去哪儿</h2></div><span class="muted">按当季精选</span></div><div id="whereNowGrid" class="where-now-grid"></div>';section.insertBefore(seasonal,library);
-    const mapCard=document.querySelector('#map>.map-card-primary'),landmark=document.getElementById('landmarkCard');if(mapCard)section.insertBefore(mapCard,library);if(landmark)section.insertBefore(landmark,library);
+    const seasonal=document.createElement('section');seasonal.id='whereNow';seasonal.className='where-now';seasonal.innerHTML='<div class="head"><div><small>SEASONAL EDIT</small><h2>现在去哪儿</h2></div><span class="muted">按当季精选</span></div><div id="whereNowGrid" class="where-now-grid"></div>';
+    const planner=section.querySelector(':scope>.card'),mapCard=document.querySelector('#map>.map-card-primary'),landmark=document.getElementById('landmarkCard');if(mapCard)section.insertBefore(mapCard,planner);section.insertBefore(seasonal,planner);if(landmark)section.insertBefore(landmark,library);
     Promise.all([fetch('modules/data/routes.json?v=4').then(response=>response.json()),fetch('modules/data/seasonal-destinations.json?v=2').then(response=>response.json())]).then(([routes,seasons])=>{window.travelRoutes=routes.routes;seasonalDestinations=seasons.destinations;renderSeasonal();renderRoutes('all');}).catch(() => { document.getElementById('routeGrid').textContent = '参考路线暂时无法加载，请检查网络后重试。'; });
     loadCommunityRoutes();
   }
