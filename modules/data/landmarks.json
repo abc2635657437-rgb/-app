@@ -1,6 +1,6 @@
 {
-  "version": "demo-2026-09",
-  "updatedAt": "2026-09-14",
+  "version": "2026-09-bilingual-complete",
+  "updatedAt": "2026-09-21",
   "landmarks": [
     {
       "id": "cn-great-wall",
@@ -11,7 +11,7 @@
       "longitude": 116.57,
       "description": "蜿蜒山脊上的世界遗产，适合清晨慢行。",
       "category": "history",
-      "image": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Great_Wall_of_China_July_2006.JPG/960px-Great_Wall_of_China_July_2006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🏯",
       "bestSeason": "春秋",
       "rating": 4.9,
@@ -19,7 +19,26 @@
         "历史",
         "摄影",
         "自然"
-      ]
+      ],
+      "name_en": "Great Wall",
+      "description_en": "A World Heritage fortification winding across mountain ridges, ideal for an early-morning walk.",
+      "country_en": "China",
+      "city_en": "Beijing",
+      "location": {
+        "city": "北京",
+        "city_en": "Beijing",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 40.43,
+        "longitude": 116.57
+      },
+      "tags_en": [
+        "History",
+        "Photography",
+        "Nature"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Great Wall Beijing"
     },
     {
       "id": "jp-fuji",
@@ -30,14 +49,32 @@
       "longitude": 138.73,
       "description": "日本代表性山景，晴天适合远眺与拍照。",
       "category": "nature",
-      "image": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Mount_Fuji_from_Hotel_Mt_Fuji_1995-2-7.jpg/960px-Mount_Fuji_from_Hotel_Mt_Fuji_1995-2-7.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🗻",
       "bestSeason": "春秋",
       "rating": 4.8,
       "tags": [
         "自然",
         "摄影"
-      ]
+      ],
+      "name_en": "Mount Fuji",
+      "description_en": "Japan’s iconic volcanic peak, best viewed on a clear day from the surrounding lakes.",
+      "country_en": "Japan",
+      "city_en": "Tokyo",
+      "location": {
+        "city": "东京",
+        "city_en": "Tokyo",
+        "country": "日本",
+        "country_en": "Japan",
+        "latitude": 35.36,
+        "longitude": 138.73
+      },
+      "tags_en": [
+        "Nature",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Mount Fuji Japan landscape photograph"
     },
     {
       "id": "jp-kiyomizu",
@@ -48,7 +85,7 @@
       "longitude": 135.78,
       "description": "京都山腰古寺与城市景观的经典组合。",
       "category": "temple",
-      "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Kiyomizu-dera%2C_Kyoto%2C_November_2016_-01.jpg/960px-Kiyomizu-dera%2C_Kyoto%2C_November_2016_-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "⛩️",
       "bestSeason": "秋季",
       "rating": 4.8,
@@ -56,7 +93,26 @@
         "寺庙",
         "摄影",
         "文化"
-      ]
+      ],
+      "name_en": "Kiyomizu-dera",
+      "description_en": "A historic hillside temple with a celebrated wooden stage and wide views across Kyoto.",
+      "country_en": "Japan",
+      "city_en": "Kyoto",
+      "location": {
+        "city": "京都",
+        "city_en": "Kyoto",
+        "country": "日本",
+        "country_en": "Japan",
+        "latitude": 34.99,
+        "longitude": 135.78
+      },
+      "tags_en": [
+        "Temples",
+        "Photography",
+        "Culture"
+      ],
+      "bestSeason_en": "Autumn",
+      "imageQuery": "Kiyomizu-dera Kyoto"
     },
     {
       "id": "fr-eiffel",
@@ -67,7 +123,7 @@
       "longitude": 2.29,
       "description": "从塞纳河畔感受巴黎城市天际线。",
       "category": "landmark",
-      "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Tour_eiffel_at_sunrise_from_the_trocadero.jpg/960px-Tour_eiffel_at_sunrise_from_the_trocadero.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🗼",
       "bestSeason": "春夏",
       "rating": 4.7,
@@ -75,7 +131,26 @@
         "建筑",
         "摄影",
         "城市"
-      ]
+      ],
+      "name_en": "Eiffel Tower",
+      "description_en": "Paris’s best-known landmark, rising above the Seine and the city skyline.",
+      "country_en": "France",
+      "city_en": "Paris",
+      "location": {
+        "city": "巴黎",
+        "city_en": "Paris",
+        "country": "法国",
+        "country_en": "France",
+        "latitude": 48.86,
+        "longitude": 2.29
+      },
+      "tags_en": [
+        "Architecture",
+        "Photography",
+        "City"
+      ],
+      "bestSeason_en": "Spring and summer",
+      "imageQuery": "Eiffel Tower Champ de Mars Paris"
     },
     {
       "id": "us-liberty",
@@ -86,14 +161,32 @@
       "longitude": -74.04,
       "description": "纽约港的城市象征，可结合轮渡游览。",
       "category": "landmark",
-      "image": "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Statue_of_Liberty_frontal_2.jpg/960px-Statue_of_Liberty_frontal_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🗽",
       "bestSeason": "春秋",
       "rating": 4.7,
       "tags": [
         "历史",
         "城市"
-      ]
+      ],
+      "name_en": "Statue of Liberty",
+      "description_en": "A symbol of New York Harbor, reached by ferry with views of Manhattan.",
+      "country_en": "United States",
+      "city_en": "New York",
+      "location": {
+        "city": "纽约",
+        "city_en": "New York",
+        "country": "美国",
+        "country_en": "United States",
+        "latitude": 40.69,
+        "longitude": -74.04
+      },
+      "tags_en": [
+        "History",
+        "City"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Statue of Liberty New York Harbor"
     },
     {
       "id": "au-opera",
@@ -104,14 +197,32 @@
       "longitude": 151.21,
       "description": "海港边的建筑地标，日落时分体验最佳。",
       "category": "landmark",
-      "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d4?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Sydney_Opera_House_and_Harbour_Bridge.jpg/960px-Sydney_Opera_House_and_Harbour_Bridge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🎭",
       "bestSeason": "春秋",
       "rating": 4.8,
       "tags": [
         "建筑",
         "摄影"
-      ]
+      ],
+      "name_en": "Sydney Opera House",
+      "description_en": "A landmark of modern architecture on Sydney Harbour, especially striking at sunset.",
+      "country_en": "Australia",
+      "city_en": "Sydney",
+      "location": {
+        "city": "悉尼",
+        "city_en": "Sydney",
+        "country": "澳大利亚",
+        "country_en": "Australia",
+        "latitude": -33.86,
+        "longitude": 151.21
+      },
+      "tags_en": [
+        "Architecture",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Sydney Opera House harbour panorama"
     },
     {
       "id": "sg-merlion",
@@ -122,7 +233,7 @@
       "longitude": 103.85,
       "description": "滨海湾城市景观与美食步行的起点。",
       "category": "city",
-      "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Singapore_Merlion-at-Marina-Bay-02.jpg/960px-Singapore_Merlion-at-Marina-Bay-02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "icon": "🦁",
       "bestSeason": "全年",
       "rating": 4.6,
@@ -130,139 +241,2692 @@
         "城市",
         "美食",
         "摄影"
-      ]
+      ],
+      "name_en": "Merlion Park",
+      "description_en": "A waterfront icon and convenient starting point for a Marina Bay walk.",
+      "country_en": "Singapore",
+      "city_en": "Singapore",
+      "location": {
+        "city": "新加坡",
+        "city_en": "Singapore",
+        "country": "新加坡",
+        "country_en": "Singapore",
+        "latitude": 1.286,
+        "longitude": 103.85
+      },
+      "tags_en": [
+        "City",
+        "Food",
+        "Photography"
+      ],
+      "bestSeason_en": "Year-round",
+      "imageQuery": "Merlion Park Singapore"
     },
     {
-      "id": "cn-forbidden-city", "name": "故宫", "country": "中国", "city": "北京", "latitude": 39.9163, "longitude": 116.3972,
-      "description": "中国明清皇家宫殿建筑群，适合历史文化与建筑摄影。", "category": "history", "image": "https://images.unsplash.com/photo-1584646098378-0874589d76b1?w=800", "icon": "🏯", "bestSeason": "春秋", "rating": 4.9, "tags": ["历史", "建筑", "摄影"]
+      "id": "cn-forbidden-city",
+      "name": "故宫",
+      "country": "中国",
+      "city": "北京",
+      "latitude": 39.9163,
+      "longitude": 116.3972,
+      "description": "中国明清皇家宫殿建筑群，适合历史文化与建筑摄影。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Sunset_of_the_Forbidden_City_2006.JPG/960px-Sunset_of_the_Forbidden_City_2006.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏯",
+      "bestSeason": "春秋",
+      "rating": 4.9,
+      "tags": [
+        "历史",
+        "建筑",
+        "摄影"
+      ],
+      "name_en": "Forbidden City",
+      "description_en": "China’s vast Ming and Qing imperial palace complex, rich in history and architectural detail.",
+      "country_en": "China",
+      "city_en": "Beijing",
+      "location": {
+        "city": "北京",
+        "city_en": "Beijing",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 39.9163,
+        "longitude": 116.3972
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Forbidden City Beijing"
     },
     {
-      "id": "cn-oriental-pearl", "name": "东方明珠", "country": "中国", "city": "上海", "latitude": 31.2397, "longitude": 121.4998,
-      "description": "浦东天际线代表地标，可俯瞰黄浦江与外滩。", "category": "city", "image": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800", "icon": "🗼", "bestSeason": "春秋", "rating": 4.7, "tags": ["城市", "夜景", "摄影"]
+      "id": "cn-oriental-pearl",
+      "name": "东方明珠",
+      "country": "中国",
+      "city": "上海",
+      "latitude": 31.2397,
+      "longitude": 121.4998,
+      "description": "浦东天际线代表地标，可俯瞰黄浦江与外滩。",
+      "category": "city",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Oriental_Pearl_Tower_in_Shanghai.jpg/960px-Oriental_Pearl_Tower_in_Shanghai.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🗼",
+      "bestSeason": "春秋",
+      "rating": 4.7,
+      "tags": [
+        "城市",
+        "夜景",
+        "摄影"
+      ],
+      "name_en": "Oriental Pearl Tower",
+      "description_en": "A defining tower of Shanghai’s Pudong skyline with broad views across the Huangpu River.",
+      "country_en": "China",
+      "city_en": "Shanghai",
+      "location": {
+        "city": "上海",
+        "city_en": "Shanghai",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 31.2397,
+        "longitude": 121.4998
+      },
+      "tags_en": [
+        "City",
+        "Night views",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Oriental Pearl Tower Shanghai"
     },
     {
-      "id": "cn-west-lake", "name": "西湖", "country": "中国", "city": "杭州", "latitude": 30.2431, "longitude": 120.1503,
-      "description": "湖山与古迹相融的世界文化遗产，适合步行和骑行。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "🌿", "bestSeason": "春秋", "rating": 4.8, "tags": ["自然", "文化", "慢旅行"]
+      "id": "cn-west-lake",
+      "name": "西湖",
+      "country": "中国",
+      "city": "杭州",
+      "latitude": 30.2431,
+      "longitude": 120.1503,
+      "description": "湖山与古迹相融的世界文化遗产，适合步行和骑行。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/20090524_Hangzhou_West_Lake_7531.jpg/960px-20090524_Hangzhou_West_Lake_7531.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🌿",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "自然",
+        "文化",
+        "慢旅行"
+      ],
+      "name_en": "West Lake",
+      "description_en": "A World Heritage cultural landscape where gardens, causeways and historic sites meet the lake.",
+      "country_en": "China",
+      "city_en": "Hangzhou",
+      "location": {
+        "city": "杭州",
+        "city_en": "Hangzhou",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 30.2431,
+        "longitude": 120.1503
+      },
+      "tags_en": [
+        "Nature",
+        "Culture",
+        "Slow travel"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "West Lake Hangzhou"
     },
     {
-      "id": "cn-zhangjiajie", "name": "张家界国家森林公园", "country": "中国", "city": "张家界", "latitude": 29.315, "longitude": 110.434,
-      "description": "石英砂岩峰林景观，云雾天气尤其适合风光摄影。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "⛰️", "bestSeason": "春秋", "rating": 4.9, "tags": ["自然", "徒步", "摄影"]
+      "id": "cn-zhangjiajie",
+      "name": "张家界国家森林公园",
+      "country": "中国",
+      "city": "张家界",
+      "latitude": 29.315,
+      "longitude": 110.434,
+      "description": "石英砂岩峰林景观，云雾天气尤其适合风光摄影。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Zhangjiajie_National_Forest_Park.jpg/960px-Zhangjiajie_National_Forest_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "⛰️",
+      "bestSeason": "春秋",
+      "rating": 4.9,
+      "tags": [
+        "自然",
+        "徒步",
+        "摄影"
+      ],
+      "name_en": "Zhangjiajie National Forest Park",
+      "description_en": "A national forest park known for dramatic quartz-sandstone pillars, mist and mountain trails.",
+      "country_en": "China",
+      "city_en": "Zhangjiajie",
+      "location": {
+        "city": "张家界",
+        "city_en": "Zhangjiajie",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 29.315,
+        "longitude": 110.434
+      },
+      "tags_en": [
+        "Nature",
+        "Hiking",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Zhangjiajie National Forest Park Zhangjiajie"
     },
     {
-      "id": "cn-erhai", "name": "洱海", "country": "中国", "city": "大理", "latitude": 25.785, "longitude": 100.191,
-      "description": "苍山脚下的高原湖泊，环湖骑行、日出和村落摄影体验丰富。", "category": "nature", "image": "https://images.unsplash.com/photo-1537531383496-f4749b8032cf?w=800", "icon": "🚲", "bestSeason": "秋冬", "rating": 4.8, "tags": ["自然", "骑行", "摄影"]
+      "id": "cn-erhai",
+      "name": "洱海",
+      "country": "中国",
+      "city": "大理",
+      "latitude": 25.785,
+      "longitude": 100.191,
+      "description": "苍山脚下的高原湖泊，环湖骑行、日出和村落摄影体验丰富。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Fishermen_at_Lake_Erhai%2C_Dali_-_panoramio.jpg/960px-Fishermen_at_Lake_Erhai%2C_Dali_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🚲",
+      "bestSeason": "秋冬",
+      "rating": 4.8,
+      "tags": [
+        "自然",
+        "骑行",
+        "摄影"
+      ],
+      "name_en": "Erhai Lake",
+      "description_en": "A highland lake below the Cangshan Mountains, popular for cycling, villages and sunrise views.",
+      "country_en": "China",
+      "city_en": "Dali",
+      "location": {
+        "city": "大理",
+        "city_en": "Dali",
+        "country": "中国",
+        "country_en": "China",
+        "latitude": 25.785,
+        "longitude": 100.191
+      },
+      "tags_en": [
+        "Nature",
+        "Cycling",
+        "Photography"
+      ],
+      "bestSeason_en": "Autumn and winter",
+      "imageQuery": "Erhai Lake Dali"
     },
     {
-      "id": "jp-tokyo-tower", "name": "东京塔", "country": "日本", "city": "东京", "latitude": 35.6586, "longitude": 139.7454,
-      "description": "东京经典城市地标，傍晚至夜间适合天际线摄影。", "category": "city", "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800", "icon": "🗼", "bestSeason": "全年", "rating": 4.7, "tags": ["城市", "夜景", "摄影"]
+      "id": "jp-tokyo-tower",
+      "name": "东京塔",
+      "country": "日本",
+      "city": "东京",
+      "latitude": 35.6586,
+      "longitude": 139.7454,
+      "description": "东京经典城市地标，傍晚至夜间适合天际线摄影。",
+      "category": "city",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Tokyo_Tower_at_night_2.JPG/960px-Tokyo_Tower_at_night_2.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🗼",
+      "bestSeason": "全年",
+      "rating": 4.7,
+      "tags": [
+        "城市",
+        "夜景",
+        "摄影"
+      ],
+      "name_en": "Tokyo Tower",
+      "description_en": "A classic Tokyo landmark and observation tower with vivid evening city views.",
+      "country_en": "Japan",
+      "city_en": "Tokyo",
+      "location": {
+        "city": "东京",
+        "city_en": "Tokyo",
+        "country": "日本",
+        "country_en": "Japan",
+        "latitude": 35.6586,
+        "longitude": 139.7454
+      },
+      "tags_en": [
+        "City",
+        "Night views",
+        "Photography"
+      ],
+      "bestSeason_en": "Year-round",
+      "imageQuery": "Tokyo Tower Tokyo"
     },
     {
-      "id": "kr-gyeongbokgung", "name": "景福宫", "country": "韩国", "city": "首尔", "latitude": 37.5796, "longitude": 126.977,
-      "description": "首尔中心的朝鲜王朝宫殿，可结合北村与传统服饰体验。", "category": "history", "image": "https://images.unsplash.com/photo-1538485399081-7c897e8fb98c?w=800", "icon": "🏯", "bestSeason": "春秋", "rating": 4.7, "tags": ["历史", "文化", "摄影"]
+      "id": "kr-gyeongbokgung",
+      "name": "景福宫",
+      "country": "韩国",
+      "city": "首尔",
+      "latitude": 37.5796,
+      "longitude": 126.977,
+      "description": "首尔中心的朝鲜王朝宫殿，可结合北村与传统服饰体验。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/Gyeonghoeru_%28Royal_Banquet_Hall%29_at_Gyeongbokgung_Palace%2C_Seoul.jpg/960px-Gyeonghoeru_%28Royal_Banquet_Hall%29_at_Gyeongbokgung_Palace%2C_Seoul.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏯",
+      "bestSeason": "春秋",
+      "rating": 4.7,
+      "tags": [
+        "历史",
+        "文化",
+        "摄影"
+      ],
+      "name_en": "Gyeongbokgung Palace",
+      "description_en": "The principal palace of the Joseon dynasty, close to Bukchon and traditional neighborhoods.",
+      "country_en": "South Korea",
+      "city_en": "Seoul",
+      "location": {
+        "city": "首尔",
+        "city_en": "Seoul",
+        "country": "韩国",
+        "country_en": "South Korea",
+        "latitude": 37.5796,
+        "longitude": 126.977
+      },
+      "tags_en": [
+        "History",
+        "Culture",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Gyeongbokgung Palace Seoul"
     },
     {
-      "id": "th-grand-palace", "name": "大皇宫", "country": "泰国", "city": "曼谷", "latitude": 13.75, "longitude": 100.4914,
-      "description": "曼谷代表性宫殿与寺庙建筑群，建议清晨到访并注意着装。", "category": "history", "image": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=800", "icon": "🛕", "bestSeason": "11月至2月", "rating": 4.7, "tags": ["寺庙", "文化", "建筑"]
+      "id": "th-grand-palace",
+      "name": "大皇宫",
+      "country": "泰国",
+      "city": "曼谷",
+      "latitude": 13.75,
+      "longitude": 100.4914,
+      "description": "曼谷代表性宫殿与寺庙建筑群，建议清晨到访并注意着装。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Grand_Palace%2C_Bangkok%2C_Thailand_-_panoramio.jpg/960px-Grand_Palace%2C_Bangkok%2C_Thailand_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🛕",
+      "bestSeason": "11月至2月",
+      "rating": 4.7,
+      "tags": [
+        "寺庙",
+        "文化",
+        "建筑"
+      ],
+      "name_en": "Grand Palace",
+      "description_en": "Bangkok’s ornate royal and temple complex, best visited early with respectful dress.",
+      "country_en": "Thailand",
+      "city_en": "Bangkok",
+      "location": {
+        "city": "曼谷",
+        "city_en": "Bangkok",
+        "country": "泰国",
+        "country_en": "Thailand",
+        "latitude": 13.75,
+        "longitude": 100.4914
+      },
+      "tags_en": [
+        "Temples",
+        "Culture",
+        "Architecture"
+      ],
+      "bestSeason_en": "November to February",
+      "imageQuery": "Grand Palace Bangkok Thailand architecture"
     },
     {
-      "id": "vn-ha-long", "name": "下龙湾", "country": "越南", "city": "下龙", "latitude": 20.9101, "longitude": 107.1839,
-      "description": "海上喀斯特地貌世界遗产，适合乘船与海湾摄影。", "category": "nature", "image": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800", "icon": "⛵", "bestSeason": "春秋", "rating": 4.7, "tags": ["海湾", "自然", "摄影"]
+      "id": "vn-ha-long",
+      "name": "下龙湾",
+      "country": "越南",
+      "city": "下龙",
+      "latitude": 20.9101,
+      "longitude": 107.1839,
+      "description": "海上喀斯特地貌世界遗产，适合乘船与海湾摄影。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Halong_Bay_in_Vietnam.jpg/960px-Halong_Bay_in_Vietnam.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "⛵",
+      "bestSeason": "春秋",
+      "rating": 4.7,
+      "tags": [
+        "海湾",
+        "自然",
+        "摄影"
+      ],
+      "name_en": "Ha Long Bay",
+      "description_en": "A World Heritage seascape of limestone towers, islands and sheltered bays.",
+      "country_en": "Vietnam",
+      "city_en": "Ha Long",
+      "location": {
+        "city": "下龙",
+        "city_en": "Ha Long",
+        "country": "越南",
+        "country_en": "Vietnam",
+        "latitude": 20.9101,
+        "longitude": 107.1839
+      },
+      "tags_en": [
+        "Bay",
+        "Nature",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Ha Long Bay Ha Long"
     },
     {
-      "id": "id-borobudur", "name": "婆罗浮屠", "country": "印度尼西亚", "city": "日惹", "latitude": -7.6079, "longitude": 110.2038,
-      "description": "大型佛教遗址，以清晨火山背景与石刻闻名。", "category": "history", "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800", "icon": "🛕", "bestSeason": "5月至9月", "rating": 4.8, "tags": ["历史", "日出", "摄影"]
+      "id": "id-borobudur",
+      "name": "婆罗浮屠",
+      "country": "印度尼西亚",
+      "city": "日惹",
+      "latitude": -7.6079,
+      "longitude": 110.2038,
+      "description": "大型佛教遗址，以清晨火山背景与石刻闻名。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/East_Face%2C_Candi_Borobudur_0962.jpg/960px-East_Face%2C_Candi_Borobudur_0962.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🛕",
+      "bestSeason": "5月至9月",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "日出",
+        "摄影"
+      ],
+      "name_en": "Borobudur",
+      "description_en": "A monumental Buddhist sanctuary famed for carved stone terraces and volcanic scenery.",
+      "country_en": "Indonesia",
+      "city_en": "Yogyakarta",
+      "location": {
+        "city": "日惹",
+        "city_en": "Yogyakarta",
+        "country": "印度尼西亚",
+        "country_en": "Indonesia",
+        "latitude": -7.6079,
+        "longitude": 110.2038
+      },
+      "tags_en": [
+        "History",
+        "Sunrise",
+        "Photography"
+      ],
+      "bestSeason_en": "May to September",
+      "imageQuery": "Borobudur Yogyakarta"
     },
     {
-      "id": "in-taj-mahal", "name": "泰姬陵", "country": "印度", "city": "阿格拉", "latitude": 27.1751, "longitude": 78.0421,
-      "description": "白色大理石陵墓建筑，日出时光线柔和、游客较少。", "category": "history", "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800", "icon": "🕌", "bestSeason": "10月至3月", "rating": 4.9, "tags": ["建筑", "历史", "摄影"]
+      "id": "in-taj-mahal",
+      "name": "泰姬陵",
+      "country": "印度",
+      "city": "阿格拉",
+      "latitude": 27.1751,
+      "longitude": 78.0421,
+      "description": "白色大理石陵墓建筑，日出时光线柔和、游客较少。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Taj_Mahal_in_March_2004.jpg/960px-Taj_Mahal_in_March_2004.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🕌",
+      "bestSeason": "10月至3月",
+      "rating": 4.9,
+      "tags": [
+        "建筑",
+        "历史",
+        "摄影"
+      ],
+      "name_en": "Taj Mahal",
+      "description_en": "A white-marble mausoleum celebrated for its symmetry, craftsmanship and soft sunrise light.",
+      "country_en": "India",
+      "city_en": "Agra",
+      "location": {
+        "city": "阿格拉",
+        "city_en": "Agra",
+        "country": "印度",
+        "country_en": "India",
+        "latitude": 27.1751,
+        "longitude": 78.0421
+      },
+      "tags_en": [
+        "Architecture",
+        "History",
+        "Photography"
+      ],
+      "bestSeason_en": "October to March",
+      "imageQuery": "Taj Mahal Agra"
     },
     {
-      "id": "ae-burj-khalifa", "name": "哈利法塔", "country": "阿联酋", "city": "迪拜", "latitude": 25.1972, "longitude": 55.2744,
-      "description": "全球知名摩天建筑，可俯瞰迪拜城市与沙漠边缘。", "category": "city", "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800", "icon": "🏙️", "bestSeason": "11月至3月", "rating": 4.7, "tags": ["建筑", "城市", "夜景"]
+      "id": "ae-burj-khalifa",
+      "name": "哈利法塔",
+      "country": "阿联酋",
+      "city": "迪拜",
+      "latitude": 25.1972,
+      "longitude": 55.2744,
+      "description": "全球知名摩天建筑，可俯瞰迪拜城市与沙漠边缘。",
+      "category": "city",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Burj_dubai_3.11.08.jpg/960px-Burj_dubai_3.11.08.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏙️",
+      "bestSeason": "11月至3月",
+      "rating": 4.7,
+      "tags": [
+        "建筑",
+        "城市",
+        "夜景"
+      ],
+      "name_en": "Burj Khalifa",
+      "description_en": "The world-famous skyscraper offering panoramic views of Dubai and the desert edge.",
+      "country_en": "United Arab Emirates",
+      "city_en": "Dubai",
+      "location": {
+        "city": "迪拜",
+        "city_en": "Dubai",
+        "country": "阿联酋",
+        "country_en": "United Arab Emirates",
+        "latitude": 25.1972,
+        "longitude": 55.2744
+      },
+      "tags_en": [
+        "Architecture",
+        "City",
+        "Night views"
+      ],
+      "bestSeason_en": "November to March",
+      "imageQuery": "Burj Khalifa Dubai"
     },
     {
-      "id": "fr-louvre", "name": "卢浮宫", "country": "法国", "city": "巴黎", "latitude": 48.8606, "longitude": 2.3376,
-      "description": "世界级艺术博物馆，馆藏丰富，建议提前选择重点展区。", "category": "museum", "image": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800", "icon": "🎨", "bestSeason": "全年", "rating": 4.9, "tags": ["艺术", "建筑", "文化"]
+      "id": "fr-louvre",
+      "name": "卢浮宫",
+      "country": "法国",
+      "city": "巴黎",
+      "latitude": 48.8606,
+      "longitude": 2.3376,
+      "description": "世界级艺术博物馆，馆藏丰富，建议提前选择重点展区。",
+      "category": "museum",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Le_Louvre_-_Aile_Richelieu.jpg/960px-Le_Louvre_-_Aile_Richelieu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🎨",
+      "bestSeason": "全年",
+      "rating": 4.9,
+      "tags": [
+        "艺术",
+        "建筑",
+        "文化"
+      ],
+      "name_en": "Louvre Museum",
+      "description_en": "One of the world’s great art museums, housed in a former royal palace in central Paris.",
+      "country_en": "France",
+      "city_en": "Paris",
+      "location": {
+        "city": "巴黎",
+        "city_en": "Paris",
+        "country": "法国",
+        "country_en": "France",
+        "latitude": 48.8606,
+        "longitude": 2.3376
+      },
+      "tags_en": [
+        "Art",
+        "Architecture",
+        "Culture"
+      ],
+      "bestSeason_en": "Year-round",
+      "imageQuery": "Louvre Museum Paris"
     },
     {
-      "id": "it-colosseum", "name": "罗马斗兽场", "country": "意大利", "city": "罗马", "latitude": 41.8902, "longitude": 12.4922,
-      "description": "古罗马文明代表遗址，可与古罗马广场安排同日步行。", "category": "history", "image": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800", "icon": "🏛️", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "城市"]
+      "id": "it-colosseum",
+      "name": "罗马斗兽场",
+      "country": "意大利",
+      "city": "罗马",
+      "latitude": 41.8902,
+      "longitude": 12.4922,
+      "description": "古罗马文明代表遗址，可与古罗马广场安排同日步行。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Colosseum_in_Rome%2C_Italy_-_April_2007.jpg/960px-Colosseum_in_Rome%2C_Italy_-_April_2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏛️",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "城市"
+      ],
+      "name_en": "Colosseum",
+      "description_en": "Ancient Rome’s monumental amphitheatre, easily combined with the Roman Forum on foot.",
+      "country_en": "Italy",
+      "city_en": "Rome",
+      "location": {
+        "city": "罗马",
+        "city_en": "Rome",
+        "country": "意大利",
+        "country_en": "Italy",
+        "latitude": 41.8902,
+        "longitude": 12.4922
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "City"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Colosseum Rome"
     },
     {
-      "id": "gb-big-ben", "name": "大本钟", "country": "英国", "city": "伦敦", "latitude": 51.5007, "longitude": -0.1246,
-      "description": "威斯敏斯特宫钟楼，泰晤士河两岸有多处经典拍摄机位。", "category": "landmark", "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800", "icon": "🕰️", "bestSeason": "春夏", "rating": 4.7, "tags": ["建筑", "城市", "摄影"]
+      "id": "gb-big-ben",
+      "name": "大本钟",
+      "country": "英国",
+      "city": "伦敦",
+      "latitude": 51.5007,
+      "longitude": -0.1246,
+      "description": "威斯敏斯特宫钟楼，泰晤士河两岸有多处经典拍摄机位。",
+      "category": "landmark",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Clock_Tower_-_Palace_of_Westminster%2C_London_-_September_2006.jpg/960px-Clock_Tower_-_Palace_of_Westminster%2C_London_-_September_2006.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🕰️",
+      "bestSeason": "春夏",
+      "rating": 4.7,
+      "tags": [
+        "建筑",
+        "城市",
+        "摄影"
+      ],
+      "name_en": "Big Ben",
+      "description_en": "The clock tower of the Palace of Westminster and a defining feature of London’s riverfront.",
+      "country_en": "United Kingdom",
+      "city_en": "London",
+      "location": {
+        "city": "伦敦",
+        "city_en": "London",
+        "country": "英国",
+        "country_en": "United Kingdom",
+        "latitude": 51.5007,
+        "longitude": -0.1246
+      },
+      "tags_en": [
+        "Architecture",
+        "City",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and summer",
+      "imageQuery": "Big Ben London"
     },
     {
-      "id": "es-sagrada", "name": "圣家堂", "country": "西班牙", "city": "巴塞罗那", "latitude": 41.4036, "longitude": 2.1744,
-      "description": "高迪未完杰作，以独特立面和彩色光影闻名。", "category": "architecture", "image": "https://images.unsplash.com/photo-1583779457094-ab6f4f969e5a?w=800", "icon": "⛪", "bestSeason": "春秋", "rating": 4.9, "tags": ["建筑", "艺术", "摄影"]
+      "id": "es-sagrada",
+      "name": "圣家堂",
+      "country": "西班牙",
+      "city": "巴塞罗那",
+      "latitude": 41.4036,
+      "longitude": 2.1744,
+      "description": "高迪未完杰作，以独特立面和彩色光影闻名。",
+      "category": "architecture",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Sagrada_Familia_March_2015-10a.jpg/960px-Sagrada_Familia_March_2015-10a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "⛪",
+      "bestSeason": "春秋",
+      "rating": 4.9,
+      "tags": [
+        "建筑",
+        "艺术",
+        "摄影"
+      ],
+      "name_en": "Sagrada Familia",
+      "description_en": "Gaudí’s evolving basilica, known for sculpted façades and colorful interior light.",
+      "country_en": "Spain",
+      "city_en": "Barcelona",
+      "location": {
+        "city": "巴塞罗那",
+        "city_en": "Barcelona",
+        "country": "西班牙",
+        "country_en": "Spain",
+        "latitude": 41.4036,
+        "longitude": 2.1744
+      },
+      "tags_en": [
+        "Architecture",
+        "Art",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Sagrada Familia Barcelona"
     },
     {
-      "id": "gr-acropolis", "name": "雅典卫城", "country": "希腊", "city": "雅典", "latitude": 37.9715, "longitude": 23.7257,
-      "description": "古希腊建筑遗址群，日落前后可俯瞰雅典。", "category": "history", "image": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800", "icon": "🏛️", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "日落"]
+      "id": "gr-acropolis",
+      "name": "雅典卫城",
+      "country": "希腊",
+      "city": "雅典",
+      "latitude": 37.9715,
+      "longitude": 23.7257,
+      "description": "古希腊建筑遗址群，日落前后可俯瞰雅典。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/20101024_Acropolis_panoramic_view_from_Areopagus_hill_Athens_Greece.jpg/960px-20101024_Acropolis_panoramic_view_from_Areopagus_hill_Athens_Greece.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏛️",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "日落"
+      ],
+      "name_en": "Acropolis of Athens",
+      "description_en": "A hilltop complex of classical Greek monuments overlooking the city of Athens.",
+      "country_en": "Greece",
+      "city_en": "Athens",
+      "location": {
+        "city": "雅典",
+        "city_en": "Athens",
+        "country": "希腊",
+        "country_en": "Greece",
+        "latitude": 37.9715,
+        "longitude": 23.7257
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Sunset"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Acropolis of Athens Athens"
     },
     {
-      "id": "tr-hagia-sophia", "name": "圣索菲亚大教堂", "country": "土耳其", "city": "伊斯坦布尔", "latitude": 41.0086, "longitude": 28.98,
-      "description": "横跨多种文明历史的穹顶建筑，与蓝色清真寺相邻。", "category": "history", "image": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800", "icon": "🕌", "bestSeason": "春秋", "rating": 4.8, "tags": ["历史", "建筑", "文化"]
+      "id": "tr-hagia-sophia",
+      "name": "圣索菲亚大教堂",
+      "country": "土耳其",
+      "city": "伊斯坦布尔",
+      "latitude": 41.0086,
+      "longitude": 28.98,
+      "description": "横跨多种文明历史的穹顶建筑，与蓝色清真寺相邻。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Hagia_Sophia_light.JPG/960px-Hagia_Sophia_light.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🕌",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "文化"
+      ],
+      "name_en": "Hagia Sophia",
+      "description_en": "A monumental domed building whose architecture reflects centuries of Byzantine and Ottoman history.",
+      "country_en": "Türkiye",
+      "city_en": "Istanbul",
+      "location": {
+        "city": "伊斯坦布尔",
+        "city_en": "Istanbul",
+        "country": "土耳其",
+        "country_en": "Türkiye",
+        "latitude": 41.0086,
+        "longitude": 28.98
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Culture"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Hagia Sophia Istanbul exterior"
     },
     {
-      "id": "us-golden-gate", "name": "金门大桥", "country": "美国", "city": "旧金山", "latitude": 37.8199, "longitude": -122.4783,
-      "description": "跨越金门海峡的红色悬索桥，多处观景台适合城市摄影。", "category": "landmark", "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800", "icon": "🌉", "bestSeason": "秋季", "rating": 4.8, "tags": ["建筑", "海湾", "摄影"]
+      "id": "us-golden-gate",
+      "name": "金门大桥",
+      "country": "美国",
+      "city": "旧金山",
+      "latitude": 37.8199,
+      "longitude": -122.4783,
+      "description": "跨越金门海峡的红色悬索桥，多处观景台适合城市摄影。",
+      "category": "landmark",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Golden_Gate_Bridge_by_night.jpg/960px-Golden_Gate_Bridge_by_night.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🌉",
+      "bestSeason": "秋季",
+      "rating": 4.8,
+      "tags": [
+        "建筑",
+        "海湾",
+        "摄影"
+      ],
+      "name_en": "Golden Gate Bridge",
+      "description_en": "San Francisco’s red suspension bridge, viewed from coastal trails and bay overlooks.",
+      "country_en": "United States",
+      "city_en": "San Francisco",
+      "location": {
+        "city": "旧金山",
+        "city_en": "San Francisco",
+        "country": "美国",
+        "country_en": "United States",
+        "latitude": 37.8199,
+        "longitude": -122.4783
+      },
+      "tags_en": [
+        "Architecture",
+        "Bay",
+        "Photography"
+      ],
+      "bestSeason_en": "Autumn",
+      "imageQuery": "Golden Gate Bridge San Francisco"
     },
     {
-      "id": "us-grand-canyon", "name": "大峡谷", "country": "美国", "city": "亚利桑那", "latitude": 36.1069, "longitude": -112.1129,
-      "description": "科罗拉多河切割形成的巨大峡谷，日出日落层次鲜明。", "category": "nature", "image": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800", "icon": "🏜️", "bestSeason": "春秋", "rating": 4.9, "tags": ["自然", "徒步", "摄影"]
+      "id": "us-grand-canyon",
+      "name": "大峡谷",
+      "country": "美国",
+      "city": "亚利桑那",
+      "latitude": 36.1069,
+      "longitude": -112.1129,
+      "description": "科罗拉多河切割形成的巨大峡谷，日出日落层次鲜明。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/USA_09847_Grand_Canyon_Luca_Galuzzi_2007.jpg/960px-USA_09847_Grand_Canyon_Luca_Galuzzi_2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏜️",
+      "bestSeason": "春秋",
+      "rating": 4.9,
+      "tags": [
+        "自然",
+        "徒步",
+        "摄影"
+      ],
+      "name_en": "Grand Canyon",
+      "description_en": "A vast canyon carved by the Colorado River, with layered views at sunrise and sunset.",
+      "country_en": "United States",
+      "city_en": "Arizona",
+      "location": {
+        "city": "亚利桑那",
+        "city_en": "Arizona",
+        "country": "美国",
+        "country_en": "United States",
+        "latitude": 36.1069,
+        "longitude": -112.1129
+      },
+      "tags_en": [
+        "Nature",
+        "Hiking",
+        "Photography"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "imageQuery": "Grand Canyon Arizona"
     },
     {
-      "id": "ca-niagara", "name": "尼亚加拉瀑布", "country": "加拿大", "city": "尼亚加拉瀑布城", "latitude": 43.0962, "longitude": -79.0377,
-      "description": "跨越加拿大与美国边界的大型瀑布群，可乘船近距离体验。", "category": "nature", "image": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800", "icon": "🌊", "bestSeason": "夏秋", "rating": 4.8, "tags": ["自然", "瀑布", "家庭"]
+      "id": "ca-niagara",
+      "name": "尼亚加拉瀑布",
+      "country": "加拿大",
+      "city": "尼亚加拉瀑布城",
+      "latitude": 43.0962,
+      "longitude": -79.0377,
+      "description": "跨越加拿大与美国边界的大型瀑布群，可乘船近距离体验。",
+      "category": "nature",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Niagara_watervallen_canada.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "icon": "🌊",
+      "bestSeason": "夏秋",
+      "rating": 4.8,
+      "tags": [
+        "自然",
+        "瀑布",
+        "家庭"
+      ],
+      "name_en": "Niagara Falls",
+      "description_en": "A powerful group of waterfalls on the Canada–United States border, seen from viewpoints and boats.",
+      "country_en": "Canada",
+      "city_en": "Niagara Falls",
+      "location": {
+        "city": "尼亚加拉瀑布城",
+        "city_en": "Niagara Falls",
+        "country": "加拿大",
+        "country_en": "Canada",
+        "latitude": 43.0962,
+        "longitude": -79.0377
+      },
+      "tags_en": [
+        "Nature",
+        "Waterfalls",
+        "Family"
+      ],
+      "bestSeason_en": "Summer and autumn",
+      "imageQuery": "Niagara Falls Niagara Falls"
     },
     {
-      "id": "mx-chichen-itza", "name": "奇琴伊察", "country": "墨西哥", "city": "尤卡坦", "latitude": 20.6843, "longitude": -88.5678,
-      "description": "玛雅文明重要遗址，以库库尔坎金字塔闻名。", "category": "history", "image": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800", "icon": "🔺", "bestSeason": "11月至4月", "rating": 4.8, "tags": ["历史", "文化", "建筑"]
+      "id": "mx-chichen-itza",
+      "name": "奇琴伊察",
+      "country": "墨西哥",
+      "city": "尤卡坦",
+      "latitude": 20.6843,
+      "longitude": -88.5678,
+      "description": "玛雅文明重要遗址，以库库尔坎金字塔闻名。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Chichen_Itza_1.jpg/960px-Chichen_Itza_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🔺",
+      "bestSeason": "11月至4月",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "文化",
+        "建筑"
+      ],
+      "name_en": "Chichen Itza",
+      "description_en": "A major Maya archaeological site centered on the stepped pyramid of El Castillo.",
+      "country_en": "Mexico",
+      "city_en": "Yucatán",
+      "location": {
+        "city": "尤卡坦",
+        "city_en": "Yucatán",
+        "country": "墨西哥",
+        "country_en": "Mexico",
+        "latitude": 20.6843,
+        "longitude": -88.5678
+      },
+      "tags_en": [
+        "History",
+        "Culture",
+        "Architecture"
+      ],
+      "bestSeason_en": "November to April",
+      "imageQuery": "Chichen Itza Yucatán"
     },
     {
-      "id": "br-christ", "name": "基督山", "country": "巴西", "city": "里约热内卢", "latitude": -22.9519, "longitude": -43.2105,
-      "description": "科尔科瓦多山顶城市地标，可俯瞰里约海湾与城区。", "category": "landmark", "image": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800", "icon": "🌅", "bestSeason": "5月至10月", "rating": 4.8, "tags": ["城市", "山景", "摄影"]
+      "id": "br-christ",
+      "name": "基督山",
+      "country": "巴西",
+      "city": "里约热内卢",
+      "latitude": -22.9519,
+      "longitude": -43.2105,
+      "description": "科尔科瓦多山顶城市地标，可俯瞰里约海湾与城区。",
+      "category": "landmark",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Unique_Moment_with_the_Moon_and_Christ_the_Redeemer_3.jpg/960px-Unique_Moment_with_the_Moon_and_Christ_the_Redeemer_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🌅",
+      "bestSeason": "5月至10月",
+      "rating": 4.8,
+      "tags": [
+        "城市",
+        "山景",
+        "摄影"
+      ],
+      "name_en": "Christ the Redeemer",
+      "description_en": "Rio’s Art Deco statue on Corcovado Mountain, overlooking the city, beaches and bay.",
+      "country_en": "Brazil",
+      "city_en": "Rio de Janeiro",
+      "location": {
+        "city": "里约热内卢",
+        "city_en": "Rio de Janeiro",
+        "country": "巴西",
+        "country_en": "Brazil",
+        "latitude": -22.9519,
+        "longitude": -43.2105
+      },
+      "tags_en": [
+        "City",
+        "Mountain views",
+        "Photography"
+      ],
+      "bestSeason_en": "May to October",
+      "imageQuery": "Christ the Redeemer Rio statue"
     },
     {
-      "id": "pe-machu-picchu", "name": "马丘比丘", "country": "秘鲁", "city": "库斯科", "latitude": -13.1631, "longitude": -72.545,
-      "description": "安第斯山中的印加古城，需提前规划交通和入场时段。", "category": "history", "image": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800", "icon": "⛰️", "bestSeason": "5月至9月", "rating": 4.9, "tags": ["历史", "徒步", "自然"]
+      "id": "pe-machu-picchu",
+      "name": "马丘比丘",
+      "country": "秘鲁",
+      "city": "库斯科",
+      "latitude": -13.1631,
+      "longitude": -72.545,
+      "description": "安第斯山中的印加古城，需提前规划交通和入场时段。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Machu_picchu_grande.jpg/960px-Machu_picchu_grande.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "⛰️",
+      "bestSeason": "5月至9月",
+      "rating": 4.9,
+      "tags": [
+        "历史",
+        "徒步",
+        "自然"
+      ],
+      "name_en": "Machu Picchu",
+      "description_en": "An Inca citadel set high in the Andes, reached through cloud forest and mountain scenery.",
+      "country_en": "Peru",
+      "city_en": "Cusco",
+      "location": {
+        "city": "库斯科",
+        "city_en": "Cusco",
+        "country": "秘鲁",
+        "country_en": "Peru",
+        "latitude": -13.1631,
+        "longitude": -72.545
+      },
+      "tags_en": [
+        "History",
+        "Hiking",
+        "Nature"
+      ],
+      "bestSeason_en": "May to September",
+      "imageQuery": "Machu Picchu Cusco"
     },
     {
-      "id": "eg-pyramids", "name": "吉萨金字塔", "country": "埃及", "city": "吉萨", "latitude": 29.9792, "longitude": 31.1342,
-      "description": "古埃及代表性建筑群，清晨和傍晚气温更适合游览。", "category": "history", "image": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800", "icon": "🔺", "bestSeason": "10月至4月", "rating": 4.8, "tags": ["历史", "建筑", "沙漠"]
+      "id": "eg-pyramids",
+      "name": "吉萨金字塔",
+      "country": "埃及",
+      "city": "吉萨",
+      "latitude": 29.9792,
+      "longitude": 31.1342,
+      "description": "古埃及代表性建筑群，清晨和傍晚气温更适合游览。",
+      "category": "history",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/All_Gizah_Pyramids.jpg/960px-All_Gizah_Pyramids.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🔺",
+      "bestSeason": "10月至4月",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "沙漠"
+      ],
+      "name_en": "Pyramids of Giza",
+      "description_en": "The monumental pyramid complex of ancient Giza, including the Great Pyramid and the Sphinx.",
+      "country_en": "Egypt",
+      "city_en": "Giza",
+      "location": {
+        "city": "吉萨",
+        "city_en": "Giza",
+        "country": "埃及",
+        "country_en": "Egypt",
+        "latitude": 29.9792,
+        "longitude": 31.1342
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Desert"
+      ],
+      "bestSeason_en": "October to April",
+      "imageQuery": "Giza pyramids Egypt photograph"
     },
     {
-      "id": "za-table-mountain", "name": "桌山", "country": "南非", "city": "开普敦", "latitude": -33.9628, "longitude": 18.4098,
-      "description": "俯瞰开普敦与大西洋的平顶山，可徒步或乘缆车。", "category": "nature", "image": "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800", "icon": "⛰️", "bestSeason": "11月至3月", "rating": 4.8, "tags": ["自然", "徒步", "海景"]
+      "id": "za-table-mountain",
+      "name": "桌山",
+      "country": "南非",
+      "city": "开普敦",
+      "latitude": -33.9628,
+      "longitude": 18.4098,
+      "description": "俯瞰开普敦与大西洋的平顶山，可徒步或乘缆车。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Table_Mountain%2C_Cape_Town_%28P1050264%29.jpg/960px-Table_Mountain%2C_Cape_Town_%28P1050264%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "⛰️",
+      "bestSeason": "11月至3月",
+      "rating": 4.8,
+      "tags": [
+        "自然",
+        "徒步",
+        "海景"
+      ],
+      "name_en": "Table Mountain",
+      "description_en": "Cape Town’s flat-topped mountain, reached by cableway or hiking trails for coastal views.",
+      "country_en": "South Africa",
+      "city_en": "Cape Town",
+      "location": {
+        "city": "开普敦",
+        "city_en": "Cape Town",
+        "country": "南非",
+        "country_en": "South Africa",
+        "latitude": -33.9628,
+        "longitude": 18.4098
+      },
+      "tags_en": [
+        "Nature",
+        "Hiking",
+        "Sea views"
+      ],
+      "bestSeason_en": "November to March",
+      "imageQuery": "Table Mountain Cape Town"
     },
     {
-      "id": "au-great-barrier", "name": "大堡礁", "country": "澳大利亚", "city": "凯恩斯", "latitude": -18.2871, "longitude": 147.6992,
-      "description": "世界最大的珊瑚礁生态系统，可通过持牌运营商参加浮潜体验。", "category": "nature", "image": "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800", "icon": "🐠", "bestSeason": "6月至10月", "rating": 4.9, "tags": ["海岛", "潜水", "自然"]
+      "id": "au-great-barrier",
+      "name": "大堡礁",
+      "country": "澳大利亚",
+      "city": "凯恩斯",
+      "latitude": -18.2871,
+      "longitude": 147.6992,
+      "description": "世界最大的珊瑚礁生态系统，可通过持牌运营商参加浮潜体验。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Cairns%2C_Great_Ocean_Barrier_Reef_01.jpg/960px-Cairns%2C_Great_Ocean_Barrier_Reef_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🐠",
+      "bestSeason": "6月至10月",
+      "rating": 4.9,
+      "tags": [
+        "海岛",
+        "潜水",
+        "自然"
+      ],
+      "name_en": "Great Barrier Reef",
+      "description_en": "The world’s largest coral reef system, explored through licensed snorkeling and diving trips.",
+      "country_en": "Australia",
+      "city_en": "Cairns",
+      "location": {
+        "city": "凯恩斯",
+        "city_en": "Cairns",
+        "country": "澳大利亚",
+        "country_en": "Australia",
+        "latitude": -18.2871,
+        "longitude": 147.6992
+      },
+      "tags_en": [
+        "Islands",
+        "Diving",
+        "Nature"
+      ],
+      "bestSeason_en": "June to October",
+      "imageQuery": "Great Barrier Reef Cairns"
     },
     {
-      "id": "nz-milford", "name": "米尔福德峡湾", "country": "新西兰", "city": "峡湾国家公园", "latitude": -44.6716, "longitude": 167.926,
-      "description": "冰川塑造的峡湾与瀑布景观，阴雨天也具有独特氛围。", "category": "nature", "image": "https://images.unsplash.com/photo-1469521669194-babb45599def?w=800", "icon": "🏔️", "bestSeason": "11月至4月", "rating": 4.9, "tags": ["自然", "游船", "摄影"]
+      "id": "nz-milford",
+      "name": "米尔福德峡湾",
+      "country": "新西兰",
+      "city": "峡湾国家公园",
+      "latitude": -44.6716,
+      "longitude": 167.926,
+      "description": "冰川塑造的峡湾与瀑布景观，阴雨天也具有独特氛围。",
+      "category": "nature",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Milford_Sound_in_Fiordland_National_Park_01.jpg/960px-Milford_Sound_in_Fiordland_National_Park_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "icon": "🏔️",
+      "bestSeason": "11月至4月",
+      "rating": 4.9,
+      "tags": [
+        "自然",
+        "游船",
+        "摄影"
+      ],
+      "name_en": "Milford Sound",
+      "description_en": "A glacier-carved fiord of steep peaks and waterfalls, atmospheric even in rainy weather.",
+      "country_en": "New Zealand",
+      "city_en": "Fiordland National Park",
+      "location": {
+        "city": "峡湾国家公园",
+        "city_en": "Fiordland National Park",
+        "country": "新西兰",
+        "country_en": "New Zealand",
+        "latitude": -44.6716,
+        "longitude": 167.926
+      },
+      "tags_en": [
+        "Nature",
+        "Cruises",
+        "Photography"
+      ],
+      "bestSeason_en": "November to April",
+      "imageQuery": "Milford Sound Fiordland National Park"
     },
-    {"id":"ru-red-square","name":"红场","country":"俄罗斯","city":"莫斯科","latitude":55.7539,"longitude":37.6208,"description":"莫斯科历史核心，可步行串联克里姆林宫与圣瓦西里大教堂。","category":"history","icon":"🏰","bestSeason":"5月至9月","rating":4.8,"tags":["历史","建筑","城市"],"duration":"3小时","nearby":["克里姆林宫","古姆百货"],"food":["罗宋汤","俄式饺子"],"stay":"特维尔区或阿尔巴特街","transport":"地铁猎人商行站步行抵达"},
-    {"id":"ru-hermitage","name":"冬宫博物馆","country":"俄罗斯","city":"圣彼得堡","latitude":59.9398,"longitude":30.3146,"description":"收藏横跨欧洲艺术史的宫殿博物馆，建议提前选定重点展厅。","category":"museum","icon":"🎨","bestSeason":"5月至8月","rating":4.9,"tags":["艺术","宫殿","建筑"],"duration":"4小时","nearby":["宫殿广场","涅瓦河"],"food":["布林饼","蜂蜜蛋糕"],"stay":"中央区","transport":"地铁海军部站步行约10分钟"},
-    {"id":"ru-baikal","name":"贝加尔湖","country":"俄罗斯","city":"伊尔库茨克","latitude":53.5587,"longitude":108.165,"description":"世界最深淡水湖，冬季蓝冰与夏季湖岸徒步各有特色。","category":"nature","icon":"❄️","bestSeason":"2月至3月或7月至8月","rating":4.9,"tags":["湖泊","冰雪","自然"],"duration":"2至4天","nearby":["奥利洪岛","利斯特维扬卡"],"food":["奥木尔鱼"],"stay":"奥利洪岛胡日尔村","transport":"从伊尔库茨克乘正规巴士或包车"},
-    {"id":"br-iguazu","name":"伊瓜苏瀑布","country":"巴西","city":"福斯-杜伊瓜苏","latitude":-25.6953,"longitude":-54.4367,"description":"跨越巴西与阿根廷边境的巨型瀑布群，巴西侧适合全景观赏。","category":"nature","icon":"🌊","bestSeason":"3月至11月","rating":4.9,"tags":["瀑布","雨林","自然"],"duration":"1天","nearby":["伊瓜苏国家公园","鸟园"],"food":["巴西烤肉","木薯料理"],"stay":"福斯市中心","transport":"机场或市区巴士前往国家公园"},
-    {"id":"br-salvador","name":"佩洛里尼奥历史中心","country":"巴西","city":"萨尔瓦多","latitude":-12.9718,"longitude":-38.5108,"description":"色彩鲜明的殖民建筑与非裔巴西文化共同构成的世界遗产街区。","category":"history","icon":"🎭","bestSeason":"9月至3月","rating":4.7,"tags":["文化","建筑","音乐"],"duration":"半天","nearby":["拉塞尔达电梯","模范市场"],"food":["巴伊亚海鲜椰奶锅"],"stay":"佩洛里尼奥或巴拉区","transport":"打车至历史中心后步行"},
-    {"id":"ma-marrakech","name":"杰马夫纳广场","country":"摩洛哥","city":"马拉喀什","latitude":31.6258,"longitude":-7.9892,"description":"从日间市集到夜间食摊不断变换的老城公共空间。","category":"culture","icon":"🕌","bestSeason":"3月至5月、9月至11月","rating":4.7,"tags":["市集","美食","文化"],"duration":"半天","nearby":["库图比亚清真寺","巴伊亚宫"],"food":["塔吉锅","薄荷茶"],"stay":"麦地那正规庭院旅馆","transport":"老城外围下车后步行"},
-    {"id":"ke-masai-mara","name":"马赛马拉国家保护区","country":"肯尼亚","city":"纳罗克","latitude":-1.4061,"longitude":35.0103,"description":"东非代表性草原生态区，以大型野生动物与季节性迁徙闻名。","category":"nature","icon":"🦁","bestSeason":"7月至10月","rating":4.9,"tags":["野生动物","草原","摄影"],"duration":"2至3天","nearby":["马拉河","马赛村落"],"food":["营地餐食"],"stay":"持牌保护区营地","transport":"内罗毕小型飞机或正规越野车"},
-    {"id":"tz-serengeti","name":"塞伦盖蒂国家公园","country":"坦桑尼亚","city":"阿鲁沙地区","latitude":-2.3333,"longitude":34.8333,"description":"广阔草原与迁徙兽群构成东非最具代表性的自然景观。","category":"nature","icon":"🦓","bestSeason":"6月至10月","rating":4.9,"tags":["草原","动物","自然"],"duration":"3至4天","nearby":["恩戈罗恩戈罗","马拉河"],"food":["营地餐食"],"stay":"国家公园持牌营地","transport":"从阿鲁沙参加正规向导行程"},
-    {"id":"jp-itsukushima","name":"严岛神社","country":"日本","city":"广岛","latitude":34.2959,"longitude":132.3199,"description":"随潮汐呈现不同景观的海上神社，适合与宫岛步行同游。","category":"temple","icon":"⛩️","bestSeason":"春秋","rating":4.8,"tags":["神社","海景","文化"],"duration":"半天","nearby":["弥山","宫岛町家通"],"food":["牡蛎","红叶馒头"],"stay":"宫岛口或广岛站周边","transport":"JR至宫岛口后乘轮渡"},
-    {"id":"kh-angkor","name":"吴哥窟","country":"柬埔寨","city":"暹粒","latitude":13.4125,"longitude":103.867,"description":"吴哥王朝大型寺庙群，日出后按小圈或大圈分日游览更从容。","category":"history","icon":"🛕","bestSeason":"11月至2月","rating":4.9,"tags":["历史","寺庙","日出"],"duration":"2至3天","nearby":["巴戎寺","塔布笼寺"],"food":["阿莫克鱼","高棉米粉"],"stay":"暹粒老市场或河畔","transport":"持票乘突突车或包车"},
-    {"id":"my-petronas","name":"双子塔","country":"马来西亚","city":"吉隆坡","latitude":3.1579,"longitude":101.7116,"description":"吉隆坡天际线核心地标，公园与观景层提供不同视角。","category":"city","icon":"🏙️","bestSeason":"全年","rating":4.7,"tags":["建筑","夜景","城市"],"duration":"2小时","nearby":["城中城公园","武吉免登"],"food":["椰浆饭","肉骨茶"],"stay":"KLCC或武吉免登","transport":"轻轨KLCC站"},
-    {"id":"np-everest","name":"珠峰地区","country":"尼泊尔","city":"卢卡拉","latitude":27.9881,"longitude":86.925,"description":"喜马拉雅高山徒步核心区域，必须预留适应海拔与天气机动时间。","category":"nature","icon":"🏔️","bestSeason":"3月至5月、10月至11月","rating":4.9,"tags":["徒步","雪山","户外"],"duration":"10天以上","nearby":["南池市场","腾波切"],"food":["达尔巴特"],"stay":"持牌山屋","transport":"从加德满都飞卢卡拉并由向导带领"},
-    {"id":"jo-petra","name":"佩特拉古城","country":"约旦","city":"瓦迪穆萨","latitude":30.3285,"longitude":35.4444,"description":"沿蛇道进入玫瑰色岩石古城，卡兹尼神殿只是庞大遗址的一部分。","category":"history","icon":"🏜️","bestSeason":"3月至5月、9月至11月","rating":4.9,"tags":["遗址","沙漠","徒步"],"duration":"1至2天","nearby":["修道院","瓦迪拉姆"],"food":["曼萨夫"],"stay":"瓦迪穆萨游客中心附近","transport":"安曼或亚喀巴乘正规巴士"},
-    {"id":"de-neuschwanstein","name":"新天鹅堡","country":"德国","city":"菲森","latitude":47.5576,"longitude":10.7498,"description":"阿尔卑斯山麓的浪漫主义城堡，玛丽安桥是经典远眺点。","category":"architecture","icon":"🏰","bestSeason":"5月至10月","rating":4.8,"tags":["城堡","山景","建筑"],"duration":"半天","nearby":["高天鹅堡","阿尔普湖"],"food":["巴伐利亚香肠"],"stay":"菲森老城","transport":"慕尼黑火车至菲森后换公交"},
-    {"id":"pt-belem","name":"贝伦塔","country":"葡萄牙","city":"里斯本","latitude":38.6916,"longitude":-9.216,"description":"特茹河畔航海时代防御塔，可与热罗尼莫斯修道院同游。","category":"history","icon":"🗼","bestSeason":"春秋","rating":4.7,"tags":["航海","建筑","河景"],"duration":"2小时","nearby":["发现者纪念碑","热罗尼莫斯修道院"],"food":["葡式蛋挞","海鲜饭"],"stay":"拜萨或希亚多","transport":"15E有轨电车或火车至贝伦"},
-    {"id":"is-golden-circle","name":"黄金圈","country":"冰岛","city":"雷克雅未克周边","latitude":64.2559,"longitude":-20.3909,"description":"串联辛格韦德利、盖歇尔与黄金瀑布的经典地热与地质路线。","category":"nature","icon":"🌋","bestSeason":"6月至9月","rating":4.8,"tags":["瀑布","地热","自驾"],"duration":"1天","nearby":["辛格韦德利","盖歇尔"],"food":["羊肉汤","黑麦面包"],"stay":"雷克雅未克","transport":"正规一日团或冬季适配车辆"},
-    {"id":"ca-banff","name":"班夫国家公园","country":"加拿大","city":"班夫","latitude":51.1784,"longitude":-115.5708,"description":"落基山湖泊、冰川与森林组成的国家公园，适合公路与轻徒步。","category":"nature","icon":"🏔️","bestSeason":"6月至9月","rating":4.9,"tags":["湖泊","山地","徒步"],"duration":"3至5天","nearby":["露易丝湖","梦莲湖"],"food":["艾伯塔牛肉"],"stay":"班夫镇或坎莫尔","transport":"卡尔加里租车或接驳巴士"},
-    {"id":"ar-perito-moreno","name":"莫雷诺冰川","country":"阿根廷","city":"埃尔卡拉法特","latitude":-50.4967,"longitude":-73.1377,"description":"可从栈道近距离观察冰川裂隙与崩落，也是巴塔哥尼亚代表景观。","category":"nature","icon":"🧊","bestSeason":"11月至3月","rating":4.9,"tags":["冰川","自然","摄影"],"duration":"1天","nearby":["阿根廷湖","冰川国家公园"],"food":["巴塔哥尼亚羊肉"],"stay":"埃尔卡拉法特","transport":"参加国家公园巴士或持牌一日团"},
-    {"id":"cl-torres","name":"百内国家公园","country":"智利","city":"纳塔莱斯港","latitude":-50.9423,"longitude":-73.4068,"description":"花岗岩峰、冰川湖与草原构成巴塔哥尼亚最经典的徒步景观。","category":"nature","icon":"⛰️","bestSeason":"11月至3月","rating":4.9,"tags":["徒步","山地","湖泊"],"duration":"3至5天","nearby":["三塔观景台","格雷冰川"],"food":["帝王蟹","羊肉"],"stay":"园区营地或纳塔莱斯港","transport":"纳塔莱斯港巴士进入园区"},
-    {"id":"nz-hobbiton","name":"霍比屯电影外景地","country":"新西兰","city":"玛塔玛塔","latitude":-37.8721,"longitude":175.6829,"description":"保留完整布景的田园电影外景地，必须跟随官方导览进入。","category":"culture","icon":"🏡","bestSeason":"全年","rating":4.7,"tags":["电影","田园","家庭"],"duration":"3小时","nearby":["玛塔玛塔镇","怀托摩萤火虫洞"],"food":["乡村烘焙","苹果酒"],"stay":"罗托鲁瓦或玛塔玛塔","transport":"奥克兰或罗托鲁瓦接驳巴士"}
+    {
+      "id": "ru-red-square",
+      "name": "红场",
+      "country": "俄罗斯",
+      "city": "莫斯科",
+      "latitude": 55.7539,
+      "longitude": 37.6208,
+      "description": "莫斯科历史核心，可步行串联克里姆林宫与圣瓦西里大教堂。",
+      "category": "history",
+      "icon": "🏰",
+      "bestSeason": "5月至9月",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "城市"
+      ],
+      "duration": "3小时",
+      "nearby": [
+        "克里姆林宫",
+        "古姆百货"
+      ],
+      "food": [
+        "罗宋汤",
+        "俄式饺子"
+      ],
+      "stay": "特维尔区或阿尔巴特街",
+      "transport": "地铁猎人商行站步行抵达",
+      "name_en": "Red Square",
+      "description_en": "Moscow’s historic center, linking the Kremlin, Saint Basil’s Cathedral and GUM.",
+      "country_en": "Russia",
+      "city_en": "Moscow",
+      "location": {
+        "city": "莫斯科",
+        "city_en": "Moscow",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 55.7539,
+        "longitude": 37.6208
+      },
+      "tags_en": [
+        "History",
+        "Architecture",
+        "City"
+      ],
+      "bestSeason_en": "May to September",
+      "nearby_en": [
+        "Moscow Kremlin",
+        "GUM"
+      ],
+      "food_en": [
+        "Borscht",
+        "Pelmeni"
+      ],
+      "stay_en": "Tverskoy District or Arbat",
+      "transport_en": "Walk from Okhotny Ryad metro station",
+      "duration_en": "3 hours",
+      "imageQuery": "Red Square Moscow",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Moscow%27s_Red_Square%2C_Moscow%2C_Russia.jpg/960px-Moscow%27s_Red_Square%2C_Moscow%2C_Russia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-hermitage",
+      "name": "冬宫博物馆",
+      "country": "俄罗斯",
+      "city": "圣彼得堡",
+      "latitude": 59.9398,
+      "longitude": 30.3146,
+      "description": "收藏横跨欧洲艺术史的宫殿博物馆，建议提前选定重点展厅。",
+      "category": "museum",
+      "icon": "🎨",
+      "bestSeason": "5月至8月",
+      "rating": 4.9,
+      "tags": [
+        "艺术",
+        "宫殿",
+        "建筑"
+      ],
+      "duration": "4小时",
+      "nearby": [
+        "宫殿广场",
+        "涅瓦河"
+      ],
+      "food": [
+        "布林饼",
+        "蜂蜜蛋糕"
+      ],
+      "stay": "中央区",
+      "transport": "地铁海军部站步行约10分钟",
+      "name_en": "State Hermitage Museum",
+      "description_en": "A palace museum with collections spanning European art, archaeology and imperial history.",
+      "country_en": "Russia",
+      "city_en": "Saint Petersburg",
+      "location": {
+        "city": "圣彼得堡",
+        "city_en": "Saint Petersburg",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 59.9398,
+        "longitude": 30.3146
+      },
+      "tags_en": [
+        "Art",
+        "Palaces",
+        "Architecture"
+      ],
+      "bestSeason_en": "May to August",
+      "nearby_en": [
+        "Palace Square",
+        "Neva River"
+      ],
+      "food_en": [
+        "Blini",
+        "Medovik"
+      ],
+      "stay_en": "Tsentralny District",
+      "transport_en": "About a 10-minute walk from Admiralteyskaya metro station",
+      "duration_en": "4 hours",
+      "imageQuery": "State Hermitage Museum Winter Palace exterior",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Winter_Palace_%2821134849722%29.jpg/960px-Winter_Palace_%2821134849722%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-baikal",
+      "name": "贝加尔湖",
+      "country": "俄罗斯",
+      "city": "伊尔库茨克",
+      "latitude": 53.5587,
+      "longitude": 108.165,
+      "description": "世界最深淡水湖，冬季蓝冰与夏季湖岸徒步各有特色。",
+      "category": "nature",
+      "icon": "❄️",
+      "bestSeason": "2月至3月或7月至8月",
+      "rating": 4.9,
+      "tags": [
+        "湖泊",
+        "冰雪",
+        "自然"
+      ],
+      "duration": "2至4天",
+      "nearby": [
+        "奥利洪岛",
+        "利斯特维扬卡"
+      ],
+      "food": [
+        "奥木尔鱼"
+      ],
+      "stay": "奥利洪岛胡日尔村",
+      "transport": "从伊尔库茨克乘正规巴士或包车",
+      "name_en": "Lake Baikal",
+      "description_en": "The world’s deepest freshwater lake, known for winter ice and summer shoreline landscapes.",
+      "country_en": "Russia",
+      "city_en": "Irkutsk",
+      "location": {
+        "city": "伊尔库茨克",
+        "city_en": "Irkutsk",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 53.5587,
+        "longitude": 108.165
+      },
+      "tags_en": [
+        "Lakes",
+        "Snow and ice",
+        "Nature"
+      ],
+      "bestSeason_en": "February to March or July to August",
+      "nearby_en": [
+        "Olkhon Island",
+        "Listvyanka"
+      ],
+      "food_en": [
+        "Omul fish"
+      ],
+      "stay_en": "Khuzhir village on Olkhon Island",
+      "transport_en": "Licensed bus or transfer from Irkutsk",
+      "duration_en": "2–4 days",
+      "imageQuery": "Lake Baikal Irkutsk",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Panorama_of_lake_Baikal.jpg/960px-Panorama_of_lake_Baikal.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "br-iguazu",
+      "name": "伊瓜苏瀑布",
+      "country": "巴西",
+      "city": "福斯-杜伊瓜苏",
+      "latitude": -25.6953,
+      "longitude": -54.4367,
+      "description": "跨越巴西与阿根廷边境的巨型瀑布群，巴西侧适合全景观赏。",
+      "category": "nature",
+      "icon": "🌊",
+      "bestSeason": "3月至11月",
+      "rating": 4.9,
+      "tags": [
+        "瀑布",
+        "雨林",
+        "自然"
+      ],
+      "duration": "1天",
+      "nearby": [
+        "伊瓜苏国家公园",
+        "鸟园"
+      ],
+      "food": [
+        "巴西烤肉",
+        "木薯料理"
+      ],
+      "stay": "福斯市中心",
+      "transport": "机场或市区巴士前往国家公园",
+      "name_en": "Iguazu Falls",
+      "description_en": "A vast waterfall system shared by Brazil and Argentina, with sweeping views from the Brazilian side.",
+      "country_en": "Brazil",
+      "city_en": "Foz do Iguaçu",
+      "location": {
+        "city": "福斯-杜伊瓜苏",
+        "city_en": "Foz do Iguaçu",
+        "country": "巴西",
+        "country_en": "Brazil",
+        "latitude": -25.6953,
+        "longitude": -54.4367
+      },
+      "tags_en": [
+        "Waterfalls",
+        "Rainforest",
+        "Nature"
+      ],
+      "bestSeason_en": "March to November",
+      "nearby_en": [
+        "Iguaçu National Park",
+        "Bird Park"
+      ],
+      "food_en": [
+        "Brazilian barbecue",
+        "Cassava dishes"
+      ],
+      "stay_en": "Central Foz do Iguaçu",
+      "transport_en": "Park bus from the airport or city",
+      "duration_en": "1 day",
+      "imageQuery": "Iguazu Falls Foz do Iguaçu",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Iguazu_Falls_Foz_do_Igua%C3%A7u_PR_Brazil.JPG/960px-Iguazu_Falls_Foz_do_Igua%C3%A7u_PR_Brazil.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "br-salvador",
+      "name": "佩洛里尼奥历史中心",
+      "country": "巴西",
+      "city": "萨尔瓦多",
+      "latitude": -12.9718,
+      "longitude": -38.5108,
+      "description": "色彩鲜明的殖民建筑与非裔巴西文化共同构成的世界遗产街区。",
+      "category": "history",
+      "icon": "🎭",
+      "bestSeason": "9月至3月",
+      "rating": 4.7,
+      "tags": [
+        "文化",
+        "建筑",
+        "音乐"
+      ],
+      "duration": "半天",
+      "nearby": [
+        "拉塞尔达电梯",
+        "模范市场"
+      ],
+      "food": [
+        "巴伊亚海鲜椰奶锅"
+      ],
+      "stay": "佩洛里尼奥或巴拉区",
+      "transport": "打车至历史中心后步行",
+      "name_en": "Pelourinho Historic Centre",
+      "description_en": "A colorful colonial quarter where architecture, music and Afro-Brazilian culture meet.",
+      "country_en": "Brazil",
+      "city_en": "Salvador",
+      "location": {
+        "city": "萨尔瓦多",
+        "city_en": "Salvador",
+        "country": "巴西",
+        "country_en": "Brazil",
+        "latitude": -12.9718,
+        "longitude": -38.5108
+      },
+      "tags_en": [
+        "Culture",
+        "Architecture",
+        "Music"
+      ],
+      "bestSeason_en": "September to March",
+      "nearby_en": [
+        "Lacerda Elevator",
+        "Mercado Modelo"
+      ],
+      "food_en": [
+        "Moqueca Baiana"
+      ],
+      "stay_en": "Pelourinho or Barra",
+      "transport_en": "Taxi to the historic center, then walk",
+      "duration_en": "Half day",
+      "imageQuery": "Pelourinho Historic Centre Salvador",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Historic_Centre_of_Salvador_de_Bahia-110098.jpg/960px-Historic_Centre_of_Salvador_de_Bahia-110098.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ma-marrakech",
+      "name": "杰马夫纳广场",
+      "country": "摩洛哥",
+      "city": "马拉喀什",
+      "latitude": 31.6258,
+      "longitude": -7.9892,
+      "description": "从日间市集到夜间食摊不断变换的老城公共空间。",
+      "category": "culture",
+      "icon": "🕌",
+      "bestSeason": "3月至5月、9月至11月",
+      "rating": 4.7,
+      "tags": [
+        "市集",
+        "美食",
+        "文化"
+      ],
+      "duration": "半天",
+      "nearby": [
+        "库图比亚清真寺",
+        "巴伊亚宫"
+      ],
+      "food": [
+        "塔吉锅",
+        "薄荷茶"
+      ],
+      "stay": "麦地那正规庭院旅馆",
+      "transport": "老城外围下车后步行",
+      "name_en": "Jemaa el-Fnaa",
+      "description_en": "Marrakesh’s central square, changing from daytime market to evening food and performance hub.",
+      "country_en": "Morocco",
+      "city_en": "Marrakesh",
+      "location": {
+        "city": "马拉喀什",
+        "city_en": "Marrakesh",
+        "country": "摩洛哥",
+        "country_en": "Morocco",
+        "latitude": 31.6258,
+        "longitude": -7.9892
+      },
+      "tags_en": [
+        "Markets",
+        "Food",
+        "Culture"
+      ],
+      "bestSeason_en": "March to May and September to November",
+      "nearby_en": [
+        "Koutoubia Mosque",
+        "Bahia Palace"
+      ],
+      "food_en": [
+        "Tagine",
+        "Mint tea"
+      ],
+      "stay_en": "A licensed riad in the Medina",
+      "transport_en": "Get off outside the Medina and continue on foot",
+      "duration_en": "Half day",
+      "imageQuery": "Jemaa el-Fnaa Marrakesh",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Jemaa_el-Fnaa_at_night_-_Maroco_-_Marrakesh.jpg/960px-Jemaa_el-Fnaa_at_night_-_Maroco_-_Marrakesh.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ke-masai-mara",
+      "name": "马赛马拉国家保护区",
+      "country": "肯尼亚",
+      "city": "纳罗克",
+      "latitude": -1.4061,
+      "longitude": 35.0103,
+      "description": "东非代表性草原生态区，以大型野生动物与季节性迁徙闻名。",
+      "category": "nature",
+      "icon": "🦁",
+      "bestSeason": "7月至10月",
+      "rating": 4.9,
+      "tags": [
+        "野生动物",
+        "草原",
+        "摄影"
+      ],
+      "duration": "2至3天",
+      "nearby": [
+        "马拉河",
+        "马赛村落"
+      ],
+      "food": [
+        "营地餐食"
+      ],
+      "stay": "持牌保护区营地",
+      "transport": "内罗毕小型飞机或正规越野车",
+      "name_en": "Maasai Mara National Reserve",
+      "description_en": "A renowned East African grassland reserve known for wildlife and seasonal migration.",
+      "country_en": "Kenya",
+      "city_en": "Narok",
+      "location": {
+        "city": "纳罗克",
+        "city_en": "Narok",
+        "country": "肯尼亚",
+        "country_en": "Kenya",
+        "latitude": -1.4061,
+        "longitude": 35.0103
+      },
+      "tags_en": [
+        "Wildlife",
+        "Savanna",
+        "Photography"
+      ],
+      "bestSeason_en": "July to October",
+      "nearby_en": [
+        "Mara River",
+        "Maasai villages"
+      ],
+      "food_en": [
+        "Camp meals"
+      ],
+      "stay_en": "A licensed conservancy camp",
+      "transport_en": "Light aircraft or licensed 4x4 from Nairobi",
+      "duration_en": "2–3 days",
+      "imageQuery": "Maasai Mara National Reserve Narok",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/Mara_River_Massai_Mara.jpg/960px-Mara_River_Massai_Mara.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "tz-serengeti",
+      "name": "塞伦盖蒂国家公园",
+      "country": "坦桑尼亚",
+      "city": "阿鲁沙地区",
+      "latitude": -2.3333,
+      "longitude": 34.8333,
+      "description": "广阔草原与迁徙兽群构成东非最具代表性的自然景观。",
+      "category": "nature",
+      "icon": "🦓",
+      "bestSeason": "6月至10月",
+      "rating": 4.9,
+      "tags": [
+        "草原",
+        "动物",
+        "自然"
+      ],
+      "duration": "3至4天",
+      "nearby": [
+        "恩戈罗恩戈罗",
+        "马拉河"
+      ],
+      "food": [
+        "营地餐食"
+      ],
+      "stay": "国家公园持牌营地",
+      "transport": "从阿鲁沙参加正规向导行程",
+      "name_en": "Serengeti National Park",
+      "description_en": "An immense savanna ecosystem famous for wildlife, open horizons and the great migration.",
+      "country_en": "Tanzania",
+      "city_en": "Arusha Region",
+      "location": {
+        "city": "阿鲁沙地区",
+        "city_en": "Arusha Region",
+        "country": "坦桑尼亚",
+        "country_en": "Tanzania",
+        "latitude": -2.3333,
+        "longitude": 34.8333
+      },
+      "tags_en": [
+        "Savanna",
+        "Wildlife",
+        "Nature"
+      ],
+      "bestSeason_en": "June to October",
+      "nearby_en": [
+        "Ngorongoro",
+        "Mara River"
+      ],
+      "food_en": [
+        "Camp meals"
+      ],
+      "stay_en": "A licensed national park camp",
+      "transport_en": "Guided trip from Arusha",
+      "duration_en": "3–4 days",
+      "imageQuery": "Serengeti National Park landscape Tanzania",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Serengeti-Landscape-2012.JPG/960px-Serengeti-Landscape-2012.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "jp-itsukushima",
+      "name": "严岛神社",
+      "country": "日本",
+      "city": "广岛",
+      "latitude": 34.2959,
+      "longitude": 132.3199,
+      "description": "随潮汐呈现不同景观的海上神社，适合与宫岛步行同游。",
+      "category": "temple",
+      "icon": "⛩️",
+      "bestSeason": "春秋",
+      "rating": 4.8,
+      "tags": [
+        "神社",
+        "海景",
+        "文化"
+      ],
+      "duration": "半天",
+      "nearby": [
+        "弥山",
+        "宫岛町家通"
+      ],
+      "food": [
+        "牡蛎",
+        "红叶馒头"
+      ],
+      "stay": "宫岛口或广岛站周边",
+      "transport": "JR至宫岛口后乘轮渡",
+      "name_en": "Itsukushima Shrine",
+      "description_en": "A seaside Shinto shrine whose famous gate changes character with the tides.",
+      "country_en": "Japan",
+      "city_en": "Hiroshima",
+      "location": {
+        "city": "广岛",
+        "city_en": "Hiroshima",
+        "country": "日本",
+        "country_en": "Japan",
+        "latitude": 34.2959,
+        "longitude": 132.3199
+      },
+      "tags_en": [
+        "Shrines",
+        "Sea views",
+        "Culture"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "nearby_en": [
+        "Mount Misen",
+        "Miyajima Machiya Street"
+      ],
+      "food_en": [
+        "Oysters",
+        "Momiji manju"
+      ],
+      "stay_en": "Miyajimaguchi or Hiroshima Station",
+      "transport_en": "JR to Miyajimaguchi, then ferry",
+      "duration_en": "Half day",
+      "imageQuery": "Itsukushima Shrine Hiroshima",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Itsukushima_torii_angle.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+    },
+    {
+      "id": "kh-angkor",
+      "name": "吴哥窟",
+      "country": "柬埔寨",
+      "city": "暹粒",
+      "latitude": 13.4125,
+      "longitude": 103.867,
+      "description": "吴哥王朝大型寺庙群，日出后按小圈或大圈分日游览更从容。",
+      "category": "history",
+      "icon": "🛕",
+      "bestSeason": "11月至2月",
+      "rating": 4.9,
+      "tags": [
+        "历史",
+        "寺庙",
+        "日出"
+      ],
+      "duration": "2至3天",
+      "nearby": [
+        "巴戎寺",
+        "塔布笼寺"
+      ],
+      "food": [
+        "阿莫克鱼",
+        "高棉米粉"
+      ],
+      "stay": "暹粒老市场或河畔",
+      "transport": "持票乘突突车或包车",
+      "name_en": "Angkor Wat",
+      "description_en": "The monumental temple complex of the Khmer Empire, best explored over several days.",
+      "country_en": "Cambodia",
+      "city_en": "Siem Reap",
+      "location": {
+        "city": "暹粒",
+        "city_en": "Siem Reap",
+        "country": "柬埔寨",
+        "country_en": "Cambodia",
+        "latitude": 13.4125,
+        "longitude": 103.867
+      },
+      "tags_en": [
+        "History",
+        "Temples",
+        "Sunrise"
+      ],
+      "bestSeason_en": "November to February",
+      "nearby_en": [
+        "Bayon",
+        "Ta Prohm"
+      ],
+      "food_en": [
+        "Fish amok",
+        "Khmer noodles"
+      ],
+      "stay_en": "Old Market or riverside Siem Reap",
+      "transport_en": "Licensed tuk-tuk or car with a valid temple pass",
+      "duration_en": "2–3 days",
+      "imageQuery": "Angkor Wat Siem Reap",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Angkor_SiemReap_Cambodia_Ankor-Wat-Statue-01.jpg/960px-Angkor_SiemReap_Cambodia_Ankor-Wat-Statue-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "my-petronas",
+      "name": "双子塔",
+      "country": "马来西亚",
+      "city": "吉隆坡",
+      "latitude": 3.1579,
+      "longitude": 101.7116,
+      "description": "吉隆坡天际线核心地标，公园与观景层提供不同视角。",
+      "category": "city",
+      "icon": "🏙️",
+      "bestSeason": "全年",
+      "rating": 4.7,
+      "tags": [
+        "建筑",
+        "夜景",
+        "城市"
+      ],
+      "duration": "2小时",
+      "nearby": [
+        "城中城公园",
+        "武吉免登"
+      ],
+      "food": [
+        "椰浆饭",
+        "肉骨茶"
+      ],
+      "stay": "KLCC或武吉免登",
+      "transport": "轻轨KLCC站",
+      "name_en": "Petronas Twin Towers",
+      "description_en": "Twin skyscrapers at the heart of Kuala Lumpur, paired with a park and observation deck.",
+      "country_en": "Malaysia",
+      "city_en": "Kuala Lumpur",
+      "location": {
+        "city": "吉隆坡",
+        "city_en": "Kuala Lumpur",
+        "country": "马来西亚",
+        "country_en": "Malaysia",
+        "latitude": 3.1579,
+        "longitude": 101.7116
+      },
+      "tags_en": [
+        "Architecture",
+        "Night views",
+        "City"
+      ],
+      "bestSeason_en": "Year-round",
+      "nearby_en": [
+        "KLCC Park",
+        "Bukit Bintang"
+      ],
+      "food_en": [
+        "Nasi lemak",
+        "Bak kut teh"
+      ],
+      "stay_en": "KLCC or Bukit Bintang",
+      "transport_en": "LRT to KLCC station",
+      "duration_en": "2 hours",
+      "imageQuery": "Petronas Twin Towers Kuala Lumpur",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Petronas_Panorama_II.jpg/960px-Petronas_Panorama_II.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "np-everest",
+      "name": "珠峰地区",
+      "country": "尼泊尔",
+      "city": "卢卡拉",
+      "latitude": 27.9881,
+      "longitude": 86.925,
+      "description": "喜马拉雅高山徒步核心区域，必须预留适应海拔与天气机动时间。",
+      "category": "nature",
+      "icon": "🏔️",
+      "bestSeason": "3月至5月、10月至11月",
+      "rating": 4.9,
+      "tags": [
+        "徒步",
+        "雪山",
+        "户外"
+      ],
+      "duration": "10天以上",
+      "nearby": [
+        "南池市场",
+        "腾波切"
+      ],
+      "food": [
+        "达尔巴特"
+      ],
+      "stay": "持牌山屋",
+      "transport": "从加德满都飞卢卡拉并由向导带领",
+      "name_en": "Everest Region",
+      "description_en": "The core Himalayan trekking region, requiring careful acclimatization and weather planning.",
+      "country_en": "Nepal",
+      "city_en": "Lukla",
+      "location": {
+        "city": "卢卡拉",
+        "city_en": "Lukla",
+        "country": "尼泊尔",
+        "country_en": "Nepal",
+        "latitude": 27.9881,
+        "longitude": 86.925
+      },
+      "tags_en": [
+        "Hiking",
+        "Snow mountains",
+        "Outdoors"
+      ],
+      "bestSeason_en": "March to May and October to November",
+      "nearby_en": [
+        "Namche Bazaar",
+        "Tengboche"
+      ],
+      "food_en": [
+        "Dal bhat"
+      ],
+      "stay_en": "Licensed mountain lodges",
+      "transport_en": "Fly from Kathmandu to Lukla and continue with a guide",
+      "duration_en": "10+ days",
+      "imageQuery": "Everest Base Camp Nepal mountain",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Prayer_Flags_at_Everest_Base_Camp.jpg/960px-Prayer_Flags_at_Everest_Base_Camp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "jo-petra",
+      "name": "佩特拉古城",
+      "country": "约旦",
+      "city": "瓦迪穆萨",
+      "latitude": 30.3285,
+      "longitude": 35.4444,
+      "description": "沿蛇道进入玫瑰色岩石古城，卡兹尼神殿只是庞大遗址的一部分。",
+      "category": "history",
+      "icon": "🏜️",
+      "bestSeason": "3月至5月、9月至11月",
+      "rating": 4.9,
+      "tags": [
+        "遗址",
+        "沙漠",
+        "徒步"
+      ],
+      "duration": "1至2天",
+      "nearby": [
+        "修道院",
+        "瓦迪拉姆"
+      ],
+      "food": [
+        "曼萨夫"
+      ],
+      "stay": "瓦迪穆萨游客中心附近",
+      "transport": "安曼或亚喀巴乘正规巴士",
+      "name_en": "Petra",
+      "description_en": "An extensive rose-colored rock city entered through the Siq, with trails beyond the Treasury.",
+      "country_en": "Jordan",
+      "city_en": "Wadi Musa",
+      "location": {
+        "city": "瓦迪穆萨",
+        "city_en": "Wadi Musa",
+        "country": "约旦",
+        "country_en": "Jordan",
+        "latitude": 30.3285,
+        "longitude": 35.4444
+      },
+      "tags_en": [
+        "Ruins",
+        "Desert",
+        "Hiking"
+      ],
+      "bestSeason_en": "March to May and September to November",
+      "nearby_en": [
+        "The Monastery",
+        "Wadi Rum"
+      ],
+      "food_en": [
+        "Mansaf"
+      ],
+      "stay_en": "Near the visitor center in Wadi Musa",
+      "transport_en": "Licensed bus from Amman or Aqaba",
+      "duration_en": "1–2 days",
+      "imageQuery": "Petra Treasury Jordan Al Khazneh",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Al_Khazneh_Petra_edit_2.jpg/960px-Al_Khazneh_Petra_edit_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "de-neuschwanstein",
+      "name": "新天鹅堡",
+      "country": "德国",
+      "city": "菲森",
+      "latitude": 47.5576,
+      "longitude": 10.7498,
+      "description": "阿尔卑斯山麓的浪漫主义城堡，玛丽安桥是经典远眺点。",
+      "category": "architecture",
+      "icon": "🏰",
+      "bestSeason": "5月至10月",
+      "rating": 4.8,
+      "tags": [
+        "城堡",
+        "山景",
+        "建筑"
+      ],
+      "duration": "半天",
+      "nearby": [
+        "高天鹅堡",
+        "阿尔普湖"
+      ],
+      "food": [
+        "巴伐利亚香肠"
+      ],
+      "stay": "菲森老城",
+      "transport": "慕尼黑火车至菲森后换公交",
+      "name_en": "Neuschwanstein Castle",
+      "description_en": "A Romantic-era castle below the Alps, with classic views from Marienbrücke.",
+      "country_en": "Germany",
+      "city_en": "Füssen",
+      "location": {
+        "city": "菲森",
+        "city_en": "Füssen",
+        "country": "德国",
+        "country_en": "Germany",
+        "latitude": 47.5576,
+        "longitude": 10.7498
+      },
+      "tags_en": [
+        "Castles",
+        "Mountain views",
+        "Architecture"
+      ],
+      "bestSeason_en": "May to October",
+      "nearby_en": [
+        "Hohenschwangau Castle",
+        "Alpsee"
+      ],
+      "food_en": [
+        "Bavarian sausages"
+      ],
+      "stay_en": "Füssen old town",
+      "transport_en": "Train from Munich to Füssen, then local bus",
+      "duration_en": "Half day",
+      "imageQuery": "Neuschwanstein Castle Füssen",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Hohenschwangau_-_Schloss_Neuschwanstein1.jpg/960px-Hohenschwangau_-_Schloss_Neuschwanstein1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "pt-belem",
+      "name": "贝伦塔",
+      "country": "葡萄牙",
+      "city": "里斯本",
+      "latitude": 38.6916,
+      "longitude": -9.216,
+      "description": "特茹河畔航海时代防御塔，可与热罗尼莫斯修道院同游。",
+      "category": "history",
+      "icon": "🗼",
+      "bestSeason": "春秋",
+      "rating": 4.7,
+      "tags": [
+        "航海",
+        "建筑",
+        "河景"
+      ],
+      "duration": "2小时",
+      "nearby": [
+        "发现者纪念碑",
+        "热罗尼莫斯修道院"
+      ],
+      "food": [
+        "葡式蛋挞",
+        "海鲜饭"
+      ],
+      "stay": "拜萨或希亚多",
+      "transport": "15E有轨电车或火车至贝伦",
+      "name_en": "Belem Tower",
+      "description_en": "A riverside defensive tower associated with Portugal’s Age of Discovery.",
+      "country_en": "Portugal",
+      "city_en": "Lisbon",
+      "location": {
+        "city": "里斯本",
+        "city_en": "Lisbon",
+        "country": "葡萄牙",
+        "country_en": "Portugal",
+        "latitude": 38.6916,
+        "longitude": -9.216
+      },
+      "tags_en": [
+        "Maritime history",
+        "Architecture",
+        "River views"
+      ],
+      "bestSeason_en": "Spring and autumn",
+      "nearby_en": [
+        "Monument to the Discoveries",
+        "Jerónimos Monastery"
+      ],
+      "food_en": [
+        "Pastéis de nata",
+        "Seafood rice"
+      ],
+      "stay_en": "Baixa or Chiado",
+      "transport_en": "Tram 15E or train to Belém",
+      "duration_en": "2 hours",
+      "imageQuery": "Belem Tower Lisbon",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Torre_Bel%C3%A9m_April_2009-4a.jpg/960px-Torre_Bel%C3%A9m_April_2009-4a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "is-golden-circle",
+      "name": "黄金圈",
+      "country": "冰岛",
+      "city": "雷克雅未克周边",
+      "latitude": 64.2559,
+      "longitude": -20.3909,
+      "description": "串联辛格韦德利、盖歇尔与黄金瀑布的经典地热与地质路线。",
+      "category": "nature",
+      "icon": "🌋",
+      "bestSeason": "6月至9月",
+      "rating": 4.8,
+      "tags": [
+        "瀑布",
+        "地热",
+        "自驾"
+      ],
+      "duration": "1天",
+      "nearby": [
+        "辛格韦德利",
+        "盖歇尔"
+      ],
+      "food": [
+        "羊肉汤",
+        "黑麦面包"
+      ],
+      "stay": "雷克雅未克",
+      "transport": "正规一日团或冬季适配车辆",
+      "name_en": "Golden Circle",
+      "description_en": "A classic route linking Thingvellir, Geysir and Gullfoss through Icelandic geology.",
+      "country_en": "Iceland",
+      "city_en": "Greater Reykjavík",
+      "location": {
+        "city": "雷克雅未克周边",
+        "city_en": "Greater Reykjavík",
+        "country": "冰岛",
+        "country_en": "Iceland",
+        "latitude": 64.2559,
+        "longitude": -20.3909
+      },
+      "tags_en": [
+        "Waterfalls",
+        "Geothermal",
+        "Road trip"
+      ],
+      "bestSeason_en": "June to September",
+      "nearby_en": [
+        "Thingvellir",
+        "Geysir"
+      ],
+      "food_en": [
+        "Lamb soup",
+        "Rye bread"
+      ],
+      "stay_en": "Reykjavík",
+      "transport_en": "Licensed day tour or winter-ready vehicle",
+      "duration_en": "1 day",
+      "imageQuery": "Golden Circle Iceland Gullfoss",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Iceland_-_Golden_Circle_-_Gullfoss_-_Rainbow_-_Road_Trip_%284889917897%29.jpg/960px-Iceland_-_Golden_Circle_-_Gullfoss_-_Rainbow_-_Road_Trip_%284889917897%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ca-banff",
+      "name": "班夫国家公园",
+      "country": "加拿大",
+      "city": "班夫",
+      "latitude": 51.1784,
+      "longitude": -115.5708,
+      "description": "落基山湖泊、冰川与森林组成的国家公园，适合公路与轻徒步。",
+      "category": "nature",
+      "icon": "🏔️",
+      "bestSeason": "6月至9月",
+      "rating": 4.9,
+      "tags": [
+        "湖泊",
+        "山地",
+        "徒步"
+      ],
+      "duration": "3至5天",
+      "nearby": [
+        "露易丝湖",
+        "梦莲湖"
+      ],
+      "food": [
+        "艾伯塔牛肉"
+      ],
+      "stay": "班夫镇或坎莫尔",
+      "transport": "卡尔加里租车或接驳巴士",
+      "name_en": "Banff National Park",
+      "description_en": "A Rocky Mountain national park of lakes, glaciers and forests suited to road trips and hiking.",
+      "country_en": "Canada",
+      "city_en": "Banff",
+      "location": {
+        "city": "班夫",
+        "city_en": "Banff",
+        "country": "加拿大",
+        "country_en": "Canada",
+        "latitude": 51.1784,
+        "longitude": -115.5708
+      },
+      "tags_en": [
+        "Lakes",
+        "Mountains",
+        "Hiking"
+      ],
+      "bestSeason_en": "June to September",
+      "nearby_en": [
+        "Lake Louise",
+        "Moraine Lake"
+      ],
+      "food_en": [
+        "Alberta beef"
+      ],
+      "stay_en": "Banff or Canmore",
+      "transport_en": "Rental car or shuttle from Calgary",
+      "duration_en": "3–5 days",
+      "imageQuery": "Banff National Park Banff",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Moraine_Lake_17092005.jpg/960px-Moraine_Lake_17092005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ar-perito-moreno",
+      "name": "莫雷诺冰川",
+      "country": "阿根廷",
+      "city": "埃尔卡拉法特",
+      "latitude": -50.4967,
+      "longitude": -73.1377,
+      "description": "可从栈道近距离观察冰川裂隙与崩落，也是巴塔哥尼亚代表景观。",
+      "category": "nature",
+      "icon": "🧊",
+      "bestSeason": "11月至3月",
+      "rating": 4.9,
+      "tags": [
+        "冰川",
+        "自然",
+        "摄影"
+      ],
+      "duration": "1天",
+      "nearby": [
+        "阿根廷湖",
+        "冰川国家公园"
+      ],
+      "food": [
+        "巴塔哥尼亚羊肉"
+      ],
+      "stay": "埃尔卡拉法特",
+      "transport": "参加国家公园巴士或持牌一日团",
+      "name_en": "Perito Moreno Glacier",
+      "description_en": "A dramatic Patagonian glacier viewed from extensive boardwalks and licensed excursions.",
+      "country_en": "Argentina",
+      "city_en": "El Calafate",
+      "location": {
+        "city": "埃尔卡拉法特",
+        "city_en": "El Calafate",
+        "country": "阿根廷",
+        "country_en": "Argentina",
+        "latitude": -50.4967,
+        "longitude": -73.1377
+      },
+      "tags_en": [
+        "Glaciers",
+        "Nature",
+        "Photography"
+      ],
+      "bestSeason_en": "November to March",
+      "nearby_en": [
+        "Lake Argentino",
+        "Los Glaciares National Park"
+      ],
+      "food_en": [
+        "Patagonian lamb"
+      ],
+      "stay_en": "El Calafate",
+      "transport_en": "National park bus or licensed day tour",
+      "duration_en": "1 day",
+      "imageQuery": "Perito Moreno Glacier El Calafate",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/El_Calafate_-_Glaciar_Perito_Moreno.jpg/960px-El_Calafate_-_Glaciar_Perito_Moreno.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "cl-torres",
+      "name": "百内国家公园",
+      "country": "智利",
+      "city": "纳塔莱斯港",
+      "latitude": -50.9423,
+      "longitude": -73.4068,
+      "description": "花岗岩峰、冰川湖与草原构成巴塔哥尼亚最经典的徒步景观。",
+      "category": "nature",
+      "icon": "⛰️",
+      "bestSeason": "11月至3月",
+      "rating": 4.9,
+      "tags": [
+        "徒步",
+        "山地",
+        "湖泊"
+      ],
+      "duration": "3至5天",
+      "nearby": [
+        "三塔观景台",
+        "格雷冰川"
+      ],
+      "food": [
+        "帝王蟹",
+        "羊肉"
+      ],
+      "stay": "园区营地或纳塔莱斯港",
+      "transport": "纳塔莱斯港巴士进入园区",
+      "name_en": "Torres del Paine National Park",
+      "description_en": "A Patagonian park of granite towers, glacial lakes and celebrated multi-day trails.",
+      "country_en": "Chile",
+      "city_en": "Puerto Natales",
+      "location": {
+        "city": "纳塔莱斯港",
+        "city_en": "Puerto Natales",
+        "country": "智利",
+        "country_en": "Chile",
+        "latitude": -50.9423,
+        "longitude": -73.4068
+      },
+      "tags_en": [
+        "Hiking",
+        "Mountains",
+        "Lakes"
+      ],
+      "bestSeason_en": "November to March",
+      "nearby_en": [
+        "Base Torres viewpoint",
+        "Grey Glacier"
+      ],
+      "food_en": [
+        "King crab",
+        "Lamb"
+      ],
+      "stay_en": "Park camps or Puerto Natales",
+      "transport_en": "Park bus from Puerto Natales",
+      "duration_en": "3–5 days",
+      "imageQuery": "Torres del Paine National Park Puerto Natales",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Laguna_Amarga%2C_Parque_nacional_Torres_del_Paine%2C_Puerto_Natales.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+    },
+    {
+      "id": "nz-hobbiton",
+      "name": "霍比屯电影外景地",
+      "country": "新西兰",
+      "city": "玛塔玛塔",
+      "latitude": -37.8721,
+      "longitude": 175.6829,
+      "description": "保留完整布景的田园电影外景地，必须跟随官方导览进入。",
+      "category": "culture",
+      "icon": "🏡",
+      "bestSeason": "全年",
+      "rating": 4.7,
+      "tags": [
+        "电影",
+        "田园",
+        "家庭"
+      ],
+      "duration": "3小时",
+      "nearby": [
+        "玛塔玛塔镇",
+        "怀托摩萤火虫洞"
+      ],
+      "food": [
+        "乡村烘焙",
+        "苹果酒"
+      ],
+      "stay": "罗托鲁瓦或玛塔玛塔",
+      "transport": "奥克兰或罗托鲁瓦接驳巴士",
+      "name_en": "Hobbiton Movie Set",
+      "description_en": "A preserved countryside film set visited on guided tours through the Shire landscape.",
+      "country_en": "New Zealand",
+      "city_en": "Matamata",
+      "location": {
+        "city": "玛塔玛塔",
+        "city_en": "Matamata",
+        "country": "新西兰",
+        "country_en": "New Zealand",
+        "latitude": -37.8721,
+        "longitude": 175.6829
+      },
+      "tags_en": [
+        "Film",
+        "Countryside",
+        "Family"
+      ],
+      "bestSeason_en": "Year-round",
+      "nearby_en": [
+        "Matamata",
+        "Waitomo Glowworm Caves"
+      ],
+      "food_en": [
+        "Country baking",
+        "Apple cider"
+      ],
+      "stay_en": "Rotorua or Matamata",
+      "transport_en": "Shuttle from Auckland or Rotorua",
+      "duration_en": "3 hours",
+      "imageQuery": "Hobbiton Movie Set Matamata",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Hobbiton_Movie_Set%2C_Matamata.jpg/960px-Hobbiton_Movie_Set%2C_Matamata.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-kremlin",
+      "name": "莫斯科克里姆林宫",
+      "name_en": "Moscow Kremlin",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "莫斯科",
+      "city_en": "Moscow",
+      "latitude": 55.752,
+      "longitude": 37.6175,
+      "description": "俄罗斯国家历史与建筑核心，宫殿、教堂和城墙共同构成莫斯科最重要的文化地标。",
+      "description_en": "Russia’s historic and architectural center, bringing together palaces, cathedrals and fortified walls.",
+      "category": "history",
+      "icon": "🏰",
+      "bestSeason": "5月至9月",
+      "bestSeason_en": "May to September",
+      "rating": 4.9,
+      "tags": [
+        "历史",
+        "建筑",
+        "文化"
+      ],
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Culture"
+      ],
+      "duration": "半天",
+      "duration_en": "Half day",
+      "nearby": [
+        "红场",
+        "亚历山大花园"
+      ],
+      "nearby_en": [
+        "Red Square",
+        "Alexander Garden"
+      ],
+      "food": [
+        "俄式饺子",
+        "罗宋汤"
+      ],
+      "food_en": [
+        "Pelmeni",
+        "Borscht"
+      ],
+      "stay": "特维尔区或阿尔巴特街",
+      "stay_en": "Tverskoy District or Arbat",
+      "transport": "地铁亚历山大花园站步行抵达",
+      "transport_en": "Walk from Aleksandrovsky Sad metro station",
+      "location": {
+        "city": "莫斯科",
+        "city_en": "Moscow",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 55.752,
+        "longitude": 37.6175
+      },
+      "imageQuery": "Moscow Kremlin panorama",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Panorama_of_Moscow_Kremlin.jpg/960px-Panorama_of_Moscow_Kremlin.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-st-basil",
+      "name": "圣瓦西里大教堂",
+      "name_en": "Saint Basil’s Cathedral",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "莫斯科",
+      "city_en": "Moscow",
+      "latitude": 55.7525,
+      "longitude": 37.6231,
+      "description": "红场南端色彩鲜明的洋葱顶教堂，是俄罗斯建筑最具辨识度的象征之一。",
+      "description_en": "The colorful onion-domed cathedral at the southern end of Red Square is one of Russia’s most recognizable buildings.",
+      "category": "architecture",
+      "icon": "⛪",
+      "bestSeason": "全年",
+      "bestSeason_en": "Year-round",
+      "rating": 4.9,
+      "tags": [
+        "建筑",
+        "历史",
+        "摄影"
+      ],
+      "tags_en": [
+        "Architecture",
+        "History",
+        "Photography"
+      ],
+      "duration": "1至2小时",
+      "duration_en": "1–2 hours",
+      "nearby": [
+        "红场",
+        "扎里亚季耶公园"
+      ],
+      "nearby_en": [
+        "Red Square",
+        "Zaryadye Park"
+      ],
+      "food": [
+        "布林饼",
+        "俄式馅饼"
+      ],
+      "food_en": [
+        "Blini",
+        "Pirozhki"
+      ],
+      "stay": "红场或特维尔区",
+      "stay_en": "Red Square or Tverskoy District",
+      "transport": "地铁中国城站或革命广场站步行",
+      "transport_en": "Walk from Kitay-gorod or Ploshchad Revolyutsii metro station",
+      "location": {
+        "city": "莫斯科",
+        "city_en": "Moscow",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 55.7525,
+        "longitude": 37.6231
+      },
+      "imageQuery": "Saint Basil’s Cathedral Moscow",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/St_Basils_Cathedral-500px.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+    },
+    {
+      "id": "ru-peterhof",
+      "name": "彼得霍夫宫",
+      "name_en": "Peterhof Palace",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "圣彼得堡",
+      "city_en": "Saint Petersburg",
+      "latitude": 59.8845,
+      "longitude": 29.9096,
+      "description": "芬兰湾畔的皇家宫殿与喷泉园林，以大瀑布和夏季水景闻名。",
+      "description_en": "An imperial palace and fountain garden on the Gulf of Finland, famous for the Grand Cascade.",
+      "category": "architecture",
+      "icon": "⛲",
+      "bestSeason": "5月至9月",
+      "bestSeason_en": "May to September",
+      "rating": 4.8,
+      "tags": [
+        "宫殿",
+        "园林",
+        "历史"
+      ],
+      "tags_en": [
+        "Palaces",
+        "Gardens",
+        "History"
+      ],
+      "duration": "半天至1天",
+      "duration_en": "Half to full day",
+      "nearby": [
+        "大宫殿",
+        "下花园"
+      ],
+      "nearby_en": [
+        "Grand Palace",
+        "Lower Gardens"
+      ],
+      "food": [
+        "俄式薄饼",
+        "烟熏鱼"
+      ],
+      "food_en": [
+        "Blini",
+        "Smoked fish"
+      ],
+      "stay": "圣彼得堡中央区",
+      "stay_en": "Central Saint Petersburg",
+      "transport": "市区水翼船或正规巴士",
+      "transport_en": "Hydrofoil or licensed bus from central Saint Petersburg",
+      "location": {
+        "city": "圣彼得堡",
+        "city_en": "Saint Petersburg",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 59.8845,
+        "longitude": 29.9096
+      },
+      "imageQuery": "Peterhof Palace Saint Petersburg",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Church_of_Grand_Peterhof_Palace_01.jpg/960px-Church_of_Grand_Peterhof_Palace_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-kazan-kremlin",
+      "name": "喀山克里姆林宫",
+      "name_en": "Kazan Kremlin",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "喀山",
+      "city_en": "Kazan",
+      "latitude": 55.7998,
+      "longitude": 49.1064,
+      "description": "东正教建筑与库尔·谢里夫清真寺并存的世界遗产，展现鞑靼与俄罗斯文化交汇。",
+      "description_en": "A World Heritage citadel where Orthodox architecture and the Qol Sharif Mosque reflect Tatar and Russian culture.",
+      "category": "history",
+      "icon": "🕌",
+      "bestSeason": "5月至9月",
+      "bestSeason_en": "May to September",
+      "rating": 4.8,
+      "tags": [
+        "历史",
+        "建筑",
+        "文化"
+      ],
+      "tags_en": [
+        "History",
+        "Architecture",
+        "Culture"
+      ],
+      "duration": "3小时",
+      "duration_en": "3 hours",
+      "nearby": [
+        "库尔·谢里夫清真寺",
+        "鲍曼街"
+      ],
+      "nearby_en": [
+        "Qol Sharif Mosque",
+        "Bauman Street"
+      ],
+      "food": [
+        "鞑靼馅饼",
+        "恰克恰克"
+      ],
+      "food_en": [
+        "Echpochmak",
+        "Chak-chak"
+      ],
+      "stay": "鲍曼街周边",
+      "stay_en": "Around Bauman Street",
+      "transport": "喀山市中心步行或地铁至克里姆林站",
+      "transport_en": "Walk from central Kazan or use Kremlyovskaya metro station",
+      "location": {
+        "city": "喀山",
+        "city_en": "Kazan",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 55.7998,
+        "longitude": 49.1064
+      },
+      "imageQuery": "Kazan Kremlin Kazan",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Kazan_Kremlin_Spasskaya_Tower_08-2016_img1.jpg/960px-Kazan_Kremlin_Spasskaya_Tower_08-2016_img1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-kizhi",
+      "name": "基日岛木结构教堂群",
+      "name_en": "Kizhi Pogost",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "彼得罗扎沃茨克",
+      "city_en": "Petrozavodsk",
+      "latitude": 62.067,
+      "longitude": 35.225,
+      "description": "奥涅加湖岛上的世界遗产木建筑群，以无钉建造的多圆顶教堂闻名。",
+      "description_en": "A World Heritage ensemble of wooden churches on Lake Onega, celebrated for its many domes and traditional construction.",
+      "category": "culture",
+      "icon": "⛪",
+      "bestSeason": "6月至9月",
+      "bestSeason_en": "June to September",
+      "rating": 4.8,
+      "tags": [
+        "木建筑",
+        "文化",
+        "湖泊"
+      ],
+      "tags_en": [
+        "Wooden architecture",
+        "Culture",
+        "Lakes"
+      ],
+      "duration": "1天",
+      "duration_en": "1 day",
+      "nearby": [
+        "奥涅加湖",
+        "基日博物馆"
+      ],
+      "nearby_en": [
+        "Lake Onega",
+        "Kizhi Museum"
+      ],
+      "food": [
+        "卡累利阿馅饼",
+        "鱼汤"
+      ],
+      "food_en": [
+        "Karelian pies",
+        "Fish soup"
+      ],
+      "stay": "彼得罗扎沃茨克",
+      "stay_en": "Petrozavodsk",
+      "transport": "从彼得罗扎沃茨克乘官方水翼船",
+      "transport_en": "Official hydrofoil from Petrozavodsk",
+      "location": {
+        "city": "彼得罗扎沃茨克",
+        "city_en": "Petrozavodsk",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 62.067,
+        "longitude": 35.225
+      },
+      "imageQuery": "Kizhi Pogost Russia",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Kizhi%2C_Kizhi_Pogost_-_panoramio.jpg/960px-Kizhi%2C_Kizhi_Pogost_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-elbrus",
+      "name": "厄尔布鲁士山",
+      "name_en": "Mount Elbrus",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "卡巴尔达-巴尔卡尔",
+      "city_en": "Kabardino-Balkaria",
+      "latitude": 43.3499,
+      "longitude": 42.4453,
+      "description": "高加索山脉最高峰，山谷徒步和高海拔登山必须根据经验选择正规向导。",
+      "description_en": "The highest peak in the Caucasus, offering valley hikes and serious high-altitude climbing with qualified guides.",
+      "category": "nature",
+      "icon": "🏔️",
+      "bestSeason": "6月至9月",
+      "bestSeason_en": "June to September",
+      "rating": 4.8,
+      "tags": [
+        "雪山",
+        "徒步",
+        "户外"
+      ],
+      "tags_en": [
+        "Mountains",
+        "Hiking",
+        "Outdoors"
+      ],
+      "duration": "2天以上",
+      "duration_en": "2+ days",
+      "nearby": [
+        "阿扎乌草甸",
+        "切格特山"
+      ],
+      "nearby_en": [
+        "Azau meadow",
+        "Mount Cheget"
+      ],
+      "food": [
+        "高加索烤肉",
+        "希奇尼馅饼"
+      ],
+      "food_en": [
+        "Caucasian barbecue",
+        "Khychin flatbread"
+      ],
+      "stay": "捷尔斯科尔或阿扎乌",
+      "stay_en": "Terskol or Azau",
+      "transport": "从矿泉城乘正规接驳车进入山谷",
+      "transport_en": "Licensed transfer from Mineralnye Vody",
+      "location": {
+        "city": "卡巴尔达-巴尔卡尔",
+        "city_en": "Kabardino-Balkaria",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 43.3499,
+        "longitude": 42.4453
+      },
+      "imageQuery": "Mount Elbrus Kabardino-Balkaria",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/046_%D0%9D%D0%B0%D0%B2%D0%B5%D1%80%D1%85%D1%83._%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%AD%D0%BB%D1%8C%D0%B1%D1%80%D1%83%D1%81_%28%D1%81_%D0%B7%D1%83%D0%BC%D0%BE%D0%BC%29.JPG/960px-046_%D0%9D%D0%B0%D0%B2%D0%B5%D1%80%D1%85%D1%83._%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%AD%D0%BB%D1%8C%D0%B1%D1%80%D1%83%D1%81_%28%D1%81_%D0%B7%D1%83%D0%BC%D0%BE%D0%BC%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    },
+    {
+      "id": "ru-kamchatka-geysers",
+      "name": "堪察加间歇泉谷",
+      "name_en": "Valley of Geysers",
+      "country": "俄罗斯",
+      "country_en": "Russia",
+      "city": "堪察加半岛",
+      "city_en": "Kamchatka Peninsula",
+      "latitude": 54.435,
+      "longitude": 160.135,
+      "description": "克罗诺基自然保护区内的大型地热峡谷，只能通过获批的直升机和保护区行程进入。",
+      "description_en": "A major geothermal canyon inside Kronotsky Nature Reserve, accessible only through approved reserve excursions.",
+      "category": "nature",
+      "icon": "🌋",
+      "bestSeason": "7月至9月",
+      "bestSeason_en": "July to September",
+      "rating": 4.9,
+      "tags": [
+        "火山",
+        "地热",
+        "自然"
+      ],
+      "tags_en": [
+        "Volcanoes",
+        "Geothermal",
+        "Nature"
+      ],
+      "duration": "1天",
+      "duration_en": "1 day",
+      "nearby": [
+        "乌宗火山口",
+        "克罗诺基保护区"
+      ],
+      "nearby_en": [
+        "Uzon Caldera",
+        "Kronotsky Reserve"
+      ],
+      "food": [
+        "当地海鲜",
+        "红鱼"
+      ],
+      "food_en": [
+        "Local seafood",
+        "Salmon"
+      ],
+      "stay": "彼得罗巴甫洛夫斯克",
+      "stay_en": "Petropavlovsk-Kamchatsky",
+      "transport": "参加保护区批准的直升机行程",
+      "transport_en": "Approved reserve helicopter excursion",
+      "location": {
+        "city": "堪察加半岛",
+        "city_en": "Kamchatka Peninsula",
+        "country": "俄罗斯",
+        "country_en": "Russia",
+        "latitude": 54.435,
+        "longitude": 160.135
+      },
+      "imageQuery": "Valley of Geysers Kamchatka Russia photo",
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Valley_of_the_Geysers.jpg/960px-Valley_of_the_Geysers.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    }
   ]
 }

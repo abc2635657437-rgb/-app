@@ -15,7 +15,7 @@
     leaflet.src = '/vendor/leaflet/leaflet.js';
     const loadRuntime = () => {
       const runtime = document.createElement('script');
-      runtime.src = 'modules/map/map-web.js?v=7';
+      runtime.src = 'modules/map/map-web.js?v=9';
       runtime.onload = () => { window.loadMap = window.initTravelMap; };
       document.body.appendChild(runtime);
     };
