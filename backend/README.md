@@ -2,6 +2,11 @@
 
 当前仓库包含 Web/微信前端、Express API 与 Supabase 数据层。未配置外部服务密钥时接口会明确失败，不会伪造 AI 或支付成功状态。
 
+## 第三方登录
+- Google 使用 Supabase Auth PKCE。先在 Supabase Auth Providers 启用 Google 并配置 Google Web OAuth Client；Google 的 Authorized redirect URI 使用 Supabase 控制台显示的 `/auth/v1/callback`。Supabase URL Configuration 的 Redirect URLs 需加入 `https://travel-world-mwdw.onrender.com/**` 及开发环境的本地地址。
+- QQ Connect 走服务端授权码流程。将 `https://travel-world-mwdw.onrender.com/api/auth/qq/callback` 配置为 QQ 互联回调，并在 Render 环境变量设置 `QQ_CLIENT_ID`、`QQ_CLIENT_SECRET`。密钥只保存在服务器。
+- 在 Supabase SQL Editor 执行 `backend/migrations/20260927_qq_oauth_identities.sql`。QQ 不返回可用于账号合并的邮箱；新 QQ 身份会建立独立登录，已存在的 Travel World 用户应先登录，再从“我的 → 账号与个人资料 → 绑定 QQ 账号”显式关联。Google 的已验证邮箱匹配由 Supabase Auth identity linking 处理。
+
 ## AI
 - POST /api/ai/plan：必须登录。接收自然语言、可选结构化偏好和 conversationId，调用 OpenAI-compatible 模型，返回并保存结构化路线。
 - GET /api/ai/conversations：读取当前用户的旅行规划会话。

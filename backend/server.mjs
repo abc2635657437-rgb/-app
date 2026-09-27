@@ -5,6 +5,7 @@ import multer from 'multer';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import { installDirectChat } from './direct-chat.mjs';
@@ -26,7 +27,9 @@ const aiBaseUrl = 'https://text.pollinations.ai';
 const nominatimBaseUrl = (process.env.NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '');
 const osrmBaseUrl = (process.env.OSRM_BASE_URL || 'https://router.project-osrm.org').replace(/\/$/, '');
 const openMeteoBaseUrl = (process.env.OPEN_METEO_BASE_URL || 'https://api.open-meteo.com').replace(/\/$/, '');
-const publicAppUrl = process.env.PUBLIC_APP_URL || `http://localhost:${port}`;
+const publicAppUrl = process.env.PUBLIC_APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${port}`;
+const qqClientId = process.env.QQ_CLIENT_ID || '';
+const qqClientSecret = process.env.QQ_CLIENT_SECRET || '';
 
 if (!supabaseUrl || !anonKey || !serviceRoleKey) {
   throw new Error('SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required');
@@ -386,6 +389,105 @@ app.post('/api/auth/refresh', async (req, res) => {
 app.get('/api/auth/session', requireUser, async (req, res) => {
   const { data: profile } = await admin.from('profiles').select('id,username,display_name,bio,avatar_url').eq('id', req.user.id).maybeSingle();
   res.json({ user: req.user, profile });
+});
+
+function qqAppOrigin(req) {
+  const current = `${req.protocol}://${String(req.get('host') || '').split(',')[0].trim()}`;
+  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(current) ? current : new URL(publicAppUrl).origin;
+}
+function qqState(userId = null, appOrigin) {
+  const nonce = randomBytes(32).toString('base64url'), body = Buffer.from(JSON.stringify({ nonce, userId, appOrigin, issuedAt: Date.now() })).toString('base64url');
+  const signature = createHmac('sha256', serviceRoleKey).update(body).digest('base64url');
+  return { nonce, state: `${body}.${signature}` };
+}
+function validQQState(value, cookieNonce) {
+  try {
+    const [body, signature] = String(value || '').split('.'), expected = createHmac('sha256', serviceRoleKey).update(body).digest();
+    if (!signature || !timingSafeEqual(Buffer.from(signature, 'base64url'), expected)) return null;
+    const state = JSON.parse(Buffer.from(body, 'base64url').toString());
+    if (!cookieNonce || state.nonce !== cookieNonce || Date.now() - state.issuedAt > 10 * 60_000 || state.issuedAt > Date.now() + 30_000) return null;
+    return state;
+  } catch (_) { return null; }
+}
+function qqCookie(req) { return String(req.headers.cookie || '').split(';').map(item => item.trim()).find(item => item.startsWith('tw_qq_state='))?.slice('tw_qq_state='.length) || ''; }
+function qqSetStateCookie(res, req, nonce, clear = false) {
+  const secure = !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(qqAppOrigin(req));
+  res.setHeader('Set-Cookie', `tw_qq_state=${clear ? '' : nonce}; HttpOnly; SameSite=Lax; Path=/api/auth/qq/callback; Max-Age=${clear ? 0 : 600}${secure ? '; Secure' : ''}`);
+}
+function qqSubject(openid) { return createHash('sha256').update(`${qqClientId}:${openid}`).digest('hex'); }
+function qqSessionRedirect(session, appOrigin) {
+  const values = new URLSearchParams({ access_token: session.access_token, refresh_token: session.refresh_token, token_type: session.token_type || 'bearer', expires_in: String(session.expires_in || 3600), provider: 'qq' });
+  return `${appOrigin}/oauth-callback.html#${values}`;
+}
+async function qqFetchJson(url) {
+  const response = await fetch(url, { signal: AbortSignal.timeout(12_000) }), raw = await response.text();
+  if (!response.ok) throw new Error(`QQ OAuth upstream returned ${response.status}`);
+  try { return JSON.parse(raw); } catch (_) { throw new Error('QQ OAuth returned an invalid response'); }
+}
+async function qqStart(req, res, userId = null) {
+  if (!qqClientId || !qqClientSecret) return res.status(503).json({ error: 'QQ 登录尚未配置，请联系管理员' });
+  const appOrigin = qqAppOrigin(req), callbackUrl = `${appOrigin}/api/auth/qq/callback`, { nonce, state } = qqState(userId, appOrigin); qqSetStateCookie(res, req, nonce);
+  const authorize = new URL('https://graph.qq.com/oauth2.0/authorize');
+  authorize.search = new URLSearchParams({ response_type: 'code', client_id: qqClientId, redirect_uri: callbackUrl, scope: 'get_user_info', state }).toString();
+  res.json({ authorizeUrl: authorize.href });
+}
+app.get('/api/auth/qq/start', (req, res) => qqStart(req, res));
+app.post('/api/auth/qq/link', requireUser, (req, res) => qqStart(req, res, req.user.id));
+app.get('/api/auth/qq/callback', async (req, res) => {
+  const cookieNonce = qqCookie(req); qqSetStateCookie(res, req, '', true);
+  if (req.query.error) return res.redirect('/?oauth_error=qq_cancelled');
+  const state = validQQState(req.query.state, cookieNonce);
+  if (!state) return res.redirect('/?oauth_error=qq_state_invalid');
+  if (!req.query.code) return res.redirect('/?oauth_error=qq_code_missing');
+  let createdUserId = null;
+  try {
+    if (!qqClientId || !qqClientSecret) throw new Error('QQ OAuth is not configured');
+    const tokenUrl = new URL('https://graph.qq.com/oauth2.0/token');
+    const callbackUrl = `${state.appOrigin}/api/auth/qq/callback`;
+    tokenUrl.search = new URLSearchParams({ grant_type: 'authorization_code', client_id: qqClientId, client_secret: qqClientSecret, code: String(req.query.code), redirect_uri: callbackUrl, fmt: 'json' }).toString();
+    const token = await qqFetchJson(tokenUrl);
+    if (!token.access_token) throw new Error(token.error_description || 'QQ token exchange failed');
+    const meUrl = new URL('https://graph.qq.com/oauth2.0/me'); meUrl.search = new URLSearchParams({ access_token: token.access_token, fmt: 'json' }).toString();
+    const identity = await qqFetchJson(meUrl);
+    if (!identity.openid) throw new Error(identity.error_description || 'QQ identity was not returned');
+    const userUrl = new URL('https://graph.qq.com/user/get_user_info'); userUrl.search = new URLSearchParams({ access_token: token.access_token, oauth_consumer_key: qqClientId, openid: identity.openid }).toString();
+    const info = await qqFetchJson(userUrl);
+    if (Number(info.ret) !== 0) throw new Error(info.msg || 'QQ profile could not be read');
+    const subjectHash = qqSubject(identity.openid), existing = await admin.from('oauth_identities').select('user_id').eq('provider', 'qq').eq('provider_user_hash', subjectHash).maybeSingle();
+    if (existing.error) throw new Error('QQ 登录数据库尚未完成配置');
+    let userId = existing.data?.user_id;
+    if (state.userId) {
+      if (userId && userId !== state.userId) return res.redirect('/?oauth_error=qq_already_linked');
+      if (!userId) {
+        const { error } = await admin.from('oauth_identities').insert({ provider: 'qq', provider_user_hash: subjectHash, user_id: state.userId });
+        if (error) { const current = await admin.from('oauth_identities').select('user_id').eq('provider', 'qq').eq('provider_user_hash', subjectHash).maybeSingle(); if (current.data?.user_id !== state.userId) return res.redirect('/?oauth_error=qq_already_linked'); }
+      }
+      return res.redirect('/?oauth=qq-linked');
+    }
+    if (!userId) {
+      const email = `qq-${subjectHash}@users.travel-world.invalid`;
+      const { data: created, error } = await admin.auth.admin.createUser({ email, email_confirm: true, password: randomBytes(32).toString('base64url'), user_metadata: { provider: 'qq', display_name: String(info.nickname || 'QQ 旅行者').slice(0, 80), avatar_url: info.figureurl_qq_2 || info.figureurl_2 || null } });
+      if (error || !created.user) throw new Error('创建 QQ 账号失败，请稍后重试');
+      createdUserId = created.user.id; userId = createdUserId;
+      const { error: insertError } = await admin.from('oauth_identities').insert({ provider: 'qq', provider_user_hash: subjectHash, user_id: userId });
+      if (insertError) {
+        const current = await admin.from('oauth_identities').select('user_id').eq('provider', 'qq').eq('provider_user_hash', subjectHash).maybeSingle();
+        if (!current.data?.user_id) throw insertError;
+        await admin.auth.admin.deleteUser(userId); createdUserId = null; userId = current.data.user_id;
+      }
+    }
+    const { data: account, error: accountError } = await admin.auth.admin.getUserById(userId);
+    if (accountError || !account.user?.email) throw new Error('QQ 账号资料未就绪');
+    const { data: link, error: linkError } = await admin.auth.admin.generateLink({ type: 'magiclink', email: account.user.email });
+    if (linkError || !link.properties?.hashed_token) throw new Error('无法创建安全登录会话');
+    const { data: signedIn, error: signInError } = await authClient.auth.verifyOtp({ token_hash: link.properties.hashed_token, type: 'magiclink' });
+    if (signInError || !signedIn.session) throw new Error('无法完成 QQ 登录，请重试');
+    res.redirect(303, qqSessionRedirect(signedIn.session, state.appOrigin));
+  } catch (error) {
+    if (createdUserId) await admin.auth.admin.deleteUser(createdUserId).catch(() => {});
+    console.error('QQ OAuth callback failed:', error.message);
+    res.redirect('/?oauth_error=qq_failed');
+  }
 });
 
 app.post('/api/auth/logout', requireUser, async (req, res) => {
