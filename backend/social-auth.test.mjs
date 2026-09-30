@@ -6,23 +6,32 @@ import vm from 'node:vm';
 const source = readFileSync(new URL('../modules/auth/auth-web.js', import.meta.url), 'utf8');
 function harness(search = '', saved = {}) {
   const storage = new Map(Object.entries(saved));
-  const messages = [], navigation = [], events = [];
+  const messages = [], navigation = [], events = [], cleanedUrls = [], errors = {};
   const toast = { style: {}, hidden: true };
   const context = {
     URL, URLSearchParams, AbortSignal, FormData,
     location: { protocol: 'https:', origin: 'https://travel-world-mwdw.onrender.com', href: 'https://travel-world-mwdw.onrender.com/?preview=old', search, hash: '' },
-    history: { replaceState() {} },
+    history: { replaceState: (_state, _title, url) => cleanedUrls.push(url) },
     localStorage: { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) },
-    document: { querySelector: () => null, getElementById: id => id === 'twToast' ? toast : id === 'discover' ? {} : null },
+    document: { querySelector: () => null, getElementById: id => id === 'twToast' ? toast : id === 'authError' ? errors : id === 'discover' ? {} : null },
     window: { go: screen => navigation.push(screen), dispatchEvent: event => events.push(event.type) },
     Event, setTimeout: () => 1, clearTimeout() {},
     fetch: async () => { throw new Error('network unavailable'); },
   };
   Object.defineProperty(toast, 'textContent', { set: value => messages.push(value) });
   vm.createContext(context);
-  vm.runInContext(source.replace(/\}\(\)\);\s*$/, 'window.testAuth = { oauthClient, startGoogle }; }());'), context);
-  return { context, storage, messages, navigation, events };
+  vm.runInContext(source.replace("function show(mode = 'login') {", "function show(mode = 'login') { window.shownMode = mode; return;").replace(/\}\(\)\);\s*$/, 'window.testAuth = { oauthClient, startGoogle }; }());'), context);
+  return { context, storage, messages, navigation, events, cleanedUrls, errors };
 }
+
+test('invalid OAuth state exposes a fresh sign-in without deleting the existing account session', () => {
+  const saved = JSON.stringify({ user: { id: 'existing-user' }, access_token: 'test-only' });
+  const h = harness('?error_code=bad_oauth_state', { 'tw-auth-session': saved });
+  assert.equal(h.context.window.shownMode, 'login');
+  assert.match(h.errors.textContent, /授权链接已失效/);
+  assert.equal(h.storage.get('tw-auth-session'), saved);
+  assert.deepEqual(h.events, []);
+});
 
 test('QQ callback restores the intended screen and broadcasts sign-in', () => {
   const h = harness('?oauth=qq-signed-in', { 'tw-oauth-return-screen': 'discover' });

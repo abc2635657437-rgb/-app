@@ -8,7 +8,7 @@
   const phrase = (zh, en) => english() ? en : zh;
   function rememberReturnScreen() { const screen = document.querySelector('.screen.active')?.id; if (screen) localStorage.setItem(returnScreenKey, screen); }
   function restoreReturnScreen() { const screen = localStorage.getItem(returnScreenKey); localStorage.removeItem(returnScreenKey); if (screen && document.getElementById(screen)) window.go?.(screen); }
-  function cleanOAuthUrl() { const url = new URL(location.href); ['code','state','type','provider','error','error_description','oauth','oauth_error'].forEach(key => url.searchParams.delete(key)); url.hash = ''; history.replaceState({}, '', url.pathname + url.search); }
+  function cleanOAuthUrl() { const url = new URL(location.href); ['code','state','type','provider','error','error_code','error_description','oauth','oauth_error'].forEach(key => url.searchParams.delete(key)); url.hash = ''; history.replaceState({}, '', url.pathname + url.search); }
   let oauthClientPromise;
   async function oauthClient() {
     if (!oauthClientPromise) oauthClientPromise = (async () => {
@@ -58,9 +58,10 @@
   if (home) { const footer = document.createElement('footer'); footer.style.cssText = 'padding:24px 0;font-size:12px;color:#78817d'; footer.innerHTML = '<a href="/privacy.html">隐私政策 / Privacy Policy</a> · <a href="/terms.html">服务说明 / Terms</a>'; home.appendChild(footer); }
   async function finishOAuthCallback() {
     const query = new URLSearchParams(location.search), hash = new URLSearchParams(location.hash.slice(1));
-    const oauth = query.get('oauth'), oauthError = query.get('oauth_error') || query.get('error_description') || query.get('error') || hash.get('error_description');
+    const oauth = query.get('oauth'), oauthError = query.get('oauth_error') || query.get('error_code') || query.get('error_description') || query.get('error') || hash.get('error_code') || hash.get('error_description');
     if (oauth || oauthError) {
       cleanOAuthUrl();
+      if (oauthError === 'bad_oauth_state') { restoreReturnScreen(); show('login'); document.getElementById('authError').textContent = phrase('授权链接已失效，请点击 Google 重新登录，不要返回旧授权页面。', 'The authorization link is no longer valid. Click Google to sign in again; do not reuse the old authorization page.'); return; }
       if (oauth === 'qq-linked' || oauth === 'qq-signed-in') { restoreReturnScreen(); toast(oauth === 'qq-linked' ? phrase('QQ 账号绑定成功', 'QQ account linked') : phrase('登录成功', 'Signed in')); window.dispatchEvent(new Event('tw-auth-change')); }
       else if (oauthError) { const message = oauthError === 'qq_cancelled' || query.get('error') === 'access_denied' ? phrase('已取消授权', 'Authorization was cancelled') : oauthError === 'qq_already_linked' ? phrase('此 QQ 已绑定到另一个 Travel World 账号', 'This QQ account is linked to another Travel World account') : /provider|not enabled|unsupported/i.test(oauthError) ? phrase('Google 登录尚未配置，请联系管理员', 'Google sign-in is not configured yet. Contact the administrator.') : phrase('第三方登录失败，请重试', 'Social sign-in failed. Please try again.'); restoreReturnScreen(); if (session) toast(message); else { show('login'); document.getElementById('authError').textContent = message; } }
       return;
