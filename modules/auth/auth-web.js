@@ -18,13 +18,13 @@
       if (!response.ok || !config.supabaseUrl || !config.anonKey) throw new Error(phrase('认证服务暂不可用', 'Authentication service is unavailable.'));
       return window.supabase.createClient(config.supabaseUrl, config.anonKey, { auth: { flowType: 'pkce', autoRefreshToken: false, detectSessionInUrl: true, persistSession: true } });
     })();
-    return oauthClientPromise;
+    try { return await oauthClientPromise; } catch (error) { oauthClientPromise = null; throw error; }
   }
   async function startGoogle(button) {
     button.disabled = true; button.querySelector('[data-provider-label]').textContent = phrase('正在连接 Google…', 'Connecting to Google…');
     try {
       rememberReturnScreen();
-      const client = await oauthClient(), redirectTo = new URL(location.href); redirectTo.hash = '';
+      const client = await oauthClient(), redirectTo = new URL(location.origin + '/');
       const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectTo.href } });
       if (error) throw error;
     } catch (error) { localStorage.removeItem(returnScreenKey); button.disabled = false; button.querySelector('[data-provider-label]').textContent = phrase('使用 Google 继续', 'Continue with Google'); document.getElementById('authError').textContent = /provider|not enabled|unsupported/i.test(error.message || '') ? phrase('Google 登录尚未配置，请联系管理员', 'Google sign-in is not configured yet. Contact the administrator.') : (error.message || phrase('Google 登录失败，请重试', 'Google sign-in failed. Try again.')); }
@@ -33,7 +33,7 @@
     button.disabled = true; button.querySelector('[data-provider-label]').textContent = phrase('正在连接 QQ…', 'Connecting to QQ…');
     try {
       rememberReturnScreen();
-      const response = await fetch(base + '/api/auth/qq/start'), body = await response.json().catch(() => ({}));
+      const response = await fetch(base + '/api/auth/qq/start', { signal: AbortSignal.timeout(15000) }), body = await response.json().catch(() => ({}));
       if (!response.ok || !body.authorizeUrl) throw new Error(body.error || phrase('QQ 登录服务暂时无法连接', 'Unable to reach QQ sign-in service.'));
       location.assign(body.authorizeUrl);
     } catch (error) { localStorage.removeItem(returnScreenKey); button.disabled = false; button.querySelector('[data-provider-label]').textContent = phrase('使用 QQ 继续', 'Continue with QQ'); document.getElementById('authError').textContent = error.message; }
@@ -59,7 +59,7 @@
     const oauth = query.get('oauth'), oauthError = query.get('oauth_error') || query.get('error_description') || query.get('error') || hash.get('error_description');
     if (oauth || oauthError) {
       cleanOAuthUrl();
-      if (oauth === 'qq-linked') { restoreReturnScreen(); toast(phrase('QQ 账号绑定成功', 'QQ account linked')); window.dispatchEvent(new Event('tw-auth-change')); }
+      if (oauth === 'qq-linked' || oauth === 'qq-signed-in') { restoreReturnScreen(); toast(oauth === 'qq-linked' ? phrase('QQ 账号绑定成功', 'QQ account linked') : phrase('登录成功', 'Signed in')); window.dispatchEvent(new Event('tw-auth-change')); }
       else if (oauthError) { const message = oauthError === 'qq_cancelled' || query.get('error') === 'access_denied' ? phrase('已取消授权', 'Authorization was cancelled') : oauthError === 'qq_already_linked' ? phrase('此 QQ 已绑定到另一个 Travel World 账号', 'This QQ account is linked to another Travel World account') : /provider|not enabled|unsupported/i.test(oauthError) ? phrase('Google 登录尚未配置，请联系管理员', 'Google sign-in is not configured yet. Contact the administrator.') : phrase('第三方登录失败，请重试', 'Social sign-in failed. Please try again.'); restoreReturnScreen(); if (session) toast(message); else { show('login'); document.getElementById('authError').textContent = message; } }
       return;
     }
