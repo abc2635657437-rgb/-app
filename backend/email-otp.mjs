@@ -3,7 +3,7 @@ export function installEmailOtp(app, authClient, publicAppUrl) {
   const attempts = new Map();
   function logAuthFailure(error) {
     const message = String(error?.message || '').replace(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 240);
-    console.error('email_otp_auth_failure', { status: error?.status, code: error?.code, name: error?.name, message });
+    console.error(JSON.stringify({ event: 'email_otp_auth_failure', status: error?.status, code: error?.code, name: error?.name, message }));
   }
   function limit(key, maximum, windowMs, res) {
     const now = Date.now();
