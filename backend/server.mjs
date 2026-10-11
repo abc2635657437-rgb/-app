@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import { installDirectChat } from './direct-chat.mjs';
 import { installAdmin } from './admin.mjs';
 import { parseAiResponse } from './ai-response.mjs';
+import { installEmailOtp } from './email-otp.mjs';
 
 dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 
@@ -356,6 +357,8 @@ app.get('/api/weather', async (req, res) => {
   } catch (error) { res.status(502).json({ error: '天气服务暂时不可用', detail: error.message }); }
 });
 
+installEmailOtp(app, authClient, publicAppUrl);
+
 app.post('/api/auth/register', async (req, res) => {
   const { email, password, displayName = '', username = '' } = req.body || {};
   if (!email || !password || password.length < 8) return res.status(400).json({ error: '请输入邮箱和至少 8 位密码' });
@@ -382,7 +385,7 @@ app.post('/api/auth/refresh', async (req, res) => {
   const refreshToken = String(req.body?.refreshToken || '');
   if (!refreshToken) return res.status(400).json({ error: '缺少会话刷新凭证' });
   const { data, error } = await authClient.auth.refreshSession({ refresh_token: refreshToken });
-  if (error || !data.session) return res.status(401).json({ error: '登录已过期，请重新登录' });
+  if (error || !data.session) return res.status(error?.status >= 500 || error?.name === 'AuthRetryableFetchError' ? 503 : 401).json({ error: '登录状态暂时无法续期，请稍后重试' });
   res.json({ user: data.user, session: data.session });
 });
 

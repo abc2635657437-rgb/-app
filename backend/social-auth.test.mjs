@@ -20,7 +20,7 @@ function harness(search = '', saved = {}) {
   };
   Object.defineProperty(toast, 'textContent', { set: value => messages.push(value) });
   vm.createContext(context);
-  vm.runInContext(source.replace("function show(mode = 'login') {", "function show(mode = 'login') { window.shownMode = mode; return;").replace(/\}\(\)\);\s*$/, 'window.testAuth = { oauthClient, startGoogle }; }());'), context);
+  vm.runInContext(source.replace("function show(mode = 'login') {", "function show(mode = 'login') { window.shownMode = mode; return;").replace(/\}\(\)\);\s*$/, 'window.testAuth = { oauthClient, startGoogle, saveSession, refreshSession }; }());'), context);
   return { context, storage, messages, navigation, events, cleanedUrls, errors };
 }
 
@@ -31,6 +31,30 @@ test('invalid OAuth state exposes a fresh sign-in without deleting the existing 
   assert.match(h.errors.textContent, /授权链接已失效/);
   assert.equal(h.storage.get('tw-auth-session'), saved);
   assert.deepEqual(h.events, []);
+});
+
+test('remembered sessions survive reload within 60 days and expire after that', () => {
+  const saved = JSON.stringify({ user: { id: 'existing-user' }, access_token: 'test-only' });
+  const recent = harness('', { 'tw-auth-session': saved, 'tw-auth-signed-in-at': String(Date.now() - 30 * 86400000) });
+  assert.equal(recent.context.window.TravelWorldAuth.session().user.id, 'existing-user');
+  const expired = harness('', { 'tw-auth-session': saved, 'tw-auth-signed-in-at': String(Date.now() - 61 * 86400000) });
+  assert.equal(expired.context.window.TravelWorldAuth.session(), null);
+  assert.equal(expired.storage.has('tw-auth-session'), false);
+});
+
+test('renewal preserves remember deadline and ignores responses after an account switch', async () => {
+  const at = String(Date.now() - 86400000);
+  const h = harness('', { 'tw-auth-session': JSON.stringify({ refresh_token: 'old', user: { id: 'one' } }), 'tw-auth-signed-in-at': at });
+  h.context.fetch = async () => ({ ok: true, json: async () => ({ session: { refresh_token: 'renewed', user: { id: 'one' } } }) });
+  assert.equal(await h.context.window.testAuth.refreshSession(), true);
+  assert.equal(h.storage.get('tw-auth-signed-in-at'), at);
+  let finish;
+  h.context.fetch = () => new Promise(resolve => { finish = resolve; });
+  const refresh = h.context.window.testAuth.refreshSession();
+  h.context.window.testAuth.saveSession({ refresh_token: 'other', user: { id: 'two' } });
+  finish({ ok: true, json: async () => ({ session: { refresh_token: 'stale', user: { id: 'one' } } }) });
+  assert.equal(await refresh, false);
+  assert.equal(h.context.window.TravelWorldAuth.session().user.id, 'two');
 });
 
 test('QQ callback restores the intended screen and broadcasts sign-in', () => {
