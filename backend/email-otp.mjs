@@ -1,6 +1,10 @@
 // Supabase owns code generation, expiry, delivery and identity matching.
 export function installEmailOtp(app, authClient, publicAppUrl) {
   const attempts = new Map();
+  function logAuthFailure(error) {
+    const message = String(error?.message || '').replace(/[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}/g, '[email]').slice(0, 240);
+    console.error('email_otp_auth_failure', { status: error?.status, code: error?.code, name: error?.name, message });
+  }
   function limit(key, maximum, windowMs, res) {
     const now = Date.now();
     for (const [entry, value] of attempts) if (value.until <= now) attempts.delete(entry);
@@ -22,10 +26,13 @@ export function installEmailOtp(app, authClient, publicAppUrl) {
       const result = action === 'send'
         ? await authClient.auth.signInWithOtp({ email, options: { shouldCreateUser: true, emailRedirectTo: new URL('/', publicAppUrl).href } })
         : await authClient.auth.verifyOtp({ email, token, type: 'email' });
-      if (result.error) return res.status(result.error.status === 429 ? 429 : 400).json({ code: action === 'send' ? 'otp_delivery_failed' : 'otp_invalid_or_expired' });
+      if (result.error) {
+        logAuthFailure(result.error);
+        return res.status(result.error.status === 429 ? 429 : 400).json({ code: action === 'send' ? 'otp_delivery_failed' : 'otp_invalid_or_expired' });
+      }
       if (action === 'send') return res.json({ sent: true, retryAfter: 60 });
       if (!result.data?.session) return res.status(401).json({ code: 'otp_invalid_or_expired' });
       res.json({ user: result.data.user, session: result.data.session });
-    } catch (_) { res.status(503).json({ code: 'auth_unavailable' }); }
+    } catch (error) { logAuthFailure(error); res.status(503).json({ code: 'auth_unavailable' }); }
   });
 }
