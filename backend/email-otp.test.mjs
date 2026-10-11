@@ -21,6 +21,7 @@ test('email OTP delegates verification to Supabase, rate limits sends and never 
   assert.equal(calls[0].email, 'person@qq.com');
   assert.equal(calls[0].options.shouldCreateUser, true);
   assert.equal((await post('send', { email: 'person@qq.com' })).status, 429);
+  assert.equal((await post('verify', { email: 'person@qq.com', token: '12345678' })).body.code, 'invalid_otp');
   assert.equal((await post('verify', { email: 'person@qq.com', token: 'wrong' })).status, 400);
   assert.equal((await post('verify', { email: 'person@qq.com', token: '000000' })).body.code, 'otp_invalid_or_expired');
   assert.deepEqual((await post('verify', { email: 'person@qq.com', token: '123456' })).body.session, session);

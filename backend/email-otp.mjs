@@ -20,7 +20,7 @@ export function installEmailOtp(app, authClient, publicAppUrl) {
     const email = String(req.body?.email || '').trim().toLowerCase();
     if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ code: 'invalid_email' });
     const token = String(req.body?.token || '').trim();
-    if (action === 'verify' && !/^\d{6,10}$/.test(token)) return res.status(400).json({ code: 'invalid_otp' });
+    if (action === 'verify' && !/^\d{6}$/.test(token)) return res.status(400).json({ code: 'invalid_otp' });
     if (!limit(`${action}:ip:${req.ip}`, 60, 600000, res) || !limit(`${action}:email:${email}`, action === 'send' ? 1 : 10, action === 'send' ? 60000 : 600000, res)) return;
     try {
       const result = action === 'send'
