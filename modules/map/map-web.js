@@ -1,5 +1,5 @@
 (function () {
-  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css';document.head.append(photoStyles);
+  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=2-mobile';document.head.append(photoStyles);
   let map;
   let markers = [];
   let routeLayer;

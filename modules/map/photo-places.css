@@ -76,3 +76,4 @@
  .place-sydney-guide .place-art-credit{grid-row:12}
 }
 @media(max-width:600px){.place-essential-grid summary img{height:100px}.place-sydney-guide .place-detail-notes{margin-top:12px}}
+@media(max-width:600px){.tw-photo-detail.place-gathered{background-size:auto 100%;background-position:24% center;background-attachment:scroll;background-repeat:no-repeat}}

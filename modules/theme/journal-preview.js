@@ -1,6 +1,6 @@
 (function(){
   document.body.classList.add('journal-preview');
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=mobile-profile';document.head.append(css);
   const lang=()=>window.TravelWorldI18n?.language?.()||'zh';
   const t=(zh,en)=>lang()==='en'?en:zh;
   const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};

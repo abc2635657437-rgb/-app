@@ -68,13 +68,17 @@ body.journal-preview .journal-hero{margin-inline:-20px}
 .journal-hero-copy h1{font-size:36px}
 body.journal-preview .community-brand{font-size:23px}
 body.journal-preview .title{font-size:29px!important;margin-bottom:16px}
-body.journal-preview .profile-links{grid-template-columns:repeat(3,1fr)}
+body.journal-preview .profile-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+body.journal-preview .profile-links button{min-height:52px;font-weight:650}
 body.journal-preview .profile-stats{display:none}
 .journal-profile-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 40px}
 .journal-profile-head h1{margin:0;font-size:29px}
 .journal-profile-head button{border:0;background:transparent;font-size:14px;min-height:44px}
 body.journal-preview .journal-profile{padding-top:0}
-body.journal-preview .journal-profile .profile-links button:nth-child(n+4){display:none}
+body.journal-preview .journal-profile .profile-links button:nth-child(n+4){display:block}
+body.journal-preview .profile-comment-card{padding:12px;border:1px solid #ded8c9;border-radius:10px;background:#fffaf0df;color:var(--ink)}
+body.journal-preview .profile-comment-card p{margin:0 0 8px;line-height:1.5}
+body.journal-preview .profile-comment-card small{display:block;color:var(--muted);margin-bottom:8px}
 .journal-tabs,.journal-trip-filters{display:flex;gap:8px;align-items:center;margin:10px 0 16px;flex-wrap:wrap}
 .journal-tabs button,.journal-trip-filters button{min-height:44px;border:0;padding:8px 12px;background:transparent;color:var(--muted);cursor:pointer}
 .journal-tabs button.active{border-bottom:2px solid var(--accent);color:var(--ink)}

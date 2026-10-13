@@ -19,4 +19,4 @@
   };
 }());
 const gatheredBackgroundScript=document.createElement('script');gatheredBackgroundScript.src='/modules/map/gathered-backgrounds.js?v=1';document.body.append(gatheredBackgroundScript);
-const journalThemeScript=document.createElement('script');journalThemeScript.src='/modules/theme/journal-preview.js?v=2';journalThemeScript.defer=true;document.body.append(journalThemeScript);
+const journalThemeScript=document.createElement('script');journalThemeScript.src='/modules/theme/journal-preview.js?v=3';journalThemeScript.defer=true;document.body.append(journalThemeScript);
