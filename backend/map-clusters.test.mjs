@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {clusterPoints} from '../modules/map/cluster-points.js';
+const rows=[{id:'a',latitude:1,longitude:1},{id:'b',latitude:1,longitude:1.1},{id:'c',latitude:8,longitude:8}];
+const project=scale=>p=>({x:p.longitude*scale,y:p.latitude*scale});
+assert.deepEqual(clusterPoints(rows,project(100),64).map(g=>g.items.length),[2,1]);
+assert.equal(clusterPoints(rows,project(1000),64).length,3);
+assert.equal(clusterPoints([],project(100)).length,0);
+assert.equal(clusterPoints([{latitude:NaN,longitude:0}],project(100)).length,0);
+const count=clusterPoints(rows,project(100)).reduce((n,g)=>n+g.items.length,0);assert.equal(count,rows.length);
+console.log('Map grouping passed: close users merge, zoom splits, counts preserved, invalid coordinates ignored.');

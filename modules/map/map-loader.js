@@ -15,8 +15,8 @@
     leaflet.src = '/vendor/leaflet/leaflet.js';
     const loadRuntime = () => {
       const runtime = document.createElement('script');
-      runtime.src = 'modules/map/map-web.js?v=9';
-      runtime.onload = () => { window.loadMap = window.initTravelMap; };
+      runtime.src = 'modules/map/map-web.js?v=10-gathered';
+      runtime.onload = () => { window.loadMap = window.initTravelMap; const landmark=new URLSearchParams(location.search).get('landmark');if(landmark){window.go('map');window.initTravelMap().then(()=>window.openMapLandmark(landmark));} };
       document.body.appendChild(runtime);
     };
     leaflet.onload = loadRuntime;

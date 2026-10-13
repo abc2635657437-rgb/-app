@@ -2,7 +2,7 @@
   const fields = { dest: ['输入目的地，例如大理', ''], budget: ['预算（CNY）', ''], date: ['出发日期', ''], days: ['旅行天数', ''], interest: ['兴趣，例如自然、美食、摄影', ''] };
   const auth = () => window.TravelWorldAuth;
   const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-  let communityRoutes = [], routeFavoriteIds = new Set(), seasonalDestinations = [], activeFilter='all';
+  let communityRoutes = [], routeFavoriteIds = new Set(), seasonalDestinations = [], activeFilter='all',destinationRegion='china',destinationSeason='auto';
   const lang=()=>window.TravelWorldI18n?.language?.()||'zh';
   const copy=(zh,en)=>lang()==='en'?en:zh;
   const routeEnglish={
@@ -41,7 +41,24 @@
   }
   window.filterTravelRoutes = renderRoutes;
   const setRoutePhoto=(image,query)=>window.TravelImageService.load(image,query);
-  function renderSeasonal(){const month=new Date().getMonth()+1,items=seasonalDestinations.filter(item=>item.months.includes(month)).slice(0,8),root=document.getElementById('whereNowGrid');if(!root)return;root.innerHTML=items.map(source=>{const item=localized(source);return '<article class="where-now-card image-loading" data-season="'+safe(source.id)+'"><img alt="'+safe(item.title)+'"><div><small>'+safe(item.country)+' · '+safe(item.city)+'</small><h3>'+safe(item.title)+'</h3><p>'+safe(item.reason)+'</p><b>'+safe(item.experience)+'</b><em>'+safe(item.seasonalFood)+'</em><button onclick="openSeasonalDestination(\''+safe(source.id)+'\')">'+copy('查看路线','View route')+' →</button></div></article>';}).join('');items.forEach(item=>window.TravelImageService.load(root.querySelector('[data-season="'+item.id+'"] img'),item.imageQuery));window.TravelWorldI18n?.translate(root);}
+  const destinationRegions=[['china','国内','China'],['asia','亚洲','Asia'],['europe','欧洲','Europe'],['north-america','北美','North America'],['south-america','南美','South America'],['africa','非洲','Africa'],['oceania','澳洲','Oceania']];
+  function matchesDestinationRegion(item){const groups={china:['中国'],asia:['东亚','东南亚','亚洲'],europe:['欧洲'],'north-america':['北美'],'south-america':['南美'],africa:['非洲'],oceania:['大洋洲','澳洲']};return(groups[destinationRegion]||[]).includes(item.region);}
+  window.filterDestinationRegion=id=>{if(!destinationRegions.some(r=>r[0]===id))return;destinationRegion=id;renderSeasonal();};
+  function inSelectedSeason(item){if(destinationSeason==='auto')return item.months.includes(new Date().getMonth()+1);const south=['澳洲','大洋洲','南非','巴西','阿根廷','智利'].includes(item.region)||['澳大利亚','新西兰','南非','巴西','阿根廷','智利'].includes(item.country),north={spring:[3,4,5],summer:[6,7,8],autumn:[9,10,11],winter:[12,1,2]},southern={spring:[9,10,11],summer:[12,1,2],autumn:[3,4,5],winter:[6,7,8]};return(south?southern:north)[destinationSeason].some(month=>item.months.includes(month));}
+  function renderSeasonal(){
+    const items=seasonalDestinations.filter(item=>inSelectedSeason(item)&&matchesDestinationRegion(item)),root=document.getElementById('whereNowGrid');if(!root)return;
+    let season=document.getElementById('destinationSeason');if(!season){season=document.createElement('select');season.id='destinationSeason';root.closest('.where-now').querySelector('.head').append(season);season.onchange=()=>{destinationSeason=season.value;renderSeasonal();};}season.setAttribute('aria-label',copy('当地季节','Local season'));season.innerHTML=[['auto','当季','This month'],['spring','春季','Spring'],['summer','夏季','Summer'],['autumn','秋季','Autumn'],['winter','冬季','Winter']].map(([id,zh,en])=>'<option value="'+id+'"'+(id===destinationSeason?' selected':'')+'>'+copy(zh,en)+'</option>').join('');
+    let tabs=document.getElementById('destinationRegionTabs');if(!tabs){tabs=document.createElement('nav');tabs.id='destinationRegionTabs';tabs.className='destination-region-tabs';tabs.setAttribute('aria-label',copy('目的地区域','Destination regions'));root.before(tabs);}
+    tabs.innerHTML=destinationRegions.map(([id,zh,en])=>'<button type="button" aria-pressed="'+(id===destinationRegion)+'" onclick="filterDestinationRegion(\''+id+'\')">'+copy(zh,en)+'</button>').join('');
+    if(document.body.classList.contains('journal-preview')){
+      season.options[0].textContent=copy('不限季节','All seasons');
+      const head=root.closest('.where-now').querySelector('.head .muted');if(head)head.textContent=destinationSeason==='auto'?copy('实拍目的地','Photo destinations'):copy('已核实的季节精选','Verified seasonal picks');
+      if(destinationSeason==='auto'){import('./destination-directory.js').then(m=>m.renderDestinationDirectory(destinationRegion));return;}
+      document.getElementById('destinationCountryControls')?.remove();
+    }
+    root.innerHTML=items.length?items.map(source=>{const item=localized(source);return '<article class="where-now-card image-loading" data-season="'+safe(source.id)+'"><img alt="'+safe(item.title)+'"><div><small>'+safe(item.country)+' · '+safe(item.city)+'</small><h3>'+safe(item.title)+'</h3><p>'+safe(item.reason)+'</p><b>'+safe(item.experience)+'</b><em>'+safe(item.seasonalFood)+'</em><button onclick="openSeasonalDestination(\''+safe(source.id)+'\')">'+copy('查看路线','View route')+' →</button></div></article>';}).join(''):'<p class="muted">'+copy('该区域精选内容仍在核实；地图中可继续查看地点。','Curated content for this region is being verified. Explore places on the map.')+'</p>';
+    items.forEach(item=>window.TravelImageService.load(root.querySelector('[data-season="'+item.id+'"] img'),item.imageQuery));window.TravelWorldI18n?.translate(root);
+  }
   window.openSeasonalDestination=id=>{const item=seasonalDestinations.find(x=>x.id===id),route=(window.travelRoutes||[]).find(x=>x.id===item?.routeId);if(route)return openTravelRoute(route.id);const input=document.getElementById('dest');if(input){input.value=localized(item).city;input.closest('.card')?.scrollIntoView({behavior:'smooth'});}};
   window.refreshExploreLocale=()=>{renderSeasonal();renderRoutes(activeFilter);};
   const activityCard = (activity, routeId, dayNumber, index) => '<article class="route-activity route-photo-loading" data-route-photo="' + safe(routeId + '-' + dayNumber + '-' + index) + '"><div class="route-activity-image"><img alt="' + safe(activity.name) + '" loading="lazy" decoding="async"><span>' + safe(activity.time) + '</span></div><div class="route-activity-copy"><h4>' + safe(activity.name) + '</h4><p>' + safe(activity.description) + '</p><dl><div><dt>'+copy('建议停留','Suggested time')+'</dt><dd>' + safe(activity.duration) + '</dd></div><div><dt>'+copy('门票参考','Ticket guide')+'</dt><dd>' + safe(activity.ticket) + '</dd></div><div><dt>'+copy('怎么去','Getting there')+'</dt><dd>' + safe(activity.transport) + '</dd></div></dl><aside><b>'+copy('旅行提示','Travel tip')+'</b>' + safe(activity.tips) + '</aside></div></article>';

@@ -12,6 +12,8 @@ import { installDirectChat } from './direct-chat.mjs';
 import { installAdmin } from './admin.mjs';
 import { parseAiResponse } from './ai-response.mjs';
 import { installEmailOtp } from './email-otp.mjs';
+import { installMapPlaces } from './map-places.mjs';
+import { installPlaceImages } from './place-images.mjs';
 
 dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 
@@ -250,6 +252,8 @@ installDirectChat(app, admin, requireUser);
 await installAdmin(app, admin, requireUser, path.resolve(backendDir, '..'));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'travel-world-api' }));
+installMapPlaces(app);
+installPlaceImages(app);
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
 app.get('/api/map/tiles/:z/:x/:y.png', async (req, res) => {
