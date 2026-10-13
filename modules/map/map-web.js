@@ -1,5 +1,5 @@
 (function () {
-  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=2-mobile';document.head.append(photoStyles);
+  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=10-west-lake-mobile';document.head.append(photoStyles);
   let map;
   let markers = [];
   let routeLayer;
@@ -9,7 +9,7 @@
   let onlineMarkers = [];
   let onlineUsers = [];
   let nearbyPlaces=[],nearbyMarkers=[],placeTimer,placeRequest=0;
-  const backgroundData=fetch('/modules/data/place-backgrounds.json').then(r=>r.ok?r.json():{}).then(d=>d.backgrounds||{}).catch(()=>({}));
+  const backgroundData=fetch('/modules/data/place-backgrounds.json?v=4').then(r=>r.ok?r.json():{}).then(d=>d.backgrounds||{}).catch(()=>({}));
   const placePhotos=new Map();
   let photoRequest=0;
   const clusterModule = import('./cluster-points.js');
@@ -100,9 +100,10 @@
     }
   }
   function openPhotoPlace(place,photo,group){
+    if(place.id==='cn-west-lake'&&window.openWestLakeGuide){window.openWestLakeGuide(place,photo);return;}
     document.getElementById('photoPlaceDialog')?.remove();
     const dialog=document.createElement('dialog');dialog.id='photoPlaceDialog';dialog.className='tw-photo-detail';dialog.setAttribute('aria-label',langText(place.name,place.name_en));
-    backgroundData.then(backgrounds=>{const art=backgrounds[place.id];if(!art||!/^\/assets\/route-photos\/[a-z0-9-]+\.png$/.test(art.image))return;dialog.classList.add('place-gathered');dialog.style.setProperty('--place-art','url("'+art.image+'")');if(place.id!=='Q45178'){const note=document.createElement('small');note.className='place-art-credit';note.textContent=langText('Gathered 艺术衍生背景，非现场实拍。源图：','Gathered artistic derivative, not documentary photography. Source: ')+art.sourceAuthor+' · '+art.license;const source=document.createElement('a');source.href=art.sourceUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent=langText('背景来源与署名','Background source and attribution');note.append(source);dialog.append(note);}});
+    backgroundData.then(backgrounds=>{const art=backgrounds[place.id];if(!art||!/^\/assets\/route-photos\/[a-z0-9-]+\.png$/.test(art.image))return;const artImage=matchMedia('(max-width:600px)').matches&&art.mobileImage?art.mobileImage:art.image;dialog.classList.add('place-gathered');dialog.style.setProperty('--place-art','url("'+artImage+'")');if(place.id!=='Q45178'){const note=document.createElement('small');note.className='place-art-credit';note.textContent=langText('Gathered 艺术衍生背景，非现场实拍。源图：','Gathered artistic derivative, not documentary photography. Source: ')+art.sourceAuthor+' · '+art.license;const source=document.createElement('a');source.href=art.sourceUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent=langText('背景来源与署名','Background source and attribution');note.append(source);dialog.append(note);}});
     const add=(tag,text)=>{const el=document.createElement(tag);if(text)el.textContent=text;dialog.append(el);return el;};
     const close=add('button',langText('返回地图','Back to map'));close.type='button';close.onclick=()=>dialog.close();
     if(place.id==='Q45178'&&!['localhost','127.0.0.1'].includes(location.hostname)){const credit=add('a',langText('Gathered 艺术衍生背景 · W. Bulach · CC BY-SA 4.0','Gathered artistic background · W. Bulach · CC BY-SA 4.0'));credit.href='https://commons.wikimedia.org/wiki/File:00_1375_Sydney_Opera_House_(Australia).jpg';credit.target='_blank';credit.rel='noopener noreferrer';}
@@ -179,9 +180,16 @@
     const source = (data && data.landmarks || []).find(entry => entry.id === id);
     if (!source) return;const item=localized(source);
     if (map) map.setView([source.latitude, source.longitude], 11);
-    const artworkIds={'cn-great-wall':'Q12501','fr-eiffel':'Q243','in-taj-mahal':'Q9141','fr-louvre':'Q19675','us-liberty':'Q9202','au-opera':'Q45178','cn-west-lake':'Q10866444'};
+    if(id==='cn-west-lake'&&window.openWestLakeGuide){window.openWestLakeGuide(source);return;}
+    const artworkIds={'cn-great-wall':'Q12501','fr-eiffel':'Q243','in-taj-mahal':'Q9141','fr-louvre':'Q19675','us-liberty':'Q9202','au-opera':'Q45178','cn-west-lake':'Q10866444','jp-kiyomizu':'jp-kiyomizu','gb-big-ben':'gb-big-ben','cn-oriental-pearl':'cn-oriental-pearl','jp-fuji':'jp-fuji','cn-forbidden-city':'cn-forbidden-city','cn-zhangjiajie':'cn-zhangjiajie','it-colosseum':'it-colosseum','es-sagrada':'es-sagrada','gr-acropolis':'gr-acropolis','us-golden-gate':'us-golden-gate','us-grand-canyon':'us-grand-canyon','ca-niagara':'ca-niagara','sg-merlion':'sg-merlion','ae-burj-khalifa':'ae-burj-khalifa','pe-machu-picchu':'pe-machu-picchu','br-christ':'br-christ','eg-pyramids':'eg-pyramids','au-great-barrier':'au-great-barrier','jp-tokyo-tower':'jp-tokyo-tower','kr-gyeongbokgung':'kr-gyeongbokgung','th-grand-palace':'th-grand-palace','vn-ha-long':'vn-ha-long','id-borobudur':'id-borobudur','tr-hagia-sophia':'tr-hagia-sophia','cn-erhai':'cn-erhai','mx-chichen-itza':'mx-chichen-itza','za-table-mountain':'za-table-mountain','nz-milford':'nz-milford','ru-hermitage':'ru-hermitage','my-petronas':'my-petronas','np-everest':'np-everest','jo-petra':'jo-petra','de-neuschwanstein':'de-neuschwanstein','pt-belem':'pt-belem'};
     const artworkId=artworkIds[id],art=(await backgroundData)[artworkId];
-    if(art){openPhotoPlace({...source,id:artworkId,countryCode:source.country_en||source.country,sourceUrl:art.sourceUrl},{url:art.image.replace('gathered-background.png','source.jpg'),sourceUrl:art.sourceUrl,credit:art.sourceAuthor,license:art.license},[source]);return;}
+    if(id==='cn-west-lake'){
+      try{
+        const payload=await fetch('/api/map/place-images?ids=Q10866444').then(r=>r.json()),photo=payload.photos?.Q10866444;
+        if(photo){photo.url=photo.url.replace('/250px-','/960px-');openPhotoPlace({...source,id:'cn-west-lake',countryCode:'CN',sourceUrl:photo.sourceUrl},photo,[source]);return;}
+      }catch(_){}
+    }
+    if(art){openPhotoPlace({...source,id:artworkId,countryCode:source.country_en||source.country,sourceUrl:art.sourceUrl},{url:art.sourceImage||art.image.replace('gathered-background.png','source.jpg'),sourceUrl:art.sourceUrl,credit:art.sourceAuthor,license:art.license},[source]);return;}
     if(new URLSearchParams(location.search).get('preview')==='journal'){
       status(langText('正在关联地点实拍与详情…','Linking sourced place photographs…'));
       try{const bounds=[source.latitude-.5,source.longitude-.5,source.latitude+.5,source.longitude+.5],response=await fetch('/api/map/places?bbox='+bounds.join(',')),payload=await response.json();const normalize=value=>String(value||'').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');const target=(payload.places||[]).find(p=>[p.name,p.name_en].some(name=>[source.name,source.name_en].some(original=>normalize(name)===normalize(original))));if(target){const images=await fetch('/api/map/place-images?ids='+target.id).then(r=>r.json()),photo=images.photos?.[target.id];if(photo){openPhotoPlace(target,photo,[target]);return;}}}catch(_){}

@@ -18,5 +18,5 @@
     document.body.appendChild(overlay);overlay.querySelectorAll('img').forEach(image=>image.onerror=()=>{image.onerror=null;image.src='/assets/ukiyoe-journey.svg';});overlay.onclick=event=>{if(event.target===overlay)window.closeLandmarkDetail();};root.innerHTML='';
   };
 }());
-const gatheredBackgroundScript=document.createElement('script');gatheredBackgroundScript.src='/modules/map/gathered-backgrounds.js?v=1';document.body.append(gatheredBackgroundScript);
+const gatheredBackgroundScript=document.createElement('script');gatheredBackgroundScript.src='/modules/map/gathered-backgrounds.js?v=2';document.body.append(gatheredBackgroundScript);
 const journalThemeScript=document.createElement('script');journalThemeScript.src='/modules/theme/journal-preview.js?v=3';journalThemeScript.defer=true;document.body.append(journalThemeScript);

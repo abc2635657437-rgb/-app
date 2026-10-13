@@ -77,3 +77,164 @@
 }
 @media(max-width:600px){.place-essential-grid summary img{height:100px}.place-sydney-guide .place-detail-notes{margin-top:12px}}
 @media(max-width:600px){.tw-photo-detail.place-gathered{background-size:auto 100%;background-position:24% center;background-attachment:scroll;background-repeat:no-repeat}}
+.tw-photo-detail.place-west-lake-guide{position:relative;display:block!important;width:min(760px,calc(100vw - 16px));max-height:96dvh;padding:0;border:1px solid #d5cbbb;border-radius:18px;overflow:auto;overscroll-behavior:contain;background:#f8f3e8;color:#173f4f;box-shadow:0 18px 65px #122c3c55}
+.place-west-lake-guide::backdrop{background:#112b398c}
+.place-west-lake-guide.place-gathered{background-color:#f6f0e3;background-image:var(--place-art);background-size:cover;background-position:center;background-attachment:fixed}
+.place-west-lake-guide .place-guide-back{position:sticky;top:8px;z-index:5;float:right;margin:8px 10px 0 0;min-height:44px;padding:8px 13px;border-radius:24px;border:1px solid #ddd2c0;background:#fffaf0ed;color:#183d4b;font-weight:700}
+.place-guide-hero{position:relative;display:block!important;width:100%;height:clamp(340px,58vh,520px);min-height:0;color:#fff;overflow:hidden;background:#183f4f}
+.place-guide-hero>img{position:absolute;inset:0;display:block!important;width:100%!important;min-width:0!important;max-width:none!important;height:100%!important;object-fit:cover!important;object-position:center 54%;border-radius:0!important;}
+.place-guide-hero:after{content:"";position:absolute;inset:30% 0 0;background:linear-gradient(transparent,#092734d9)}
+.place-guide-intro{position:absolute;z-index:1;inset:auto 20px 18px;max-width:630px}
+.place-guide-kicker{font-size:12px;letter-spacing:.12em;color:#f8dbb2;font-weight:700}
+.place-guide-intro h2{font:800 clamp(32px,6vw,52px)/1.1 "Noto Serif SC",Georgia,serif;margin:8px 0;color:white}
+.place-guide-intro p{max-width:540px;margin:0;font-size:15px;line-height:1.55;color:#fff;font-weight:550;text-shadow:0 1px 6px #102d39}
+.place-guide-actions{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px;background:#fffaf0e9}
+.place-guide-actions a,.place-guide-link,.place-guide-source{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 14px;border:1px solid #c9bcaa;border-radius:24px;background:#fffdf7;color:#193f4e;text-decoration:none;font-size:13px;font-weight:700}
+.place-guide-actions .place-guide-primary{background:#b94d36;border-color:#b94d36;color:#fff}
+.place-guide-hint{display:block;padding:0 19px 10px;background:#fffaf0e9;color:#596c70;font-size:11px;line-height:1.45}
+.place-guide-section{position:relative;margin:12px 14px;padding:16px;border:0;border-radius:18px;background:#fffaf0d9;backdrop-filter:blur(8px)}
+.place-guide-heading small{display:block;color:#aa553f;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.place-guide-heading h3{margin:4px 0 12px;font:750 21px/1.2 "Noto Serif SC",Georgia,serif;color:#173f4f}
+.place-guide-grid{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,78%);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 0 6px;overscroll-behavior-inline:contain}
+.place-guide-card{min-width:0;scroll-snap-align:start;border:0;border-radius:16px;overflow:hidden;background:#fffdf8ed;box-shadow:none}
+.place-guide-card>img{display:block;width:100%;height:176px;object-fit:cover;background:#ece5d9}
+.place-guide-tag{display:inline-flex;margin:11px 12px 0;padding:4px 8px;border-radius:20px;background:#f1e4d4;color:#9d513c;font-size:10px;font-weight:800}
+.place-guide-card h4,.place-guide-stay-copy h4{margin:6px 12px 3px;font:750 18px/1.25 "Noto Serif SC",Georgia,serif;color:#183e4c}
+.place-guide-subtitle{display:block;margin:0 12px;color:#a4543e;font-size:11px}
+.place-guide-card p,.place-guide-stay-copy p,.place-guide-transport p,.place-guide-stroll p{margin:6px 12px 8px;font-size:12px;line-height:1.45;color:#4f6267}
+.place-guide-card .place-guide-credit,.place-guide-card .place-guide-link,.place-guide-card .place-guide-source{margin:0 6px 7px 10px;min-height:28px;padding:3px 5px;border:0;background:none;color:#758287;font-size:9px;font-weight:500;text-decoration:underline;text-underline-offset:2px}
+.place-guide-stay-card{display:grid;grid-template-columns:1fr;overflow:hidden;border:1px solid #e5dccd;border-radius:12px;background:#fffdf8ed;box-shadow:0 5px 16px #183f4f10}
+.place-guide-stay-gallery{display:grid;grid-template-columns:1fr 1fr;gap:4px;overflow:hidden;background:#ece5d9}
+.place-guide-stay-gallery>img{width:100%;height:190px;object-fit:cover;background:#ece5d9}
+.place-guide-stay-copy{padding:0 12px 12px}
+.place-guide-stay-copy .place-guide-tag{margin-left:0}
+.place-guide-stay-copy h4{margin-left:0}
+.place-guide-stay-copy p{margin-left:0;margin-right:0}
+.place-guide-stay-copy a{margin-right:6px}
+.place-guide-transport,.place-guide-stroll{padding:15px 17px}
+.place-guide-transport .place-guide-heading h3,.place-guide-stroll .place-guide-heading h3{font-size:18px}
+.place-guide-transport p,.place-guide-stroll p{margin:0 0 10px}
+.place-guide-nearby,.place-guide-map{position:relative;margin:10px 14px;padding:0 15px;border:1px solid #e5dac7;border-radius:12px;background:#fffaf0e9}
+.place-guide-nearby>summary,.place-guide-map>summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-weight:800;font-size:14px;list-style:none}
+.place-guide-nearby>summary::-webkit-details-marker,.place-guide-map>summary::-webkit-details-marker{display:none}
+.place-guide-nearby-grid{grid-auto-columns:minmax(0,65%);padding-bottom:14px}
+.place-guide-nearby-grid{grid-auto-columns:minmax(0,72%)}
+.place-guide-nearby-grid .place-guide-card>img{height:180px}
+.place-guide-nearby-grid .place-guide-card>strong{display:block;margin:9px 12px 0;font:750 17px/1.25 "Noto Serif SC",Georgia,serif;color:#183e4c}
+.place-guide-nearby-grid .place-guide-card>img{height:158px}
+.place-guide-mini-map{height:250px;margin:0 0 10px;border-radius:9px;overflow:hidden}
+.place-guide-map>.place-guide-source{margin-bottom:12px}
+.place-guide-footer{margin:14px;padding:12px 15px;border-radius:12px;background:#fffaf0e8;color:#627277;font-size:10px;line-height:1.55}
+.place-guide-account-actions{display:flex;gap:8px;margin-top:10px}
+.place-guide-account-actions button{flex:1;min-height:46px;border:0;border-radius:24px;background:#1e4a59;color:white;font-size:13px;font-weight:700}
+.place-guide-account-actions button+button{background:#b94d36}
+.place-guide-image-missing{min-height:90px}
+.place-west-lake-guide .place-art-credit{display:block;margin:10px 14px;padding:8px 10px;border-radius:9px;background:#fffaf0e8;color:#465e66;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+.place-west-lake-guide .place-art-credit a{display:inline;color:inherit;font-size:inherit}
+@media(min-width:680px){
+ .place-guide-hero{min-height:430px}
+ .place-guide-intro{inset:auto 34px 30px}
+ .place-guide-actions{padding-left:26px}
+ .place-guide-section{margin:14px 22px;padding:18px}
+ .place-guide-grid{grid-auto-flow:initial;grid-auto-columns:initial;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}
+ .place-guide-card>img{height:180px}
+ .place-guide-stay-card{grid-template-columns:minmax(220px,.9fr) minmax(0,1.1fr)}
+ .place-guide-stay-gallery{min-height:240px}
+ .place-guide-stay-gallery>img{height:100%;min-height:240px}
+ .place-guide-stay-copy{padding:12px 18px 16px}
+ .place-guide-nearby,.place-guide-map{margin-left:22px;margin-right:22px}
+ .place-guide-nearby-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .place-guide-nearby-grid .place-guide-card>img{height:160px}
+ .place-guide-mini-map{height:320px}
+ .place-guide-footer{margin-left:22px;margin-right:22px}
+}
+@media(max-width:600px){
+ .tw-photo-detail.place-west-lake-guide{width:calc(100vw - 12px)!important;max-width:none;margin:auto}
+ .place-guide-hero{height:52vh;min-height:330px;max-height:440px}
+}
+@media(max-width:420px){
+ .place-guide-hero{min-height:330px}
+ .place-guide-intro{inset:auto 15px 16px}
+ .place-guide-section{margin:9px;padding:13px}
+ .place-guide-grid{grid-auto-columns:86%}
+ .place-guide-card>img{height:196px}
+ .place-guide-stay-gallery>img{height:155px}
+ .place-guide-nearby,.place-guide-map{margin:9px;padding-left:12px;padding-right:12px}
+ .place-guide-account-actions{flex-direction:column}
+}
+@media(max-width:600px){
+ .tw-photo-detail.place-west-lake-guide.place-gathered{background-size:auto 100dvh;background-position:50% center;background-repeat:no-repeat;background-attachment:fixed}
+ .place-west-lake-guide .place-guide-back{position:absolute;top:8px;right:8px;display:block;float:none;width:max-content;max-width:calc(100% - 16px);box-sizing:border-box;margin:0}
+ .place-west-lake-guide .place-guide-section{padding:13px}
+ .place-west-lake-guide .place-guide-nearby-grid .place-guide-card>img{height:155px}
+}
+.tw-photo-detail.place-west-lake-guide{width:min(620px,calc(100vw - 8px));max-height:calc(100dvh - 8px);}
+.west-lake-guide-open{overflow:hidden!important;}
+.place-west-lake-guide .place-guide-hero{height:min(55svh,470px);min-height:330px;}
+.place-west-lake-guide .place-guide-hero>img{object-fit:cover!important;object-position:center 58%;transform:scale(1.12);transform-origin:50% 72%;}
+.place-west-lake-guide .place-guide-hero:after{inset:22% 0 0;background:linear-gradient(transparent 5%,#092734de 100%)}
+.place-west-lake-guide .place-guide-intro{inset:auto 18px 18px;}
+.place-west-lake-guide .place-guide-intro p{max-width:290px;font-size:14px;}
+.place-west-lake-guide .place-guide-actions{gap:8px;padding:10px 12px;}
+.place-west-lake-guide .place-guide-actions a{flex:1;min-width:0;padding:8px 10px;font-size:12px;}
+.place-west-lake-guide .place-guide-section{margin:8px 10px;padding:12px;border-radius:15px;}
+.place-west-lake-guide .place-guide-heading h3{margin:3px 0 9px;font-size:19px;}
+.place-west-lake-guide .place-guide-grid{grid-auto-columns:minmax(0,78%);gap:9px;}
+.place-west-lake-guide .place-guide-card>img{height:190px;}
+.place-west-lake-guide .place-guide-card p{margin:5px 10px;font-size:12px;}
+.place-west-lake-guide .place-guide-stay-gallery>img{height:168px;}
+.place-west-lake-guide .place-guide-stay-copy{padding:7px 10px 10px;}
+.place-west-lake-guide .place-guide-stay-copy p{margin:0 0 8px;}
+.place-west-lake-guide .place-guide-nearby-grid{grid-auto-columns:minmax(0,68%);}
+.place-west-lake-guide .place-guide-nearby-grid .place-guide-card>img{height:150px;}
+.place-west-lake-guide .place-guide-map{margin:8px 10px;padding:0 12px;}
+.place-west-lake-guide .place-guide-mini-map{height:210px;}
+.place-west-lake-guide .place-guide-footer{margin:8px 10px 12px;padding:9px 11px;}
+.place-west-lake-guide .place-guide-credits>summary{min-height:40px;display:flex;align-items:center;cursor:pointer;font-size:11px;}
+.place-west-lake-guide .place-guide-credit{display:block;min-height:28px;padding:4px;font-size:10px;}
+.place-west-lake-guide .place-guide-account-actions{margin-top:7px;}
+.place-west-lake-guide .place-guide-account-actions button{min-height:44px;}
+@media(max-width:420px){
+ .tw-photo-detail.place-west-lake-guide{width:calc(100vw - 8px)!important;}
+ .place-west-lake-guide .place-guide-hero{height:47svh;min-height:310px;max-height:390px;}
+ .place-west-lake-guide .place-guide-intro{inset:auto 14px 16px;}
+ .place-west-lake-guide .place-guide-intro h2{font-size:38px;}
+ .place-west-lake-guide .place-guide-actions{padding:9px;}
+ .place-west-lake-guide .place-guide-card>img{height:168px;}
+ .place-west-lake-guide .place-guide-stay-gallery>img{height:145px;}
+ .place-west-lake-guide .place-guide-account-actions{flex-direction:row;}
+}
+/* West Lake mobile art direction: the approved gathered art is the hero; photos stay with food and stays. */
+@media(max-width:600px){
+ .tw-photo-detail.place-west-lake-guide{width:100vw!important;max-width:none;max-height:100dvh;margin:0;border:0;border-radius:0;}
+ .place-west-lake-guide .place-guide-hero{height:49svh;min-height:350px;max-height:430px;}
+ .place-west-lake-guide .place-guide-hero{background:transparent;color:#173f4f;}
+ .place-west-lake-guide .place-guide-hero>img,.place-west-lake-guide .place-guide-hero:after{display:none!important;}
+ .place-west-lake-guide .place-guide-intro{inset:34% 16px auto;text-align:center;max-width:none;}
+ .place-west-lake-guide .place-guide-intro h2{margin:0;color:#173f4f!important;font-size:48px;font-weight:900;letter-spacing:.12em;text-shadow:0 1px 0 #fff9,0 3px 14px #fff8;}
+ .place-west-lake-guide .place-guide-section{margin:9px 10px;padding:12px;border:1px solid #e6dccb;background:#fffaf0f2;backdrop-filter:blur(10px);}
+ .place-west-lake-guide .place-guide-heading h3{font-size:18px;font-weight:850;}
+ .place-west-lake-guide .place-guide-grid{grid-auto-columns:minmax(0,48%);gap:8px;}
+ .place-west-lake-guide .place-guide-food .place-guide-card>img{height:158px;}
+ .place-west-lake-guide .place-guide-card h4{margin:7px 9px 2px;font-size:15px;font-weight:850;}
+ .place-west-lake-guide .place-guide-subtitle{margin:0 9px;font-size:10px;}
+ .place-west-lake-guide .place-guide-card p{display:none;}
+ .place-west-lake-guide .place-guide-card .place-guide-link{min-height:34px;margin:2px 5px 6px 8px;padding:3px 6px;font-size:10px;}
+ .place-west-lake-guide .place-guide-stay-gallery>img{height:154px;}
+ .place-west-lake-guide .place-guide-stay-copy p{display:none;}
+ .place-west-lake-guide .place-guide-nearby-grid{grid-auto-columns:minmax(0,70%);}
+ .place-west-lake-guide .place-guide-nearby-grid .place-guide-card>img{height:158px;}
+ .place-west-lake-guide .place-guide-map,.place-west-lake-guide .place-guide-footer{margin-left:10px;margin-right:10px;}
+ .place-west-lake-guide .place-guide-account-actions{flex-direction:row;}
+ .place-west-lake-guide .place-guide-account-actions button{min-height:46px;font-size:12px;}
+}
+/* All Gathered landmark pages: keep the portrait artwork visible behind compact translucent content. */
+@media(max-width:600px){
+ .tw-photo-detail.place-gathered{width:min(100vw,430px)!important;max-width:100vw;max-height:100dvh;margin:0;padding:max(16px,env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom));border:0;border-radius:0;overflow-x:hidden;background-size:min(100vw,430px) auto;background-position:center top;background-repeat:repeat-y;background-attachment:scroll;}
+ .tw-photo-detail.place-gathered>.place-lead-photo{display:none!important;}
+ .tw-photo-detail.place-gathered>h2{background:#fffaf080;color:#173f4f;text-shadow:0 1px 0 #fff9;backdrop-filter:blur(1.5px);}
+ .tw-photo-detail.place-gathered>p,.tw-photo-detail.place-gathered>a,.tw-photo-detail.place-gathered>small,.tw-photo-detail.place-gathered h3,.tw-photo-detail.place-gathered .place-art-credit{max-width:100%;background:#fffaf0a6;color:#173f4f;backdrop-filter:blur(2px);overflow-wrap:anywhere;}
+ .tw-photo-detail.place-gathered .place-detail-notes,.tw-photo-detail.place-gathered .place-nearby-photos{max-width:100%;background:#fffaf0a6;backdrop-filter:blur(2px);border-radius:12px;padding:10px;}
+ .tw-photo-detail.place-gathered .place-nearby-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .tw-photo-detail.place-gathered :is(button,a,input,select,textarea){min-width:0;max-width:100%;overflow-wrap:anywhere;}
+}

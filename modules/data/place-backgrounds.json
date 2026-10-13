@@ -4,6 +4,10 @@
   "backgrounds": {
     "Q243": {
       "image": "/assets/route-photos/q243-gathered-background.png",
+      "mobileImage": "/assets/route-photos/q243-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/q243-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "Eiffel Tower",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg",
@@ -16,6 +20,10 @@
     },
     "Q9141": {
       "image": "/assets/route-photos/q9141-gathered-background.png",
+      "mobileImage": "/assets/route-photos/q9141-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/q9141-source.jpg",
+      "mobileWidth": 972,
+      "mobileHeight": 1619,
       "name": "Taj Mahal",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Taj_Mahal_(Edited).jpeg",
@@ -28,6 +36,10 @@
     },
     "Q19675": {
       "image": "/assets/route-photos/q19675-gathered-background.png",
+      "mobileImage": "/assets/route-photos/q19675-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/q19675-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "Louvre Museum",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cour_Napol%C3%A9on_at_night_-_Louvre.jpg",
@@ -40,6 +52,10 @@
     },
     "Q45178": {
       "image": "/assets/route-photos/sydney-opera-gathered-background.png",
+      "mobileImage": "/assets/route-photos/sydney-opera-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/sydney-opera-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "Sydney Opera House",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:00_1375_Sydney_Opera_House_(Australia).jpg",
@@ -52,6 +68,10 @@
     },
     "Q12501": {
       "image": "/assets/route-photos/great-wall-gathered-background.png",
+      "mobileImage": "/assets/route-photos/great-wall-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/great-wall-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "Great Wall of China",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Wall_of_China_July_2006.JPG",
@@ -63,7 +83,11 @@
       "height": 971
     },
     "Q10866444": {
-      "image": "/assets/route-photos/west-lake-gathered-background.png",
+      "image": "/assets/route-photos/west-lake-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/west-lake-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/west-lake-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "West Lake — Three Pools Mirroring the Moon",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Three_Pools_Mirroring_the_Moon.jpg",
@@ -71,11 +95,15 @@
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "artisticDerivative": true,
-      "width": 1619,
-      "height": 971
+      "width": 971,
+      "height": 1619
     },
     "Q9202": {
       "image": "/assets/route-photos/liberty-gathered-background.png",
+      "mobileImage": "/assets/route-photos/liberty-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/liberty-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
       "name": "Statue of Liberty",
       "skill": "scenes-gathered-zine-v1-3",
       "sourceUrl": "https://commons.wikimedia.org/wiki/File:Statue_of_Liberty_and_a_sightseeing_boat,_Liberty_Island,_New_York.jpg",
@@ -85,6 +113,612 @@
       "artisticDerivative": true,
       "width": 1663,
       "height": 946
+    },
+    "jp-kiyomizu": {
+      "image": "/assets/route-photos/jp-kiyomizu-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/jp-kiyomizu-source.jpg",
+      "mobileImage": "/assets/route-photos/jp-kiyomizu-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/jp-kiyomizu-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Kiyomizu-dera",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kiyomizu-dera,_Kyoto,_November_2016_-01.jpg",
+      "sourceAuthor": "Martin Falbisoner",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "gb-big-ben": {
+      "image": "/assets/route-photos/gb-big-ben-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/gb-big-ben-source.jpg",
+      "mobileImage": "/assets/route-photos/gb-big-ben-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/gb-big-ben-source.jpg",
+      "mobileWidth": 972,
+      "mobileHeight": 1619,
+      "name": "Big Ben",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Clock_Tower_-_Palace_of_Westminster,_London_-_September_2006.jpg",
+      "sourceAuthor": "Diliff",
+      "license": "CC BY 2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
+      "artisticDerivative": true,
+      "width": 972,
+      "height": 1619
+    },
+    "cn-oriental-pearl": {
+      "image": "/assets/route-photos/cn-oriental-pearl-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/cn-oriental-pearl-source.jpg",
+      "mobileImage": "/assets/route-photos/cn-oriental-pearl-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/cn-oriental-pearl-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Oriental Pearl Tower",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Oriental_Pearl_Tower_in_Shanghai.jpg",
+      "sourceAuthor": "Dmitry A. Mottl",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "jp-fuji": {
+      "image": "/assets/route-photos/jp-fuji-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/jp-fuji-source.jpg",
+      "mobileImage": "/assets/route-photos/jp-fuji-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/jp-fuji-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Mount Fuji",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mount_Fuji_from_Hotel_Mt_Fuji_1995-2-7.jpg",
+      "sourceAuthor": "Alpsdake",
+      "license": "CC0",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "cn-forbidden-city": {
+      "image": "/assets/route-photos/cn-forbidden-city-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/cn-forbidden-city-source.jpg",
+      "mobileImage": "/assets/route-photos/cn-forbidden-city-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/cn-forbidden-city-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Forbidden City",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_the_Forbidden_City_2006.JPG",
+      "sourceAuthor": "Kallgan",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "cn-zhangjiajie": {
+      "image": "/assets/route-photos/cn-zhangjiajie-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/cn-zhangjiajie-source.jpg",
+      "mobileImage": "/assets/route-photos/cn-zhangjiajie-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/cn-zhangjiajie-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Zhangjiajie National Forest Park",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park.jpg",
+      "sourceAuthor": "Kuruman",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "it-colosseum": {
+      "image": "/assets/route-photos/it-colosseum-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/it-colosseum-source.jpg",
+      "mobileImage": "/assets/route-photos/it-colosseum-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/it-colosseum-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Colosseum",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colosseum_in_Rome,_Italy_-_April_2007.jpg",
+      "sourceAuthor": "Diliff",
+      "license": "CC BY-SA 2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "es-sagrada": {
+      "image": "/assets/route-photos/es-sagrada-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/es-sagrada-source.jpg",
+      "mobileImage": "/assets/route-photos/es-sagrada-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/es-sagrada-source.jpg",
+      "mobileWidth": 972,
+      "mobileHeight": 1619,
+      "name": "Sagrada Familia",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sagrada_Familia_March_2015-10a.jpg",
+      "sourceAuthor": "Alvesgaspar",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "artisticDerivative": true,
+      "width": 972,
+      "height": 1619
+    },
+    "gr-acropolis": {
+      "image": "/assets/route-photos/gr-acropolis-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/gr-acropolis-source.jpg",
+      "mobileImage": "/assets/route-photos/gr-acropolis-gathered-background-portrait.png",
+      "mobileSourceImage": "/assets/route-photos/gr-acropolis-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Acropolis of Athens",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:20101024_Acropolis_panoramic_view_from_Areopagus_hill_Athens_Greece.jpg",
+      "sourceAuthor": "Ggia",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "us-golden-gate": {
+      "image": "/assets/route-photos/us-golden-gate-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/us-golden-gate-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/us-golden-gate-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/us-golden-gate-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Golden Gate Bridge",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_by_night.jpg",
+      "sourceAuthor": "Daniel Schwen",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "us-grand-canyon": {
+      "image": "/assets/route-photos/us-grand-canyon-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/us-grand-canyon-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/us-grand-canyon-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/us-grand-canyon-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Grand Canyon",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:USA_09847_Grand_Canyon_Luca_Galuzzi_2007.jpg",
+      "sourceAuthor": "Luca Galuzzi",
+      "license": "CC BY-SA 2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "ca-niagara": {
+      "image": "/assets/route-photos/ca-niagara-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/ca-niagara-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/ca-niagara-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/ca-niagara-source.jpg",
+      "mobileWidth": 972,
+      "mobileHeight": 1619,
+      "name": "Niagara Falls",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Niagara_watervallen_canada.jpg",
+      "sourceAuthor": "Quistnix",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 972,
+      "height": 1619
+    },
+    "sg-merlion": {
+      "image": "/assets/route-photos/sg-merlion-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/sg-merlion-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/sg-merlion-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/sg-merlion-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Merlion Park",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Singapore_Merlion-at-Marina-Bay-02.jpg",
+      "sourceAuthor": "CEphoto, Uwe Aranas",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "ae-burj-khalifa": {
+      "image": "/assets/route-photos/ae-burj-khalifa-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/ae-burj-khalifa-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/ae-burj-khalifa-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/ae-burj-khalifa-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Burj Khalifa",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Burj_dubai_3.11.08.jpg",
+      "sourceAuthor": "Aheilner",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "pe-machu-picchu": {
+      "image": "/assets/route-photos/pe-machu-picchu-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/pe-machu-picchu-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/pe-machu-picchu-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/pe-machu-picchu-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Machu Picchu",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Machu_picchu_grande.jpg",
+      "sourceAuthor": "Thomas Quine",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "br-christ": {
+      "image": "/assets/route-photos/br-christ-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/br-christ-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/br-christ-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/br-christ-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Christ the Redeemer",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Unique_Moment_with_the_Moon_and_Christ_the_Redeemer_3.jpg",
+      "sourceAuthor": "Donatas Dabravolskas",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "eg-pyramids": {
+      "image": "/assets/route-photos/eg-pyramids-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/eg-pyramids-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/eg-pyramids-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/eg-pyramids-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Pyramids of Giza",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:All_Gizah_Pyramids.jpg",
+      "sourceAuthor": "Ricardo Liberato",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "au-great-barrier": {
+      "image": "/assets/route-photos/au-great-barrier-gathered-background-portrait.png",
+      "mobileImage": "/assets/route-photos/au-great-barrier-gathered-background-portrait.png",
+      "sourceImage": "/assets/route-photos/au-great-barrier-source.jpg",
+      "mobileSourceImage": "/assets/route-photos/au-great-barrier-source.jpg",
+      "mobileWidth": 971,
+      "mobileHeight": 1619,
+      "name": "Great Barrier Reef",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cairns,_Great_Ocean_Barrier_Reef_01.jpg",
+      "sourceAuthor": "Ank kumar",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 971,
+      "height": 1619
+    },
+    "jp-tokyo-tower": {
+      "image": "/assets/route-photos/jp-tokyo-tower-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-tokyo-tower-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-tokyo-tower-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-tokyo-tower-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Tokyo Tower", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tokyo_Tower_at_night_2.JPG", "sourceAuthor": "kakidai", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "kr-gyeongbokgung": {
+      "image": "/assets/route-photos/kr-gyeongbokgung-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/kr-gyeongbokgung-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/kr-gyeongbokgung-source.jpg", "mobileSourceImage": "/assets/route-photos/kr-gyeongbokgung-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Gyeongbokgung Palace", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gyeonghoeru_(Royal_Banquet_Hall)_at_Gyeongbokgung_Palace,_Seoul.jpg", "sourceAuthor": "Frank Schulenburg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "th-grand-palace": {
+      "image": "/assets/route-photos/th-grand-palace-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/th-grand-palace-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/th-grand-palace-source.jpg", "mobileSourceImage": "/assets/route-photos/th-grand-palace-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Grand Palace Bangkok", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Palace,_Bangkok,_Thailand_-_panoramio.jpg", "sourceAuthor": "msserv", "license": "CC BY 3.0", "licenseUrl": "https://creativecommons.org/licenses/by/3.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "vn-ha-long": {
+      "image": "/assets/route-photos/vn-ha-long-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/vn-ha-long-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/vn-ha-long-source.jpg", "mobileSourceImage": "/assets/route-photos/vn-ha-long-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Ha Long Bay", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Halong_Bay_in_Vietnam.jpg", "sourceAuthor": "Thomas Hirsch / User:Ravn", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "id-borobudur": {
+      "image": "/assets/route-photos/id-borobudur-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/id-borobudur-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/id-borobudur-source.jpg", "mobileSourceImage": "/assets/route-photos/id-borobudur-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Borobudur", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:East_Face,_Candi_Borobudur_0962.jpg", "sourceAuthor": "Michael Gunther", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "tr-hagia-sophia": {
+      "image": "/assets/route-photos/tr-hagia-sophia-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/tr-hagia-sophia-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/tr-hagia-sophia-source.jpg", "mobileSourceImage": "/assets/route-photos/tr-hagia-sophia-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Hagia Sophia", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hagia_Sophia_light.JPG", "sourceAuthor": "Kirua", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    }
+    ,"cn-erhai": {
+      "image": "/assets/route-photos/cn-erhai-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cn-erhai-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cn-erhai-source.jpg", "mobileSourceImage": "/assets/route-photos/cn-erhai-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Erhai Lake", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fishermen_at_Lake_Erhai,_Dali_-_panoramio.jpg", "sourceAuthor": "Colin W", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "mx-chichen-itza": {
+      "image": "/assets/route-photos/mx-chichen-itza-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/mx-chichen-itza-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/mx-chichen-itza-source.jpg", "mobileSourceImage": "/assets/route-photos/mx-chichen-itza-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Chichen Itza", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Chichen_Itza_1.jpg", "sourceAuthor": "Daniel Schwen", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "za-table-mountain": {
+      "image": "/assets/route-photos/za-table-mountain-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/za-table-mountain-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/za-table-mountain-source.jpg", "mobileSourceImage": "/assets/route-photos/za-table-mountain-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Table Mountain", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Table_Mountain,_Cape_Town_(P1050264).jpg", "sourceAuthor": "Matti Blume", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "nz-milford": {
+      "image": "/assets/route-photos/nz-milford-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/nz-milford-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/nz-milford-source.jpg", "mobileSourceImage": "/assets/route-photos/nz-milford-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Milford Sound", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Milford_Sound_in_Fiordland_National_Park_01.jpg", "sourceAuthor": "Krzysztof Golik", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-hermitage": {
+      "image": "/assets/route-photos/ru-hermitage-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-hermitage-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-hermitage-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-hermitage-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "State Hermitage Museum", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Winter_Palace_(21134849722).jpg", "sourceAuthor": "Jorge Láscar from Melbourne, Australia", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "my-petronas": {
+      "image": "/assets/route-photos/my-petronas-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/my-petronas-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/my-petronas-source.jpg", "mobileSourceImage": "/assets/route-photos/my-petronas-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Petronas Twin Towers", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Petronas_Panorama_II.jpg", "sourceAuthor": "Someformofhuman", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "np-everest": {
+      "image": "/assets/route-photos/np-everest-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/np-everest-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/np-everest-source.jpg", "mobileSourceImage": "/assets/route-photos/np-everest-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Everest Region", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Prayer_Flags_at_Everest_Base_Camp.jpg", "sourceAuthor": "Daniel Oberhaus", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jo-petra": {
+      "image": "/assets/route-photos/jo-petra-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jo-petra-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jo-petra-source.jpg", "mobileSourceImage": "/assets/route-photos/jo-petra-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Petra", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Al_Khazneh_Petra_edit_2.jpg", "sourceAuthor": "Graham Racher; derivative by MrPanyGoff", "license": "CC BY-SA 2.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "de-neuschwanstein": {
+      "image": "/assets/route-photos/de-neuschwanstein-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/de-neuschwanstein-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/de-neuschwanstein-source.jpg", "mobileSourceImage": "/assets/route-photos/de-neuschwanstein-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Neuschwanstein Castle", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hohenschwangau_-_Schloss_Neuschwanstein1.jpg", "sourceAuthor": "Taxiarchos228", "license": "FAL", "licenseUrl": "http://artlibre.org/licence/lal/en", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "pt-belem": {
+      "image": "/assets/route-photos/pt-belem-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/pt-belem-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/pt-belem-source.jpg", "mobileSourceImage": "/assets/route-photos/pt-belem-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Belém Tower", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Torre_Bel%C3%A9m_April_2009-4a.jpg", "sourceAuthor": "Alvesgaspar", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "br-iguazu": {
+      "image": "/assets/route-photos/br-iguazu-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/br-iguazu-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/br-iguazu-source.jpg", "mobileSourceImage": "/assets/route-photos/br-iguazu-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Iguazu Falls", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Iguazu_Falls_Foz_do_Iguaçu_PR_Brazil.JPG", "sourceAuthor": "Marcio Fernandes de Lima", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "br-salvador": {
+      "image": "/assets/route-photos/br-salvador-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/br-salvador-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/br-salvador-source.jpg", "mobileSourceImage": "/assets/route-photos/br-salvador-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Historic Centre of Salvador", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Historic_Centre_of_Salvador_de_Bahia-110098.jpg", "sourceAuthor": "Francesco Bandarin", "license": "CC BY-SA 3.0 IGO", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ma-marrakech": {
+      "image": "/assets/route-photos/ma-marrakech-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ma-marrakech-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ma-marrakech-source.jpg", "mobileSourceImage": "/assets/route-photos/ma-marrakech-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Jemaa el-Fnaa", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jemaa_el-Fnaa_at_night_-_Maroco_-_Marrakesh.jpg", "sourceAuthor": "Andrzej Kosiński", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ke-masai-mara": {
+      "image": "/assets/route-photos/ke-masai-mara-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ke-masai-mara-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ke-masai-mara-source.jpg", "mobileSourceImage": "/assets/route-photos/ke-masai-mara-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Maasai Mara", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mara_River_Massai_Mara.jpg", "sourceAuthor": "Morris Pügner", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:Mara_River_Massai_Mara.jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "tz-serengeti": {
+      "image": "/assets/route-photos/tz-serengeti-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/tz-serengeti-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/tz-serengeti-source.jpg", "mobileSourceImage": "/assets/route-photos/tz-serengeti-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Serengeti National Park", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Serengeti-Landscape-2012.JPG", "sourceAuthor": "Bjørn Christian Tørrissen", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-baikal": {
+      "image": "/assets/route-photos/ru-baikal-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-baikal-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-baikal-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-baikal-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Lake Baikal", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_of_lake_Baikal.jpg", "sourceAuthor": "Sergey Pesterev", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "is-golden-circle": {
+      "image": "/assets/route-photos/is-golden-circle-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/is-golden-circle-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/is-golden-circle-source.jpg", "mobileSourceImage": "/assets/route-photos/is-golden-circle-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Gullfoss Waterfall", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Iceland_-_Golden_Circle_-_Gullfoss_-_Rainbow_-_Road_Trip_%284889917897%29.jpg", "sourceAuthor": "CGP Grey", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ca-banff": {
+      "image": "/assets/route-photos/ca-banff-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ca-banff-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ca-banff-source.jpg", "mobileSourceImage": "/assets/route-photos/ca-banff-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Moraine Lake, Banff", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moraine_Lake_17092005.jpg", "sourceAuthor": "Gorgo", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:Moraine_Lake_17092005.jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cl-torres": {
+      "image": "/assets/route-photos/cl-torres-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cl-torres-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cl-torres-source.jpg", "mobileSourceImage": "/assets/route-photos/cl-torres-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Torres del Paine", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Laguna_Amarga%2C_Parque_nacional_Torres_del_Paine%2C_Puerto_Natales.jpg", "sourceAuthor": "Danutts", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-st-basil": {
+      "image": "/assets/route-photos/ru-st-basil-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-st-basil-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-st-basil-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-st-basil-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Saint Basil's Cathedral", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:St_Basils_Cathedral-500px.jpg", "sourceAuthor": "David Crawshaw", "license": "CC BY-SA 3.0", "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-itsukushima": {
+      "image": "/assets/route-photos/jp-itsukushima-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-itsukushima-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-itsukushima-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-itsukushima-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Itsukushima Shrine", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Itsukushima_torii_angle.jpg", "sourceAuthor": "Rdsmith4", "license": "CC BY-SA 2.5", "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "nz-hobbiton": {
+      "image": "/assets/route-photos/nz-hobbiton-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/nz-hobbiton-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/nz-hobbiton-source.jpg", "mobileSourceImage": "/assets/route-photos/nz-hobbiton-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Hobbiton Movie Set", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hobbiton_Movie_Set%2C_Matamata.jpg", "sourceAuthor": "Andres Iga", "license": "CC0", "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-elbrus": {
+      "image": "/assets/route-photos/ru-elbrus-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-elbrus-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-elbrus-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-elbrus-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Mount Elbrus", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:046_%D0%9D%D0%B0%D0%B2%D0%B5%D1%80%D1%85%D1%83._%D0%92%D0%B8%D0%B4_%D0%BD%D0%B0_%D0%AD%D0%BB%D1%8C%D0%B1%D1%80%D1%83%D1%81_%28%D1%81_%D0%B7%D1%83%D0%BC%D0%BE%D0%BC%29.JPG", "sourceAuthor": "LxAndrew", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-kamchatka-geysers": {
+      "image": "/assets/route-photos/ru-kamchatka-geysers-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-kamchatka-geysers-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-kamchatka-geysers-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-kamchatka-geysers-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Valley of Geysers", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Valley_of_the_Geysers.jpg", "sourceAuthor": "Robert Nunn from London, UK", "license": "CC BY-SA 2.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-kremlin": {
+      "image": "/assets/route-photos/ru-kremlin-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-kremlin-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-kremlin-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-kremlin-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Moscow Kremlin", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_of_Moscow_Kremlin.jpg", "sourceAuthor": "Julmin", "license": "CC BY-SA 1.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/1.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-peterhof": {
+      "image": "/assets/route-photos/ru-peterhof-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-peterhof-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-peterhof-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-peterhof-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Peterhof Palace", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Church_of_Grand_Peterhof_Palace_01.jpg", "sourceAuthor": "Florstein (Telegram:WikiPhoto.Space)", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-kazan-kremlin": {
+      "image": "/assets/route-photos/ru-kazan-kremlin-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-kazan-kremlin-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-kazan-kremlin-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-kazan-kremlin-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Kazan Kremlin", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kazan_Kremlin_Spasskaya_Tower_08-2016_img1.jpg", "sourceAuthor": "A.Savin", "license": "FAL", "licenseUrl": "http://artlibre.org/licence/lal/en", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "kh-angkor": {
+      "image": "/assets/route-photos/kh-angkor-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/kh-angkor-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/kh-angkor-source.jpg", "mobileSourceImage": "/assets/route-photos/kh-angkor-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Angkor Wat", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:20191210_Angkor_Wat_towers-2.jpg", "sourceAuthor": "Balon Greyjoy", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:20191210_Angkor_Wat_towers-2.jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ru-kizhi": {
+      "image": "/assets/route-photos/ru-kizhi-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-kizhi-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-kizhi-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-kizhi-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Kizhi Pogost", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kizhi_Pogost._The_Church_of_the_Transfiguration_DSC02646_2200.jpg", "sourceAuthor": "Alexxx1979", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ar-perito-moreno": {
+      "image": "/assets/route-photos/ar-perito-moreno-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ar-perito-moreno-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ar-perito-moreno-source.jpg", "mobileSourceImage": "/assets/route-photos/ar-perito-moreno-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Perito Moreno Glacier", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Muralla_de_hielo_en_el_Glaciar_Perito_Moreno.jpg", "sourceAuthor": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "fr-mont-saint-michel": {
+      "image": "/assets/route-photos/fr-mont-saint-michel-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/fr-mont-saint-michel-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/fr-mont-saint-michel-source.jpg", "mobileSourceImage": "/assets/route-photos/fr-mont-saint-michel-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Mont Saint-Michel", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Le_Mont_Saint-Michel.jpg", "sourceAuthor": "Hans Hillewaert", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "it-rialto-bridge": {
+      "image": "/assets/route-photos/it-rialto-bridge-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/it-rialto-bridge-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/it-rialto-bridge-source.jpg", "mobileSourceImage": "/assets/route-photos/it-rialto-bridge-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Rialto Bridge", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ponte_di_Rialto_Venice_1.jpg", "sourceAuthor": "kallerna", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "tz-kilimanjaro": {
+      "image": "/assets/route-photos/tz-kilimanjaro-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/tz-kilimanjaro-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/tz-kilimanjaro-source.jpg", "mobileSourceImage": "/assets/route-photos/tz-kilimanjaro-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Mount Kilimanjaro", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kilimanjaro_from_Amboseli.jpg", "sourceAuthor": "Sergey Pesterev", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "gb-stonehenge": {
+      "image": "/assets/route-photos/gb-stonehenge-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/gb-stonehenge-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/gb-stonehenge-source.jpg", "mobileSourceImage": "/assets/route-photos/gb-stonehenge-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Stonehenge", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stonehenge_from_north,_August_2010,_cropped.jpg", "sourceAuthor": "Julie Anne Workman", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "gr-santorini-oia": {
+      "image": "/assets/route-photos/gr-santorini-oia-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/gr-santorini-oia-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/gr-santorini-oia-source.jpg", "mobileSourceImage": "/assets/route-photos/gr-santorini-oia-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Oia, Santorini", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_in_Oia,_Santorini.jpg", "sourceAuthor": "Michael Nicht", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-kamakura-buddha": {
+      "image": "/assets/route-photos/jp-kamakura-buddha-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-kamakura-buddha-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-kamakura-buddha-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-kamakura-buddha-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Great Buddha of Kamakura", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Great_Buddha_of_Kamakura.jpg", "sourceAuthor": "Alexandar Vujadinovic", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cn-potala": {
+      "image": "/assets/route-photos/cn-potala-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cn-potala-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cn-potala-source.jpg", "mobileSourceImage": "/assets/route-photos/cn-potala-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Potala Palace", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Potala_Palace,_Lhasa,_Tibet,_China.JPG", "sourceAuthor": "Daniel R. Witte", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "it-trevi-fountain": {
+      "image": "/assets/route-photos/it-trevi-fountain-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/it-trevi-fountain-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/it-trevi-fountain-source.jpg", "mobileSourceImage": "/assets/route-photos/it-trevi-fountain-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Trevi Fountain", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_view_of_the_Trevi_Fountain._Rome,_Italy.jpg", "sourceAuthor": "Mstyslav Chernov", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "au-twelve-apostles": {
+      "image": "/assets/route-photos/au-twelve-apostles-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/au-twelve-apostles-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/au-twelve-apostles-source.jpg", "mobileSourceImage": "/assets/route-photos/au-twelve-apostles-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Twelve Apostles", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Twelve_Apostles_Victoria.jpg", "sourceAuthor": "Tanha Tasnuva", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cn-terracotta-army": {
+      "image": "/assets/route-photos/cn-terracotta-army-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cn-terracotta-army-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cn-terracotta-army-source.jpg", "mobileSourceImage": "/assets/route-photos/cn-terracotta-army-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Terracotta Army", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Terracotta_army.jpg", "sourceAuthor": "Ideophagous", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-fushimi-inari": {
+      "image": "/assets/route-photos/jp-fushimi-inari-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-fushimi-inari-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-fushimi-inari-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-fushimi-inari-source.jpg", "mobileWidth": 971, "mobileHeight": 1620,
+      "name": "Fushimi Inari Shrine", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kyoto_Fushimi_Inari_Shrine.jpg", "sourceAuthor": "Pkos079", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1620
+    },
+    "ru-red-square": {
+      "image": "/assets/route-photos/ru-red-square-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ru-red-square-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ru-red-square-source.jpg", "mobileSourceImage": "/assets/route-photos/ru-red-square-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Red Square", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moscow_-_2026_-_St._Basil%E2%80%99s_Cathedral,_daytime_view_from_Red_Square.jpg", "sourceAuthor": "Юрий Д.К.", "license": "CC BY 4.0", "licenseUrl": "https://creativecommons.org/licenses/by/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-himeji": {
+      "image": "/assets/route-photos/jp-himeji-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-himeji-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-himeji-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-himeji-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Himeji Castle", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Himeji_castle.jpg", "sourceAuthor": "Drivephotographer", "license": "CC0 1.0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "in-golden-temple": {
+      "image": "/assets/route-photos/in-golden-temple-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/in-golden-temple-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/in-golden-temple-source.jpg", "mobileSourceImage": "/assets/route-photos/in-golden-temple-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Golden Temple, Amritsar", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Temple-_Amritsar-_Punjab-001.jpg", "sourceAuthor": "Gurnishaan Singh", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "fr-notre-dame": {
+      "image": "/assets/route-photos/fr-notre-dame-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/fr-notre-dame-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/fr-notre-dame-source.jpg", "mobileSourceImage": "/assets/route-photos/fr-notre-dame-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Notre-Dame de Paris", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Notre-Dame_de_Paris_in_2025.jpg", "sourceAuthor": "Wyslijp16", "license": "CC BY 4.0", "licenseUrl": "https://creativecommons.org/licenses/by/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cz-prague-castle": {
+      "image": "/assets/route-photos/cz-prague-castle-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cz-prague-castle-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cz-prague-castle-source.jpg", "mobileSourceImage": "/assets/route-photos/cz-prague-castle-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Prague Castle", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:PragueCastle.jpg", "sourceAuthor": "Aqwis", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "de-brandenburg-gate": {
+      "image": "/assets/route-photos/de-brandenburg-gate-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/de-brandenburg-gate-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/de-brandenburg-gate-source.jpg", "mobileSourceImage": "/assets/route-photos/de-brandenburg-gate-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Brandenburg Gate", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brandenburg_Gate%2C_Berlin.jpg", "sourceAuthor": "Mike Peel", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "it-pisa-tower": {
+      "image": "/assets/route-photos/it-pisa-tower-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/it-pisa-tower-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/it-pisa-tower-source.jpg", "mobileSourceImage": "/assets/route-photos/it-pisa-tower-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Leaning Tower of Pisa", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Leaning_Tower_of_Pisa,_Pisa,_Italy.jpg", "sourceAuthor": "Vyacheslav Argenberg", "license": "CC BY 4.0", "licenseUrl": "https://creativecommons.org/licenses/by/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "eg-great-sphinx": {
+      "image": "/assets/route-photos/eg-great-sphinx-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/eg-great-sphinx-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/eg-great-sphinx-source.jpg", "mobileSourceImage": "/assets/route-photos/eg-great-sphinx-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Great Sphinx of Giza", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Sphinx_of_Giza_%28%D8%A3%D8%A8%D9%88_%D8%A7%D9%84%D9%87%D9%88%D9%84%29.jpg", "sourceAuthor": "Petar Milošević", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "gb-edinburgh-castle": {
+      "image": "/assets/route-photos/gb-edinburgh-castle-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/gb-edinburgh-castle-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/gb-edinburgh-castle-source.jpg", "mobileSourceImage": "/assets/route-photos/gb-edinburgh-castle-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Edinburgh Castle", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Edinburgh_castle.jpg", "sourceAuthor": "Tilmandralle", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:Edinburgh_castle.jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "tr-blue-mosque": {
+      "image": "/assets/route-photos/tr-blue-mosque-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/tr-blue-mosque-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/tr-blue-mosque-source.jpg", "mobileSourceImage": "/assets/route-photos/tr-blue-mosque-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Blue Mosque, Istanbul", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:View_of_the_Sultan_Ahmed_I_Mosque_from_Sultanahmet_Square.jpg", "sourceAuthor": "Yair Haklai", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "es-alhambra": {
+      "image": "/assets/route-photos/es-alhambra-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/es-alhambra-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/es-alhambra-source.jpg", "mobileSourceImage": "/assets/route-photos/es-alhambra-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Alhambra", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Alhambra_Palace.jpg", "sourceAuthor": "Ahjaypee", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "va-st-peters": {
+      "image": "/assets/route-photos/va-st-peters-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/va-st-peters-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/va-st-peters-source.jpg", "mobileSourceImage": "/assets/route-photos/va-st-peters-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "St. Peter's Basilica", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:St._Peter%27s_Basilica_in_Vatican_City.jpg", "sourceAuthor": "Didier Moïse", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "us-rushmore": {
+      "image": "/assets/route-photos/us-rushmore-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/us-rushmore-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/us-rushmore-source.jpg", "mobileSourceImage": "/assets/route-photos/us-rushmore-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Mount Rushmore", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dean_Franklin_-_06.04.03_Mount_Rushmore_Monument_(by-sa).jpg", "sourceAuthor": "Dean Franklin", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:Dean_Franklin_-_06.04.03_Mount_Rushmore_Monument_(by-sa).jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "us-yosemite": {
+      "image": "/assets/route-photos/us-yosemite-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/us-yosemite-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/us-yosemite-source.jpg", "mobileSourceImage": "/assets/route-photos/us-yosemite-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Yosemite Valley", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tunnel_View,_Yosemite_Valley,_Yosemite_NP_-_Diliff.jpg", "sourceAuthor": "Diliff", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-kinkakuji": {
+      "image": "/assets/route-photos/jp-kinkakuji-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-kinkakuji-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-kinkakuji-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-kinkakuji-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Kinkaku-ji", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kinkaku-ji_in_November_2016_-02.jpg", "sourceAuthor": "Martin Falbisoner", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cn-temple-heaven": {
+      "image": "/assets/route-photos/cn-temple-heaven-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cn-temple-heaven-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cn-temple-heaven-source.jpg", "mobileSourceImage": "/assets/route-photos/cn-temple-heaven-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Temple of Heaven", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Temple_of_Heaven,_Beijing,_China_-_010_edit.jpg", "sourceAuthor": "Maros M r a z", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "in-hawa-mahal": {
+      "image": "/assets/route-photos/in-hawa-mahal-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/in-hawa-mahal-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/in-hawa-mahal-source.jpg", "mobileSourceImage": "/assets/route-photos/in-hawa-mahal-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Hawa Mahal", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:East_facade_Hawa_Mahal_Jaipur_from_ground_level_(July_2022)_-_img_01.jpg", "sourceAuthor": "Chainwit.", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "us-old-faithful": {
+      "image": "/assets/route-photos/us-old-faithful-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/us-old-faithful-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/us-old-faithful-source.jpg", "mobileSourceImage": "/assets/route-photos/us-old-faithful-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Old Faithful Geyser", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yellowstone_National_Park_(WY,_USA),_Old_Faithful_Geyser_--_2022_--_2599.jpg", "sourceAuthor": "Dietmar Rabich", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "es-park-guell": {
+      "image": "/assets/route-photos/es-park-guell-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/es-park-guell-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/es-park-guell-source.jpg", "mobileSourceImage": "/assets/route-photos/es-park-guell-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Park Güell", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Park_G%C3%BCell_02.jpg", "sourceAuthor": "Bernard Gagnon", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ch-matterhorn": {
+      "image": "/assets/route-photos/ch-matterhorn-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ch-matterhorn-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ch-matterhorn-source.jpg", "mobileSourceImage": "/assets/route-photos/ch-matterhorn-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Matterhorn", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zermatt_and_Matterhorn.jpg", "sourceAuthor": "Stan Shebs; retouch by Arad Mojtahedi", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "jp-osaka-castle": {
+      "image": "/assets/route-photos/jp-osaka-castle-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/jp-osaka-castle-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/jp-osaka-castle-source.jpg", "mobileSourceImage": "/assets/route-photos/jp-osaka-castle-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Osaka Castle", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Osaka_Castle,_Keep_tower,_South_view_20190415_1.jpg", "sourceAuthor": "DXR", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "ie-cliffs-moher": {
+      "image": "/assets/route-photos/ie-cliffs-moher-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/ie-cliffs-moher-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/ie-cliffs-moher-source.jpg", "mobileSourceImage": "/assets/route-photos/ie-cliffs-moher-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Cliffs of Moher", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ireland_cliffs_of_moher3_Pumbaa80.jpg", "sourceAuthor": "Tobias Helfrich; modified by Pumbaa80", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "cl-moai-rano-raraku": {
+      "image": "/assets/route-photos/cl-moai-rano-raraku-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cl-moai-rano-raraku-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cl-moai-rano-raraku-source.jpg", "mobileSourceImage": "/assets/route-photos/cl-moai-rano-raraku-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Moai of Rano Raraku", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moai_Rano_raraku.jpg", "sourceAuthor": "Aurbina", "license": "Public domain", "licenseUrl": "https://commons.wikimedia.org/wiki/File:Moai_Rano_raraku.jpg", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "hr-dubrovnik": {
+      "image": "/assets/route-photos/hr-dubrovnik-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/hr-dubrovnik-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/hr-dubrovnik-source.jpg", "mobileSourceImage": "/assets/route-photos/hr-dubrovnik-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Dubrovnik Old Town", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casco_viejo_de_Dubrovnik,_Croacia,_2014-04-14,_DD_07.JPG", "sourceAuthor": "Diego Delso", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "pt-pena-palace": {
+      "image": "/assets/route-photos/pt-pena-palace-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/pt-pena-palace-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/pt-pena-palace-source.jpg", "mobileSourceImage": "/assets/route-photos/pt-pena-palace-source.jpg", "mobileWidth": 972, "mobileHeight": 1619,
+      "name": "Pena Palace", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Palacio_Nacional_da_Pena,_Sintra,_Portugal,_2019-05-25,_DD_132.jpg", "sourceAuthor": "Diego Delso", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 972, "height": 1619
+    },
+    "cn-jiuzhaigou": {
+      "image": "/assets/route-photos/cn-jiuzhaigou-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/cn-jiuzhaigou-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/cn-jiuzhaigou-source.jpg", "mobileSourceImage": "/assets/route-photos/cn-jiuzhaigou-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Jiuzhaigou Valley", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jiuzhaigou_Sichuan_China_Jiuzhaigou-Valley-02.jpg", "sourceAuthor": "CEphoto, Uwe Aranas", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "gr-meteora": {
+      "image": "/assets/route-photos/gr-meteora-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/gr-meteora-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/gr-meteora-source.jpg", "mobileSourceImage": "/assets/route-photos/gr-meteora-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Meteora", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Meteora_Agios_Triadas_IMG_7632.jpg", "sourceAuthor": "Dido3", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/", "artisticDerivative": true, "width": 971, "height": 1619
+    },
+    "eg-abu-simbel": {
+      "image": "/assets/route-photos/eg-abu-simbel-gathered-background-portrait.png", "mobileImage": "/assets/route-photos/eg-abu-simbel-gathered-background-portrait.png", "sourceImage": "/assets/route-photos/eg-abu-simbel-source.jpg", "mobileSourceImage": "/assets/route-photos/eg-abu-simbel-source.jpg", "mobileWidth": 971, "mobileHeight": 1619,
+      "name": "Abu Simbel", "skill": "scenes-gathered-zine-v1-3", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Templo_de_Rams%C3%A9s_II,_Abu_Simbel,_Egipto,_2022-04-02,_DD_26-28_HDR.jpg", "sourceAuthor": "Diego Delso", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "artisticDerivative": true, "width": 971, "height": 1619
     }
   }
 }
