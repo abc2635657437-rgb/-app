@@ -1,10 +1,17 @@
 (function(){
+  if(new URLSearchParams(location.search).get('preview')!=='journal')return;
   document.body.classList.add('journal-preview');
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=mobile-profile';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=3';document.head.append(css);
+  const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
+  const setPageBackground=id=>{if(pageBackgrounds[id])document.body.dataset.pageBg=pageBackgrounds[id];};
+  const baseGo=window.go;
+  if(baseGo)window.go=function(id,...args){const result=baseGo.call(this,id,...args);setPageBackground(id);return result;};
+  setPageBackground(document.querySelector('.screen.active')?.id||'home');
   const lang=()=>window.TravelWorldI18n?.language?.()||'zh';
   const t=(zh,en)=>lang()==='en'?en:zh;
   const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
   let companionMount;
+  import('../chat/ai-companions.js').then(m=>{companionMount=m.mountCompanions;companionMount();});
   const originalPublish=window.publishBuddyPlan;
   window.publishBuddyPlan=()=>{
     const type=document.getElementById('journalTripType')?.value,budget=document.getElementById('journalTripBudget')?.value,note=document.getElementById('tripNote');
@@ -12,17 +19,13 @@
     return originalPublish?.();
   };
   function decorate(){
-    document.querySelectorAll('.post-actions button').forEach(button=>{if(/^(☆ 收藏|☆ Save)$/.test(button.textContent.trim()))setText(button,t('☆ 收藏','☆ Save'));if(/^(★ 已收藏|★ Saved)$/.test(button.textContent.trim()))setText(button,t('★ 已收藏','★ Saved'));});
-    document.querySelectorAll('a[href="/privacy.html"]').forEach(a=>setText(a,t('隐私政策','Privacy Policy')));document.querySelectorAll('a[href="/terms.html"]').forEach(a=>setText(a,t('服务说明','Terms')));
-    const messageNav=document.querySelector('.nav button[data-id="messages"]');if(messageNav)messageNav.setAttribute('aria-label',t('聊天','Messages'));
-    const regionNav=document.getElementById('destinationRegionTabs');if(regionNav)regionNav.setAttribute('aria-label',t('目的地区域','Destination regions'));
     const hero=document.querySelector('.uk-hero');
     if(hero&&!hero.classList.contains('journal-hero')){
       hero.className='uk-hero journal-hero';
-      hero.innerHTML='<button class="journal-hero-link" type="button"><img src="/assets/route-photos/home-meili-collage.png" alt=""><span class="journal-hero-copy"><h1 data-journal-title></h1><p data-journal-subtitle></p></span><span class="journal-hero-caption" data-journal-caption></span></button>';
+      hero.innerHTML='<button class="journal-hero-link" type="button"><img src="/assets/route-photos/page-bg-great-wall-mobile.png?v=2" alt=""><span class="journal-hero-copy"><h1 data-journal-title></h1><p data-journal-subtitle></p></span><span class="journal-hero-caption" data-journal-caption></span></button>';
       hero.querySelector('button').onclick=()=>{window.go('map');window.loadMap?.();};
     }
-    if(hero){setText(hero.querySelector('[data-journal-title]'),t('山海之间','Between Mountains & Sea'));setText(hero.querySelector('[data-journal-subtitle]'),t('沿途风景，日常记录。','Scenes and stories along the way.'));setText(hero.querySelector('[data-journal-caption]'),t('梅里雪山 · 艺术拼贴','Meili Snow Mountain · art collage'));}
+    if(hero){setText(hero.querySelector('[data-journal-title]'),t('山海之间','Between Mountains & Sea'));setText(hero.querySelector('[data-journal-subtitle]'),t('沿途风景，日常记录。','Scenes and stories along the way.'));setText(hero.querySelector('[data-journal-caption]'),t('长城','Great Wall'));}
     const map=document.getElementById('map');
     if(map){
       const canvas=document.getElementById('mapCanvas'),card=canvas?.closest('.map-card');
@@ -53,10 +56,8 @@
     const profile=document.getElementById('profile');if(profile){profile.classList.add('journal-profile');if(!profile.querySelector('.journal-profile-head')){const head=document.createElement('header');head.className='journal-profile-head';head.innerHTML='<h1></h1><button type="button"></button>';profile.prepend(head);head.querySelector('button').onclick=()=>{const settings=profile.querySelector('.profile-settings');settings.hidden=!settings.hidden;if(!settings.hidden)settings.scrollIntoView({block:'start'});};const settings=profile.querySelector('.profile-settings');if(settings)settings.hidden=true;}setText(profile.querySelector('.journal-profile-head h1'),t('我的','My space'));setText(profile.querySelector('.journal-profile-head button'),t('设置','Settings'));}
   }
   let queued=false;
-  const observeApp=()=>{const app=document.querySelector('.app');if(app)observer.observe(app,{childList:true,subtree:true});};
-  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;observer.disconnect();decorate();observeApp();});};
-  const observer=new MutationObserver(schedule);decorate();observeApp();
+  const schedule=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;observer.disconnect();decorate();observer.observe(document.querySelector('.app'),{childList:true,subtree:true});});};
+  const observer=new MutationObserver(schedule);decorate();observer.observe(document.querySelector('.app'),{childList:true,subtree:true});
   window.addEventListener('tw-auth-change',schedule);
   new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-  window.refreshExploreLocale?.();
 }());
