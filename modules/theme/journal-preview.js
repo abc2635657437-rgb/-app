@@ -1,5 +1,4 @@
 (function(){
-  if(new URLSearchParams(location.search).get('preview')!=='journal')return;
   document.body.classList.add('journal-preview');
   const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=3';document.head.append(css);
   const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
