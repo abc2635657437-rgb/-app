@@ -1,6 +1,6 @@
 (function(){
   document.body.classList.add('journal-preview');
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=3';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=4';document.head.append(css);
   const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
   const setPageBackground=id=>{if(pageBackgrounds[id])document.body.dataset.pageBg=pageBackgrounds[id];};
   const baseGo=window.go;
