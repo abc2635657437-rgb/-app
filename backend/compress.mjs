@@ -24,7 +24,11 @@ export function compressPayloads(options = {}) {
     let finished = false;
 
     const restore = () => { res.write = originalWrite; res.end = originalEnd; };
+    // Streaming responses (SSE) must never be buffered: everything a reader needs
+    // is flushed as it arrives, so a live answer starts rendering immediately.
+    const isStream = () => /text\/event-stream/i.test(String(res.getHeader('Content-Type') || ''));
     res.write = (chunk, encoding, callback) => {
+      if (isStream()) { restore(); return originalWrite(chunk, encoding, callback); }
       if (chunk) { const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding || 'utf8'); size += buf.length; parts.push(buf); }
       if (typeof callback === 'function') callback();
       return true;
@@ -43,7 +47,7 @@ export function compressPayloads(options = {}) {
       };
 
       const type = res.getHeader('Content-Type');
-      const worthIt = size >= minBytes && (!type || COMPRESSIBLE.test(String(type)));
+      const worthIt = size >= minBytes && !isStream() && (!type || COMPRESSIBLE.test(String(type)));
 
       if (!worthIt) return flush(size ? Buffer.concat(parts) : null);
 

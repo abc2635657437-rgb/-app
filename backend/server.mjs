@@ -15,6 +15,7 @@ import { parseAiResponse } from './ai-response.mjs';
 import { installEmailOtp } from './email-otp.mjs';
 import { installMapPlaces, placeIndex } from './map-places.mjs';
 import { installAiCompanions } from './ai-companions.mjs';
+import { installAiAssistant } from './ai-assistant.mjs';
 import { installPlaceImages } from './place-images.mjs';
 import { searchTravelKnowledge, knowledgeForPrompt } from './travel-knowledge.mjs';
 
@@ -298,6 +299,10 @@ installPlaceImages(app);
 // still idle, so the first real visitor does not pay for it.
 placeIndex().catch(() => {});
 installAiCompanions(app,{requireUser,enforceAiQuota,aiBaseUrl,aiModel});
+// Native travel assistant (replaces the third-party iframe): streams from our own
+// origin so a reply starts rendering after one API hop instead of loading an
+// external web app inside an iframe.
+installAiAssistant(app,{optionalUser,aiBaseUrl,aiModel});
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
 app.get('/api/map/tiles/:z/:x/:y.png', async (req, res) => {
