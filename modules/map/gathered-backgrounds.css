@@ -1,0 +1,20 @@
+.landmark-sheet.gathered-landmark{width:min(1000px,100%);background:#f6f1e5 var(--gathered-art) center/cover fixed;isolation:isolate}
+.gathered-landmark>header,.gathered-landmark>.landmark-facts,.gathered-landmark>.landmark-nearby,.gathered-landmark>.landmark-map-link,.gathered-landmark>.landmark-related{background:#fffaf0d9;padding:14px;border-radius:8px}
+.gathered-landmark>header h2{font-weight:800;letter-spacing:1px}
+.gathered-landmark .landmark-sheet-gallery{display:block}
+.gathered-landmark .landmark-sheet-gallery figure.featured{height:260px;min-height:0;background:#fffaf0b3}
+.gathered-landmark .landmark-sheet-gallery img{object-fit:contain}
+@media(max-width:600px){.landmark-sheet.gathered-landmark{background-image:var(--gathered-mobile-art,var(--gathered-art))}}
+.gathered-landmark .landmark-sheet-back,.gathered-landmark>.landmark-source,.gathered-credit{background:#fffaf0e8;padding:8px;border-radius:5px}
+.gathered-credit{font:11px/1.6 system-ui,sans-serif;color:#173f4f;overflow-wrap:anywhere}
+.gathered-credit a{color:inherit}
+@media(max-width:520px){
+ .landmark-sheet-overlay{padding:0;overflow-x:hidden}
+ .landmark-sheet.gathered-landmark{box-sizing:border-box;width:100%;min-height:100dvh;margin:0;padding:max(18px,env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));border:0;overflow-x:hidden;background-attachment:fixed;background-size:auto 100dvh;background-position:center top;background-repeat:no-repeat}
+ .gathered-landmark>header,.gathered-landmark>.landmark-facts,.gathered-landmark>.landmark-nearby,.gathered-landmark>.landmark-map-link,.gathered-landmark>.landmark-related{box-sizing:border-box;max-width:100%;padding:11px;background:#fffaf080;backdrop-filter:blur(2px)}
+ .gathered-landmark .landmark-sheet-gallery{display:none}
+ .gathered-landmark .landmark-sheet-back,.gathered-landmark>.landmark-source,.gathered-credit{max-width:100%;background:#fffaf080;backdrop-filter:blur(2px);overflow-wrap:anywhere}
+ .gathered-landmark .landmark-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .gathered-landmark .landmark-facts>div,.gathered-landmark .landmark-nearby span,.gathered-landmark .landmark-related button{min-width:0;max-width:100%;background:#fffaf080;backdrop-filter:blur(2px);overflow-wrap:anywhere}
+ .gathered-landmark .landmark-sheet-actions{grid-template-columns:1fr}
+}

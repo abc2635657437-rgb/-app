@@ -1,7 +1,9 @@
 (function(){
+  // index.html loads this module on the main site, so the journal shell must stay
+  // opt-in: only ?preview=journal applies it, never the regular app.
   if(new URLSearchParams(location.search).get('preview')!=='journal')return;
   document.body.classList.add('journal-preview');
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=7';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=14';document.head.append(css);
   const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
   applyTimeTheme();window.setInterval(applyTimeTheme,60_000);
   const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};

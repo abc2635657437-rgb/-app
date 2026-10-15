@@ -780,6 +780,18 @@ app.get('/api/community/favorites', requireUser, async (req, res) => {
   res.json((data || []).map(item => item.posts).filter(Boolean));
 });
 
+app.get('/api/community/me/likes', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('post_likes').select('created_at, posts:post_id(*, profiles:author_id(id,username,display_name,bio,avatar_url), post_media(*), post_likes(user_id), comments(id))').eq('user_id', req.user.id).order('created_at', { ascending: false }).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json((data || []).map(item => item.posts).filter(Boolean));
+});
+
+app.get('/api/community/me/comments', requireUser, async (req, res) => {
+  const { data, error } = await admin.from('comments').select('id,post_id,content,created_at,posts:post_id(id,title)').eq('author_id', req.user.id).order('created_at', { ascending: false }).limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data || []);
+});
+
 app.get('/api/community/me/posts', requireUser, async (req, res) => {
   const { data, error } = await publicPostQuery().eq('author_id', req.user.id).limit(100);
   if (error) return res.status(500).json({ error: error.message });

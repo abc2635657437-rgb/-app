@@ -21,4 +21,5 @@
   });
   const chapters={discover:['壱','目的地选集'],map:['弐','世界游览图'],messages:['参','旅途书信'],friends:['肆','同路人名录'],profile:['伍','我的旅册']};
   Object.entries(chapters).forEach(([id,[number,label]])=>{const screen=document.getElementById(id);if(!screen)return;screen.classList.add('uk-chapter');screen.dataset.chapter=number;screen.dataset.chapterLabel=label;const eyebrow=screen.querySelector('.eyebrow');if(eyebrow)eyebrow.dataset.chapterLabel=label;});
+  const preview=document.createElement('script');preview.src='/modules/theme/journal-preview.js?v=5';document.body.append(preview);
 }());
