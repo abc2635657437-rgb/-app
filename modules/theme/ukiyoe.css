@@ -384,3 +384,25 @@ body .post-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap
 .post-media-dialog{width:100vw;max-width:none;height:100dvh;max-height:none;padding:0;border:0;background:#102a31eF}.post-media-dialog::backdrop{background:#102a31eF}.post-media-dialog>button{position:fixed;z-index:2;right:18px;top:18px;width:42px;height:42px;border:1px solid #fff8;background:#102a31aa;color:#fff;font-size:25px}.post-media-dialog>img{display:block;width:100%;height:100%;object-fit:contain}
 @media(max-width:520px){body #mapExplore>.card:first-child .grid{grid-template-columns:repeat(2,minmax(0,1fr))}body #mapExplore>.card:first-child>label,body #mapExplore>.card:first-child>.btn{width:100%;display:block}.where-now-grid{gap:7px}.where-now-card,.where-now-card>div{min-height:265px}.where-now-card>div{padding:12px}.where-now-card h3{font-size:18px}body #mapExplore>.map-card-primary{width:min(88vw,400px);padding:7px}body #map .map-controls{grid-template-columns:1fr auto auto}body #routeGrid{gap:8px}body .route-reference-card,body .route-reference-copy{min-height:245px}body .route-reference-copy{padding:11px}body .route-reference-main h3{font-size:17px}body .route-reference-copy .route-card-top{font-size:8px;letter-spacing:.5px}.hiking-facts,.hiking-notes{grid-template-columns:1fr}.hiking-map{height:240px}}
 @media(max-width:350px){.where-now-grid,body #routeGrid{grid-template-columns:1fr}}
+
+/* Home uses a two-column, staggered photo feed on phones. */
+body #communityFeed.home-feed-masonry.has-posts{columns:2;column-gap:12px}
+body #communityFeed.home-feed-masonry:not(.has-posts){columns:auto}
+body #communityFeed.home-feed-masonry>.post-card{display:inline-block;width:100%;min-width:0;vertical-align:top;break-inside:avoid-column;margin:0 0 12px;overflow:hidden;border:0;border-bottom:0;border-radius:10px;background:transparent;box-shadow:none}
+body #communityFeed.home-feed-masonry .post-gallery{display:block;width:100%;overflow:hidden;background:#e7e2d6}
+body #communityFeed.home-feed-masonry .post-gallery>button,body #communityFeed.home-feed-masonry .post-gallery>video{display:none}
+body #communityFeed.home-feed-masonry .post-gallery>:first-child{display:block;width:100%;height:auto;max-height:280px;padding:0;border:0;background:#e7e2d6}
+body #communityFeed.home-feed-masonry .post-gallery>:first-child :is(img,video){display:block;width:100%;height:auto;max-height:280px;aspect-ratio:auto;object-fit:cover}
+body #communityFeed.home-feed-masonry .post-content{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"story story" "author like";align-items:center;gap:4px 2px;padding:9px 7px 8px}
+body #communityFeed.home-feed-masonry .post-open{grid-area:story;min-width:0;text-align:left}
+body #communityFeed.home-feed-masonry .post-title{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;margin:0;font:600 14px/1.38 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}
+body #communityFeed.home-feed-masonry .post-copy{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;margin:4px 0 0;font:12px/1.42 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}
+body #communityFeed.home-feed-masonry .post-author{grid-area:author;min-width:0;overflow:hidden}
+body #communityFeed.home-feed-masonry .post-author-identity{min-width:0;gap:5px}
+body #communityFeed.home-feed-masonry .post-author-identity img,body #communityFeed.home-feed-masonry .post-avatar-fallback{width:24px;height:24px}
+body #communityFeed.home-feed-masonry .post-author-name{display:block;overflow:hidden;max-width:72px;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+body #communityFeed.home-feed-masonry .post-author-identity small,body #communityFeed.home-feed-masonry .post-author>.post-map,body #communityFeed.home-feed-masonry .post-route-card,body #communityFeed.home-feed-masonry .post-owner-actions,body #communityFeed.home-feed-masonry .comment-row,body #communityFeed.home-feed-masonry .post-comments{display:none}
+body #communityFeed.home-feed-masonry .post-actions{grid-area:like;display:flex;justify-content:flex-end;align-items:center;gap:0;margin:0;white-space:nowrap;font-size:11px}
+body #communityFeed.home-feed-masonry .post-actions>:not(:first-child){display:none}
+body #communityFeed.home-feed-masonry .post-actions button{min-width:40px;min-height:44px;padding:6px 2px}
+@media(max-width:350px){body #communityFeed.home-feed-masonry.has-posts{column-gap:8px}body #communityFeed.home-feed-masonry>.post-card{margin-bottom:8px}body #communityFeed.home-feed-masonry .post-content{padding-inline:5px}body #communityFeed.home-feed-masonry .post-author-name{max-width:60px}}
