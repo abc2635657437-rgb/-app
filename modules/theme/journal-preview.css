@@ -180,7 +180,7 @@ body.journal-preview[data-time-theme="night"] .card,body.journal-preview[data-ti
 body.journal-preview[data-time-theme="night"] .muted,body.journal-preview[data-time-theme="night"] .sub{color:#c4c3bb}
 body.journal-preview[data-time-theme="night"] .input,body.journal-preview[data-time-theme="night"] input,body.journal-preview[data-time-theme="night"] select,body.journal-preview[data-time-theme="night"] textarea{background:#293437;color:#f2eee6;border-color:#536064}
 body.journal-preview[data-time-theme="night"] .input::placeholder,body.journal-preview[data-time-theme="night"] input::placeholder,body.journal-preview[data-time-theme="night"] textarea::placeholder{color:#b7bdbb}
-body.journal-preview[data-time-theme="night"] .home-feed-grid>.home-feed-card{background:rgba(28,37,40,.91);box-shadow:0 2px 12px #0005}
+body.journal-preview[data-time-theme="night"] .home-feed-grid>.home-feed-card,body.journal-preview[data-time-theme="night"] #communityFeed.home-feed-masonry>.post-card{background:rgba(28,37,40,.91);border:1px solid rgba(225,231,225,.16);box-shadow:0 2px 12px #0005}
 body.journal-preview[data-time-theme="night"] .home-feed-grid .post-title,body.journal-preview[data-time-theme="night"] .home-feed-grid .post-author-name{color:#f3efe7}
 body.journal-preview[data-time-theme="night"] .home-feed-grid .post-copy,body.journal-preview[data-time-theme="night"] .home-feed-grid .post-actions{color:#c6c9c6}
 body.journal-preview[data-time-theme="night"] .home-tabs,body.journal-preview[data-time-theme="night"] .home-tab{color:#e1e2de;border-color:#5a6263}

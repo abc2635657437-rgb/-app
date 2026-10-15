@@ -2,7 +2,7 @@
   document.body.classList.add('journal-preview');
   const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
   applyTimeTheme();window.setInterval(applyTimeTheme,60_000);
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=5';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=6';document.head.append(css);
   const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
   const setPageBackground=id=>{if(pageBackgrounds[id])document.body.dataset.pageBg=pageBackgrounds[id];};
   const baseGo=window.go;
