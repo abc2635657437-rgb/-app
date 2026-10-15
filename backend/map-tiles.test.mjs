@@ -124,14 +124,39 @@ const install = () => {
   srv.close();
 }
 
-// 7. No provider configured at all is reported, not crashed on.
+// 7. The deployment already carries AMAP_SERVER_KEY / GOOGLE_MAPS_SERVER_KEY for
+//    geocoding, so those names are honoured — otherwise a working key sits idle
+//    and mainland visitors stay on the OSM proxy.
 {
-  for (const name of ['TIANDITU_KEY', 'AMAP_KEY', 'TENCENT_MAP_KEY', 'BAIDU_MAP_KEY', 'GOOGLE_MAPS_KEY']) delete process.env[name];
+  for (const name of ['TIANDITU_KEY', 'AMAP_KEY', 'TENCENT_MAP_KEY', 'BAIDU_MAP_KEY', 'GOOGLE_MAPS_KEY', 'AMAP_SERVER_KEY', 'GOOGLE_MAPS_SERVER_KEY']) delete process.env[name];
+  process.env.AMAP_SERVER_KEY = KEY;
   const info = mapProviderInfo();
-  assert.equal(info.providers.length, 1, 'only the keyless provider survives');
-  assert.equal(info.providers[0].id, 'osm');
-  assert.equal(info.default, 'osm');
+  assert.deepEqual(info.providers.map(spec => spec.id), ['amap', 'osm'], 'the alias alone is enough to configure the provider');
+  assert.equal(info.default, 'amap', 'and mainland visitors then get 高德, not the OSM proxy');
+  const serialized = JSON.stringify(info);
+  assert.ok(!serialized.includes(KEY), 'still no key material in the payload');
+  delete process.env.AMAP_SERVER_KEY;
+}
+
+// 8. A rejected key served as an HTML page is also remembered, not retried per tile.
+{
+  process.env.TIANDITU_KEY = KEY;
+  const realFetch = globalThis.fetch;
+  // Same shape a real provider returns when it rejects a token: 200 + HTML.
+  globalThis.fetch = async (url) => {
+    const target = String(url);
+    if (/^https?:\/\/(127\.0\.0\.1|localhost)(:|\/)/.test(target)) return realFetch(url);
+    if (target.includes('tile.openstreetmap.org')) return new Response(PNG, { status: 200, headers: { 'content-type': 'image/png' } });
+    return new Response('<html>forbidden</html>', { status: 200, headers: { 'content-type': 'text/html' } });
+  };
+  const { srv, url } = install();
+  const first = await fetch(`${url}/api/map/tiles/tianditu/6/2/3.png`);
+  assert.equal(first.status, 200, 'an HTML error page still falls through to a working provider');
+  assert.equal(first.headers.get('x-map-provider'), 'osm');
+  assert.equal((await fetch(`${url}/api/map/providers`).then(r => r.json())).cache.down.includes('tianditu'), true, 'the HTML rejection is remembered');
+  srv.close();
+  globalThis.fetch = realFetch;
 }
 
 restore();
-console.log('map-tiles: 7 assertions groups passed');
+console.log('map-tiles: 8 assertions groups passed');

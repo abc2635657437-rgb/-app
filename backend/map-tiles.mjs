@@ -112,9 +112,28 @@ const PROVIDER_SPECS = [
 // Deliberately generous: a nearby provider is preferable to an OSM proxy hop.
 const CHINA_BOUNDS = { south: 17.5, west: 73.5, north: 53.5, east: 135.1 };
 
+// The deployment already carried AMAP_SERVER_KEY / GOOGLE_MAPS_SERVER_KEY for
+// the geocoding calls, so those names are accepted as aliases. Without this a
+// perfectly good Amap key sat unused and mainland visitors stayed on OSM.
+const KEY_ALIASES = {
+  AMAP_KEY: ['AMAP_KEY', 'AMAP_SERVER_KEY', 'GAODE_KEY'],
+  GOOGLE_MAPS_KEY: ['GOOGLE_MAPS_KEY', 'GOOGLE_MAPS_SERVER_KEY'],
+  TIANDITU_KEY: ['TIANDITU_KEY'],
+  TENCENT_MAP_KEY: ['TENCENT_MAP_KEY'],
+  BAIDU_MAP_KEY: ['BAIDU_MAP_KEY']
+};
+
+function providerKey(keyName) {
+  for (const name of KEY_ALIASES[keyName] || [keyName]) {
+    const value = String(process.env[name] || '').trim();
+    if (value) return value;
+  }
+  return '';
+}
+
 function providers() {
   const specs = PROVIDER_SPECS.map(spec => {
-    const key = spec.keyName ? String(process.env[spec.keyName] || '').trim() : '';
+    const key = spec.keyName ? providerKey(spec.keyName) : '';
     return {
       ...spec,
       key,
@@ -274,9 +293,11 @@ export function installMapTiles(app) {
           return { ...entry, provider: id, layer, fromCache: false };
         } catch (error) { lastError = error; failed = error; }
       }
-      // Only an auth/config failure is remembered. A provider that simply has
-      // no tile at this zoom must not be blacklisted for the next request.
-      if (failed && /\b(401|403)\b/.test(String(failed.message))) markDown(id);
+      // A rejected key arrives either as 401/403 or as an HTML error page; both
+      // mean "stop asking this provider". A plain 404 is just a missing tile at
+      // this zoom and must not blacklist anything.
+      const reason = String(failed && failed.message || '');
+      if (failed && (/\b(401|403)\b/.test(reason) || /non-image/.test(reason))) markDown(id);
     }
     throw lastError || new Error('no tile provider available');
   }
