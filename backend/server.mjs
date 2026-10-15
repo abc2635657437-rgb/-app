@@ -14,6 +14,7 @@ import { installAdmin } from './admin.mjs';
 import { parseAiResponse } from './ai-response.mjs';
 import { installEmailOtp } from './email-otp.mjs';
 import { installMapPlaces, placeIndex } from './map-places.mjs';
+import { installMapTiles, preferredProvider, mapProviderInfo } from './map-tiles.mjs';
 import { installAiCompanions } from './ai-companions.mjs';
 import { installAiAssistant } from './ai-assistant.mjs';
 import { installPlaceImages } from './place-images.mjs';
@@ -305,19 +306,9 @@ installAiCompanions(app,{requireUser,enforceAiQuota,aiBaseUrl,aiModel});
 installAiAssistant(app,{optionalUser,aiBaseUrl,aiModel});
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
-app.get('/api/map/tiles/:z/:x/:y.png', async (req, res) => {
-  const z = Number(req.params.z), x = Number(req.params.x), y = Number(req.params.y);
-  const max = 2 ** z;
-  if (!Number.isInteger(z) || !Number.isInteger(x) || !Number.isInteger(y) || z < 0 || z > 19 || x < 0 || y < 0 || x >= max || y >= max) return res.status(400).json({ error: '地图瓦片坐标无效' });
-  try {
-    const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 10_000);
-    const upstream = await fetch(`https://tile.openstreetmap.org/${z}/${x}/${y}.png`, { signal: controller.signal, headers: { 'User-Agent': `TravelWorld/1.0 (${publicAppUrl})`, Accept: 'image/png' } });
-    clearTimeout(timer);
-    if (!upstream.ok) return res.status(502).json({ error: '地图瓦片服务暂时不可用' });
-    res.set({ 'Content-Type': upstream.headers.get('content-type') || 'image/png', 'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800', 'X-Map-Attribution': 'OpenStreetMap contributors' });
-    res.send(Buffer.from(await upstream.arrayBuffer()));
-  } catch (_) { res.status(502).json({ error: '地图瓦片服务暂时不可用' }); }
-});
+// China-compliant basemap providers (天地图/高德/腾讯/百度) with OSM and Google
+// for the rest of the world, in-process tile caching and automatic fallback.
+installMapTiles(app);
 
 app.get('/api/map/search', async (req, res) => {
   const query = String(req.query.q || '').trim().slice(0, 160);

@@ -204,7 +204,7 @@
     };
   };
 
-  window.openStudio = async function (routeId) {
+  window.openStudio = async function (routeId, draft) {
     if (!auth().requireLogin()) return;
     inject();
     state.editing = routeId || null;
@@ -219,6 +219,15 @@
     var pane = document.getElementById('studioPlanPane'); if (pane) pane.innerHTML = '';
     window.studioTab('basic');
     renderPoints();
+    // A draft arrives from the AI assistant: the user reviewed a plan and wants to
+    // publish it, so the answer is carried over as editable starting content.
+    if (!routeId && draft) {
+      if (draft.title) title.value = String(draft.title).slice(0, 120);
+      if (draft.dest) dest.value = String(draft.dest).slice(0, 160);
+      if (draft.season) season.value = String(draft.season).slice(0, 60);
+      if (draft.budget) budget.value = String(draft.budget).slice(0, 40);
+      if (draft.tips) tips.value = String(draft.tips).slice(0, 1200);
+    }
     if (routeId) {
       try {
         var route = await auth().request('/api/routes/' + routeId);

@@ -1,6 +1,9 @@
 (function () {
   const commonsFile = name => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(name) + '?width=1000';
   const commonsPage = name => 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(name.replaceAll(' ', '_'));
+  // The catalogue is WGS-84; the active basemap may not be. Re-project here.
+  const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
+  const twp = (point) => (window.TravelMapProviders ? window.TravelMapProviders.focusPoint(point) : [point.latitude, point.longitude]);
   window.openWestLakeGuide = place => {
     document.getElementById('photoPlaceDialog')?.remove();
     const en = () => window.TravelWorldI18n?.language?.() === 'en';
@@ -111,9 +114,9 @@
     }).catch(() => {});
     mapDetails.addEventListener('toggle', () => {
       if (!mapDetails.open || dialog._map || !window.L) return;
-      dialog._map = L.map(mapNode, { scrollWheelZoom: false }).setView([place.latitude, place.longitude], 13);
-      L.tileLayer(TravelMapProviders.get().tile, { attribution: TravelMapProviders.get().attribution, maxZoom: 19 }).addTo(dialog._map);
-      L.marker([place.latitude, place.longitude]).addTo(dialog._map).bindPopup(t('西湖', 'West Lake')).openPopup();
+      dialog._map = L.map(mapNode, { scrollWheelZoom: false }).setView(twp(place), 13);
+      TravelMapProviders.tileLayer(dialog._map);
+      L.marker(twp(place)).addTo(dialog._map).bindPopup(t('西湖', 'West Lake')).openPopup();
       requestAnimationFrame(() => dialog._map?.invalidateSize());
     });
   };

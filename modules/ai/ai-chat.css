@@ -1,0 +1,41 @@
+/* Travel assistant screen: a native chat surface that replaces the old iframe.
+   Mobile first — the panel never exceeds the viewport width and the composer
+   stays pinned above the bottom navigation. */
+.ai-chat-screen{padding-bottom:18px}
+.ai-chat-panel{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.ai-chat-chrome{align-items:center}
+.ai-chat-label{font-size:15px;color:var(--ink)}
+.ai-chat-chrome button{padding:6px 10px;font-size:12px}
+.ai-chat-prompts{display:flex;flex-wrap:wrap;gap:6px;max-width:100%}
+.ai-chat-prompt{display:inline-flex;align-items:center;gap:5px;margin:0;white-space:nowrap}
+.ai-chat-prompt b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800}
+.ai-chat-list{display:flex;flex-direction:column;gap:10px;min-height:180px;max-height:52vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px}
+.ai-chat-hello{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 14px;text-align:center;border:1px dashed #cdd8d3;border-radius:16px;background:#fff9}
+.ai-chat-hero{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;font-size:15px;font-weight:800}
+.ai-chat-hello b{font-size:16px;color:var(--ink)}
+.ai-chat-hello p{margin:0;max-width:34ch;font-size:13px;line-height:1.6}
+.bubble.ai .ai-chat-body{max-width:100%;overflow-wrap:anywhere}
+.bubble.ai .ai-chat-body p{margin:0 0 8px}
+.bubble.ai .ai-chat-body p:last-child{margin-bottom:0}
+.bubble.ai .ai-chat-body h3{font-size:16px;line-height:1.35;margin:12px 0 6px;color:var(--ink)}
+.bubble.ai .ai-chat-body h4{font-size:14px;margin:10px 0 5px;color:var(--ink)}
+.bubble.ai .ai-chat-body ul{margin:0 0 8px;padding-left:20px}
+.bubble.ai .ai-chat-body li{margin:3px 0;line-height:1.55}
+.bubble.ai .ai-chat-body blockquote{margin:6px 0;padding:6px 10px;border-left:3px solid #d7c9b4;background:#f4f0e6;border-radius:0 8px 8px 0}
+.bubble.ai .ai-chat-body hr{border:0;border-top:1px solid #e3e0d6;margin:10px 0}
+.bubble.ai .ai-chat-body a{color:var(--accent);text-underline-offset:2px}
+.bubble.ai .ai-chat-body table{width:100%;border-collapse:collapse;font-size:12px;display:block;overflow-x:auto}
+.bubble.ai .ai-chat-body th,.bubble.ai .ai-chat-body td{border:1px solid #e3e0d6;padding:5px 7px;text-align:left;vertical-align:top}
+.ai-chat-sources{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:9px;padding-top:8px;border-top:1px dashed #e0e5df;font-size:11px;color:var(--muted)}
+.ai-chat-sources a{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#47706b}
+.ai-chat-actions{margin-top:9px}
+.ai-chat-note{margin:0;font-size:11px;line-height:1.55;color:var(--muted)}
+.ai-chat-compose{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid #e0e6e1;border-radius:14px;background:#fff}
+.ai-chat-compose textarea{min-height:44px;max-height:132px;margin:0;border:1px solid #dfe6e1;background:#f4f7f4;resize:none;font-size:15px;line-height:1.5}
+.ai-chat-status{font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-chat-signin{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;border:1px solid #e2d9c8;border-radius:12px;background:#fbf7ee;font-size:12px;color:#5d6a6e}
+@media(max-width:360px){
+  .ai-chat-list{max-height:46vh}
+  .ai-chat-prompt{padding:6px 9px;font-size:11px}
+}
+@media(prefers-color-scheme:dark){.ai-chat-hello{background:#ffffff08}}

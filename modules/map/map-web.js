@@ -23,6 +23,9 @@
   const langText=(zh,en)=>window.TravelWorldI18n?.language?.()==='en'?en:zh;
   const localized=item=>{if(window.TravelWorldI18n?.language?.()!=='en')return item;const result={...item};['name','description','country','city','bestSeason','duration','nearby','food','stay','transport','tags'].forEach(key=>{if(item[key+'_en'])result[key]=item[key+'_en'];});return result;};
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
+  // The catalogue is WGS-84; the active basemap may not be. Re-project here.
+  const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
+  const twp = (point) => (window.TravelMapProviders ? window.TravelMapProviders.focusPoint(point) : [point.latitude, point.longitude]);
   async function loadData() {
     const key = 'tw-map-cache-v5';
     try {
@@ -40,6 +43,37 @@
     }
   }
   function clearMarkers() { markers.forEach(marker => marker.remove()); markers = []; }
+  // Names the basemap actually in use, so attribution is honest after a
+  // provider switch and never claims a service that served nothing.
+  function updateProviderBadge() {
+    let credit = document.getElementById('mapProviderCredit');
+    if (!credit) {
+      credit = document.createElement('small');
+      credit.id = 'mapProviderCredit';
+      credit.className = 'muted';
+      credit.style.cssText = 'display:block;font-size:11px;line-height:1.5;margin:2px 0 0';
+      document.getElementById('mapStatus')?.after(credit);
+    }
+    credit.textContent = TravelMapProviders.attributionLabel();
+  }
+  // /api/map/providers answers after the first paint. When it lands on a
+  // different provider the datum can change too (WGS-84 vs GCJ-02), so the
+  // basemap and every marker on it have to be rebuilt from the catalogue.
+  function watchProvider() {
+    if (!map || map._twProviderWatch) return;
+    map._twProviderWatch = true;
+    map._twProvider = TravelMapProviders.active();
+    updateProviderBadge();
+    TravelMapProviders.onReady(provider => {
+      if (!map || map._twProvider === provider.id) return;
+      map._twProvider = provider.id;
+      if (map._twTileLayer) { map._twTileLayer.remove(); map._twTileLayer = null; }
+      map._twTileLayer = TravelMapProviders.tileLayer(map);
+      updateProviderBadge();
+      renderMarkers();
+      renderNearbyPlaces();
+    });
+  }
   function clearOnlineMarkers() { onlineMarkers.forEach(marker => marker.remove()); onlineMarkers = []; }
   function renderFallback() {
     const canvas = document.getElementById('mapCanvas');
@@ -64,13 +98,13 @@
     const {clusterPoints}=await clusterModule;
     clearMarkers();
     const overviewIds=new Set(['cn-great-wall','fr-eiffel','us-liberty','jp-tokyo-tower','au-opera','br-christ','eg-pyramids','za-table-mountain','sg-merlion','gb-big-ben','pe-machu-picchu']);
-    const visible=data.landmarks.filter(p=>map.getBounds().contains([p.latitude,p.longitude])&&(map.getZoom()>=4||overviewIds.has(p.id))&&!nearbyPlaces.some(n=>placePhotos.get(n.id)&&Math.abs(n.latitude-p.latitude)<.01&&Math.abs(n.longitude-p.longitude)<.01));
-    clusterPoints(visible,p=>map.latLngToLayerPoint([p.latitude,p.longitude]),map.getZoom()>=8?0:62).forEach(group=>{
-      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';const image=document.createElement('img');image.src=representative.image;image.alt='';const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(image,count,label);const marker=L.marker([group.latitude,group.longitude],{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>[p.latitude,p.longitude]),{padding:[30,30],maxZoom:Math.min(12,map.getZoom()+3)}));markers.push(marker);return;}
+    const visible=data.landmarks.filter(p=>map.getBounds().contains(twp(p))&&(map.getZoom()>=4||overviewIds.has(p.id))&&!nearbyPlaces.some(n=>placePhotos.get(n.id)&&Math.abs(n.latitude-p.latitude)<.01&&Math.abs(n.longitude-p.longitude)<.01));
+    clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),map.getZoom()>=8?0:62).forEach(group=>{
+      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';const image=document.createElement('img');image.src=representative.image;image.alt='';const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(image,count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(12,map.getZoom()+3)}));markers.push(marker);return;}
       const source=group.items[0],item=localized(source);
       const pin=document.createElement('div');pin.className='tw-q-pin__body';const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(image,label);
       const icon = L.divIcon({ className: 'tw-q-pin', html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
-      const marker = L.marker([source.latitude, source.longitude], { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup('<strong>' + source.icon + ' ' + item.name + '</strong><br>' + item.country + ' · ' + item.city + '<br><button onclick="window.openMapLandmark(\'' + source.id + '\')">' + langText('查看详情','View details') + '</button>');
+      const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup('<strong>' + source.icon + ' ' + item.name + '</strong><br>' + item.country + ' · ' + item.city + '<br><button onclick="window.openMapLandmark(\'' + source.id + '\')">' + langText('查看详情','View details') + '</button>');
       markers.push(marker);
     });
   }
@@ -80,8 +114,8 @@
     const {clusterPoints}=await clusterModule;
     nearbyMarkers.forEach(m=>m.remove());nearbyMarkers=[];
     if(map.getZoom()<4)return;
-    const visible=nearbyPlaces.filter(p=>map.getBounds().contains([p.latitude,p.longitude]));
-    const groups=clusterPoints(visible,p=>map.latLngToLayerPoint([p.latitude,p.longitude]),map.getZoom()>=15?0:64).slice(0,24);
+    const visible=nearbyPlaces.filter(p=>map.getBounds().contains(twp(p)));
+    const groups=clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),map.getZoom()>=15?0:64).slice(0,24);
     groups.forEach(group=>{
       const p=group.items.find(p=>placePhotos.get(p.id))||group.items[0],photo=placePhotos.get(p.id);
       if(!photo)return;
@@ -90,7 +124,7 @@
       image.addEventListener('error',()=>pin.hidden=true,{once:true});
       const label=document.createElement('small');label.textContent=name;pin.append(image,label);
       if(group.items.length>1){const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;pin.append(count);}
-      const marker=L.marker([p.latitude,p.longitude],{title:name,icon:L.divIcon({className:'tw-photo-place-icon',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);
+      const marker=L.marker(twp(p),{title:name,icon:L.divIcon({className:'tw-photo-place-icon',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);
       marker.on('click',()=>openPhotoPlace(p,photo,group.items));nearbyMarkers.push(marker);
     });
     const missing=groups.map(g=>g.items[0].id).filter(id=>!placePhotos.has(id));
@@ -113,7 +147,7 @@
     const credit=add('a',photo.credit+' · '+photo.license);credit.href=photo.sourceUrl;credit.target='_blank';credit.rel='noopener noreferrer';
     const source=add('a',langText('查看地点资料','Place source'));source.href=place.sourceUrl;source.target='_blank';source.rel='noopener noreferrer';
     add('p',langText('第三方地点资料；入口、开放时间及费用需另行核实。','Third-party place data. Entrances, opening hours and prices need separate verification.'));
-    if(group.length>1){const expand=add('button',langText('放大查看周边 ','Zoom to nearby places: ')+group.length);expand.onclick=()=>{map.fitBounds(group.map(p=>[p.latitude,p.longitude]),{padding:[35,35],maxZoom:Math.min(18,map.getZoom()+3)});dialog.close();};}
+    if(group.length>1){const expand=add('button',langText('放大查看周边 ','Zoom to nearby places: ')+group.length);expand.onclick=()=>{map.fitBounds(group.map(p=>twp(p)),{padding:[35,35],maxZoom:Math.min(18,map.getZoom()+3)});dialog.close();};}
     const navigation=add('nav');navigation.className='place-navigation';const coords=place.latitude+','+place.longitude;
     [[langText('查看地点','View place'),'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(coords)],[langText('导航去这里','Directions here'),'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords)]].forEach(([text,url])=>{const link=document.createElement('a');link.textContent=text;link.href=url;link.target='_blank';link.rel='noopener noreferrer';navigation.append(link);});
     add('small',langText('导航由 Google 地图打开，并由你在导航服务中选择当前位置；本站不会自动读取或上传你的位置。','Directions open in Google Maps, where you can choose your current location. This site does not automatically read or upload your location.'));
@@ -136,12 +170,12 @@
       const artCredit=add('small',langText('背景：Gathered 艺术衍生图，非现场实拍。源图 W. Bulach · CC BY-SA 4.0；背景沿用相同授权。','Background: Gathered artistic derivative, not documentary photography. Source: W. Bulach · CC BY-SA 4.0; derivative under the same license.'));artCredit.className='place-art-credit';
     }
     dialog.addEventListener('close',()=>dialog.remove(),{once:true});document.body.append(dialog);dialog.showModal();
-    const detailMap=L.map(miniMap,{scrollWheelZoom:false}).setView([place.latitude,place.longitude],13);L.tileLayer(TravelMapProviders.get().tile,{attribution:TravelMapProviders.get().attribution,maxZoom:19}).addTo(detailMap);
-    const markerPhoto=document.createElement('img');markerPhoto.src=photo.url;markerPhoto.alt=langText(place.name,place.name_en);markerPhoto.className='place-mini-marker';L.marker([place.latitude,place.longitude],{icon:L.divIcon({className:'tw-photo-place-icon',html:markerPhoto,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(detailMap);
+    const detailMap=L.map(miniMap,{scrollWheelZoom:false}).setView(twp(place),13);TravelMapProviders.tileLayer(detailMap);
+    const markerPhoto=document.createElement('img');markerPhoto.src=photo.url;markerPhoto.alt=langText(place.name,place.name_en);markerPhoto.className='place-mini-marker';L.marker(twp(place),{icon:L.divIcon({className:'tw-photo-place-icon',html:markerPhoto,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(detailMap);
     dialog.addEventListener('close',()=>detailMap.remove(),{once:true});requestAnimationFrame(()=>detailMap.invalidateSize());
-    (async()=>{try{const delta=.08,bounds=[place.latitude-delta,place.longitude-delta,place.latitude+delta,place.longitude+delta],response=await fetch('/api/map/places?bbox='+bounds.join(',')),payload=await response.json();if(!response.ok)throw new Error();const places=(payload.places||[]).filter(p=>p.id!==place.id).slice(0,8);if(!places.length){photoFeedback.textContent=langText('本范围暂无其他已收录地点。','No other catalogued places in this area.');return;}const photosResponse=await fetch('/api/map/place-images?ids='+places.map(p=>p.id).join('|')),{photos}=await photosResponse.json();if(!photosResponse.ok)throw new Error();if(!dialog.isConnected)return;let count=0;places.forEach(p=>{const pic=photos[p.id];if(!pic)return;count++;const button=document.createElement('button'),img=document.createElement('img'),label=document.createElement('strong');img.src=pic.url;img.alt=langText(p.name,p.name_en);label.textContent=img.alt;button.append(img,label);button.onclick=()=>{dialog.close();window.openSourcedMapPlace(p,pic);};photoGrid.append(button);const mini=img.cloneNode();mini.className='place-mini-marker';L.marker([p.latitude,p.longitude],{title:label.textContent,icon:L.divIcon({className:'tw-photo-place-icon',html:mini,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(detailMap).on('click',button.onclick);});photoFeedback.textContent=count?langText('照片对应各自标注的地点；作者及授权见详情。','Each photograph belongs to its labelled place. Open details for author and license.'):langText('附近地点暂无已关联的授权照片。','No licensed nearby photographs are linked.');}catch(_){photoFeedback.textContent=langText('周边实拍暂不可用，请稍后重试。','Nearby photographs are unavailable. Please try again later.');}})();
+    (async()=>{try{const delta=.08,bounds=[place.latitude-delta,place.longitude-delta,place.latitude+delta,place.longitude+delta],response=await fetch('/api/map/places?bbox='+bounds.join(',')),payload=await response.json();if(!response.ok)throw new Error();const places=(payload.places||[]).filter(p=>p.id!==place.id).slice(0,8);if(!places.length){photoFeedback.textContent=langText('本范围暂无其他已收录地点。','No other catalogued places in this area.');return;}const photosResponse=await fetch('/api/map/place-images?ids='+places.map(p=>p.id).join('|')),{photos}=await photosResponse.json();if(!photosResponse.ok)throw new Error();if(!dialog.isConnected)return;let count=0;places.forEach(p=>{const pic=photos[p.id];if(!pic)return;count++;const button=document.createElement('button'),img=document.createElement('img'),label=document.createElement('strong');img.src=pic.url;img.alt=langText(p.name,p.name_en);label.textContent=img.alt;button.append(img,label);button.onclick=()=>{dialog.close();window.openSourcedMapPlace(p,pic);};photoGrid.append(button);const mini=img.cloneNode();mini.className='place-mini-marker';L.marker(twp(p),{title:label.textContent,icon:L.divIcon({className:'tw-photo-place-icon',html:mini,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(detailMap).on('click',button.onclick);});photoFeedback.textContent=count?langText('照片对应各自标注的地点；作者及授权见详情。','Each photograph belongs to its labelled place. Open details for author and license.'):langText('附近地点暂无已关联的授权照片。','No licensed nearby photographs are linked.');}catch(_){photoFeedback.textContent=langText('周边实拍暂不可用，请稍后重试。','Nearby photographs are unavailable. Please try again later.');}})();
   }
-  window.openSourcedMapPlace=async(place,photo)=>{window.go('map');await initMap();if(map){map.setView([place.latitude,place.longitude],14);openPhotoPlace(place,photo,[place]);}};
+  window.openSourcedMapPlace=async(place,photo)=>{window.go('map');await initMap();if(map){map.setView(twp(place),14);openPhotoPlace(place,photo,[place]);}};
   function schedulePlaces(){clearTimeout(placeTimer);renderNearbyPlaces();placeTimer=setTimeout(loadNearbyPlaces,650);}
   async function loadNearbyPlaces(){
     if(!map||map.getZoom()<4)return;
@@ -164,9 +198,10 @@
       data = await loadData();
       if (!window.L) { renderFallback(); status(langText('离线地图 · 使用已缓存地标数据；联网后可启用拖动、缩放和搜索。','Offline map · Showing cached landmarks. Reconnect to pan, zoom and search.')); return; }
       if (!map) { map = L.map(canvas, { zoomControl: true, worldCopyJump: true,dragging:!coarse,touchZoom:!coarse,scrollWheelZoom:!coarse,doubleClickZoom:!coarse,boxZoom:!coarse }).setView([20, 10], 1); map.on('zoomend', updateMarkerDensity); map.on('moveend',renderOnlineUsers);map.on('moveend',renderMarkers);map.on('moveend',schedulePlaces); }
-      if (!map._twTileLayer) { map._twTileLayer = L.tileLayer(TravelMapProviders.get().tile, { attribution: TravelMapProviders.get().attribution, maxZoom: 19 }).addTo(map); }
+      if (!map._twTileLayer) { map._twTileLayer = TravelMapProviders.tileLayer(map); }
       renderMarkers();
       updateMarkerDensity();
+      watchProvider();
       setTimeout(() => map.invalidateSize(), 0);
       loadOnlineUsers();
       clearInterval(onlineRefreshTimer);
@@ -179,7 +214,7 @@
   async function openLandmark(id) {
     const source = (data && data.landmarks || []).find(entry => entry.id === id);
     if (!source) return;const item=localized(source);
-    if (map) map.setView([source.latitude, source.longitude], 11);
+    if (map) map.setView(twp(source), 11);
     if(id==='cn-west-lake'&&window.openWestLakeGuide){window.openWestLakeGuide(source);return;}
     const artworkIds={'cn-great-wall':'Q12501','fr-eiffel':'Q243','in-taj-mahal':'Q9141','fr-louvre':'Q19675','us-liberty':'Q9202','au-opera':'Q45178','cn-west-lake':'Q10866444','jp-kiyomizu':'jp-kiyomizu','gb-big-ben':'gb-big-ben','cn-oriental-pearl':'cn-oriental-pearl','jp-fuji':'jp-fuji','cn-forbidden-city':'cn-forbidden-city','cn-zhangjiajie':'cn-zhangjiajie','it-colosseum':'it-colosseum','es-sagrada':'es-sagrada','gr-acropolis':'gr-acropolis','us-golden-gate':'us-golden-gate','us-grand-canyon':'us-grand-canyon','ca-niagara':'ca-niagara','sg-merlion':'sg-merlion','ae-burj-khalifa':'ae-burj-khalifa','pe-machu-picchu':'pe-machu-picchu','br-christ':'br-christ','eg-pyramids':'eg-pyramids','au-great-barrier':'au-great-barrier','jp-tokyo-tower':'jp-tokyo-tower','kr-gyeongbokgung':'kr-gyeongbokgung','th-grand-palace':'th-grand-palace','vn-ha-long':'vn-ha-long','id-borobudur':'id-borobudur','tr-hagia-sophia':'tr-hagia-sophia','cn-erhai':'cn-erhai','mx-chichen-itza':'mx-chichen-itza','za-table-mountain':'za-table-mountain','nz-milford':'nz-milford','ru-hermitage':'ru-hermitage','my-petronas':'my-petronas','np-everest':'np-everest','jo-petra':'jo-petra','de-neuschwanstein':'de-neuschwanstein','pt-belem':'pt-belem'};
     const artworkId=artworkIds[id],art=(await backgroundData)[artworkId];
@@ -218,9 +253,9 @@
       const payload = await response.json(); const results = payload.results || [];
       if (!results.length) return status(langText('没有找到“','No results found for “') + raw + '”.');
       const result = results[0], lat = Number(result.latitude), lon = Number(result.longitude);
-      map.setView([lat, lon], 13);
+      map.setView(tw([lat, lon]), 13);
       const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">📍</span><span class="tw-q-pin__label">' + raw.replace(/[<>]/g, '') + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
-      const marker = L.marker([lat, lon], { icon }).addTo(map).bindPopup(result.displayName).openPopup(); markers.push(marker);
+      const marker = L.marker(tw([lat, lon]), { icon }).addTo(map).bindPopup(result.displayName).openPopup(); markers.push(marker);
       status(langText('在线地图已定位：','Located on the map: ') + result.displayName);
     } catch (_) { status(langText('在线搜索暂时不可用；仍可浏览已缓存的 ','Online search is temporarily unavailable. You can still browse ') + (data?.landmarks?.length || 0) + langText(' 个地标。',' cached landmarks.')); }
   }
@@ -233,20 +268,20 @@
     const {clusterPoints}=await clusterModule;
     clearOnlineMarkers();
     const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const groups=clusterPoints(onlineUsers,entry=>map.latLngToLayerPoint([entry.latitude,entry.longitude]),map.getZoom()>=15?0:64);
+    const groups=clusterPoints(onlineUsers,entry=>map.latLngToLayerPoint(twp(entry)),map.getZoom()>=15?0:64);
     groups.forEach(group=>{
       if(group.items.length>1){
         const button=document.createElement('button');button.type='button';button.textContent=String(group.items.length);button.setAttribute('aria-label',group.items.length+langText(' 位共享位置的用户；点击放大',' users sharing their location; zoom in'));
         const icon=L.divIcon({className:'tw-user-cluster',html:button,iconSize:[38,38],iconAnchor:[19,19]});
-        const marker=L.marker([group.latitude,group.longitude],{icon,zIndexOffset:2100}).addTo(map);
-        marker.on('click',()=>map.fitBounds(group.items.map(p=>[p.latitude,p.longitude]),{padding:[40,40],maxZoom:Math.min(18,map.getZoom()+3)}));onlineMarkers.push(marker);return;
+        const marker=L.marker(twp(group),{icon,zIndexOffset:2100}).addTo(map);
+        marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[40,40],maxZoom:Math.min(18,map.getZoom()+3)}));onlineMarkers.push(marker);return;
       }
       const entry=group.items[0],profile=entry.profiles||{},id=String(profile.id||entry.user_id||'').replace(/[^a-zA-Z0-9-]/g,''),name=escape(profile.display_name||profile.username||langText('旅行者','Traveler'));
       const icon=L.divIcon({className:'tw-q-pin tw-online-pin',html:'<div class="tw-q-pin__body"><span class="tw-q-pin__icon">🧭</span><span class="tw-q-pin__label">'+name+'</span></div>',iconSize:[36,36],iconAnchor:[18,18]});
       const content=document.createElement('div');content.innerHTML='<strong>'+name+'</strong><p>'+escape(profile.bio||langText('这位旅行者还没有填写简介','This traveler has not added a bio yet.'))+'</p>';
       const follow=document.createElement('button');follow.textContent=langText('关注/取消关注','Follow / unfollow');follow.onclick=()=>followOnlineUser(id);
       const chat=document.createElement('button');chat.textContent=langText('私聊','Message');chat.onclick=()=>openOnlineUser(id);content.append(follow,chat);
-      onlineMarkers.push(L.marker([entry.latitude,entry.longitude],{icon,title:name,zIndexOffset:2000}).addTo(map).bindPopup(content));
+      onlineMarkers.push(L.marker(twp(entry),{icon,title:name,zIndexOffset:2000}).addTo(map).bindPopup(content));
     });
   }
   async function followOnlineUser(userId) { const auth = window.TravelWorldAuth; if (!auth?.requireLogin()) return; try { const result = await auth.request('/api/community/users/' + encodeURIComponent(userId) + '/follow', { method: 'POST' }); status(result.following ? langText('已关注该旅行者。','Traveler followed.') : langText('已取消关注。','Traveler unfollowed.')); } catch (error) { status(langText('关注操作失败，请重试','Could not update follow status. Try again.')); } }
@@ -275,8 +310,8 @@
     await initMap(); if (!map || !window.L) return;
     const title = String(point.name || '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
     focusedPlaceMarker?.remove();
-    focusedPlaceMarker = L.marker([point.latitude, point.longitude], {zIndexOffset:1500}).addTo(map).bindPopup(title);
-    map.setView([point.latitude, point.longitude], 15); focusedPlaceMarker.openPopup();
+    focusedPlaceMarker = L.marker(twp(point), {zIndexOffset:1500}).addTo(map).bindPopup(title);
+    map.setView(twp(point), 15); focusedPlaceMarker.openPopup();
   };
   window.showTravelPlaces = async function (points) {
     await initMap(); if (!map || !window.L || !Array.isArray(points)) return;
@@ -293,14 +328,14 @@
         const button = document.createElement('button'); button.textContent = langText('查看地点详情','View place details');
         button.onclick = () => window.onTravelPlaceSelected(point.id); content.append(document.createElement('br'),button);
       }
-      routeMarkers.push(L.marker([point.latitude,point.longitude],{icon,zIndexOffset:1000}).addTo(map).bindPopup(content));
+      routeMarkers.push(L.marker(twp(point),{icon,zIndexOffset:1000}).addTo(map).bindPopup(content));
     });
-    if (valid.length) map.fitBounds(valid.map(p=>[p.latitude,p.longitude]),{padding:[35,35],maxZoom:13});
+    if (valid.length) map.fitBounds(valid.map(p=>twp(p)),{padding:[35,35],maxZoom:13});
     status(langText('已显示沿途地点，点击标记查看详情。','Places shown. Click a marker for details.'));
   };
   window.showTravelRoute = async function (points, options = {}) {
     if (!map || !Array.isArray(points)) return;
-    const coords = points.map(point => Array.isArray(point) ? point : [point.latitude, point.longitude]).filter(point => point.length === 2 && point.every(Number.isFinite));
+    const coords = points.map(point => Array.isArray(point) ? point : twp(point)).filter(point => point.length === 2 && point.every(Number.isFinite));
     if (coords.length < 2) return status(langText('路线至少需要两个有效地点。','A route needs at least two valid places.'));
     if (routeLayer) routeLayer.remove();
     routeMarkers.forEach(marker => marker.remove()); routeMarkers = [];
