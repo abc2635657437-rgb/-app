@@ -1,0 +1,271 @@
+body.journal-preview{--cream:#f8f5ed;--paper:#f8f5ed;--ink:#173747;--accent:#b74b36;--muted:#69736d;--line:#d9d4c9;background:#e6e5df}
+body.journal-preview .app{background:#f8f5ed;max-width:480px;padding:22px 22px 92px}
+body.journal-preview .screen::before,body.journal-preview .screen::after,body.journal-preview .eyebrow{display:none}
+body.journal-preview .community-top{padding:0 0 4px;border:0}
+body.journal-preview .community-top .eyebrow{display:block;font:600 13px Georgia,serif;letter-spacing:0;color:var(--ink)}
+body.journal-preview .community-brand{font:600 25px/1.3 Georgia,"Songti SC",SimSun,serif;letter-spacing:2px}
+body.journal-preview .brand-subtitle{display:none}
+body.journal-preview .title,body.journal-preview h1,body.journal-preview h2{font-family:Georgia,"Songti SC",SimSun,serif;color:var(--ink)}
+body.journal-preview .title{font-size:32px!important;line-height:1.3;margin:0 0 20px;letter-spacing:.05em}
+body.journal-preview .card{background:transparent;box-shadow:none;border-radius:0;border:0;border-bottom:1px solid var(--line);padding:18px 0;margin:0}
+body.journal-preview .journal-hero{margin:0 -22px 0;border:0;padding:0}
+.journal-hero-link{display:block;position:relative;padding:0;border:0;background:transparent;color:inherit;width:100%;text-align:left;cursor:pointer}
+.journal-hero-link>img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.journal-hero-copy{position:absolute;top:18px;left:22px;right:22px}
+.journal-hero-copy h1{font:600 clamp(29px,8vw,44px)/1.2 Georgia,"Songti SC",SimSun,serif;letter-spacing:.06em;margin:0 0 10px;max-width:360px}
+.journal-hero-copy p{font-size:14px;margin:0;color:#52605e}
+.journal-hero-caption{position:absolute;bottom:12px;right:22px;font-size:11px;color:#334c52;background:#f8f5edd9;padding:4px 8px}
+body.journal-preview .home-tabs{margin:2px 0 12px;gap:26px}
+body.journal-preview .post-card{background:transparent;box-shadow:none;border-radius:0;border-bottom:1px solid var(--line);padding-bottom:16px}
+body.journal-preview .post-content{padding:12px 0 0}
+body.journal-preview .post-author{order:0}
+body.journal-preview .post-gallery{border-radius:6px}
+body.journal-preview .post-title{font:600 20px/1.4 Georgia,"Songti SC",SimSun,serif}
+body.journal-preview .post-copy{font-size:14px;line-height:1.65}
+body.journal-preview .post-actions button{min-height:44px;padding:8px 2px}
+body.journal-preview .nav{background:#f8f5edf5;border-top:1px solid var(--line);padding-bottom:max(12px,env(safe-area-inset-bottom));max-width:480px}
+body.journal-preview .nav button{min-width:48px;min-height:44px;font-size:11px}
+body.journal-preview #map{display:none}
+body.journal-preview #map.active{display:flex;flex-direction:column}
+body.journal-preview #map>.title{order:-5}
+body.journal-preview #map>.map-controls{order:-4}
+body.journal-preview #map>.map-card-primary{order:-3;width:100%;margin:0 0 24px;padding:0;border:0;background:transparent!important;box-shadow:none!important}
+body.journal-preview #map .map-canvas{aspect-ratio:1;min-height:0;border-radius:6px}
+body.journal-preview .map-controls{margin-bottom:12px}
+body.journal-preview .map-controls .input,body.journal-preview .map-controls input{background:transparent;border:1px solid var(--line);border-radius:7px;font-size:16px}
+body.journal-preview .map-controls button{background:transparent;border:1px solid var(--line);border-radius:7px}
+body.journal-preview .where-now{margin:0 0 28px}
+body.journal-preview .dm-page-head .title{font-size:32px}
+body.journal-preview .dm-page-head p,body.journal-preview .dm-private-mark{display:none}
+body.journal-preview .dm-row{border-radius:0;background:transparent;border-bottom:1px solid var(--line);padding:20px 0;margin:0;gap:15px}
+body.journal-preview .dm-avatar{width:54px;height:54px}
+body.journal-preview .dm-summary b{font-family:Georgia,"Songti SC",SimSun,serif;font-size:18px}
+body.journal-preview #friends>.title{padding-top:20px;margin-bottom:4px!important}
+body.journal-preview #friends{background:url('/assets/route-photos/great-wall-paper-banner.png') center 25px/100% auto no-repeat}
+body.journal-preview .journal-buddy-subtitle{padding-bottom:95px;margin:0;color:var(--muted);font-size:14px}
+body.journal-preview #friends .journal-trip-composer{margin-bottom:18px}
+body.journal-preview .journal-profile{background:url('/assets/route-photos/great-wall-paper-banner.png') center top/100% auto no-repeat;padding-top:90px}
+body.journal-preview .profile-hero{gap:20px;padding:12px 0 24px}
+body.journal-preview .profile-large-avatar{width:92px;height:92px}
+body.journal-preview .profile-links{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+body.journal-preview .profile-links button{min-height:55px;padding:8px 2px;font-size:13px}
+body.journal-preview .profile-settings{font-size:15px}
+body.journal-preview .ai-float{width:48px!important;height:48px!important;right:max(12px,calc((100vw - 480px)/2 + 12px))!important;bottom:100px;border-radius:50%!important;background:#f8f5ed!important;border:1px solid #b7b9ac!important;box-shadow:0 3px 12px #17374718}
+body.journal-preview .ai-float>span,body.journal-preview .ai-float::after{display:none}
+body.journal-preview .ai-float svg{width:25px;height:25px;color:var(--ink)}
+body.journal-preview .ai-float.is-hidden{visibility:hidden;pointer-events:none}
+body.journal-preview button:focus-visible,body.journal-preview a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+body.journal-preview .tw-user-cluster{border:0;background:transparent}
+.tw-user-cluster>button{border:2px solid white;border-radius:50%;width:38px;height:38px;background:#b74b36;color:white;font-weight:700;box-shadow:0 2px 8px #17374733;cursor:pointer}
+@media(max-width:360px){body.journal-preview .app{padding-inline:16px}.journal-hero-copy{left:16px}.journal-hero-copy h1{font-size:29px}body.journal-preview .journal-hero{margin-inline:-16px}}
+/* Selected five-panel reference: compact cover, content visible below the fold. */
+body.journal-preview .app{max-width:420px;padding:18px 20px 88px;background:var(--paper) url('/assets/route-photos/camino-page-background.png') -9999px 0/1px no-repeat}
+body.journal-preview .nav{max-width:420px}
+body.journal-preview .journal-hero{margin-inline:-20px}
+.journal-hero-link>img{height:clamp(290px,48dvh,390px);aspect-ratio:auto;object-fit:cover;object-position:center bottom}
+.journal-hero-copy{left:20px;top:15px}
+.journal-hero-copy h1{font-size:36px}
+body.journal-preview .community-brand{font-size:23px}
+body.journal-preview .title{font-size:29px!important;margin-bottom:16px}
+body.journal-preview .profile-links{grid-template-columns:repeat(3,1fr)}
+body.journal-preview .profile-stats{display:none}
+.journal-profile-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 40px}
+.journal-profile-head h1{margin:0;font-size:29px}
+.journal-profile-head button{border:0;background:transparent;font-size:14px;min-height:44px}
+body.journal-preview .journal-profile{padding-top:0}
+body.journal-preview .journal-profile .profile-links button:nth-child(n+4){display:none}
+.journal-tabs,.journal-trip-filters{display:flex;gap:8px;align-items:center;margin:10px 0 16px;flex-wrap:wrap}
+.journal-tabs button,.journal-trip-filters button{min-height:44px;border:0;padding:8px 12px;background:transparent;color:var(--muted);cursor:pointer}
+.journal-tabs button.active{border-bottom:2px solid var(--accent);color:var(--ink)}
+.journal-trip-filters button.active,.journal-trip-filters button:last-child{background:var(--accent);color:white;border-radius:20px}
+.journal-composer>summary{cursor:pointer;padding:12px 0;font-weight:600;min-height:44px}
+.tw-place-cluster{border:0;background:none}
+.tw-place-cluster>button{border:2px solid white;border-radius:50%;width:34px;height:34px;background:#173747;color:white;font-weight:700;cursor:pointer}
+body.journal-preview .map-canvas{height:310px}
+body.journal-preview .ai-float{right:max(12px,calc((100vw - 420px)/2 + 12px))!important}
+body.journal-preview .map-controls{grid-template-columns:minmax(0,1fr) auto auto}
+#regionalAiCompanions{margin:12px 0 18px;padding:12px 0;border-block:1px solid var(--line)}
+#regionalAiCompanions header{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+#regionalAiCompanions header small,.ai-companion-disclosure{font-size:11px;color:var(--muted)}
+.ai-companion-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ai-companion-grid button{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px;min-height:100px;border:1px solid var(--line);background:transparent;border-radius:8px;color:var(--ink);font:inherit;font-size:12px;cursor:pointer}
+.ai-companion-grid img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.ai-companion-grid small{position:absolute;top:5px;right:5px;color:var(--accent);font-size:10px}
+.ai-companion-disclosure{padding:0 8px;line-height:1.6}
+.ai-float-tab{font-size:11px}
+.tw-landmark-thumb{display:block;width:32px;height:32px;border-radius:50%;object-fit:cover;background:#e6e2d8}
+body.journal-preview #messages .dm-page-head{display:block;padding:0;border:0;background:none;margin:0}
+body.journal-preview #messages .dm-page-head>div{width:100%}
+body.journal-preview #messages .dm-page-head .title{max-width:none;width:auto;padding:0;margin:0 0 12px;white-space:normal}
+body.journal-preview #messages .dm-page-head::after,body.journal-preview .title::after,body.journal-preview .profile-hero::after,body.journal-preview .map-card::before,body.journal-preview .head::after,body.journal-preview .app::after,body.journal-preview .app::before{display:none!important}
+body.journal-preview #profile .profile-hero{background:none;border:0;padding:12px 0 24px}
+body.journal-preview #map .map-card{box-shadow:none}
+body.journal-preview #map .map-canvas{min-height:310px;height:310px}
+body.journal-preview .title,body.journal-preview h1,body.journal-preview h2,body.journal-preview h3,body.journal-preview .community-brand{font-family:"Noto Serif SC","Songti SC",SimSun,Georgia,serif!important;font-weight:700}
+body.journal-preview #map>.title{margin:0 0 16px;padding:0;line-height:1.3;letter-spacing:.05em}
+body.journal-preview #map .tw-q-pin .tw-q-pin__body{display:block;width:46px!important;height:46px!important;max-width:46px!important;padding:0;border:2px solid #fff;border-radius:50%;background:#f8f5ed;box-shadow:0 2px 7px #17374733;transform:translate(-8px,-8px)}
+body.journal-preview #map .tw-q-pin .tw-landmark-thumb{display:block;width:42px!important;height:42px!important;min-width:42px!important;max-width:42px!important;min-height:42px!important;max-height:42px!important;flex:none;aspect-ratio:1/1;object-fit:cover;border-radius:50%}
+body.journal-preview #map .tw-q-pin__label{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);max-width:100px;padding:2px 4px;border-radius:3px;background:#f8f5ede8;line-height:1.2;font-size:10px;white-space:nowrap}
+body.journal-preview #map .leaflet-tile-pane{filter:saturate(1.35) contrast(1.02)}
+body.journal-preview #map .tw-online-pin .tw-q-pin__body{width:auto!important;height:auto!important;max-width:130px!important;border-color:#367a73;padding:3px 6px!important;display:flex}
+
+/* Home feed: compact, varied-height photo masonry with a familiar system sans. */
+body.journal-preview #communityFeed.home-feed-grid{display:block;columns:2;column-gap:8px;padding:0 0 12px}
+body.journal-preview .home-feed-grid>.home-feed-card{display:inline-block;width:100%;min-width:0;margin:0 0 8px;break-inside:avoid;vertical-align:top;border:0;border-radius:10px;overflow:hidden;background:rgba(248,245,237,.9);box-shadow:0 2px 9px #203a410c;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+body.journal-preview .home-feed-grid .post-gallery{border-radius:0}
+body.journal-preview .home-feed-grid .post-gallery>button:first-child{width:100%;height:auto;aspect-ratio:1/1.08;background:#e7e2d6}
+body.journal-preview .home-feed-grid .home-feed-card:nth-child(6n+1) .post-gallery>button:first-child{aspect-ratio:1/1.16}
+body.journal-preview .home-feed-grid .home-feed-card:nth-child(6n+2) .post-gallery>button:first-child{aspect-ratio:1/1.04}
+body.journal-preview .home-feed-grid .home-feed-card:nth-child(6n+3) .post-gallery>button:first-child{aspect-ratio:1/1.12}
+body.journal-preview .home-feed-grid .home-feed-card:nth-child(6n+4) .post-gallery>button:first-child{aspect-ratio:1/1}
+body.journal-preview .home-feed-grid .post-gallery>button:first-child img{width:100%;height:100%;aspect-ratio:unset;object-fit:cover}
+body.journal-preview .home-feed-grid .post-content{grid-template-columns:minmax(0,1fr) auto;gap:5px;padding:8px}
+body.journal-preview .home-feed-grid .post-title{font:650 14px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;color:#242729}
+body.journal-preview .home-feed-grid .post-copy{font:400 12px/1.42 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;color:#666b6d}
+body.journal-preview .home-feed-grid .post-author-name{color:#45494b}
+body.journal-preview .home-feed-grid .post-actions{color:#73787a;font-family:inherit}
+body.journal-preview .home-feed-grid .post-author-identity img,body.journal-preview .home-feed-grid .post-avatar-fallback{width:22px;height:22px}
+body.journal-preview .home-feed-grid .post-author-name{max-width:68px}
+@media(max-width:360px){body.journal-preview #communityFeed.home-feed-grid{column-gap:7px}body.journal-preview .home-feed-grid>.home-feed-card{margin-bottom:7px}body.journal-preview .home-feed-grid .post-content{padding:7px}}
+
+/* Local time follows the user's 08:00–20:00 day / evening preference. */
+body.journal-preview[data-time-theme="night"]{--cream:#1c2528;--paper:#1c2528;--ink:#f2eee6;--muted:#c4c3bb;--line:#4c575a;background:#111719;color:#f2eee6;color-scheme:dark}
+body.journal-preview[data-time-theme="night"]::before{filter:brightness(.48) saturate(.72)}
+body.journal-preview[data-time-theme="night"] .card,body.journal-preview[data-time-theme="night"] .post-card,body.journal-preview[data-time-theme="night"] .dm-row{background:rgba(28,37,40,.91);color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .muted,body.journal-preview[data-time-theme="night"] .sub{color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] .input,body.journal-preview[data-time-theme="night"] input,body.journal-preview[data-time-theme="night"] select,body.journal-preview[data-time-theme="night"] textarea{background:#293437;color:#f2eee6;border-color:#536064}
+body.journal-preview[data-time-theme="night"] .input::placeholder,body.journal-preview[data-time-theme="night"] input::placeholder,body.journal-preview[data-time-theme="night"] textarea::placeholder{color:#b7bdbb}
+body.journal-preview[data-time-theme="night"] .home-feed-grid>.home-feed-card{background:rgba(28,37,40,.91);box-shadow:0 2px 12px #0005}
+body.journal-preview[data-time-theme="night"] .home-feed-grid .post-title,body.journal-preview[data-time-theme="night"] .home-feed-grid .post-author-name{color:#f3efe7}
+body.journal-preview[data-time-theme="night"] .home-feed-grid .post-copy,body.journal-preview[data-time-theme="night"] .home-feed-grid .post-actions{color:#c6c9c6}
+body.journal-preview[data-time-theme="night"] .home-tabs,body.journal-preview[data-time-theme="night"] .home-tab{color:#e1e2de;border-color:#5a6263}
+body.journal-preview[data-time-theme="night"] .home-tab.active{color:#fff}
+body.journal-preview[data-time-theme="night"] .nav{background:#1c2528f5;border-color:#4c575a}
+body.journal-preview[data-time-theme="night"] .nav button{color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] .nav button.active{color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .journal-hero-copy h1,body.journal-preview[data-time-theme="night"] .journal-hero-copy p{color:#f2eee6;background:rgba(28,37,40,.72)}
+body.journal-preview #home .community-brand,body.journal-preview #home .home-tabs,body.journal-preview #home .home-tabs button{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+/* Profile shortcuts stay light and unboxed by day; night mode carries the dark surface through every profile panel. */
+body.journal-preview .profile-large-avatar{border:0!important;outline:0!important;box-shadow:none!important}
+body.journal-preview .journal-profile .profile-links{background:transparent;border:0;box-shadow:none;padding:0}
+body.journal-preview .journal-profile .profile-links button{background:transparent;border:0;color:var(--ink)}
+body.journal-preview[data-time-theme="night"] .journal-profile .profile-hero,
+body.journal-preview[data-time-theme="night"] .journal-profile .profile-links,
+body.journal-preview[data-time-theme="night"] .journal-profile .profile-stats{background:transparent;border-color:transparent;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .journal-profile .profile-settings{background:rgba(28,37,40,.9);border:0;box-shadow:none;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .journal-profile :is(.profile-hero h1,.profile-stats b,.profile-links button,.profile-settings h3,.profile-settings summary,.profile-settings button,.profile-language-row,.profile-detail-head h2,.profile-item b,.profile-row b,.profile-item p,.profile-event,.profile-toggle,.profile-document,.profile-document h3){color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .journal-profile :is(.profile-bio-action,.profile-stats span,.profile-row small,.profile-item small,.profile-empty){color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] .journal-profile :is(.profile-settings details,.profile-settings button,.profile-language-row,.profile-item,.profile-row,.profile-toggle){border-color:#4c575a}
+body.journal-preview[data-time-theme="night"] .journal-profile :is(.profile-item-actions button,.profile-row-actions button,.profile-detail-head button){background:#293437;border-color:#536064;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .journal-profile .profile-language-row select{background:#293437;border-color:#536064;color:#f2eee6}
+body.journal-preview .title,body.journal-preview #map>.title,
+body.journal-preview .journal-profile-head h1,
+body.journal-preview .journal-hero-copy h1{font-weight:900!important;-webkit-text-stroke:.25px currentColor}
+body.journal-preview .title,body.journal-preview .journal-profile-head h1{font-size:32px!important}
+body.journal-preview #whereNow h2{font-size:26px!important;line-height:1.3;font-weight:900!important;-webkit-text-stroke:.2px currentColor}
+body.journal-preview .title,body.journal-preview #whereNow h2,body.journal-preview .journal-profile-head h1{ text-shadow:.25px 0 currentColor,-.25px 0 currentColor; }
+body.journal-preview .home-tabs button,body.journal-preview .journal-tabs button{font-weight:700!important}
+body.journal-preview #mapExplore{display:flex;flex-direction:column}
+body.journal-preview #whereNow{order:0}
+body.journal-preview #routeLibrary{order:1}
+body.journal-preview #regionalAiCompanions{order:2}
+body.journal-preview .where-now-grid{grid-template-columns:1fr;gap:10px}
+body.journal-preview .where-now-card{min-height:88px;height:88px;display:grid;grid-template-columns:112px 1fr;gap:12px;border:0;background:none;color:var(--ink);overflow:hidden}
+body.journal-preview .where-now-card>img{position:static;width:112px;height:80px;object-fit:cover;border-radius:5px}
+body.journal-preview .where-now-card::after{display:none}
+body.journal-preview .where-now-card>div{position:static;min-height:0;padding:0;display:block}
+body.journal-preview .where-now-card h3{font-size:17px;margin:2px 0 4px}
+body.journal-preview .where-now-card p,body.journal-preview .where-now-card b,body.journal-preview .where-now-card em,body.journal-preview .where-now-card small{display:none}
+body.journal-preview .where-now-card button{font-size:12px;color:var(--muted);margin:0;min-height:36px;border:0}
+.destination-region-tabs{display:flex;gap:4px;overflow-x:auto;margin:0 0 12px;padding-bottom:4px}
+.destination-region-tabs button{flex:0 0 auto;min-height:44px;border:0;border-radius:5px;background:#ebe7dc;color:var(--muted);padding:7px 10px;font:inherit;font-size:12px;cursor:pointer}
+.destination-region-tabs button[aria-pressed="true"]{background:transparent;color:var(--ink);border-bottom:2px solid var(--accent);border-radius:0;font-weight:700}
+#destinationSeason{font:inherit;font-size:12px;min-height:44px;max-width:110px;background:#ebe7dc;border:0;border-radius:5px;color:var(--ink);padding:5px 8px}
+#regionalAiCompanions>summary{font-size:13px;min-height:44px;cursor:pointer;padding:10px 0}
+.tw-landmark-cluster{background:none;border:0}
+body.journal-preview #map .tw-landmark-group{position:relative;width:46px;height:46px}
+body.journal-preview #map .tw-landmark-group img{width:46px!important;height:46px!important;min-width:46px!important;max-width:46px!important;min-height:46px!important;max-height:46px!important;object-fit:cover;border-radius:50%;border:2px solid white;box-shadow:0 2px 7px #17374733}
+.tw-cluster-count{position:absolute;top:-5px;right:-6px;min-width:20px;height:20px;display:grid;place-items:center;padding:0 4px;background:#173747;color:white;border:1px solid white;border-radius:50%;font:600 10px system-ui}
+.tw-landmark-group small{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);max-width:100px;padding:2px 4px;border-radius:3px;background:#f8f5ede8;color:#173747;font:600 10px/1.2 system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.journal-preview #routeLibrary>.head:first-child,body.journal-preview #routeFilters,body.journal-preview #routeGrid{display:none}
+body.journal-preview #whereNowGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
+body.journal-preview #whereNowGrid:has(.where-now-card){grid-template-columns:1fr}
+#destinationCountryControls{display:grid;gap:7px;margin:4px 0 16px}
+#destinationCountryControls label{display:flex;gap:12px;align-items:center;font-size:13px;font-weight:600}
+#destinationCountryControls select{min-height:44px;max-width:70%;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);font:inherit;padding:6px}
+#destinationCountryControls>small{font-size:11px;color:var(--muted)}
+.destination-photo-card{display:flex;flex-direction:column;gap:6px;min-width:0;text-align:left;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;font:inherit}
+.destination-photo-card img{display:block;width:100%;height:110px;object-fit:cover;border-radius:6px}
+.destination-photo-card strong{font-family:"Noto Serif SC",SimSun,serif;font-size:17px;line-height:1.35}
+.destination-photo-card small{font-size:11px;color:var(--muted);line-height:1.5}
+.destination-pagination,.destination-source-note,.destination-feedback{grid-column:1/-1}
+.destination-pagination{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0}
+.destination-pagination button{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--ink)}
+.destination-pagination button:disabled{opacity:.4}
+.destination-source-note{font-size:11px;line-height:1.6;color:var(--muted)}
+
+/* Five selected mobile backgrounds: fixed beneath the scrolling page. */
+body.journal-preview{position:relative;isolation:isolate;background:#f8f5ed}
+body.journal-preview::before{content:"";position:fixed;z-index:-1;inset:0;pointer-events:none;background-repeat:no-repeat;background-position:center 22%;background-size:cover;background-color:#f8f5ed}
+body.journal-preview[data-page-bg="great-wall"]::before{background-image:url('/assets/route-photos/page-bg-great-wall-mobile.png?v=2')}
+body.journal-preview[data-page-bg="zhangjiajie"]::before{background-image:url('/assets/route-photos/page-bg-zhangjiajie-mobile.png?v=2')}
+body.journal-preview[data-page-bg="west-lake"]::before{background-image:url('/assets/route-photos/page-bg-west-lake-mobile.png?v=1')}
+body.journal-preview[data-page-bg="erhai"]::before{background-image:url('/assets/route-photos/page-bg-erhai-mobile.png?v=2')}
+body.journal-preview[data-page-bg="potala"]::before{background-image:url('/assets/route-photos/page-bg-potala-mobile.png?v=2')}
+body.journal-preview .app{background:transparent!important}
+body.journal-preview #friends,body.journal-preview .journal-profile{background-image:none!important}
+body.journal-preview .journal-profile{padding-top:14px!important}
+body.journal-preview .journal-hero{display:none!important}
+body.journal-preview .journal-hero-link{min-height:0}
+body.journal-preview .journal-hero-link>img{display:none}
+body.journal-preview .journal-hero-copy h1{display:inline-block;padding:5px 10px;background:rgba(248,245,237,.9);border-radius:8px}
+body.journal-preview .journal-hero-copy p{display:table;padding:4px 8px;background:rgba(248,245,237,.9);border-radius:6px}
+body.journal-preview .card,body.journal-preview .post-card{background:rgba(248,245,237,.88)}
+body.journal-preview .nav{background:rgba(248,245,237,.97)}
+
+/* Profile shortcuts: compact translucent tiles, with all personal sections visible. */
+body.journal-preview #profile .journal-profile-head{margin-bottom:14px}
+body.journal-preview #profile .profile-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0;background:transparent!important;border:0!important;box-shadow:none!important}
+body.journal-preview #profile .profile-links button,
+body.journal-preview #profile .profile-links button:nth-child(n+4){display:flex;align-items:center;justify-content:center;min-height:56px;padding:8px 4px;border:1px solid rgba(23,55,71,.16)!important;border-radius:12px;background:rgba(248,245,237,.38)!important;color:var(--ink)!important;box-shadow:none}
+body.journal-preview #profile .profile-avatar-action{background:rgba(23,55,71,.16);border-radius:50%;overflow:hidden}
+body.journal-preview #profile .profile-large-avatar{filter:brightness(.86) saturate(.88)}
+body.journal-preview[data-time-theme="night"] #profile .profile-large-avatar{filter:brightness(.42) saturate(.68) contrast(.94)}
+body.journal-preview[data-time-theme="night"] #profile .profile-avatar-action{background:rgba(18,29,33,.7)}
+body.journal-preview[data-time-theme="night"] #profile .profile-links button,
+body.journal-preview[data-time-theme="night"] #profile .profile-links button:nth-child(n+4){border-color:rgba(225,231,225,.22)!important;background:rgba(18,29,33,.62)!important;color:#f2eee6!important;backdrop-filter:blur(8px)}
+
+/* Keep message surfaces and map controls legible without bright white plates at night. */
+body.journal-preview[data-time-theme="night"] #messages .dm-page-head{background:rgba(18,29,33,.42)!important;border:1px solid rgba(225,231,225,.18)!important;border-radius:12px;padding:14px!important;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] #messages .dm-page-head .title,
+body.journal-preview[data-time-theme="night"] #messages .dm-page-head p{color:#f2eee6}
+body.journal-preview[data-time-theme="night"] #messages .journal-tabs button{color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] #messages .journal-tabs button.active{color:#fff}
+body.journal-preview[data-time-theme="night"] #messages .dm-row,
+body.journal-preview[data-time-theme="night"] #messages .dm-empty{background:rgba(18,29,33,.62)!important;border:1px solid rgba(225,231,225,.18)!important;border-radius:12px;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] #messages .dm-empty-icon{background:rgba(18,29,33,.55);border-color:rgba(225,231,225,.2);color:#e4c2a4;box-shadow:3px 3px 0 rgba(5,12,14,.28)}
+body.journal-preview[data-time-theme="night"] #messages #dmLogin{background:rgba(43,76,83,.82);border-color:rgba(225,231,225,.18);color:#f2eee6}
+body.journal-preview[data-time-theme="night"] #messages .dm-preview,
+body.journal-preview[data-time-theme="night"] #messages .dm-row time{color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] .dm-overlay{background:rgba(7,12,14,.78)}
+body.journal-preview[data-time-theme="night"] .dm-window,
+body.journal-preview[data-time-theme="night"] .dm-profile{background:#182226;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .dm-header{border-color:#465256}
+body.journal-preview[data-time-theme="night"] .dm-header button,
+body.journal-preview[data-time-theme="night"] .dm-profile h2,
+body.journal-preview[data-time-theme="night"] .dm-profile-stats b,
+body.journal-preview[data-time-theme="night"] .dm-profile-post b{color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .dm-message{background:#293437;color:#f2eee6}
+body.journal-preview[data-time-theme="night"] .dm-message.mine{background:#34545c;color:#fff}
+body.journal-preview[data-time-theme="night"] .dm-message.failed{background:#50322e;color:#ffe9e2}
+body.journal-preview[data-time-theme="night"] .dm-compose textarea{background:#222f33;color:#f2eee6;border-color:#536064}
+body.journal-preview[data-time-theme="night"] .dm-compose textarea::placeholder{color:#b7bdbb}
+body.journal-preview[data-time-theme="night"] .dm-status{color:#f0b29f}
+body.journal-preview[data-time-theme="night"] #map .map-controls input,
+body.journal-preview[data-time-theme="night"] #map .map-controls button{background:rgba(18,29,33,.68)!important;color:#f2eee6!important;border:1px solid rgba(225,231,225,.24)!important;box-shadow:none}
+body.journal-preview[data-time-theme="night"] #map .map-controls input::placeholder{color:#c4c3bb}
+body.journal-preview[data-time-theme="night"] #map #mapStatus{color:#dedbd3}
+body.journal-preview[data-time-theme="night"] .ai-float{background:rgba(18,29,33,.82)!important;border-color:rgba(225,231,225,.24)!important;color:#f2eee6!important;box-shadow:0 3px 12px rgba(0,0,0,.22)}
+body.journal-preview[data-time-theme="night"] .ai-float svg{color:#f2eee6}
+@media(min-width:800px){body.journal-preview .app{border:0!important;box-shadow:none!important}}
+@media(max-width:360px){body.journal-preview #profile .profile-links{grid-template-columns:repeat(2,minmax(0,1fr))}}

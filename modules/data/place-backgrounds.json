@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "notice": "Only individually generated, inspected artwork belongs in this registry. Missing entries are not generated backgrounds.",
+  "backgrounds": {
+    "Q243": {
+      "image": "/assets/route-photos/q243-gathered-background.png",
+      "name": "Eiffel Tower",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg",
+      "sourceAuthor": "Benh LIEU SONG",
+      "license": "Public domain",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg",
+      "artisticDerivative": true,
+      "width": 1619,
+      "height": 971
+    },
+    "Q9141": {
+      "image": "/assets/route-photos/q9141-gathered-background.png",
+      "name": "Taj Mahal",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Taj_Mahal_(Edited).jpeg",
+      "sourceAuthor": "Yann; edited by Jim Carter",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 1619,
+      "height": 971
+    },
+    "Q19675": {
+      "image": "/assets/route-photos/q19675-gathered-background.png",
+      "name": "Louvre Museum",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cour_Napol%C3%A9on_at_night_-_Louvre.jpg",
+      "sourceAuthor": "Benh LIEU SONG",
+      "license": "CC BY 2.5",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
+      "artisticDerivative": true,
+      "width": 1619,
+      "height": 971
+    },
+    "Q45178": {
+      "image": "/assets/route-photos/sydney-opera-gathered-background.png",
+      "name": "Sydney Opera House",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:00_1375_Sydney_Opera_House_(Australia).jpg",
+      "sourceAuthor": "W. Bulach",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 1685,
+      "height": 934
+    },
+    "Q12501": {
+      "image": "/assets/route-photos/great-wall-gathered-background.png",
+      "name": "Great Wall of China",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Wall_of_China_July_2006.JPG",
+      "sourceAuthor": "Velatrix",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "artisticDerivative": true,
+      "width": 1619,
+      "height": 971
+    },
+    "Q10866444": {
+      "image": "/assets/route-photos/west-lake-gathered-background.png",
+      "name": "West Lake — Three Pools Mirroring the Moon",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Three_Pools_Mirroring_the_Moon.jpg",
+      "sourceAuthor": "Hangzhou West Lake, Ten Thousand Strangers",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "artisticDerivative": true,
+      "width": 1619,
+      "height": 971
+    },
+    "Q9202": {
+      "image": "/assets/route-photos/liberty-gathered-background.png",
+      "name": "Statue of Liberty",
+      "skill": "scenes-gathered-zine-v1-3",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Statue_of_Liberty_and_a_sightseeing_boat,_Liberty_Island,_New_York.jpg",
+      "sourceAuthor": "Christian David / Espandero",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "artisticDerivative": true,
+      "width": 1663,
+      "height": 946
+    }
+  }
+}

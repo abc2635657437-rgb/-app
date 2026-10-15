@@ -1,0 +1,87 @@
+{
+  "version": "2026-10-12",
+  "guides": [
+    {
+      "id": "camino-sarria-portomarin",
+      "backgroundArt": {"image":"/assets/route-photos/camino-page-background.png","landmark":{"zh":"圣地亚哥大教堂","en":"Santiago de Compostela Cathedral"},"skill":"scenes-gathered-zine-v1-3","sourceUrl":"https://commons.wikimedia.org/wiki/File:2010-Catedral_de_Santiago_de_Compostela-Galicia_(Spain)_3.jpg","credit":"Luis Miguel Bugallo Sánchez","license":"CC BY-SA 3.0","documentary":false},
+      "routeId": "es-camino-hike",
+      "dayNumber": 1,
+      "title": {"zh": "萨里亚 → 波尔托马林：吃住与关键节点", "en": "Sarria → Portomarín: stops, food and stays"},
+      "keywords": ["朝圣", "圣地亚哥", "萨里亚", "波尔托马林", "西班牙", "Camino", "Sarria", "Portomarin", "Portomarín", "Santiago", "Galicia", "Spain"],
+      "checkedAt": "2026-10-12",
+      "currency": "EUR",
+      "distanceKm": 22.2,
+      "walkingHours": 5,
+      "difficulty": {
+        "stars": 2,
+        "provisional": true,
+        "scope": {"zh":"仅适用于萨里亚至波尔托马林约 22.2 公里单日路段；不代表整条法国之路。","en":"Applies only to the approximately 22.2 km day stage from Sarria to Portomarín, not the entire French Way."},
+        "basis": {"zh":"依据约 5 小时步行、乡村与林地起伏作暂定判断；累计爬升尚未核实。雨天、炎热、负重和连续多日步行会增加难度，出发前核对官方路况。","en":"Provisional assessment based on about five hours of walking through undulating rural and woodland terrain; total ascent is not yet verified. Rain, heat, pack weight and consecutive walking days increase demands. Check official trail conditions before departure."}
+      },
+      "sourceUrl": "https://www.gronze.com/etapa/sarria/portomarin",
+      "journey": [
+        {"name":{"zh":"萨里亚","en":"Sarria"},"query":"Sarria, Lugo, Spain"},
+        {"name":{"zh":"波尔托马林","en":"Portomarín"},"query":"Portomarin, Lugo, Spain"},
+        {"name":{"zh":"帕拉斯德雷","en":"Palas de Rei"},"query":"Palas de Rei, Lugo, Spain"},
+        {"name":{"zh":"梅利德","en":"Melide"},"query":"Melide, A Coruna, Spain"},
+        {"name":{"zh":"阿尔苏阿","en":"Arzúa"},"query":"Arzua, A Coruna, Spain"},
+        {"name":{"zh":"奥佩德罗索","en":"O Pedrouzo"},"query":"O Pedrouzo, O Pino, Spain"},
+        {"name":{"zh":"圣地亚哥","en":"Santiago de Compostela"},"query":"Santiago de Compostela, Spain"}
+      ],
+      "waypoints": [
+        {"id":"sarria-start","name":{"zh":"萨里亚 · 圣玛丽娜教堂","en":"Sarria · Santa Mariña church"},"latitude":42.7774499,"longitude":-7.4143584,"sourceUrl":"https://www.openstreetmap.org/way/368025246","description":{"zh":"在老城 Rúa Maior 核对方向与补给后出发。这是明确的集合点，不是整个萨里亚行政区域的中心坐标。出发时间由你的行程决定。","en":"Start at this identifiable meeting point on Rúa Maior in the old town. Check your direction and supplies. This is a church location, not an administrative-area centroid; choose your own departure time."}},
+        {"id":"barbadelo","name":{"zh":"巴尔瓦德洛 · 圣地亚哥教堂","en":"Barbadelo · Santiago church"},"latitude":42.7651999,"longitude":-7.4503614,"sourceUrl":"https://www.openstreetmap.org/way/64310566","description":{"zh":"途经 Barbadelo，可在教堂周边短暂停留。能否进入以现场开放情况为准；不把未核实门票算作免费。","en":"Pause around the church in Barbadelo. Check local opening arrangements before entering; unverified admission is not assumed to be free."}},
+        {"id":"ferreiros","name":{"zh":"Ferreiros 村 · 休息补给","en":"Ferreiros village · rest stop"},"latitude":42.7832763,"longitude":-7.5302357,"sourceUrl":"https://www.openstreetmap.org/node/470351319","description":{"zh":"这里定位到实际村落，不是虚构的“林地与石墙”拍摄点。按现场营业情况选择休息与补水，随身保留备用食物；尚未指定或核价某一家午餐店。","en":"This pin identifies the village, not the unknown camera position of the woodland photo. Check which businesses are open, refill supplies when available and carry backup food. No particular lunch venue or price has been verified here."}},
+        {"id":"portomarin-arrival","name":{"zh":"波尔托马林 · 圣尼古拉斯教堂","en":"Portomarín · San Nicolao church"},"latitude":42.8077853,"longitude":-7.6155196,"sourceUrl":"https://www.openstreetmap.org/way/65082217","description":{"zh":"抵达小镇后在教堂广场结束本段步行，再按实际预订前往住宿。晚餐推荐属于抵达后的可选安排，不是 Ferreiros 的午餐店。","en":"Finish this stage by the church, then continue to your booked accommodation. The dinner suggestion is an optional stop after arrival, not a lunch venue in Ferreiros."}}
+      ],
+      "notice": {"zh": "费用为核对当日网页列价，不是实时库存或锁定报价。下面的餐饮和住宿是可选项；小计不等于全天预算。商家照片暂用于本地来源预览，公开发布前需确认图片使用条件。", "en": "Prices are published references checked on the date shown, not live availability or guaranteed quotes. Food and accommodation below are optional; the subtotal is not a full-day budget. Business photos are shown in this local source preview; confirm reuse terms before public release."},
+      "stops": [
+        {
+          "id": "camino-rural-stage", "category": "hiking",
+          "name": {"zh": "萨里亚至波尔托马林乡村路段", "en": "Rural stage from Sarria to Portomarín"},
+          "description": {"zh": "沿乡村与林地步行，有连续起伏。约 5 小时是路段步行参考，吃饭、休息和天气应另留余量。实拍摄于 2025 年，不代表当日路况。", "en": "Walk through villages and woodland with repeated climbs and descents. The five-hour estimate excludes your breaks and weather delays. This 2025 photograph is not a live trail-condition report."},
+          "image": "/assets/route-photos/camino-stage.jpg",
+          "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Camino_Day_39,_Sarria_-)_Portomar%C3%ADn_9-25-2025_%5Ecamino_-_Flickr_-_Sharon_Mollerus.jpg",
+          "credit": "Sharon Mollerus", "license": "CC BY 4.0", "licenseUrl": "https://creativecommons.org/licenses/by/4.0/", "imageStatus": "licensed", "photoDate": "2025-09-25",
+          "sourceUrl": "https://www.gronze.com/etapa/sarria/portomarin"
+        },
+        {
+          "id": "portomarin-church", "category": "sight",
+          "latitude":42.8077853,"longitude":-7.6155196,"locationSourceUrl":"https://www.openstreetmap.org/way/65082217",
+          "name": {"zh": "圣尼古拉斯教堂", "en": "Church of San Nicolao"},
+          "description": {"zh": "抵达波尔托马林后参观小镇地标的外观。教堂曾因水库建设逐石迁移；实拍为 2015 年夜景。内部开放时间与门票尚未核实，不计入费用小计。", "en": "After reaching Portomarín, see the town landmark from outside. The church was relocated stone by stone for the reservoir; this is a 2015 night photograph. Interior access and ticket prices have not been verified and are excluded from the subtotal."},
+          "image": "/assets/route-photos/portomarin-church.jpg",
+          "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Iglesia_de_San_Nicol%C3%A1s,_Puertomar%C3%ADn,_Camino_de_Santiago,_Lugo,_Espa%C3%B1a,_2015-09-19,_DD_15-17_HDR.jpg",
+          "credit": "Diego Delso, delso.photo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/", "imageStatus": "licensed", "photoDate": "2015-09-19",
+          "sourceUrl": "https://www.turismo.gal/que-facer/camino-de-santiago/camino-frances-a-cabalo"
+        },
+        {
+          "id": "peregrina-classic-burger", "category": "food",
+          "address":"Plaza del Camino 5, 27170 Portomarín, Lugo, Spain",
+          "name": {"zh": "La Peregrina Gourmet · 经典牛肉汉堡", "en": "La Peregrina Gourmet · Classic beef burger"},
+          "description": {"zh": "波尔托马林门店官网菜单中的 Ternera gallega 选项为 €13.50；更换肉类另价。照片对应官网经典汉堡，不冒充当地鳗鱼馅饼。饮料及其他点餐不包含在此价格内。", "en": "The Portomarín menu lists the Ternera gallega option at €13.50; other meat choices cost more. The official photo shows the classic burger, not local eel empanada. Drinks and additional orders are not included."},
+          "image": "https://laperegrinagourmet.com/wp-content/uploads/2024/11/hamburguesa-clasica.jpg",
+          "imageSourceUrl": "https://laperegrinagourmet.com/carta-portomarin/", "credit": "La Peregrina Gourmet", "imageStatus": "source-preview",
+          "sourceUrl": "https://laperegrinagourmet.com/carta-portomarin/",
+          "price": {"amount": 13.5, "unit": {"zh": "每份 / 起", "en": "per serving / from"}, "kind": "published-reference"}
+        },
+        {
+          "id": "ferramenteiro-stay", "category": "stay",
+          "latitude":42.8060531,"longitude":-7.6183485,"locationSourceUrl":"https://www.openstreetmap.org/node/1437009588",
+          "name": {"zh": "Albergue Ferramenteiro · 旅舍床位", "en": "Albergue Ferramenteiro · Hostel bed"},
+          "description": {"zh": "官网列价 €15 / 人，地址 Rúa Chantada 3。请向旅舍确认入住日期、床位和取消条件，网页列价不保证有空房。图片来自旅舍官方相册。", "en": "The official site lists €15 per person at Rúa Chantada 3. Confirm your dates, bed availability and cancellation terms directly. A published rate is not a vacancy guarantee. Photo from the hostel's official gallery."},
+          "image": "/assets/route-photos/ferramenteiro-beds.jpg",
+          "imageSourceUrl": "https://www.albergueferramenteiro.com/galeria.php", "credit": "Albergue Ferramenteiro", "imageStatus": "source-preview",
+          "sourceUrl": "https://www.albergueferramenteiro.com/",
+          "price": {"amount": 15, "unit": {"zh": "每人 / 每晚", "en": "per person / night"}, "kind": "published-reference"}
+        }
+      ],
+      "costs": [
+        {"name": {"zh": "上述旅舍床位", "en": "Hostel bed above"}, "amount": 15, "sourceUrl": "https://www.albergueferramenteiro.com/", "kind": "published-reference"},
+        {"name": {"zh": "上述旅舍普通早餐（官网价）", "en": "Standard hostel breakfast (official rate)"}, "amount": 3, "sourceUrl": "https://www.albergueferramenteiro.com/", "kind": "published-reference"},
+        {"name": {"zh": "上述经典牛肉汉堡", "en": "Classic beef burger above"}, "amount": 13.5, "sourceUrl": "https://laperegrinagourmet.com/carta-portomarin/", "kind": "published-reference"}
+      ],
+      "excluded": {"zh": "另计：午餐、饮料、交通、行李转运、门票及个人消费。尚未核实的价格不会填成 0。", "en": "Extra: lunch, drinks, transport, baggage transfer, admission and personal spending. Unverified prices are not treated as zero."}
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "purpose": "Mobile-first fixed-page backgrounds for the five main screens.",
+  "rendering": "Vertical 3:5 Gathered-style artwork derived from real location photography.",
+  "deployStatus": "preview-only",
+  "pages": [
+    {
+      "page": "home",
+      "landmark": "Great Wall of China",
+      "file": "/assets/route-photos/page-bg-great-wall-mobile.png",
+      "sourceFile": "assets/route-photos/great-wall-source.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Badaling_China_Great-Wall-of-China-06.jpg",
+      "author": "CEphoto, Uwe Aranas",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "page": "map",
+      "landmark": "Zhangjiajie National Forest Park",
+      "file": "/assets/route-photos/page-bg-zhangjiajie-mobile.png",
+      "sourceFile": "assets/route-photos/zhangjiajie-source.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park.jpg",
+      "author": "Kuruman",
+      "license": "CC BY 2.0"
+    },
+    {
+      "page": "messages",
+      "landmark": "West Lake",
+      "file": "/assets/route-photos/page-bg-west-lake-mobile.png",
+      "sourceFile": "assets/route-photos/west-lake-source.jpg"
+    },
+    {
+      "page": "friends",
+      "landmark": "Erhai Lake",
+      "file": "/assets/route-photos/page-bg-erhai-mobile.png",
+      "sourceFile": "artifacts/design-refs/erhai.jpg"
+    },
+    {
+      "page": "profile",
+      "landmark": "Potala Palace",
+      "file": "/assets/route-photos/page-bg-potala-mobile.png",
+      "sourceFile": "assets/route-photos/potala-source-solemn.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Potala_Palace_HR.jpg",
+      "author": "Xiquinho",
+      "license": "CC BY-SA 3.0"
+    }
+  ]
+}

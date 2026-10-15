@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {parseBounds,mapCatalog,placesInBounds,regionPlaces} from './map-places.mjs';
+assert.deepEqual(parseBounds('-34,151,-33,152'),[-34,151,-33,152]);
+for(const value of ['',',,,','0,0,1,999','1,2,0,3','0,0,90,180','0,0,1,2);bad'])assert.throws(()=>parseBounds(value));
+const d=await mapCatalog();assert(d.places.length>20000);assert(d.places.filter(p=>p.countryCode==='CN').length>=200);assert(d.places.filter(p=>p.countryCode==='AU').length>=100);assert(!d.places.some(p=>/airport|railway station|hospital/i.test(p.name_en)));
+assert.equal(new Set(d.places.map(p=>p.id)).size,d.places.length);
+assert(d.places.every(p=>p.name&&p.name_en&&Number.isFinite(p.latitude)&&Number.isFinite(p.longitude)&&/^Q\d+$/.test(p.id)));
+const sydney=placesInBounds(d.places,[-34,150.7,-33.5,151.5]);assert(sydney.length>20);assert(sydney.every(p=>p.latitude>= -34&&p.longitude>=150.7));
+assert(regionPlaces(d.places,'china').length>=200);
+assert.equal(regionPlaces(d.places,'world').length,d.places.length);
+assert(regionPlaces(d.places,'oceania','AU').length>=100);
+assert(regionPlaces(d.places,'asia','JP').length>=100);
+assert(regionPlaces(d.places,'europe','FR').every(p=>p.countryCode==='FR'));
+assert.equal(regionPlaces(d.places,'europe','US').length,0);
+assert.equal(d.license,'CC BY 4.0');console.log('Map directory passed: valid bounds, 20,000+ sourced attractions, China/Australia coverage, bilingual names, unique IDs and Sydney viewport selection.');

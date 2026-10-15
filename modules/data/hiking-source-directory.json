@@ -1,0 +1,1957 @@
+{
+  "checkedAt": "2026-10-12",
+  "sourceUrl": "https://www.hiking.gov.hk/trail",
+  "notice": "Official route names and detail links only; not complete guides, verified navigation, translated content, photo permissions or generated backgrounds.",
+  "routes": [
+    {
+      "id": "hk-official-673",
+      "name": {
+        "zh": "香港仔郊野公園(香港仔上水塘)無障礙路線"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cDdjamRvMFVtbHdQZWpMcXFQZ09Bdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-41",
+      "name": {
+        "zh": "香港仔自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UUVxMEg3eGVJSFpjbHdVQWtoOVdrQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-701",
+      "name": {
+        "zh": "香港仔畔塘徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VGpKUGVSdGQ2Q2I2WWIyK0ZvN0RjUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-700",
+      "name": {
+        "zh": "香港仔畔塘徑 (下水塘段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ekRuYUFhUi9zdnczTk1vTzRvUGZ0Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-77",
+      "name": {
+        "zh": "香港仔樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/WmppU2ZSVEUwdFF4VWFaTFkrdmZBUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-86",
+      "name": {
+        "zh": "鴨洲地質景點"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TmZqUWFZMmJwU1hoKzNwVlA0aXErQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-43",
+      "name": {
+        "zh": "新娘潭自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/T2lic3MxTlFSUnVjZUQ2dGxOb25iQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-7",
+      "name": {
+        "zh": "嶂上郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/aEVHbmRZbkJYL3FvR0EvVUNRRWFSZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-15",
+      "name": {
+        "zh": "芝麻灣郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZDU4aERwb1FhczExTUxFNk9YOU5TUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-55",
+      "name": {
+        "zh": "川龍家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RVJobWpURjlCUGU4VFB6bDdhYXl5UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-69",
+      "name": {
+        "zh": "涌背樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RURvbVRIM0FiZXc0U0dlcWtTVnNBdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-70",
+      "name": {
+        "zh": "清水灣樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Wk12WTM4TlZlRFhhMlAyU0dCVkRldz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-662",
+      "name": {
+        "zh": "印洲塘郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/a0h1NVNNdFp6UGFuUXZhblNLQ09UUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-687",
+      "name": {
+        "zh": "龍脊"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UWgvZytZSlRrcnBJSU5DWVZUa2pyUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-4",
+      "name": {
+        "zh": "鷹巢山自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/N0s2OTlzeWN5NzF0bG9BTmZsTWRsZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-16",
+      "name": {
+        "zh": "分流郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SnJ4Q3QwV3V3dW5FcHBsQ2RYM05pdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-669",
+      "name": {
+        "zh": "虎地郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/K3BHR1o4SlVPNmFodG9ydjBvMlBvdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-62",
+      "name": {
+        "zh": "鳳坑家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RDBrZUgxZm82eGlYWW5saS9zSDBWQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-702",
+      "name": {
+        "zh": "萬宜地質步道 - 標尖角段"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MUNrNUw1WEdwS2RTa0IzMVJwSkY5QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-704",
+      "name": {
+        "zh": "萬宜地質步道 - 東壩段"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZFNQcUI3R0toMzhFWHAwbUdQNXBwZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-703",
+      "name": {
+        "zh": "萬宜地質步道 - 破邊洲段"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/c2ZrZUpiUGRBck1TanVNQ1J6Qkg5Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-24",
+      "name": {
+        "zh": "釣魚翁郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SzAxekR1U1dCNytYL3U3NW9PWnVWQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-56",
+      "name": {
+        "zh": "河背水塘家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SnNRa3lmM0U4NTVScG5uMG45Qktsdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-26",
+      "name": {
+        "zh": "鶴藪郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MHQzMHVZSGU5S3dNUEdYdEl1bUFHdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-59",
+      "name": {
+        "zh": "鶴藪水塘家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UHkzMDc1SzQzSHoyK09neFRTNTRTUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-637",
+      "name": {
+        "zh": "港島徑(第一段)山頂至薄扶林水塘道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MkpYc3Jud1ZjS2RFbzE1Qkhza0htdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-638",
+      "name": {
+        "zh": "港島徑(第二段)薄扶林水塘道至貝璐道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TnY1M1V3ajM0MEZnRE5TbzRSVUJ3QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-639",
+      "name": {
+        "zh": "港島徑(第三段)貝璐道至灣仔峽"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cGRqOGNYRGlmUTFxbjB3TEVaakxHdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-640",
+      "name": {
+        "zh": "港島徑(第四段)灣仔峽至黃泥涌峽"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZFJyWllCUGJpMUJublRIZUVPWWF0dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-641",
+      "name": {
+        "zh": "港島徑(第五段)黃泥涌峽至柏架山道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/YXhBNmNMRldCL0wwZHE5ZGR1aWRHQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-642",
+      "name": {
+        "zh": "港島徑(第六段)柏架山道至大潭道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/N3BGSE14SVlMSE9yVzQva1RNRTN5Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-643",
+      "name": {
+        "zh": "港島徑(第七段)大潭道至土地灣"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/czFnaDRTUUFySjBwT1VDeWxSSGM3QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-644",
+      "name": {
+        "zh": "港島徑(第八段)土地灣至大浪灣"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/QVVxLzJWeGxNUndtYUNXY2VpK3QxUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-12",
+      "name": {
+        "zh": "康柏郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UVZUTW1PdmF5c1BSWU5JRjZVZ29DZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-38",
+      "name": {
+        "zh": "紅梅谷自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/YVpWWkg5S0gzMFJrWmZaSWVDWHZJZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-64",
+      "name": {
+        "zh": "金山家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VGZRNVlyYTdoR2l4cXB2TTRSRWpsQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-75",
+      "name": {
+        "zh": "金山樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/c0RsOFZwREtEUGlqK050bVY0dys1dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-32",
+      "name": {
+        "zh": "甲龍古道郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UVNWcm9oRWYwdU1xYWhjVk1VY2ZxZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-679",
+      "name": {
+        "zh": "吉澳文化徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/R2FLU0hMdUpwY29KUVpmZXJEbTE5UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-71",
+      "name": {
+        "zh": "企嶺下樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RVlYeCtCQWFVQWcyanhnWGU0d1ZCUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-17",
+      "name": {
+        "zh": "羗山郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/d1E5STBlOVVkcmNTeks3cHM5Zm9BQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-89",
+      "name": {
+        "zh": "荔枝莊地質景點"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dTRjZnBQWXZ0WHdjVFhxS1dSR0tkZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-44",
+      "name": {
+        "zh": "荔枝窩自然步道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NHJCWmlmZFNNcWRVVWVTYVBJZVh1UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-645",
+      "name": {
+        "zh": "鳳凰徑(第一段) 梅窩至南山"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/YUNwM2czOWpZU2hrTXF3NlRTU3hNZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-646",
+      "name": {
+        "zh": "鳳凰徑(第二段) 南山至伯公坳"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SVdvZDdnTENQZXl0byt5QndsQ0NmZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-647",
+      "name": {
+        "zh": "鳳凰徑(第三段) 伯公坳至昂坪"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NWJYSHpGd0d5NmZNdXdtQmM4UTBRdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-648",
+      "name": {
+        "zh": "鳳凰徑(第四段) 昂坪至深屈道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/bFFXSU03dVRuU1VQSHpMRThST3Zldz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-649",
+      "name": {
+        "zh": "鳳凰徑(第五段) 深屈道至萬丈布"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ckcwQUpQUHEzcWRhZVdDYkZsQlR2UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-668",
+      "name": {
+        "zh": "鳳凰徑(第六段) 萬丈布至大澳"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NjVmZUw2OURKcjZkQldxYlN3TjJXQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-651",
+      "name": {
+        "zh": "鳳凰徑(第七段) 大澳至狗嶺涌"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Qk9WL0ZDY2huUFJSYVg4Rm5Gb3h3Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-652",
+      "name": {
+        "zh": "鳳凰徑(第八段) 狗嶺涌至石壁"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Nk5VMHQ4YmlkMFZkV0JxdDdtSS94Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-653",
+      "name": {
+        "zh": "鳳凰徑(第九段) 石壁至水口"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZjQ0ZG5zT3FFbm5HYUlwVmNtck5QUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-654",
+      "name": {
+        "zh": "鳳凰徑(第十段) 水口至長沙"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/YS9XR04yWE5GRnBRZTFFS3E3bjlKdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-655",
+      "name": {
+        "zh": "鳳凰徑(第十一段) 長沙至貝澳"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NktmYXJYQWVwNmMrM016d09JbkYrQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-656",
+      "name": {
+        "zh": "鳳凰徑(第十二段) 貝澳至梅窩"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/aU9nYU5ZRzBPU0VIWWJ0NUhkK1NWZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-27",
+      "name": {
+        "zh": "流水響郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/U2ZUQWFtNks2Rjh6a1grT0tGR3p5UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-689",
+      "name": {
+        "zh": "蓮麻坑郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UFNRbC8yekNibFVpdWN5eW5XZ2c0Zz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-695",
+      "name": {
+        "zh": "獅子山歷史徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Ymh6YmlmYzl3WkRUdmdzeGx0QVMvQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-686",
+      "name": {
+        "zh": "獅子山戰地遺跡徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cFFCTzVsK0N3K21MeW1kRGdDVGppQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-18",
+      "name": {
+        "zh": "老虎頭郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/QVdhZkZzOGdtenhPZ2dTSGI1R3FUUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-706",
+      "name": {
+        "zh": "鹿頸戰地遺跡徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TEZyOEI1QXBwZFhvOVVLampzdGtwQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-8",
+      "name": {
+        "zh": "鹿湖郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cTdXUHRZbytJbUo0eEtTNVNMT3I0dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-25",
+      "name": {
+        "zh": "龍蝦灣郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/YXpGRThNNHNZeXB4dHppcmphemc3QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-33",
+      "name": {
+        "zh": "龍門郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/STlIVWFKdDRmNjRZVUFIM3pyL04rUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-658",
+      "name": {
+        "zh": "馬鞍山郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/QThMbWJpZ010MlZRYkFlMzU5UXY0QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-6",
+      "name": {
+        "zh": "馬鞍山家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/S25mS2F6QmlEQlg2VTRtOVN4M29nZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-45",
+      "name": {
+        "zh": "馬屎洲自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MGRDbkwxQmtSSzV3OUliRlRhWE5DUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-617",
+      "name": {
+        "zh": "麥理浩徑(第一段)北潭涌至浪茄"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VFFUbFFNOXNXTHNWU2FqT09UTjlOZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-618",
+      "name": {
+        "zh": "麥理浩徑(第二段)浪茄至北潭凹"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/d0pFSWc1N1dWdkh3aStSajBvUHlmUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-619",
+      "name": {
+        "zh": "麥理浩徑(第三段)北潭凹至企嶺下"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/aG1rVm1JUWVFcUVyT2RXL3Z5RnpUdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-620",
+      "name": {
+        "zh": "麥理浩徑(第四段) 企嶺下至大老山"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/aWhDRVFZbmpET0pMazRxdWhhU0hIUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-621",
+      "name": {
+        "zh": "麥理浩徑(第五段) 大老山至大埔公路"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MW45T1puY3I1OVJiaDRudGNuNEgxZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-622",
+      "name": {
+        "zh": "麥理浩徑(第六段)大埔公路至城門"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/bStIb016ZGszVk5WWElJN2FzdTdRdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-623",
+      "name": {
+        "zh": "麥理浩徑(第七段)城門至鉛鑛坳"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MzVpUXNrWFZsM3NvcEppamc4emhIZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-624",
+      "name": {
+        "zh": "麥理浩徑(第八段)鉛鑛坳至荃錦公路"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cm1EdG9ycVhDTEFrT3NGYmFsYXdWdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-625",
+      "name": {
+        "zh": "麥理浩徑(第九段)荃錦公路至田夫仔"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VGdKd0dZMzBTK3lKYjR3Z1dTR291UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-626",
+      "name": {
+        "zh": "麥理浩徑(第十段) 田夫仔至屯門"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/N2ptQ3BGSUdScnRGTzllNXZ6Uk8vUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-76",
+      "name": {
+        "zh": "泥涌樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/V3JLaVN0VWZ2T1lteUZmQlp2L1ZoQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-28",
+      "name": {
+        "zh": "南涌郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NUVWdXZxR2NuU0Y1OU5pOFloSDBCZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-82",
+      "name": {
+        "zh": "南山樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/bUhFSUx4VzgzMFBPWFhuaVRqRE9mUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-19",
+      "name": {
+        "zh": "彌勒山郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/OGdwWlNpL1VmT3FQYndjVjljNklCZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-678",
+      "name": {
+        "zh": "昂坪自然步道(鳳凰山段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZlNCMkhacU5vNm90ZzJLOENqOVhpQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-676",
+      "name": {
+        "zh": "昂坪自然步道(彌勒山段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/eXNxeEpiRVl4cXRidzFFZTg3VHE2dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-677",
+      "name": {
+        "zh": "昂坪自然步道(市集段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/WWVwemE2SGZGSmlTQWxUc2dQOHBkdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-53",
+      "name": {
+        "zh": "北潭涌家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dDFXTTZ2TTBxWGVpd3ZKajdFRUNzZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-40",
+      "name": {
+        "zh": "北潭涌自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/akp1K09abERSMDBzaGZFWDZQTkxMZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-659",
+      "name": {
+        "zh": "北潭涌至標尖角遠足徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SnVsSFVZUXZWbWtlczU4RmN0a1NGZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-72",
+      "name": {
+        "zh": "北潭涌樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ak8zampXZjZLK1d4ZmU5THVMMGVMUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-9",
+      "name": {
+        "zh": "北潭郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SUYvb0pkOWZMdWFTak5BWWJvK3RLQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-46",
+      "name": {
+        "zh": "八仙嶺自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SmRaQXBzUy9DSHY1YlRSQjA3QVE5QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-2",
+      "name": {
+        "zh": "爐峰自然步道(西高山段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dDI5eDQrbTBHemxIaTEvKzh6N3hwdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-661",
+      "name": {
+        "zh": "爐峰自然步道(松林砲台段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cFpocmtHWk1VY1NrRGNtNldQcHh5UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-5",
+      "name": {
+        "zh": "菠蘿壩自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dUNQblk0eTArL1RqVWVFWForbytaZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-65",
+      "name": {
+        "zh": "松林砲台歷史徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Njk2MDlSS01XZkpMVXNzd1ltQTFUZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-29",
+      "name": {
+        "zh": "平洲環島郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VE4wRlNxT1hZM1NqWkpKYVBmS1M2dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-30",
+      "name": {
+        "zh": "船灣淡水湖郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SUduYUhCbXFFaC9jT1dMRk91OTRKUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-63",
+      "name": {
+        "zh": "薄扶林家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TWprMlNsc2tlb3p2VFBNMGJnRzNSQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-78",
+      "name": {
+        "zh": "薄扶林樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UFBsNE9YZFZiVjcxbEppTE5waXo3UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-13",
+      "name": {
+        "zh": "砵甸乍山郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/WTlaMHl6akpNYk9BRGViczlXaFZhQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-79",
+      "name": {
+        "zh": "鰂魚涌樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/bjVaMklDRFFFWnEzMmgxT2cvY2t4dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-688",
+      "name": {
+        "zh": "紅花嶺郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VHBSaWIrMzR0aWN5RnFhWitoeFN0UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-48",
+      "name": {
+        "zh": "扶輪公園自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/WFc2Tm45WTVOR0ZMQ3hLeTJHUDRldz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-682",
+      "name": {
+        "zh": "橋咀郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZnovL1lLVDZuRUxZR3JhWlNidkZzQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-93",
+      "name": {
+        "zh": "橋咀洲地質步道"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Y056R09YSEJvYjZIQStpRXFhVzVqZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-20",
+      "name": {
+        "zh": "石壁郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/OHBlUmNCN0JJZnl1ZjY3Z014cGYvQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-10",
+      "name": {
+        "zh": "上窰郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cG9Hc1Z4bTEzN3ZkZ1p6VExnTWFhdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-58",
+      "name": {
+        "zh": "上窰家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/LzJZUFdmR0thSHgwV0xPSElFbjVBQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-671",
+      "name": {
+        "zh": "城門郊野公園(白千層林)無障礙路線"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/SnROM2YxaGRIVVNJUDRwRDFONjdVQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-684",
+      "name": {
+        "zh": "城門畔塘徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NlRMUDdJZmdSaTRPeDVGZXlMQ0VEZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-696",
+      "name": {
+        "zh": "水浪窩至大水井"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/V2tHckpJZ2crK0NGSzIrU2I3MnpYZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-21",
+      "name": {
+        "zh": "南大嶼郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VkxUMG1za3hybXBtOEFJZ0h1VUltQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-34",
+      "name": {
+        "zh": "大欖涌郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/anYvYnJvaVlCeStTZ2VwTVNFbFkrZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-672",
+      "name": {
+        "zh": "大欖郊野公園(清潭上灌溉水塘)無障礙路線"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/R1pFTkp4b3YzbnFyc2syajA1ZkNidz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-49",
+      "name": {
+        "zh": "大欖自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TnN4ZEZ2M0dnZ0EzdEJMYnpLOXp4UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-92",
+      "name": {
+        "zh": "大浪灣遠足徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ckZZcXRjeHpwZzROc0FUN0xFTTJPdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-60",
+      "name": {
+        "zh": "大美督家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZHIxalZwQUVXdytUUE9uRU94OTVTdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-52",
+      "name": {
+        "zh": "大帽山家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/OUpMbkhjSTJxM05tM3VZcGFXZTZwdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-47",
+      "name": {
+        "zh": "大埔滘自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/K3VwN1BwU0c5b0tZMHFKRlBrdEM0QT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-674",
+      "name": {
+        "zh": "大潭郊野公園(大潭篤水塘)無障礙路線"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/allrZU84K2t1Z0R2OXBkN0ZQUDY4UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-14",
+      "name": {
+        "zh": "大潭郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/bGxMc2FyRXQvajBqQXFSNHlHOUlTZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-57",
+      "name": {
+        "zh": "大潭家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VXUrUWZ6Y3hSVmdqdmVDNXA5QU5mUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-690",
+      "name": {
+        "zh": "大潭至太古 (渣甸山段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TXpWQlRML0VFTUtiTmpqSDhhMkYwQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-691",
+      "name": {
+        "zh": "大潭至太古 (大潭水塘段)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dmpYRDNZMzFZUXczNGFDN0VlZnRxdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-80",
+      "name": {
+        "zh": "大潭樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/MzdJN3lQcHFvVXp0R1BOWTRBZ2liUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-11",
+      "name": {
+        "zh": "大灘郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/ZzhaM011eEwyWkZuWVoyUjJ0aUdMUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-73",
+      "name": {
+        "zh": "大灘樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/UzEydzFOQTc2YjFneklVdFV6cTVJZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-50",
+      "name": {
+        "zh": "大棠自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/d2pnTThIZnFwWWt5akVXc1NSeGxLdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-697",
+      "name": {
+        "zh": "大棠至黃泥墩水塘"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Z1U3TDhQNmtyWmhnS0VFV2w1RFBYUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-68",
+      "name": {
+        "zh": "大棠樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VUYwYmN4Y1Q4R0FHSldVNkRCTXVuUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-22",
+      "name": {
+        "zh": "地塘仔郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VTAxcjA3Sks4RGorOUdwZzRRbVBFdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-42",
+      "name": {
+        "zh": "蕉坑自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/QW83RFlqandJamIvZGprRFlzNkdsZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-51",
+      "name": {
+        "zh": "荃錦自然教育徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RUloUlprQ09aZ2FyMC9VVTlYWGtidz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-699",
+      "name": {
+        "zh": "荃錦至石龍拱"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Q0RKR25WR2JsUnB5aVVyOFZYeEhGZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-66",
+      "name": {
+        "zh": "戰地遺跡徑(城門)"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/NTdJUjdNOGM2REpMSEZydGkwNHJSQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-627",
+      "name": {
+        "zh": "衞奕信徑(第一段)赤柱峽道至黃泥涌水塘"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TCtocVVTL1JuMXpaQVBSOFBYYzRSUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-628",
+      "name": {
+        "zh": "衞奕信徑(第二段)黃泥涌水塘至藍田"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/cktQWGdYRkF1MEsvNXFHQVk2Sm5FQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-629",
+      "name": {
+        "zh": "衞奕信徑(第三段)藍田至井欄樹"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Z05QUVAxMnphOXBCSGlwSkhKVE1Zdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-630",
+      "name": {
+        "zh": "衞奕信徑(第四段)井欄樹至沙田坳"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Q3hxOUd0N3FPcVZMeXdBZi93U0t0dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-631",
+      "name": {
+        "zh": "衞奕信徑(第五段)沙田坳至大埔公路"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/Sk1oNnZ1NlE3VksxUU1CekZYYkZuUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-632",
+      "name": {
+        "zh": "衞奕信徑(第六段)大埔公路至城門水塘"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/M3ArN2RxYmROLzBKNlhxRndlRUdzZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-633",
+      "name": {
+        "zh": "衞奕信徑(第七段)城門水塘至元墩下"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/anRlQ0Q2VTA5SUhNQjBTSm9tRGJhUT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-634",
+      "name": {
+        "zh": "衞奕信徑(第八段)元墩下至九龍坑山"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dGljejY4cWNjZ3E5Z2wwK1V3cWtJZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-635",
+      "name": {
+        "zh": "衞奕信徑(第九段)九龍坑山至八仙嶺"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/TjFJNDlpb0FhSmdCS25nYTg5K0pmQT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-636",
+      "name": {
+        "zh": "衞奕信徑(第十段)八仙嶺至南涌"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/azJKaHRIeUFIbXZWN0UyVU1ZS1hFdz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-23",
+      "name": {
+        "zh": "黃龍坑郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/OEMxQmNSNHUrVjBDV0xOMHJtYURldz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-54",
+      "name": {
+        "zh": "黃石家樂徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/dVVzSndDcTNlMlpYcFgveHArcGxlZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-74",
+      "name": {
+        "zh": "黃石樹木研習徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/VWlnL0szQnNOWG5OVEZLRXhCbnA1UT09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-31",
+      "name": {
+        "zh": "烏蛟騰郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/OXArZzdyQnRlN2d4VlN6UVNDNHpFZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-35",
+      "name": {
+        "zh": "元荃古道郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/V2JJVDNVR25Lc0lnV1pZdC9NdHVBZz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    },
+    {
+      "id": "hk-official-36",
+      "name": {
+        "zh": "圓墩郊遊徑"
+      },
+      "countryCode": "CN",
+      "region": "HK",
+      "type": "hiking",
+      "sourceUrl": "https://www.hiking.gov.hk/trail/info/id/RlZDWHhKMGtQZzBqL2l0eGRaajl2dz09",
+      "status": "directory-only",
+      "backgroundStatus": "not-created",
+      "detailsStatus": "not-verified"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "asset": "great-wall-gathered-background.png",
+  "dimensions": { "width": 1619, "height": 971 },
+  "kind": "AI-assisted Gathered Scenes artistic background, not a documentary photograph",
+  "source": {
+    "localFile": "great-wall-source.jpg",
+    "author": "Velatrix",
+    "license": "CC0",
+    "url": "https://commons.wikimedia.org/wiki/File:Great_Wall_of_China_July_2006.JPG"
+  },
+  "styleReference": "sydney-opera-gathered-background.png",
+  "workflow": "scenes-gathered-zine-v1-3 with built-in image generation; factual source and approved style reference inspected before generation",
+  "inspection": "Source-specific winding wall, foreground watchtower and receding ridge retained; ivory quiet field, fibrous torn handoff, source-derived gray mountains and vermilion directional accent; no text or foreign landmark.",
+  "generatedOn": "2026-10-13"
+}

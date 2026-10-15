@@ -5,3 +5,25 @@ node_modules/
 cloudflared.exe
 outputs/
 work/
+
+# Agent workspace metadata and local-only review artifacts
+.workbuddy-ai/
+artifacts/
+
+# 56 MB raw OSM/Wikidata dump; the runtime uses the compact map-place-catalog.json
+modules/data/audiala-places.geojson
+
+# Gathered review renders are local-only: 100 wide 5:3 + 100 portrait 2:3 + 100 sources + thumbs.
+# Only the 7 backgrounds registered in modules/data/place-backgrounds.json are tracked.
+assets/route-photos/thumbs/
+assets/route-photos/q*-gathered-background.png
+assets/route-photos/q*-gathered-background-mobile.png
+assets/route-photos/q*-gathered-background.provenance.json
+assets/route-photos/q*-source.jpg
+# re-include the registered set
+!assets/route-photos/q243-gathered-background.png
+!assets/route-photos/q9141-gathered-background.png
+!assets/route-photos/q19675-gathered-background.png
+!assets/route-photos/q243-source.jpg
+!assets/route-photos/q9141-source.jpg
+!assets/route-photos/q19675-source.jpg
