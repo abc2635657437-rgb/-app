@@ -7,6 +7,7 @@
   var KEY = { outfit: '行装 / 穿搭', food: '必吃推荐', stay: '住宿建议', move: '交通衔接', play: '玩法建议', itinerary: '行程顺序' };
   var LABELS = ['outfit', 'food', 'stay', 'move', 'play'];
   var state = { editing: null, points: [], plan: { outfit: [], food: [], stay: [], move: [], play: [] }, itinerary: [], filter: '' };
+  var returnToPublisher = false;
 
   var ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   function auth() { return window.TravelWorldAuth; }
@@ -39,7 +40,7 @@
   function studioHTML() {
     return [
       '<section id="studio" class="screen">',
-      '  <div class="route-page-head"><button onclick="go(\'home\')" aria-label="返回">‹</button>',
+      '  <div class="route-page-head"><button onclick="window.closeStudio()" aria-label="返回">‹</button>',
       '    <div><small>ROUTE STUDIO</small><h1>发布旅行路线</h1></div>',
       '    <button class="route-save" onclick="window.saveStudioRoute()">发布</button></div>',
       '  <div class="studio-bar">',
@@ -204,8 +205,10 @@
     };
   };
 
-  window.openStudio = async function (routeId, draft) {
+  window.closeStudio = function () { go(returnToPublisher ? 'publish' : 'home'); };
+  window.openStudio = async function (routeId, draft, options) {
     if (!auth().requireLogin()) return;
+    returnToPublisher = Boolean(options && options.returnToPublisher);
     inject();
     state.editing = routeId || null;
     state.points = [];
@@ -291,9 +294,14 @@
       });
       A.toast(state.editing ? '路线已更新' : '路线已发布');
       state.editing = null;
-      window.loadTravels();
-      window.openRouteDetail(route.id || route[0] && route[0].id);
-      go('travels');
+      if (returnToPublisher) {
+        window.selectPublishRoute?.(Array.isArray(route) ? route[0] : route);
+        go('publish');
+      } else {
+        window.loadTravels();
+        window.openRouteDetail(route.id || route[0] && route[0].id);
+        go('travels');
+      }
     } catch (error) { A.toast('保存失败：' + error.message); }
   };
 
@@ -407,16 +415,10 @@
     }
     var shell = document.querySelector('.app') || document.body;
     shell.insertAdjacentHTML('beforeend', studioHTML() + travelsHTML());
-    var nav = document.querySelector('.nav');
-    if (nav && !nav.querySelector('[data-id="travels"]')) {
-      nav.insertAdjacentHTML('beforeend',
-        '<button data-id="travels" onclick="go(\'travels\');window.loadTravels()"><span class="nav-icon">✈</span><br>路线</button>');
-    }
-    var home = document.getElementById('home');
-    if (home && !document.getElementById('studioEntry')) {
-      home.insertAdjacentHTML('afterbegin',
-        '<div class="studio-bar"><button id="studioEntry" type="button" onclick="window.openStudio()">发布我的路线</button>' +
-        '<button type="button" onclick="go(\'travels\');window.loadTravels()">旅行者路线</button></div>');
+    var publishRoute = document.querySelector('#publish .publish-section-head button');
+    if (publishRoute) {
+      publishRoute.textContent = '发布我的路线';
+      publishRoute.onclick = function () { window.openStudio(null, null, { returnToPublisher: true }); };
     }
   }
 
