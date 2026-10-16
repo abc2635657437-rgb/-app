@@ -1,7 +1,5 @@
 (function(){
-  // index.html loads this module on the main site, so the journal shell must stay
-  // opt-in: only ?preview=journal applies it, never the regular app.
-  if(new URLSearchParams(location.search).get('preview')!=='journal')return;
+  // The approved five-page journal is the only home shell.
   document.body.classList.add('journal-preview');
   const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=14';document.head.append(css);
   const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
