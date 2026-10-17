@@ -1,5 +1,5 @@
 (function () {
-  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=10-west-lake-mobile';document.head.append(photoStyles);
+  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=11-westlake-guide';document.head.append(photoStyles);
   let map;
   let markers = [];
   let routeLayer;

@@ -238,3 +238,516 @@
  .tw-photo-detail.place-gathered .place-nearby-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
  .tw-photo-detail.place-gathered :is(button,a,input,select,textarea){min-width:0;max-width:100%;overflow-wrap:anywhere;}
 }
+
+/* West Lake: photo-led field guide, preserving the site's quiet paper palette. */
+dialog.tw-photo-detail.place-west-lake-guide{
+  --wl-ink:#183947;--wl-muted:#65757a;--wl-paper:#fbf7ee;--wl-line:#d8cebd;--wl-red:#b64d39;
+  box-sizing:border-box;width:min(1100px,calc(100vw - 24px));height:min(94dvh,1000px);max-width:100vw;max-height:100dvh;
+  margin:auto;padding:0;border:1px solid #b8ac99;border-radius:20px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+  color:var(--wl-ink);background-color:var(--wl-paper);background-image:var(--place-art);background-size:min(100%,650px) auto;background-position:center top;background-repeat:repeat-y;
+  box-shadow:0 24px 70px #152f3c55;scroll-behavior:smooth;scroll-padding-top:58px;
+}
+dialog.tw-photo-detail.place-west-lake-guide::backdrop{background:#12232ab8;backdrop-filter:blur(3px)}
+.place-west-lake-guide :is(*,::before,::after){box-sizing:border-box}
+.place-west-lake-guide .wl-topbar{position:sticky;z-index:5;top:0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;background:#f8f3e8ed;border-bottom:1px solid #d8cebd;backdrop-filter:blur(12px)}
+.place-west-lake-guide .wl-topbar button{min-height:42px;padding:0 15px;border:1px solid #9d8974;border-radius:22px;color:var(--wl-ink);background:#fbf7eee8;font:600 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-west-lake-guide .wl-hero{min-height:310px;padding:clamp(36px,7vw,74px) clamp(20px,6vw,72px) 25px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;color:var(--wl-ink);background:linear-gradient(180deg,#f8f3e855,#f8f3e830 55%,#f8f3e9bd)}
+.place-west-lake-guide .wl-hero-place,.place-west-lake-guide .wl-section-kicker{color:#8b5847;font:700 10px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.place-west-lake-guide .wl-hero h2{margin:8px 0 2px;color:#173f4f;font:700 clamp(48px,10vw,76px)/1.05 "Noto Serif SC",Georgia,serif;letter-spacing:.12em;text-shadow:0 1px 12px #fff9}
+.place-west-lake-guide .wl-hero-caption{margin:7px 0 20px;color:#274b58;font:500 clamp(14px,2vw,17px)/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-hero-meta{display:flex;flex-wrap:wrap;gap:8px}
+.place-west-lake-guide .wl-hero-meta span{padding:7px 10px;border:1px solid #c4b49d;border-radius:20px;color:#344e56;background:#f8f3e8cc;font:600 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-quick-nav{position:sticky;top:62px;z-index:4;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin:0;padding:8px clamp(10px,3vw,22px);border-block:1px solid #d8cebd;background:#f8f3e9e8;backdrop-filter:blur(12px)}
+.place-west-lake-guide .wl-quick-nav a{display:grid;place-items:center;min-height:42px;border-radius:10px;color:#41565c;text-decoration:none;font:650 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-quick-nav a:focus-visible,.place-west-lake-guide :is(button,a,input,select,summary):focus-visible{outline:3px solid #b64d39;outline-offset:2px}
+.place-west-lake-guide .wl-quick-nav a:hover{background:#e9dfcf;color:var(--wl-red)}
+.place-west-lake-guide .wl-section{scroll-margin-top:120px;margin:clamp(12px,2.2vw,22px) clamp(10px,2.5vw,24px);padding:clamp(13px,2.4vw,22px);border:1px solid #d8cebd;border-radius:17px;background:#fbf7eef0;box-shadow:0 7px 24px #56452b0d;backdrop-filter:blur(8px)}
+.place-west-lake-guide .wl-section-head{margin:0 0 13px}
+.place-west-lake-guide .wl-section-kicker{display:block;margin-bottom:5px}
+.place-west-lake-guide .wl-section-head h3{margin:0;color:var(--wl-ink);font:700 clamp(19px,3vw,25px)/1.25 "Noto Serif SC",Georgia,serif;letter-spacing:.015em}
+.place-west-lake-guide .wl-section-note{margin:6px 0 0;color:var(--wl-muted);font:400 13px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.place-west-lake-guide .wl-photo-card,.place-west-lake-guide .wl-feature-photo,.place-west-lake-guide .wl-stay-photo{min-width:0;overflow:hidden;border:1px solid #d8cebd;border-radius:13px;background:#fffdf8;box-shadow:0 3px 10px #203c400d}
+.place-west-lake-guide .wl-photo-card>img,.place-west-lake-guide .wl-feature-photo>img,.place-west-lake-guide .wl-stay-photo>img{display:block;width:100%;max-width:100%;height:clamp(120px,20vw,205px);margin:0;object-fit:cover;background:#e7e0d4}
+.place-west-lake-guide .wl-photo-title{display:block;margin:9px 10px 2px;color:#183947;font:700 14px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-photo-note{display:block;margin:0 10px 8px;color:#69777a;font:400 11px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-inline-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin:0 9px 10px;padding:6px 10px;border:1px solid #b64d39;border-radius:8px;color:#9f4433;background:#fffaf2;text-decoration:none;font:650 12px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-section-cta,.place-west-lake-guide .wl-outline-cta{display:flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:9px 12px;border:1px solid var(--wl-red);border-radius:10px;color:#fff;background:var(--wl-red);text-align:center;text-decoration:none;font:700 13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-west-lake-guide .wl-outline-cta{color:#8f4334;background:#fffaf2}
+.place-west-lake-guide .wl-photo-grid-wide{grid-auto-columns:minmax(0,1fr)}
+.place-west-lake-guide .wl-photo-grid-wide .wl-photo-card>img{height:clamp(112px,17vw,170px)}
+.place-west-lake-guide .wl-feature-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(220px,.9fr);gap:15px;align-items:center}
+.place-west-lake-guide .wl-feature-photo>img{height:clamp(190px,28vw,290px)}
+.place-west-lake-guide .wl-feature-copy{padding:8px 5px}
+.place-west-lake-guide .wl-feature-copy>strong{display:block;color:var(--wl-ink);font:700 16px/1.5 "Noto Serif SC",Georgia,serif}
+.place-west-lake-guide .wl-feature-copy>p,.place-west-lake-guide .wl-nearby p{color:var(--wl-muted);font:400 13px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-stay-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.place-west-lake-guide .wl-field{display:grid;gap:5px;min-width:0;color:#51656a;font:650 11px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-field-area{grid-column:span 3}
+.place-west-lake-guide .wl-field input,.place-west-lake-guide .wl-field select{width:100%;min-width:0;min-height:44px;padding:8px 9px;border:1px solid #c8bdac;border-radius:9px;color:#223f4a;background:#fffdf8;font:500 14px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-stay-form .wl-section-cta{grid-column:1/-1;width:100%;font:700 13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-service-note{margin:9px 0;color:#6c7778;font:400 11px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-stay-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:12px}
+.place-west-lake-guide .wl-stay-photo>img{height:clamp(120px,19vw,185px)}
+.place-west-lake-guide .wl-route-modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.place-west-lake-guide .wl-route-link{display:grid;place-items:center;min-height:46px;padding:6px;border:1px solid #c4b49d;border-radius:9px;color:#314d57;background:#fffaf2;text-decoration:none;text-align:center;font:650 12px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-route-link:hover{border-color:#b64d39;color:#a34534}
+.place-west-lake-guide .wl-map-details{margin-top:11px;border:1px solid #d3c6b4;border-radius:11px;background:#fffaf2}
+.place-west-lake-guide .wl-map-details>summary,.place-west-lake-guide .wl-credits>summary{display:flex;align-items:center;min-height:46px;padding:0 12px;cursor:pointer;color:#344f57;font:650 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;list-style:none}
+.place-west-lake-guide .wl-map-details>summary::-webkit-details-marker,.place-west-lake-guide .wl-credits>summary::-webkit-details-marker{display:none}
+.place-west-lake-guide .wl-mini-map{height:300px;margin:0 8px 8px;border-radius:8px;overflow:hidden;background:#e7e0d4}
+.place-west-lake-guide .wl-nearby{margin:10px clamp(10px,2.5vw,24px) 18px;padding:12px clamp(13px,2.4vw,22px);border-left:3px solid #b64d39;background:#f8f3e9d9}
+.place-west-lake-guide .wl-nearby p{margin:5px 0 8px}
+.place-west-lake-guide .wl-credits{margin:10px clamp(10px,2.5vw,24px);padding:0 12px;border:1px solid #d8cebd;border-radius:10px;background:#fbf7eee8}
+.place-west-lake-guide .wl-credit-link{display:block;padding:7px 3px;border-top:1px solid #e5ddcf;color:#425d64;text-decoration:none;font:400 11px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-bottom-actions{position:sticky;z-index:6;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:10px max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));border-top:1px solid #d4c8b8;background:#f8f3e9ed;backdrop-filter:blur(14px)}
+.place-west-lake-guide .wl-bottom-actions button{min-width:0;min-height:48px;padding:8px;border:1px solid #a8503d;border-radius:10px;color:#9e4433;background:#fffaf2;font:700 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-west-lake-guide .wl-bottom-actions .wl-bottom-primary{color:white;background:#b64d39}
+.place-west-lake-guide .wl-image-unavailable{min-height:90px;background:linear-gradient(135deg,#eee5d5,#f9f4eb)}
+.place-west-lake-guide .wl-toast{position:sticky;bottom:78px;z-index:9;width:max-content;max-width:90%;margin:0 auto 8px;padding:10px 14px;border-radius:22px;color:#fff;background:#183947eF;font:600 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+@media(max-width:600px){
+ dialog.tw-photo-detail.place-west-lake-guide{position:fixed;inset:0;width:100vw;height:100dvh;max-height:100dvh;margin:0;padding:0;border:0;border-radius:0;background-size:min(100vw,430px) auto;background-position:center top;background-repeat:repeat-y;}
+ .place-west-lake-guide .wl-topbar{top:0;padding:calc(6px + env(safe-area-inset-top)) 12px 7px;}
+ .place-west-lake-guide .wl-hero{min-height:clamp(260px,38svh,350px);padding:22px 19px 17px;background:linear-gradient(180deg,#f8f3e820,#f8f3e985 78%,#f8f3e9d9);}
+ .place-west-lake-guide .wl-hero h2{font-size:52px;}
+ .place-west-lake-guide .wl-hero-caption{margin-bottom:13px;}
+ .place-west-lake-guide .wl-quick-nav{top:55px;padding:6px 7px;gap:2px;}
+ .place-west-lake-guide .wl-quick-nav a{min-height:42px;font-size:13px;}
+ .place-west-lake-guide .wl-section{margin:11px 9px;padding:13px 11px;border-radius:14px;}
+ .place-west-lake-guide .wl-section-head{margin-bottom:10px;}
+ .place-west-lake-guide .wl-section-note{font-size:12px;line-height:1.5;}
+ .place-west-lake-guide .wl-photo-grid{gap:8px;}
+ .place-west-lake-guide .wl-photo-card>img{height:clamp(112px,39vw,158px);}
+ .place-west-lake-guide .wl-photo-title{margin:8px 8px 2px;font-size:13px;}
+ .place-west-lake-guide .wl-photo-note{margin:0 8px 7px;font-size:10px;}
+ .place-west-lake-guide .wl-inline-link{min-height:40px;margin:0 7px 8px;padding:6px 7px;font-size:11px;}
+ .place-west-lake-guide .wl-feature-split{grid-template-columns:1fr;gap:8px;}
+ .place-west-lake-guide .wl-feature-photo>img{height:clamp(160px,53vw,230px);}
+ .place-west-lake-guide .wl-feature-copy{padding:2px 0;}
+ .place-west-lake-guide .wl-feature-copy>strong{font-size:14px;}
+ .place-west-lake-guide .wl-stay-form{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+ .place-west-lake-guide .wl-field-area{grid-column:1/-1;}
+ .place-west-lake-guide .wl-stay-form .wl-section-cta{grid-column:1/-1;}
+ .place-west-lake-guide .wl-stay-gallery{gap:8px;}
+ .place-west-lake-guide .wl-stay-photo>img{height:clamp(112px,39vw,158px);}
+ .place-west-lake-guide .wl-route-modes{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .place-west-lake-guide .wl-mini-map{height:230px;}
+ .place-west-lake-guide .wl-nearby{margin:9px;padding:12px;}
+ .place-west-lake-guide .wl-credits{margin:9px;}
+ .place-west-lake-guide .wl-bottom-actions{gap:7px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));}
+ .place-west-lake-guide .wl-bottom-actions button{min-height:48px;font-size:12px;}
+}
+@media(max-width:360px){
+ .place-west-lake-guide .wl-hero h2{font-size:46px;}
+ .place-west-lake-guide .wl-hero{min-height:250px;}
+ .place-west-lake-guide .wl-quick-nav a{font-size:12px;}
+ .place-west-lake-guide .wl-photo-grid{gap:6px;}
+ .place-west-lake-guide .wl-photo-title{font-size:12px;}
+}
+.place-west-lake-guide .wl-form-error{grid-column:1/-1;margin:0;padding:9px 11px;border:1px solid #d7a097;border-radius:9px;color:#7b2d26;background:#fff0ea;font:600 12px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-form-error[hidden]{display:none}
+.place-west-lake-guide .wl-location-button{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin:0 0 7px;padding:8px 12px;border:1px solid #b64d39;border-radius:10px;color:#9e4433;background:#fffaf2;font:700 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-west-lake-guide .wl-location-button:disabled{opacity:.65;cursor:wait}
+.place-west-lake-guide .wl-location-status{margin:0 0 10px;color:#697778;font:400 11px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-ride-hail{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;padding:11px;border:1px solid #d6c8b7;border-radius:11px;background:#fffaf2d9}
+.place-west-lake-guide .wl-ride-hail>strong,.place-west-lake-guide .wl-ride-hail>.wl-service-note{grid-column:1/-1;margin:0}
+.place-west-lake-guide .wl-ride-provider{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px;border:1px solid #a8503d;border-radius:9px;color:#9e4433;background:#fff;text-decoration:none;text-align:center;font:700 12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-west-lake-guide .wl-ride-provider-primary{color:#fff;background:#b64d39}
+.place-west-lake-guide .wl-ride-hail>a:only-of-type{grid-column:1/-1}
+
+/* Selected full-page city guide v2. The legacy West Lake dialog is no longer loaded. */
+dialog.tw-photo-detail.place-city-guide-v2{--guide-ink:#183947;--guide-paper:#fbf7ee;--guide-sand:#e8ddc8;--guide-red:#a83e31;box-sizing:border-box;position:relative;display:block!important;width:min(1040px,calc(100vw - 24px));height:min(96dvh,1200px);max-width:100vw;max-height:100dvh;margin:auto;padding:0;border:1px solid #d7cbb6;border-radius:18px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth;scroll-padding-top:60px;color:var(--guide-ink);background:var(--guide-paper);box-shadow:0 24px 80px #10293355}
+dialog.tw-photo-detail.place-city-guide-v2::backdrop{background:#13242ab8;backdrop-filter:blur(3px)}
+.place-city-guide-v2 :is(*,::before,::after){box-sizing:border-box}
+.place-city-guide-v2 .city-topbar{position:absolute;z-index:8;top:12px;right:14px;left:14px;display:flex;justify-content:space-between;pointer-events:none}
+.place-city-guide-v2 .city-top-button{pointer-events:auto;min-width:44px;min-height:44px;padding:7px 13px;border:1px solid #f7f0e2aa;border-radius:999px;color:#193846;background:#fbf7eecc;backdrop-filter:blur(8px);font:650 13px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-city-guide-v2 .city-hero{position:relative;min-height:270px;padding:80px clamp(22px,4vw,48px) 24px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background-color:#efe7d8;background-image:linear-gradient(90deg,#fbf7ee62,transparent 72%),var(--city-hero-art);background-repeat:no-repeat;background-position:center;background-size:cover}
+.place-city-guide-v2 .city-eyebrow{color:#6c7771;font:700 10px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 5px #fff9}
+.place-city-guide-v2 .city-hero h2{margin:2px 0;color:#192d38;font:900 clamp(44px,8vw,76px)/1.05 "Noto Serif SC",serif;letter-spacing:.1em;text-shadow:0 1px 2px #fff9,0 0 15px #fff8}
+.place-city-guide-v2 .city-tagline{margin:0;color:#314c56;font:500 13px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;text-shadow:0 1px 6px #fff}
+.place-city-guide-v2 .city-hero-actions{margin-top:12px}
+.place-city-guide-v2 .city-hero-actions a{display:inline-flex;align-items:center;min-height:38px;padding:7px 11px;border:1px solid #c5b79f;border-radius:8px;color:#394f54;background:#fbf7eedb;text-decoration:none;font:650 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-tabs{position:sticky;top:0;z-index:7;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:4px 12px;border-block:1px solid #d7cbb6;background:#fbf7eef2;backdrop-filter:blur(12px)}
+.place-city-guide-v2 .city-tabs a{display:flex;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:44px;color:#293e45;text-decoration:none;font:800 15px/1 "Noto Serif SC",serif}
+.place-city-guide-v2 .city-tabs a::before{content:"⊙";color:var(--guide-red);font:700 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-tabs a:hover,.place-city-guide-v2 .city-tabs a:focus-visible{color:var(--guide-red);background:#eee4d5}
+.place-city-guide-v2 :is(a,button,input,select,summary):focus-visible{outline:3px solid #b64d39;outline-offset:2px}
+.place-city-guide-v2 .city-section{display:grid;grid-template-columns:minmax(85px,16%) minmax(0,1fr);column-gap:clamp(12px,3vw,28px);align-items:start;margin:0;padding:18px clamp(12px,2.5vw,26px);border-bottom:1px solid #e0d7c9;background:#fbf7eee8}
+.place-city-guide-v2 .city-section-head{grid-column:1;grid-row:1/span 4;display:flex;gap:8px;align-items:flex-start;padding-top:5px}
+.place-city-guide-v2 .city-section-mark{flex:0 0 auto;color:var(--guide-red);font:900 clamp(42px,6vw,60px)/.95 "Noto Serif SC",serif}
+.place-city-guide-v2 .city-section-head h3{margin:1px 0 5px;color:#283d43;font:800 16px/1.3 "Noto Serif SC",serif}
+.place-city-guide-v2 .city-section-head p{margin:0;color:#73766f;font:400 11px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-card-grid{grid-column:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.place-city-guide-v2 .city-place-card{min-width:0;overflow:hidden;border:1px solid #d9ccb8;border-radius:9px;background:#fffdf8;box-shadow:0 2px 8px #493b260c}
+.place-city-guide-v2 .city-place-card>img,.place-city-guide-v2 .city-photo-placeholder{display:block;width:100%;height:clamp(118px,20vw,205px);object-fit:cover;background:#e8e0d3}
+.place-city-guide-v2 .city-photo-placeholder{display:grid;place-items:center;padding:12px;color:#52656a;text-align:center;font:600 12px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-photo-missing>img{display:none}
+.place-city-guide-v2 .city-place-card h4{margin:7px 8px 2px;color:#283b42;font:750 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-place-note{min-height:30px;margin:0 8px 5px;color:#777a75;font:400 10px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-map-link,.place-city-guide-v2 .city-section-cta,.place-city-guide-v2 .city-outline-cta{grid-column:2;display:flex;align-items:center;justify-content:center;min-height:38px;margin-top:8px;padding:7px 10px;border:1px solid var(--guide-red);border-radius:8px;color:#9d3e32;background:#fffaf3;text-align:center;text-decoration:none;font:700 12px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-section-cta{color:#fff;background:var(--guide-red)}
+.place-city-guide-v2 .city-transport{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin:4px 6px 0}
+.place-city-guide-v2 .city-transport-international{grid-template-columns:repeat(4,minmax(0,1fr))}
+.place-city-guide-v2 .city-transport-link{display:grid;place-items:center;min-width:0;min-height:32px;padding:4px 2px;border:1px solid #d7cbb8;border-radius:6px;color:#46585a;background:#f9f4ea;text-align:center;text-decoration:none;font:650 10px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-transport-taxi{color:#963f34}
+.place-city-guide-v2 .city-transport-note{display:block;margin:4px 7px 7px;color:#7b7b73;font:400 9px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-stay-gallery{margin-top:8px}
+.place-city-guide-v2 .city-stay-gallery .city-place-card>img{height:clamp(110px,17vw,175px)}
+.place-city-guide-v2 .city-stay-form{grid-column:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;min-width:0;margin-top:2px}
+.place-city-guide-v2 .city-field{display:grid;gap:4px;min-width:0;color:#59696a;font:650 10px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-field select,.place-city-guide-v2 .city-field input{width:100%;min-width:0;min-height:40px;padding:7px 8px;border:1px solid #cfc2ae;border-radius:7px;color:#2b4149;background:#fffdf8;font:500 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-stay-form .city-section-cta,.place-city-guide-v2 .city-error{grid-column:1/-1;margin-top:2px}
+.place-city-guide-v2 .city-error{margin:0;color:#9f352b;font:600 11px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-locate{grid-column:2;min-height:40px;padding:7px 10px;border:1px solid #b9aa93;border-radius:8px;color:#344c53;background:#fbf7ee;font:650 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-location-status{grid-column:2;margin:5px 0;color:#747971;font:400 10px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-route-modes{grid-column:2;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.place-city-guide-v2 .city-route-link{display:grid;place-items:center;min-width:0;min-height:38px;padding:5px 3px;border:1px solid #d3c7b5;border-radius:7px;color:#3e5458;background:#fffaf1;text-decoration:none;text-align:center;font:650 10px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-taxi{grid-column:2;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;padding:8px;border:1px solid #dbcfbc;border-radius:8px;background:#fffaf1}
+.place-city-guide-v2 .city-taxi>strong,.place-city-guide-v2 .city-taxi>.city-transport-note{grid-column:1/-1}
+.place-city-guide-v2 .city-taxi>strong{font:700 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-ride-button{display:grid;place-items:center;min-height:38px;border:1px solid #b9aa93;border-radius:7px;color:#40565a;background:#fff;text-decoration:none;font:700 11px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-ride-primary{border-color:#24373b;color:#fff;background:#24373b}
+.place-city-guide-v2 .city-map-box{grid-column:2;min-width:0;margin-top:9px;border:1px solid #d7cbb8;border-radius:8px;overflow:hidden}
+.place-city-guide-v2 .city-mini-map{height:200px;background:#ebe5d9}
+.place-city-guide-v2 .city-credits{margin:10px 16px 80px;border:1px solid #dfd4c3;border-radius:8px;background:#fbf7ee}
+.place-city-guide-v2 .city-credits>summary{min-height:42px;padding:11px;cursor:pointer;color:#566264;font:650 11px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-credit-link{display:block;padding:8px;border-top:1px solid #e7dfd2;color:#526467;text-decoration:none;font:400 10px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-city-guide-v2 .city-footer{position:sticky;z-index:10;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:9px max(12px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));border-top:1px solid #d4c8b7;background:#fbf7eef2;backdrop-filter:blur(12px)}
+.place-city-guide-v2 .city-footer button{min-width:0;min-height:46px;padding:7px;border:1px solid var(--guide-red);border-radius:8px;color:#9b4033;background:#fffdf7;font:700 12px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-city-guide-v2 .city-footer .city-add{color:#fff;background:var(--guide-red)}
+.place-city-guide-v2 .city-toast{position:sticky;bottom:68px;z-index:12;width:max-content;max-width:90%;margin:0 auto 8px;padding:9px 13px;border-radius:18px;color:#fff;background:#173f4f;font:600 12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+@media(max-width:600px){
+ dialog.tw-photo-detail.place-city-guide-v2{position:fixed;inset:0;width:100vw;height:100dvh;max-height:100dvh;margin:0;border:0;border-radius:0;background:var(--guide-paper)}
+ .place-city-guide-v2 .city-hero{min-height:clamp(205px,30svh,260px);padding:65px 17px 15px;background-position:center 50%}
+ .place-city-guide-v2 .city-hero h2{font-size:clamp(40px,13vw,56px)}
+ .place-city-guide-v2 .city-tagline{font-size:11px}
+ .place-city-guide-v2 .city-tabs{padding-inline:5px}
+ .place-city-guide-v2 .city-tabs a{min-height:42px;font-size:14px}
+ .place-city-guide-v2 .city-section{grid-template-columns:68px minmax(0,1fr);column-gap:8px;padding:12px 10px}
+ .place-city-guide-v2 .city-section-mark{font-size:42px}
+ .place-city-guide-v2 .city-section-head h3{font-size:13px}
+ .place-city-guide-v2 .city-section-head p{font-size:9px;line-height:1.45}
+ .place-city-guide-v2 .city-card-grid{gap:6px}
+ .place-city-guide-v2 .city-place-card>img,.place-city-guide-v2 .city-photo-placeholder{height:clamp(92px,32vw,132px)}
+ .place-city-guide-v2 .city-place-card h4{margin:6px 6px 2px;font-size:11px}
+ .place-city-guide-v2 .city-place-note{min-height:28px;margin:0 6px 3px;font-size:9px}
+ .place-city-guide-v2 .city-map-link,.place-city-guide-v2 .city-section-cta,.place-city-guide-v2 .city-outline-cta{min-height:36px;margin-top:6px;padding:6px;font-size:10px}
+ .place-city-guide-v2 .city-transport{gap:3px;margin-inline:4px}
+ .place-city-guide-v2 .city-transport-link{min-height:30px;font-size:9px}
+ .place-city-guide-v2 .city-transport-note{font-size:8px}
+ .place-city-guide-v2 .city-stay-form{gap:5px}
+ .place-city-guide-v2 .city-field select,.place-city-guide-v2 .city-field input{min-height:38px;padding:6px;font-size:11px}
+ .place-city-guide-v2 .city-route-modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .place-city-guide-v2 .city-mini-map{height:175px}
+ .place-city-guide-v2 .city-credits{margin:8px 10px 72px}
+ .place-city-guide-v2 .city-footer{gap:6px;padding:7px 9px calc(7px + env(safe-area-inset-bottom))}
+ .place-city-guide-v2 .city-footer button{min-height:44px;font-size:11px}
+}
+@media(max-width:360px){.place-city-guide-v2 .city-section{grid-template-columns:58px minmax(0,1fr);column-gap:6px;padding-inline:7px}.place-city-guide-v2 .city-section-mark{font-size:36px}.place-city-guide-v2 .city-place-card>img{height:94px}}
+
+/* West Lake: real, reusable guide components; reference artwork is only the hero backdrop. */
+dialog.tw-photo-detail.place-westlake-guide-v2{--wl-paper:#f7f1e6;--wl-ink:#183947;--wl-muted:#5d6a68;--wl-red:#a83e31;--wl-rule:#d8cbb5;box-sizing:border-box;display:block!important;position:fixed;inset:0;width:min(1120px,100vw);height:min(96dvh,1500px);max-width:100vw;max-height:100dvh;margin:auto;padding:0;border:1px solid #d8cbb5;border-radius:18px;overflow:hidden;background:var(--wl-paper);color:var(--wl-ink);box-shadow:0 24px 80px #10293355}
+dialog.tw-photo-detail.place-westlake-guide-v2::backdrop{background:#13242ab8;backdrop-filter:blur(3px)}
+.place-westlake-guide-v2 :is(*,::before,::after){box-sizing:border-box}
+.place-westlake-guide-v2 .wl-shell{position:relative;width:100%;height:100%;overflow:hidden}
+.place-westlake-guide-v2 .wl-scroll{width:100%;height:100%;overflow:auto;overscroll-behavior:contain;scroll-behavior:smooth;padding-bottom:calc(78px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#fbf7ef 0%,#f8f2e8 52%,#f7f1e6 100%)}
+.place-westlake-guide-v2 .wl-scroll[hidden]{display:none}
+.place-westlake-guide-v2 .wl-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;min-height:50px;padding:4px clamp(14px,3vw,30px);background:#faf6eee8}
+.place-westlake-guide-v2 .wl-top-note{color:#78827c;font:650 10px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.22em}
+.place-westlake-guide-v2 .wl-quiet-button{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:44px;padding:6px 12px;border:1px solid #d4c7b3;border-radius:24px;background:#fbf8f1;color:var(--wl-ink);font:650 13px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-hero{position:relative;display:block;aspect-ratio:798/334;min-height:0;padding:0;overflow:hidden;background:#c9d7d7 url("/assets/route-photos/west-lake-selected-reference.png") 0 0/100% auto no-repeat}
+.place-westlake-guide-v2 .wl-hero::before{content:none}
+.place-westlake-guide-v2 .wl-hero-copy{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.place-westlake-guide-v2 .wl-search-button{position:absolute;top:7%;right:3%;display:grid;place-items:center;width:clamp(36px,5.6vw,48px);aspect-ratio:1;border:1px solid #d6cbb8;border-radius:50%;background:#fffaf1ed;color:#4e514d;box-shadow:0 2px 8px #1d30261c;font:500 30px/1 system-ui,sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-search-panel{position:absolute;z-index:5;top:58px;right:12px;width:min(330px,calc(100% - 24px));max-height:220px;padding:9px;border:1px solid #d8cbb5;border-radius:12px;background:#fffaf2;box-shadow:0 8px 26px #1d302633}
+.place-westlake-guide-v2 .wl-search-panel[hidden]{display:none}
+.place-westlake-guide-v2 .wl-search-panel input{width:100%;min-height:40px;padding:8px 10px;border:1px solid #d6cbb8!important;border-radius:8px;background:#fffaf2!important;color:var(--wl-ink)!important;font:500 13px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-search-results{display:grid;max-height:150px;overflow:auto}
+.place-westlake-guide-v2 .wl-search-result{min-height:36px;padding:6px 8px;border:0;border-bottom:1px solid #eee5d7;background:transparent;color:var(--wl-ink);text-align:left;font:600 12px/1.3 system-ui,sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-search-results p{margin:8px;color:var(--wl-muted);font:500 12px/1.4 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-hero-copy>span,.place-westlake-guide-v2 .wl-kicker{color:#62746f;font:700 10px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.2em}
+.place-westlake-guide-v2 .wl-hero-copy h1{margin:4px 0;color:#172d37;font:900 clamp(52px,9vw,86px)/1.04 "Noto Serif SC","Songti SC",serif;letter-spacing:.12em}
+.place-westlake-guide-v2 .wl-hero-copy p{max-width:34em;margin:10px 0 0;color:#344e55;font:500 15px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-categories{position:sticky;top:0;z-index:8;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:4px clamp(8px,2vw,18px);border-block:1px solid var(--wl-rule);background:#faf6eef2;backdrop-filter:blur(10px)}
+.place-westlake-guide-v2 .wl-category{position:relative;min-width:0;min-height:48px;border:0;border-radius:6px;background:transparent;color:var(--wl-ink);font:800 19px/1 "Noto Serif SC","Songti SC",serif;cursor:pointer;touch-action:manipulation}
+.place-westlake-guide-v2 .wl-category::before{content:"·";margin-right:5px;color:var(--wl-red);font:900 17px/1 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-category:hover,.place-westlake-guide-v2 .wl-category:focus-visible{background:#efe5d5;color:var(--wl-red)}
+.place-westlake-guide-v2 .wl-intro{display:flex;align-items:end;justify-content:space-between;gap:24px;padding:clamp(20px,4vw,38px) clamp(16px,4vw,42px) 16px;border-bottom:1px solid var(--wl-rule)}
+.place-westlake-guide-v2 .wl-intro h2{margin:8px 0 0;color:var(--wl-ink);font:800 clamp(26px,4vw,38px)/1.35 "Noto Serif SC","Songti SC",serif;letter-spacing:.04em}
+.place-westlake-guide-v2 .wl-intro>p{max-width:340px;margin:0;color:var(--wl-muted);font:450 14px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-section{scroll-margin-top:60px;padding:20px clamp(12px,3vw,32px) 24px;border-bottom:1px solid #ded4c4}
+.place-westlake-guide-v2 .wl-section-heading{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.place-westlake-guide-v2 .wl-section-title{display:flex;gap:12px;align-items:flex-start}
+.place-westlake-guide-v2 .wl-section-title>span{flex:0 0 auto;color:var(--wl-red);font:900 42px/.95 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-section-title h2{margin:1px 0 4px;color:#243d45;font:800 19px/1.35 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-section-title p{max-width:58ch;margin:0;color:#67736e;font:450 12px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-section-index{padding-top:4px;color:#a19a8c;font:650 11px/1 system-ui,sans-serif;letter-spacing:.16em}
+.place-westlake-guide-v2 .wl-carousel-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 8px}
+.place-westlake-guide-v2 .wl-scroll-hint{margin-right:auto;color:#81837b;font:500 11px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-arrow{width:38px;height:38px;border:1px solid #d3c5b0;border-radius:50%;background:#faf6ec;color:var(--wl-ink);font:700 16px/1 system-ui,sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-arrow:disabled{opacity:.4;cursor:default}
+.place-westlake-guide-v2 .wl-carousel{display:flex;gap:12px;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#b8aa93 #eee6d9;padding:2px 2px 12px;cursor:grab;-webkit-overflow-scrolling:touch;user-select:none;-webkit-user-select:none}
+.place-westlake-guide-v2 .wl-carousel:active{cursor:grabbing}
+.place-westlake-guide-v2 .wl-carousel.was-dragged{user-select:none}
+.place-westlake-guide-v2 .wl-card{flex:0 0 clamp(240px,31%,330px);min-width:0;overflow:hidden;border:1px solid #d5c8b4;border-radius:11px;background:#fffaf2;box-shadow:0 4px 16px #50442d10;scroll-snap-align:start}
+.place-westlake-guide-v2 .wl-card-open{display:block;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.place-westlake-guide-v2 .wl-card-open:hover .wl-card-image img{transform:scale(1.025)}
+.place-westlake-guide-v2 .wl-photo{position:relative;display:block;min-width:0;margin:0;background:#e7dfd1}
+.place-westlake-guide-v2 .wl-card-image{display:block;width:100%;height:clamp(150px,19vw,210px);object-fit:cover;background:#e8e0d3}
+.place-westlake-guide-v2 .wl-card-photo-credit{display:block;padding:5px 8px;color:#6d716b;background:#fffaf2;font:400 10px/1.4 system-ui,sans-serif;text-decoration:underline;text-underline-offset:2px}
+.place-westlake-guide-v2 .wl-card.is-missing .wl-card-open::before{content:"实景照片暂不可用";display:grid;place-items:center;min-height:clamp(150px,19vw,210px);color:#65716d;background:linear-gradient(135deg,#e7dfd2,#f4ecdf);font:600 12px/1.4 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-photo img{display:block;width:100%;height:100%;object-fit:cover;background:#e8e0d3;transition:transform .24s ease}
+.place-westlake-guide-v2 .wl-photo.is-missing{display:grid;place-items:center;min-height:130px;background:linear-gradient(135deg,#e7dfd2,#f4ecdf)}
+.place-westlake-guide-v2 .wl-photo.is-missing::after{content:"实景照片暂不可用";color:#65716d;font:600 12px/1.4 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-photo.is-missing figcaption{display:none}
+.place-westlake-guide-v2 .wl-photo figcaption{display:flex;align-items:center;flex-wrap:wrap;gap:3px 6px;padding:5px 8px;color:#6d716b;background:#fffaf2;font:400 10px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-photo-source{display:inline;color:#58727b;text-decoration:underline;text-underline-offset:2px}
+.place-westlake-guide-v2 .wl-card-copy{display:grid;gap:5px;padding:12px 13px 14px}
+.place-westlake-guide-v2 .wl-card-kicker{color:#68776f;font:650 10px/1.3 system-ui,sans-serif;letter-spacing:.08em}
+.place-westlake-guide-v2 .wl-card-copy strong{color:#203d45;font:800 17px/1.3 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-card-copy>span:not(.wl-card-kicker):not(.wl-card-more){min-height:40px;color:#626c68;font:450 12px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-card-more{margin-top:3px;color:var(--wl-red);font:700 12px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-card-provider{display:flex;align-items:center;justify-content:center;min-height:42px;margin:0 12px 12px;border:1px solid #cbb9a0;border-radius:7px;background:#f9f3e8;color:#7b4338;text-decoration:none;font:700 12px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-more,.place-westlake-guide-v2 .wl-more-provider{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:5px 4px;padding:8px 13px;border:1px solid #b95643;border-radius:7px;background:#fffaf2;color:#9d4235;text-decoration:none;font:700 12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.place-westlake-guide-v2 .wl-route-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;padding:15px;border:1px solid #d5c8b4;border-radius:10px;background:#fffaf2}
+.place-westlake-guide-v2 .wl-route-card h3{margin:0;color:#243d45;font:800 17px/1.3 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-route-card p{flex:1;margin:0;color:#626c68;font:450 12px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-stay-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.place-westlake-guide-v2 .wl-stay-filters label{display:grid;gap:4px;color:#596b69;font:650 11px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-stay-filters select{width:100%;min-width:0;min-height:44px;padding:8px 10px;border:1px solid #cfc2ae;border-radius:7px;background:#fffaf2;color:var(--wl-ink);font:500 13px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-stay-search{margin-top:11px}
+.place-westlake-guide-v2 .wl-link,.place-westlake-guide-v2 .wl-primary-action,.place-westlake-guide-v2 .wl-secondary-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 14px;border:1px solid #b95643;border-radius:7px;background:#fffaf2;color:#934136;text-decoration:none;text-align:center;font:700 13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-primary-action{border-color:var(--wl-red);background:var(--wl-red);color:#fffdf8}
+.place-westlake-guide-v2 :is(a,button,select):focus-visible{outline:3px solid #235d6d;outline-offset:2px}
+.place-westlake-guide-v2 .wl-footer{position:sticky;z-index:10;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:9px max(12px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));border-top:1px solid #d6cab7;background:#faf6eef0;backdrop-filter:blur(12px)}
+.place-westlake-guide-v2 .wl-footer button{min-width:0;min-height:46px}
+.place-westlake-guide-v2 .wl-status{position:sticky;z-index:11;bottom:68px;width:max-content;max-width:90%;margin:0 auto 8px;padding:8px 12px;border-radius:18px;background:#183947;color:white;font:600 12px/1.4 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-credits{margin:12px clamp(12px,3vw,32px) 18px;border:1px solid #ded3c2;border-radius:8px;background:#fffaf2}
+.place-westlake-guide-v2 .wl-credits summary{min-height:44px;padding:12px;color:#566b6c;font:700 12px/1.4 system-ui,sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-credits p{margin:0;padding:0 12px 10px;color:#5f6d69;font:450 11px/1.6 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-credits>a{display:inline-flex;margin:0 12px 12px;color:#56717a;font:500 11px/1.4 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-detail{position:absolute;inset:0;z-index:12;overflow:auto;overscroll-behavior:contain;background:#f8f2e8;padding:0 0 calc(20px + env(safe-area-inset-bottom));scroll-behavior:smooth}
+.place-westlake-guide-v2 .wl-detail-top{position:sticky;z-index:8;top:0;display:flex;justify-content:space-between;padding:9px clamp(12px,3vw,28px);border-bottom:1px solid #ddd1be;background:#faf6eef2;backdrop-filter:blur(12px)}
+.place-westlake-guide-v2 .wl-detail-heading{padding:18px clamp(16px,4vw,38px) 12px}
+.place-westlake-guide-v2 .wl-detail-heading>span{color:#7b7770;font:700 10px/1.4 system-ui,sans-serif;letter-spacing:.15em}
+.place-westlake-guide-v2 .wl-detail-heading h2{margin:6px 0;color:var(--wl-ink);font:850 clamp(28px,5vw,46px)/1.2 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-detail-heading p{max-width:65ch;margin:0;color:#5f6d69;font:450 14px/1.65 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-detail-gallery{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 clamp(12px,3vw,28px) 8px;scrollbar-width:thin;scrollbar-color:#b8aa93 #eee6d9}
+.place-westlake-guide-v2 .wl-detail-gallery .wl-photo{flex:0 0 clamp(245px,45%,520px);height:clamp(175px,35vw,320px);overflow:hidden;border:1px solid #d5c8b4;border-radius:9px;scroll-snap-align:start}
+.place-westlake-guide-v2 .wl-detail-gallery .wl-photo img{height:calc(100% - 30px)}
+.place-westlake-guide-v2 .wl-detail-copy{max-width:72ch;margin:12px clamp(16px,4vw,38px);color:#394f53;font:450 14px/1.8 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px clamp(12px,3vw,28px);padding:0}
+.place-westlake-guide-v2 .wl-facts>div{min-width:0;padding:11px;border:1px solid #ddd1be;border-radius:8px;background:#fffaf2}
+.place-westlake-guide-v2 .wl-facts dt{margin:0 0 5px;color:#8a5045;font:700 11px/1.3 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-facts dd{margin:0;color:#344c52;font:450 12px/1.6 system-ui,sans-serif;overflow-wrap:anywhere}
+.place-westlake-guide-v2 .wl-honesty-note{margin:12px clamp(12px,3vw,28px);padding:10px 12px;border-left:3px solid #b64d39;background:#eee5d7;color:#5c605b;font:500 12px/1.6 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-detail-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px clamp(12px,3vw,28px)}
+.place-westlake-guide-v2 .wl-detail-actions>*{min-width:150px}
+@media(max-width:700px){
+ dialog.tw-photo-detail.place-westlake-guide-v2{inset:0;width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;margin:0;border:0;border-radius:0}
+ .place-westlake-guide-v2 .wl-scroll{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+ .place-westlake-guide-v2 .wl-topbar{min-height:46px;padding:2px 12px}
+ .place-westlake-guide-v2 .wl-hero{min-height:clamp(210px,32svh,285px);padding:20px 20px 23px;background-position:52% center}
+ .place-westlake-guide-v2 .wl-hero::before{background:linear-gradient(90deg,#f9f5ebee 0%,#f9f5ebae 52%,#f9f5eb15 100%)}
+ .place-westlake-guide-v2 .wl-hero-copy p{max-width:29ch;font-size:14px}
+ .place-westlake-guide-v2 .wl-categories{padding-inline:4px}
+ .place-westlake-guide-v2 .wl-category{min-height:48px;font-size:17px}
+ .place-westlake-guide-v2 .wl-category::before{margin-right:2px;font-size:14px}
+ .place-westlake-guide-v2 .wl-intro{display:block;padding:20px 16px 17px}
+ .place-westlake-guide-v2 .wl-intro h2{font-size:27px}
+ .place-westlake-guide-v2 .wl-intro>p{margin-top:9px;font-size:13px}
+ .place-westlake-guide-v2 .wl-section{padding:16px 12px 19px;scroll-margin-top:56px}
+ .place-westlake-guide-v2 .wl-section-title{gap:8px}
+ .place-westlake-guide-v2 .wl-section-title>span{font-size:38px}
+ .place-westlake-guide-v2 .wl-section-title h2{font-size:16px}
+ .place-westlake-guide-v2 .wl-section-title p{font-size:11px}
+ .place-westlake-guide-v2 .wl-section-index{font-size:10px}
+ .place-westlake-guide-v2 .wl-carousel-controls{gap:6px}
+ .place-westlake-guide-v2 .wl-arrow{width:40px;height:40px}
+ .place-westlake-guide-v2 .wl-carousel{gap:9px;padding-bottom:10px}
+ .place-westlake-guide-v2 .wl-card{flex-basis:min(78vw,315px)}
+ .place-westlake-guide-v2 .wl-card-image{height:clamp(155px,48vw,205px)}
+ .place-westlake-guide-v2 .wl-card-copy{padding:10px 11px 12px}
+ .place-westlake-guide-v2 .wl-card-copy strong{font-size:16px}
+ .place-westlake-guide-v2 .wl-card-copy>span:not(.wl-card-kicker):not(.wl-card-more){font-size:12px}
+ .place-westlake-guide-v2 .wl-routes{grid-template-columns:1fr;gap:8px}
+ .place-westlake-guide-v2 .wl-route-card{padding:13px}
+ .place-westlake-guide-v2 .wl-stay-filters{grid-template-columns:1fr 1fr}
+ .place-westlake-guide-v2 .wl-stay-filters label:last-child{grid-column:1/-1}
+ .place-westlake-guide-v2 .wl-footer{gap:7px;padding:7px 10px calc(7px + env(safe-area-inset-bottom))}
+ .place-westlake-guide-v2 .wl-footer :is(button,a){min-height:46px;font-size:12px}
+ .place-westlake-guide-v2 .wl-detail-gallery .wl-photo{flex-basis:82vw;height:240px}
+ .place-westlake-guide-v2 .wl-facts{grid-template-columns:1fr 1fr;gap:7px}
+ .place-westlake-guide-v2 .wl-detail-actions{display:grid;grid-template-columns:1fr}
+ .place-westlake-guide-v2 .wl-detail-actions>*{width:100%}
+}
+@media(max-width:360px){
+ .place-westlake-guide-v2 .wl-section{padding-inline:8px}
+ .place-westlake-guide-v2 .wl-card{flex-basis:83vw}
+ .place-westlake-guide-v2 .wl-facts{grid-template-columns:1fr}
+}
+/* Match the selected portrait guide: map first, six illustrated shortcuts, then six independently scrollable sections. */
+.place-westlake-guide-v2 .wl-scroll{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.place-westlake-guide-v2 .wl-hero{aspect-ratio:798/334;min-height:0;padding:0;background-position:0 0;background-size:100% auto}
+.place-westlake-guide-v2 .wl-hero::before{background:none}
+.place-westlake-guide-v2 .wl-categories{position:relative;top:auto;backdrop-filter:none;grid-template-columns:repeat(6,minmax(0,1fr));padding:10px clamp(8px,2vw,18px);border:0;background:transparent}
+.place-westlake-guide-v2 .wl-category{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:92px;padding:4px 2px;border-radius:10px;font:inherit}
+.place-westlake-guide-v2 .wl-category::before{content:none}
+.place-westlake-guide-v2 .wl-category-icon{display:grid;place-items:center;width:clamp(42px,7vw,58px);aspect-ratio:1;border:1px solid #ffffffb8;border-radius:50%;background:#d9e3df;color:#234952;box-shadow:0 3px 10px #253a3514;font:700 clamp(20px,3vw,28px)/1 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-category:nth-child(1) .wl-category-icon{background:#ead2a6;color:#765431}
+.place-westlake-guide-v2 .wl-category:nth-child(2) .wl-category-icon{background:#b6d0c4;color:#315f54}
+.place-westlake-guide-v2 .wl-category:nth-child(3) .wl-category-icon{background:#bed4d8;color:#275563}
+.place-westlake-guide-v2 .wl-category:nth-child(4) .wl-category-icon{background:#e4bbb0;color:#8c4438}
+.place-westlake-guide-v2 .wl-category:nth-child(5) .wl-category-icon{background:#c0d1df;color:#35566b}
+.place-westlake-guide-v2 .wl-category:nth-child(6) .wl-category-icon{background:#c8d4cf;color:#365a59}
+.place-westlake-guide-v2 .wl-category-label{color:#172d37;font:800 16px/1.2 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-category:hover,.place-westlake-guide-v2 .wl-category:focus-visible{background:#efe5d5}
+.place-westlake-guide-v2 .wl-map-panel{margin:0 clamp(10px,2.5vw,24px) 2px;overflow:hidden;border:1px solid #e3d4bd;border-radius:15px;background:#eee6d8;box-shadow:0 5px 16px #64583e12}
+.place-westlake-guide-v2 .wl-map-art{position:relative;overflow:hidden;aspect-ratio:798/454;background:#d2dfd8}
+.place-westlake-guide-v2 .wl-map-reference{position:absolute;top:-73.5%;left:0;display:block;width:100%;max-width:none;height:auto;object-fit:unset}
+.place-westlake-guide-v2 .wl-map-pin{position:absolute;left:var(--pin-x);top:var(--pin-y);display:flex;align-items:center;gap:5px;width:clamp(90px,23vw,180px);min-height:40px;padding:3px 9px 3px 3px;transform:translate(-50%,-50%);overflow:hidden;border:1px solid #dfceb0;border-radius:24px;background:#fffaf1;color:#1c3944;box-shadow:0 3px 10px #1d30262e;font:700 12px/1.2 "Noto Serif SC","Songti SC",serif;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+.place-westlake-guide-v2 .wl-map-pin:hover{border-color:#ad4e3c;background:#fff;color:#a33f32}
+.place-westlake-guide-v2 .wl-map-pin img{flex:0 0 31px;width:31px;height:31px;object-fit:cover;border:2px solid white;border-radius:50%}
+.place-westlake-guide-v2 .wl-map-pin span{overflow:hidden;text-overflow:ellipsis}
+.place-westlake-guide-v2 .wl-section{scroll-margin-top:12px}
+.place-westlake-guide-v2 .wl-section-title{gap:8px}
+.place-westlake-guide-v2 .wl-section-title>span{flex:0 0 4px;width:4px;height:20px;margin-top:2px;border-radius:3px;background:var(--wl-red)}
+.place-westlake-guide-v2 .wl-section-title h2{margin:0;color:#173d4a;font-size:19px}
+.place-westlake-guide-v2 .wl-card{flex-basis:clamp(140px,36vw,300px)}
+.place-westlake-guide-v2 .wl-card-ways{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:0 8px 9px}
+.place-westlake-guide-v2 .wl-card-way{display:flex;align-items:center;justify-content:center;min-width:0;min-height:36px;padding:4px 2px;border:1px solid #e4ded2;border-radius:17px;background:#f2eee6;color:#284653;text-decoration:none;text-align:center;font:650 10px/1.15 system-ui,-apple-system,"Segoe UI",sans-serif;white-space:nowrap}
+.place-westlake-guide-v2 .wl-card-way:hover{border-color:#b85a46;background:#fff8ed}
+.place-westlake-guide-v2 .wl-location-button{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin:0 0 7px;padding:8px 12px;border:1px solid #b64d39;border-radius:10px;color:#9e4433;background:#fffaf2;font:700 13px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
+.place-westlake-guide-v2 .wl-location-button:disabled{opacity:.65;cursor:wait}
+.place-westlake-guide-v2 .wl-location-status{margin:0 0 12px;color:#67736e;font:450 12px/1.5 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-status:empty{display:none}
+.place-westlake-guide-v2 .wl-footer{position:absolute;right:0;bottom:0;left:0;z-index:20;gap:10px;padding:9px max(12px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));border-top:1px solid #55727a;background:#123e4a;backdrop-filter:none}
+.place-westlake-guide-v2 .wl-footer button{min-height:48px;border-radius:24px;font:750 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-footer .wl-secondary-action{border-color:#e4eee8;background:transparent;color:#fffdf7}
+.place-westlake-guide-v2 .wl-footer .wl-primary-action{border-color:#ad4334;background:#ad4334;color:#fffdf7}
+@media(max-width:700px){
+ .place-westlake-guide-v2 .wl-scroll{padding-bottom:calc(108px + env(safe-area-inset-bottom))}
+ .place-westlake-guide-v2 .wl-categories{padding:7px 6px 9px}
+ .place-westlake-guide-v2 .wl-category{min-height:78px;gap:4px;font-size:16px}
+ .place-westlake-guide-v2 .wl-category-icon{width:clamp(40px,11vw,50px);font-size:22px}
+ .place-westlake-guide-v2 .wl-category-label{font-size:15px}
+ .place-westlake-guide-v2 .wl-map-panel{margin-inline:10px;border-radius:13px}
+ .place-westlake-guide-v2 .wl-map-pin{gap:3px;max-width:41%;min-height:34px;padding:2px 6px 2px 2px;font-size:10px}
+ .place-westlake-guide-v2 .wl-map-pin img{flex-basis:26px;width:26px;height:26px}
+ .place-westlake-guide-v2 .wl-section{padding:14px 12px 17px;scroll-margin-top:8px}
+ .place-westlake-guide-v2 .wl-section-title h2{font-size:16px}
+ .place-westlake-guide-v2 .wl-card{flex-basis:clamp(140px,36vw,300px)}
+ .place-westlake-guide-v2 .wl-card-image{height:clamp(112px,34vw,180px)}
+ .place-westlake-guide-v2 .wl-card-copy{gap:4px;padding:8px 8px 9px}
+ .place-westlake-guide-v2 .wl-card-copy strong{font-size:14px}
+ .place-westlake-guide-v2 .wl-card-copy>span:not(.wl-card-kicker):not(.wl-card-more){min-height:34px;font-size:10px;line-height:1.45}
+ .place-westlake-guide-v2 .wl-card-way{min-height:33px;font-size:9px}
+ .place-westlake-guide-v2 .wl-footer{gap:7px;padding:7px 10px calc(7px + env(safe-area-inset-bottom))}
+ .place-westlake-guide-v2 .wl-footer :is(button,a){min-height:46px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.place-westlake-guide-v2 *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+/* Wide, image-led cards and picture-only pins follow the supplied West Lake guide. */
+.place-westlake-guide-v2 .wl-category-icon svg,.place-westlake-guide-v2 .wl-way-icon svg,.place-westlake-guide-v2 .wl-route-icon svg{display:block;width:72%;height:72%;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.place-westlake-guide-v2 .wl-map-art{aspect-ratio:1672/947;background:#dce8df}
+.place-westlake-guide-v2 .wl-map-reference{inset:0;width:100%;height:100%;object-fit:cover}
+.place-westlake-guide-v2 .wl-map-title{position:absolute;z-index:2;top:13px;left:16px;display:grid;gap:2px;color:#173f4b;text-shadow:0 1px #fff9}
+.place-westlake-guide-v2 .wl-map-title strong{font:800 clamp(18px,2.8vw,27px)/1.2 "Noto Serif SC","Songti SC",serif}
+.place-westlake-guide-v2 .wl-map-title span{font:500 11px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-map-compass{position:absolute;z-index:2;top:14px;right:17px;display:grid;place-items:center;width:34px;height:42px;color:#39565b;font:700 25px/1 Georgia,serif}
+.place-westlake-guide-v2 .wl-map-compass span{font:600 10px/1 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-map-pin{position:absolute;left:var(--pin-x);top:var(--pin-y);display:grid;place-items:start center;width:66px;height:78px;padding:0;overflow:visible;transform:translate(-50%,-100%);border:0;border-radius:0;background:transparent;box-shadow:none;cursor:pointer;touch-action:manipulation}
+.place-westlake-guide-v2 .wl-map-pin::after{position:absolute;z-index:0;bottom:3px;width:15px;height:15px;transform:rotate(45deg);border-radius:2px;background:#a94332;box-shadow:2px 2px 4px #1d30262e;content:""}
+.place-westlake-guide-v2 .wl-map-pin img{position:relative;z-index:1;flex:none;width:60px;height:60px;border:3px solid #fffdf7;border-radius:50%;object-fit:cover;box-shadow:0 3px 12px #1d30264a}
+.place-westlake-guide-v2 .wl-map-pin:hover img,.place-westlake-guide-v2 .wl-map-pin:focus-visible img{outline:3px solid #a94332;outline-offset:2px}
+.place-westlake-guide-v2 .wl-section-heading{align-items:center}
+.place-westlake-guide-v2 .wl-section-more{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;min-height:42px;padding:6px 2px 6px 10px;color:#6f6c63;text-decoration:none;font:600 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;white-space:nowrap}
+.place-westlake-guide-v2 .wl-section-more:hover{color:#a94332}
+.place-westlake-guide-v2 .wl-carousel{gap:10px;padding-bottom:10px;scrollbar-width:none}
+.place-westlake-guide-v2 .wl-carousel::-webkit-scrollbar{display:none}
+.place-westlake-guide-v2 .wl-card{display:flex;flex:0 0 clamp(230px,30vw,310px);flex-direction:column;min-height:0;border:1px solid #ded3c2;border-radius:12px;background:#fffaf2;box-shadow:0 4px 14px #4b402b12}
+.place-westlake-guide-v2 .wl-card-open{display:flex;flex-direction:column;align-items:stretch;flex:1;min-height:0}
+.place-westlake-guide-v2 .wl-card-image{width:100%;height:auto;aspect-ratio:2.15/1;object-fit:cover}
+.place-westlake-guide-v2 .wl-card-copy{align-content:start;gap:5px;min-width:0;min-height:76px;padding:8px 10px}
+.place-westlake-guide-v2 .wl-card-copy strong{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:16px}
+.place-westlake-guide-v2 .wl-card-chevron{color:#8a8175;font:500 24px/1 system-ui,sans-serif}
+.place-westlake-guide-v2 .wl-card-summary{display:-webkit-box;overflow:hidden;min-height:0;color:#68716b;font:450 12px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.place-westlake-guide-v2 .wl-card-more{margin-top:1px;color:#9d493a;font:650 11px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}
+.place-westlake-guide-v2 .wl-card-kicker{font-size:9px}
+.place-westlake-guide-v2 .wl-card-provider{min-height:35px;margin:0 9px 7px;border-radius:8px}
+.place-westlake-guide-v2 .wl-card-ways{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:7px 8px 8px;border-top:1px solid #eee6d9}
+.place-westlake-guide-v2 .wl-card-way{gap:5px;min-height:38px;padding:4px 5px;border-color:#e9e1d5;border-radius:8px;font-size:11px}
+.place-westlake-guide-v2 .wl-way-icon{display:grid;flex:0 0 21px;place-items:center;width:21px;height:21px;color:#274c59}
+.place-westlake-guide-v2 .wl-route-card h3{display:flex;align-items:center;gap:9px}
+.place-westlake-guide-v2 .wl-route-icon{display:grid;flex:0 0 36px;place-items:center;width:36px;height:36px;border-radius:50%;background:#e8eee8;color:#285260}
+.place-westlake-guide-v2 .wl-route-card .wl-primary-action{gap:7px}
+@media(max-width:700px){
+ .place-westlake-guide-v2 .wl-map-title{top:9px;left:11px}
+ .place-westlake-guide-v2 .wl-map-title strong{font-size:17px}
+ .place-westlake-guide-v2 .wl-map-title span{font-size:9px}
+ .place-westlake-guide-v2 .wl-map-compass{top:8px;right:9px;width:28px;height:34px;font-size:21px}
+ .place-westlake-guide-v2 .wl-map-pin{width:59px;height:69px}
+ .place-westlake-guide-v2 .wl-map-pin img{width:52px;height:52px}
+ .place-westlake-guide-v2 .wl-map-pin::after{width:13px;height:13px}
+ .place-westlake-guide-v2 .wl-section-heading{gap:6px}
+ .place-westlake-guide-v2 .wl-section-more{min-height:38px;padding-left:5px;font-size:11px}
+ .place-westlake-guide-v2 .wl-card{flex-basis:min(76vw,300px)}
+ .place-westlake-guide-v2 .wl-card-image{aspect-ratio:2.15/1}
+ .place-westlake-guide-v2 .wl-card-copy{gap:5px;padding:9px 10px}
+ .place-westlake-guide-v2 .wl-card-copy strong{font-size:14px}
+ .place-westlake-guide-v2 .wl-card-summary{font-size:11px;-webkit-line-clamp:2}
+ .place-westlake-guide-v2 .wl-card-way{gap:3px;min-height:35px;padding:3px 2px;font-size:10px}
+ .place-westlake-guide-v2 .wl-way-icon{flex-basis:18px;width:18px;height:18px}
+}
+@media(max-width:360px){.place-westlake-guide-v2 .wl-card{flex-basis:78vw}}
+/* Final West Lake review: slightly tighter spacing, vivid imagery, and calm pointer states. */
+.place-westlake-guide-v2 .wl-section{padding-top:12px;padding-bottom:14px}
+.place-westlake-guide-v2 .wl-carousel{gap:8px;padding-bottom:7px}
+.place-westlake-guide-v2 .wl-card{position:relative}
+.place-westlake-guide-v2 .wl-card-image,.place-westlake-guide-v2 .wl-detail-gallery .wl-photo img{filter:saturate(1.12) contrast(1.025)}
+.place-westlake-guide-v2 .wl-card-open:hover,.place-westlake-guide-v2 .wl-card-open:active{outline:0;border:0;box-shadow:none}
+.place-westlake-guide-v2 .wl-card-open:focus-visible{outline:0;box-shadow:inset 0 0 0 2px #a94332}
+.place-westlake-guide-v2 .wl-map-pin:hover img{outline:0}
+.place-westlake-guide-v2 .wl-map-pin:focus-visible img{outline:2px solid #a94332;outline-offset:2px}
+.place-westlake-guide-v2 .wl-card-image-note{position:absolute;top:8px;left:8px;z-index:2;padding:4px 7px;border:1px solid #fff8;border-radius:12px;background:#183d48d9;color:#fffdf7;font:600 10px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;pointer-events:none}
+.place-westlake-guide-v2 .wl-card-copy{gap:4px;padding:7px 9px 8px}
+.place-westlake-guide-v2 .wl-card-ways{gap:4px;padding:6px 7px 7px}
+@media(max-width:700px){
+ .place-westlake-guide-v2 .wl-section{padding-top:11px;padding-bottom:13px}
+ .place-westlake-guide-v2 .wl-card-copy{gap:4px;padding:7px 8px 8px}
+ .place-westlake-guide-v2 .wl-card-ways{gap:3px;padding:5px 6px 6px}
+}
+/* Compact, landscape recommendation cards; labels sit beside the four photo pins. */
+.place-westlake-guide-v2 .wl-card{flex-basis:clamp(205px,25vw,255px)}
+.place-westlake-guide-v2 .wl-card-image{aspect-ratio:2.4/1}
+.place-westlake-guide-v2 .wl-card-copy{min-height:66px;gap:3px;padding:6px 8px}
+.place-westlake-guide-v2 .wl-card-copy strong{font-size:13px;line-height:1.25}
+.place-westlake-guide-v2 .wl-card-summary{font-size:10px;line-height:1.4}
+.place-westlake-guide-v2 .wl-card-more{font-size:10px}
+.place-westlake-guide-v2 .wl-card-ways{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:4px;padding:5px 7px 6px}
+.place-westlake-guide-v2 .wl-card-way{flex:0 0 auto;width:auto;min-width:0;gap:3px;padding:3px 6px;font-size:9px;white-space:nowrap}
+.place-westlake-guide-v2 .wl-way-icon{flex:0 0 16px;width:16px;height:16px}
+.place-westlake-guide-v2 .wl-way-label{min-width:0;white-space:nowrap}
+.place-westlake-guide-v2 .wl-map-pin{z-index:3}
+.place-westlake-guide-v2 .wl-map-pin:hover img,.place-westlake-guide-v2 .wl-map-pin:active img{outline:0;box-shadow:0 3px 12px #1d30264a}
+.place-westlake-guide-v2 .wl-map-pin:focus-visible img{outline:2px solid #a94332;outline-offset:2px}
+.place-westlake-guide-v2 .wl-map-pin-label{position:absolute;top:24px;left:calc(100% - 9px);max-width:82px;overflow:hidden;padding:4px 7px;border:1px solid #d9c8ac;border-radius:12px;background:#fff9edeb;color:#29454a;box-shadow:0 2px 7px #1d302624;font:650 10px/1.2 "Noto Serif SC","Songti SC",serif;text-overflow:ellipsis;white-space:nowrap;pointer-events:none}
+.place-westlake-guide-v2 .wl-map-pin[style*="82%"] .wl-map-pin-label{right:calc(100% - 9px);left:auto}
+@media(max-width:700px){
+ .place-westlake-guide-v2 .wl-card{flex-basis:min(64vw,240px)}
+ .place-westlake-guide-v2 .wl-card-image{aspect-ratio:2.35/1}
+ .place-westlake-guide-v2 .wl-card-copy{min-height:62px;padding:6px 7px}
+ .place-westlake-guide-v2 .wl-card-copy strong{font-size:12px}
+ .place-westlake-guide-v2 .wl-card-way{gap:2px;padding:3px 5px;font-size:9px}
+ .place-westlake-guide-v2 .wl-way-icon{flex-basis:15px;width:15px;height:15px}
+ .place-westlake-guide-v2 .wl-map-pin-label{top:20px;max-width:74px;padding:3px 6px;font-size:9px}
+}
+/* Keep each recommendation section compact without reducing tap targets. */
+.place-westlake-guide-v2 .wl-section-heading{margin-bottom:7px}
+.place-westlake-guide-v2 .wl-carousel-controls{margin-bottom:4px}
+.place-westlake-guide-v2 .wl-arrow{width:32px;height:32px}
+.place-westlake-guide-v2 .wl-scroll-hint{font-size:10px}
+@media(max-width:700px){
+ .place-westlake-guide-v2 .wl-card{flex-basis:min(62vw,232px)}
+ .place-westlake-guide-v2 .wl-card-image{aspect-ratio:2.45/1}
+}

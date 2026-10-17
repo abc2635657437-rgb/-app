@@ -1,5 +1,5 @@
 (function () {
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=8', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=50-westlake-guide', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
   window.loadMap = function () { if (window.initTravelMap) window.initTravelMap(); else { const status = document.getElementById('mapStatus'); if (status) status.textContent = '正在加载在线地图…'; } };
   const css = document.createElement('link');
   css.rel = 'stylesheet';
@@ -16,12 +16,12 @@
     const loadRuntime = () => {
       const appendRuntime = () => {
         const runtime = document.createElement('script');
-        runtime.src = 'modules/map/map-web.js?v=15-west-lake-mobile';
+        runtime.src = 'modules/map/map-web.js?v=16-westlake-guide';
         runtime.onload = () => { window.loadMap = window.initTravelMap; const landmark=new URLSearchParams(location.search).get('landmark');if(landmark){window.go('map');window.initTravelMap().then(()=>window.openMapLandmark(landmark));} };
         document.body.appendChild(runtime);
       };
       const guide = document.createElement('script');
-      guide.src = 'modules/map/west-lake-guide.js?v=8-west-lake-photo-first';
+      guide.src = 'modules/map/west-lake-interactive-guide.js?v=1-westlake-template';
       guide.onload = appendRuntime;
       guide.onerror = appendRuntime;
       document.body.appendChild(guide);
