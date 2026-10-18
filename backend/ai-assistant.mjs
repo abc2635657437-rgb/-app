@@ -444,7 +444,7 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       sseWrite(res, 'meta', payload);
     };
 
-    const cacheKey = `${input.language}|${input.region}|${normalizeKey(input.message)}|${normalizeKey(input.history.map(turn => turn.content).join(' '))}|${normalizeKey(JSON.stringify(input.plans || null))}`;
+    const cacheKey = `${input.mode}|${input.language}|${input.region}|${normalizeKey(input.message)}|${normalizeKey(input.history.map(turn => turn.content).join(' '))}|${normalizeKey(JSON.stringify(input.plans || null))}`;
     const cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.at < CACHE_TTL) {
       const sources = cached.sources || [];
