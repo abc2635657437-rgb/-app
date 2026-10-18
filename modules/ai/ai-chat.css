@@ -472,3 +472,19 @@ body .ai-chat-modes-panel header{padding-bottom:9px}
 body .ai-chat-modes-panel header b{font-size:15px}
 body .ai-chat-mode{padding:12px 0}
 
+/* Bigger photographs: two per screen, so the picture leads and the words follow. */
+body .ai-chat-plan-strip{gap:9px;padding:0 12px 10px;scroll-snap-type:x mandatory}
+body .ai-chat-plan-item{width:200px;height:258px;scroll-snap-align:start}
+body .ai-chat-plan-body{left:12px;right:12px;bottom:12px;gap:3px}
+body .ai-chat-plan-time{font-size:9.5px;letter-spacing:.2em}
+body .ai-chat-plan-body b{font-size:16px;letter-spacing:.5px;line-height:1.35}
+body .ai-chat-plan-body small{font-size:11px;line-height:1.5;-webkit-line-clamp:2}
+body .ai-chat-plan-links{gap:9px;margin-top:6px;padding-top:6px}
+body .ai-chat-plan-links a,body .ai-chat-plan-way{font-size:10.5px;letter-spacing:.06em}
+body .ai-chat-plan-stars-badge{padding:4px 7px}
+body .ai-chat-plan-stars-badge .ai-star{width:9px;height:9px}
+@media(max-width:360px){
+  body .ai-chat-plan-item{width:176px;height:236px}
+  body .ai-chat-plan-body b{font-size:15px}
+}
+

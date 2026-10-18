@@ -34,6 +34,37 @@ async function entityFor(name) {
   }
 }
 
+// A stop without a name-level photograph still deserves a picture: search by
+// what the stop is, not only by what it is called.
+const CLOTHES = [
+  [/冲锋衣|硬壳|shell/i, 'hardshell jacket'],
+  [/羽绒|down/i, 'down jacket'],
+  [/雨衣|rain/i, 'raincoat'],
+  [/登山鞋|徒步鞋|hiking/i, 'hiking boots'],
+  [/帽|hat|cap/i, 'sun hat'],
+  [/围巾|scarf/i, 'scarf'],
+  [/手套|glove/i, 'gloves'],
+  [/防晒|sunscreen/i, 'sunscreen'],
+  [/外套|jacket|coat/i, 'jacket']
+];
+
+function searchHint(name, kind, city, language) {
+  const value = String(kind || '');
+  if (/衣|穿|cloth|wear/i.test(value)) {
+    for (const [pattern, english] of CLOTHES) {
+      if (pattern.test(name)) return english;
+    }
+    return name + (language === 'en' ? ' clothing' : '');
+  }
+  if (/行|交通|move|transport|transit/i.test(value)) {
+    if (/骑|单车|自行车|cycling|bike/i.test(name)) return (city || name) + ' cycling';
+    if (/公交|bus/i.test(name)) return (city || name) + ' bus';
+    return (city || name) + ' metro';
+  }
+  if (/住|宿|hotel|stay|lodg/i.test(value)) return name + (city ? ' ' + city : '');
+  return (name + ' ' + (city || '')).trim();
+}
+
 function photoFrom(info) {
   const meta = info?.extmetadata || {};
   const url = info?.thumburl || info?.url;
@@ -47,8 +78,10 @@ function photoFrom(info) {
   };
 }
 
-export async function resolvePhotos(names, city) {
+export async function resolvePhotos(names, city, hints) {
   const unique = [...new Set((Array.isArray(names) ? names : []).map(name => String(name || '').trim()).filter(Boolean))];
+  const kindOf = name => (hints && hints[name]) || '';
+  const language = (hints && hints.__language) || 'zh';
   const photos = new Map();
   if (!unique.length) return photos;
 
@@ -119,12 +152,14 @@ export async function resolvePhotos(names, city) {
 
   searched.filter(Boolean).forEach(([name, photo]) => { if (photo) photos.set(name, photo); });
 
-  // Last pass: the same search with the city attached, which fixes ambiguous names.
-  const stillMissing = unique.filter(name => !photos.has(name) && city);
+  // Last pass: search by what the stop is (a jacket, the metro, the hotel) with
+  // the city attached, so nothing in the plan is left without a picture.
+  const stillMissing = unique.filter(name => !photos.has(name));
   if (stillMissing.length) {
-    const cityHits = await Promise.all(stillMissing.slice(0, 8).map(async name => {
+    const cityHits = await Promise.all(stillMissing.slice(0, 10).map(async name => {
       try {
-        const data = await getJson('https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(name + ' ' + city) + '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=520');
+        const query = searchHint(name, kindOf(name), city, language);
+        const data = await getJson('https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(query) + '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=520');
         const page = Object.values(data.query?.pages || {})[0];
         const photo = photoFrom(page?.imageinfo?.[0]);
         return photo ? [name, photo] : null;

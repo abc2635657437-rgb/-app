@@ -17,7 +17,7 @@ import { detectRegion, linksFor } from './plan-links.mjs';
 
 const MAX_MESSAGE = 2000;
 const MAX_TOKENS = 1400;
-const PLAN_MAX_TOKENS = 2600;
+const PLAN_MAX_TOKENS = 6000;
 // The traveller should not wait longer than this for a first answer.
 const PLAN_BUDGET = Number(process.env.PLAN_BUDGET_MS) > 0 ? Number(process.env.PLAN_BUDGET_MS) : 5000;
 const UPSTREAM_TIMEOUT = 60_000;
@@ -51,7 +51,7 @@ const SYSTEM_PROMPT = [
 // Plan mode gets a deliberately short prompt. The free upstream spends its whole
 // budget on hidden reasoning once the instruction grows; a two-sentence contract
 // plus the question reliably produces the table.
-const PLAN_SYSTEM_ZH = '你是旅行顾问。先写一句有人情味的定调，不要寒暄、不要感叹号，然后只输出一张表格：表头必须是 天 | 时间 | 地点 | 类型 | 说明。每天 6–8 行，类型必须把 吃、喝、玩、乐、住、行 六种都排上（行写清坐什么去下一站，例如“地铁东西线到东山站”）；只写真实存在、游客到过并能被查到的地点，不要编造小店，也不要只写寺庙；时间用 24 小时制，说明写一句给朋友的建议、不超过 20 字，不要写时长和票价。';
+const PLAN_SYSTEM_ZH = '你是旅行顾问。先写一句有人情味的定调，不要寒暄、不要感叹号，然后只输出一张表格：每行都以 | 开头、以 | 结尾，表头必须是 天 | 时间 | 地点 | 类型 | 说明，天 这一列只写阿拉伯数字 1、2、3，不要写“第一天”。每天 6–8 行，类型从 衣、吃、喝、玩、乐、住、行 里选，尽量把 吃、喝、玩、乐、住、行 都排上，衣 在第一天安排一次就够；行 里如果适合骑车就写“骑车沿鸭川”，不要只说“前往”（行写清坐什么去下一站，例如“地铁东西线到东山站”）；只写真实存在、游客到过并能被查到的地点，不要编造小店，也不要只写寺庙；时间用 24 小时制，说明写一句给朋友的建议、不超过 20 字，不要写时长和票价。';
 const PLAN_SYSTEM_EN = 'You are a travel desk. Write one warm framing sentence with no greeting and no exclamation mark, then output only one table with the columns: day | time | place | type | note. Six to eight rows per day, and every day must cover all six types: eat, drink, play, fun, stay, move (for move, say how to get to the next stop). Only name real, well-visited places that can be looked up. Choose real street-level places — markets, noodle shops, old lanes, cafes, small restaurants — 24-hour times, and a note of advice for a friend under 20 characters, with no duration and no prices.';
 const PLAN_SYSTEM = { zh: PLAN_SYSTEM_ZH, en: PLAN_SYSTEM_EN };
 
@@ -172,8 +172,13 @@ function parsePlan(answer) {
   const lines = String(answer || '').split('\n');
   let columns = null;
   const rows = [];
+  const CN = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
   for (const raw of lines) {
-    const line = raw.trim();
+    // Models sometimes print a label in front of the table row; keep from the
+    // first pipe to the last one.
+    const trimmed = raw.trim();
+    const start = trimmed.indexOf('|');
+    const line = start >= 0 && trimmed.endsWith('|') ? trimmed.slice(start) : trimmed;
     if (!/^\|.*\|$/.test(line)) { columns = null; continue; }
     const cells = line.slice(1, -1).split('|').map(cell => cell.trim());
     if (!columns) {
@@ -193,7 +198,10 @@ function parsePlan(answer) {
     // Some models prefix every row with an empty cell; drop it so the columns line up.
     if (!cells[0] && cells.length > (columns.note >= 0 ? columns.note + 1 : 5)) cells.shift();
     const pick = index => (index >= 0 ? cells[index] : '');
-    const dayNumber = Number(String(pick(columns.day)).replace(/[^0-9]/g, ''));
+    const dayCell = String(pick(columns.day));
+    const dayDigits = dayCell.replace(/[^0-9]/g, '');
+    const dayChinese = dayCell.match(/第?([一二三四五六七八九十])\s*天/);
+    const dayNumber = Number(dayDigits) || (dayChinese ? CN[dayChinese[1]] || 0 : 0);
     const place = planCell(pick(columns.place));
     if (!place) continue;
     rows.push({
@@ -236,12 +244,16 @@ async function buildPlan(answer, resolvePhotos, context, partial = false) {
   const parsed = parsePlan(answer);
   if (!parsed) return null;
   const names = [];
+  const language = context?.language === 'en' ? 'en' : 'zh';
   parsed.days.forEach(day => day.items.forEach(item => names.push(item.place)));
   let photos = new Map();
   if (typeof resolvePhotos === 'function' && names.length) {
     try {
+      const kinds = {};
+      parsed.days.forEach(day => day.items.forEach(item => { kinds[item.place] = item.kind; }));
+      kinds.__language = language;
       photos = await Promise.race([
-        resolvePhotos([...new Set(names)].slice(0, partial ? 8 : 24), detectRegion(context?.message || '')?.city),
+        resolvePhotos([...new Set(names)].slice(0, partial ? 8 : 24), detectRegion(context?.message || '')?.city, kinds),
         new Promise(resolve => setTimeout(() => resolve(new Map()), partial ? 1200 : 7000))
       ]);
     } catch (_) { photos = new Map(); }
@@ -252,7 +264,6 @@ async function buildPlan(answer, resolvePhotos, context, partial = false) {
     if (photo && photo.url) { item.photo = photo; photoCount += 1; }
   }));
   const region = detectRegion(context?.message || '');
-  const language = context?.language === 'en' ? 'en' : 'zh';
   parsed.days.forEach(day => day.items.forEach(item => {
     item.links = linksFor(item, region, language);
     item.stars = starsFor(item.photo);
@@ -314,7 +325,7 @@ function upstreamTarget(base, key) {
   };
 }
 
-export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiApiKey = '', resolvePhotos = defaultResolvePhotos }) {
+export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPlanModel = '', aiApiKey = '', resolvePhotos = defaultResolvePhotos }) {
   const cache = new Map();
   const recent = new Map();
 
@@ -422,7 +433,7 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
         method: 'POST',
         headers: target.headers,
         signal: AbortSignal.timeout(input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT),
-        body: JSON.stringify({ model: aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning })
+        body: JSON.stringify({ model: input.mode === 'plan' ? (aiPlanModel || aiModel) : aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning })
       });
 
       if (!upstream.ok || !upstream.body) throw new Error(`upstream ${upstream.status}`);
@@ -443,8 +454,8 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
           if (input.mode === 'plan' && /Timeout|Abort/i.test(String(error?.name))) truncated = true;
           else throw error;
         }
-        if (!answer.trim() && input.mode === 'plan') {
-          console.warn('ai_assistant_plan_retry', JSON.stringify({ finish }));
+        if (input.mode === 'plan' && (!answer.trim() || !parsePlan(answer))) {
+          console.warn('ai_assistant_plan_retry', JSON.stringify({ finish, parsed: Boolean(parsePlan(answer)) }));
           try {
             const retry = await fetch(target.url, {
               method: 'POST',
@@ -453,7 +464,7 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
               body: JSON.stringify({
                 model: aiModel,
                 temperature: 0.2,
-                max_tokens: 1600,
+                max_tokens: 4000,
                 stream: true,
                 messages: [{ role: 'user', content: PLAN_ONLY_PROMPT + '\n\n' + input.message }],
                 ...reasoning
