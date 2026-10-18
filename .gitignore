@@ -1,5 +1,6 @@
 backend/.env
 deploy.hooks.json
+deploy.local.json
 backend/node_modules/
 node_modules/
 %SystemDrive%/

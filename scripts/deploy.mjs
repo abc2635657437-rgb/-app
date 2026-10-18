@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-// 一键上线：触发部署 → 等新版本起来 → 健康检查 → 冒烟。
+// 一键上线：触发部署 → 轮询到新版本真的 live → 健康检查 → 冒烟。
 //
 // 用法：
 //   node scripts/deploy.mjs                       # 默认项目 travel-world
-//   node scripts/deploy.mjs travel-world          # 指定项目
-//   node scripts/deploy.mjs travel-world --wait 180 --smoke
+//   node scripts/deploy.mjs travel-world --smoke  # 发完顺带跑冒烟
 //   node scripts/deploy.mjs travel-world --hook https://api.render.com/deploy/srv-...
 //   node scripts/deploy.mjs --list
 //
-// hook（部署触发地址）的四种来源，按优先级：
-//   --hook 参数 > 环境变量 <hookEnv> > deploy.hooks.json > 环境变量 DEPLOY_HOOK
-// deploy.hooks.json 已在 .gitignore 里，不会被提交。
+// 两种触发方式：
+//   1. Render API（推荐）：项目配了 render.serviceId + 环境变量 RENDER_API_KEY，
+//      直接 POST /deploys 并轮询 GET /deploys/{id}，能确认"live"而不只是"服务活着"。
+//   2. Deploy Hook：--hook 参数 > 环境变量 <hookEnv> > deploy.hooks.json > DEPLOY_HOOK。
+//      hook 只能触发，拿不到部署状态，所以只能按 --wait 秒数等。
+// deploy.hooks.json 已在 .gitignore 里，不会被提交；RENDER_API_KEY 只从环境变量读。
 import { readFileSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -20,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONFIG_PATH = path.join(ROOT, 'deploy.config.json');
 const HOOKS_PATH = path.join(ROOT, 'deploy.hooks.json');
+const RENDER_API = 'https://api.render.com/v1';
 
 function readJson(file) {
   try {
@@ -57,11 +60,73 @@ function resolveHook(projectName, project, cliHook) {
   return null;
 }
 
-async function trigger(hook) {
-  // Render 的 Deploy Hook 同时接受 GET 和 POST，先 POST，405 再退回 GET。
-  let response = await fetch(hook, { method: 'POST' });
+function localSecrets() {
+  const file = path.join(ROOT, 'deploy.local.json');
+  if (!existsSync(file)) return {};
+  try {
+    return JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
+// 优先环境变量，其次本机 deploy.local.json（已 gitignore），都不写进仓库。
+function renderKey(project) {
+  const envName = project.render?.apiKeyEnv || 'RENDER_API_KEY';
+  const key = process.env[envName] || localSecrets().renderApiKey || '';
+  return { key, envName };
+}
+
+async function renderApi(project, method, pathname, body) {
+  const { key, envName } = renderKey(project);
+  if (!key) throw new Error(`没有 ${envName} 环境变量，也没有 deploy.local.json 里的 renderApiKey`);
+  const response = await fetch(`${RENDER_API}${pathname}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${key}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = (await response.text()).trim();
+  if (!response.ok) {
+    throw new Error(`Render API ${method} ${pathname} → HTTP ${response.status} ${text.slice(0, 300)}`);
+  }
+  return text ? JSON.parse(text) : null;
+}
+
+async function deployViaRender(project) {
+  const sid = project.render.serviceId;
+  const timeoutSeconds = project.render.timeoutSeconds || 900;
+  const deploy = await renderApi(project, 'POST', `/services/${sid}/deploys`, { clearCache: 'do_not_clear' });
+  const sha = deploy.commit?.id ? deploy.commit.id.slice(0, 7) : '?';
+  const firstLine = (deploy.commit?.message || '').split('\n')[0];
+  console.log(`  已触发：${deploy.id} · commit ${sha}${firstLine ? ` · ${firstLine}` : ''}`);
+
+  const deadline = Date.now() + timeoutSeconds * 1000;
+  let last = '';
+  while (Date.now() < deadline) {
+    await sleep(10000);
+    const current = await renderApi(project, 'GET', `/services/${sid}/deploys/${deploy.id}`);
+    if (current.status !== last) {
+      console.log(`  ${new Date().toLocaleTimeString()} ${current.status}`);
+      last = current.status;
+    }
+    if (current.status === 'live') return { ok: true, deploy: current };
+    if (['build_failed', 'update_failed', 'canceled', 'deactivated'].includes(current.status)) {
+      const detail = current.status === 'build_failed' ? current.buildCommand || '' : '';
+      return { ok: false, deploy: current, reason: `${current.status}${detail ? ` · ${detail}` : ''}` };
+    }
+  }
+  return { ok: false, reason: `超时 ${timeoutSeconds}s，最后状态 ${last || '未知'}` };
+}
+
+async function triggerHook(project, resolved) {
+  // Render 的 Deploy Hook 同时接受 GET 和 POST，先 POST，405/404 再退回 GET。
+  let response = await fetch(resolved.hook, { method: 'POST' });
   if (response.status === 405 || response.status === 404) {
-    response = await fetch(hook, { method: 'GET' });
+    response = await fetch(resolved.hook, { method: 'GET' });
   }
   const text = (await response.text()).trim();
   return { ok: response.ok, status: response.status, body: text.slice(0, 500) };
@@ -96,9 +161,11 @@ async function main() {
     for (const name of names) {
       const project = projects[name];
       const hook = resolveHook(name, project, '');
-      console.log(`  - ${name.padEnd(16)} ${project.site || '(未配置 site)'}  hook: ${hook ? '已配置' : '缺失'}`);
+      const { key, envName } = renderKey(project);
+      const api = project.render?.serviceId ? (key ? `已就绪（${envName}）` : `缺 ${envName}`) : '未配置';
+      console.log(`  - ${name.padEnd(16)} ${project.site || '(未配置 site)'}  API: ${api}  hook: ${hook ? '已配置' : '缺失'}`);
     }
-    console.log('\n加项目：在 deploy.config.json 里加一条，再把 hook 写进 deploy.hooks.json。');
+    console.log('\n加项目：在 deploy.config.json 里加一条，再配 render.serviceId（+ 环境变量）或 hook。');
     return 0;
   }
 
@@ -109,39 +176,60 @@ async function main() {
     return 1;
   }
 
-  const resolved = resolveHook(name, project, options.hook);
-  if (!resolved) {
-    console.error(
-      [
-        `项目 ${name} 还没有部署 hook，所以发不出去。`,
-        '',
-        '获取方式（Render 面板）：travel-world → Settings → Deploy Hook → 复制那条',
-        'https://api.render.com/deploy/srv-… 的地址，然后任选一种存法：',
-        `  1. 写进 deploy.hooks.json：{ "${name}": "https://api.render.com/deploy/srv-…" }`,
-        `  2. 设环境变量：set ${project.hookEnv || 'DEPLOY_HOOK'}=https://api.render.com/deploy/srv-…`,
-        `  3. 临时用：node scripts/deploy.mjs ${name} --hook "https://api.render.com/deploy/srv-…"`,
-      ].join('\n'),
-    );
-    return 2;
+  let deployed = false;
+  const useApi = project.render?.serviceId && !options.hook && renderKey(project).key;
+
+  if (useApi) {
+    console.log(`触发上线：${name}（Render API）`);
+    console.log(`  站点：${project.site || '(未配置)'}`);
+    try {
+      const result = await deployViaRender(project);
+      if (!result.ok) {
+        console.error(`  部署未成功：${result.reason}`);
+        return 1;
+      }
+      console.log(`  部署完成：${result.deploy.id} · ${result.deploy.status}`);
+      deployed = true;
+    } catch (error) {
+      console.error(`  触发失败：${error.message}`);
+      return 1;
+    }
+  } else {
+    const resolved = resolveHook(name, project, options.hook);
+    if (!resolved) {
+      const { envName } = renderKey(project);
+      console.error(
+        [
+          `项目 ${name} 既没有 Render API 凭据（${envName}），也没有部署 hook，发不出去。`,
+          '',
+          '任选一种：',
+          `  1. 设环境变量 ${envName}=rnd_…，或写进 deploy.local.json：{ "renderApiKey": "rnd_…" }（Render → Account Settings → API Keys）`,
+          `  2. 把 Deploy Hook 写进 deploy.hooks.json：{ "${name}": "https://api.render.com/deploy/srv-…" }`,
+          `  3. 临时用：node scripts/deploy.mjs ${name} --hook "https://api.render.com/deploy/srv-…"`,
+        ].join('\n'),
+      );
+      return 2;
+    }
+    console.log(`触发上线：${name}（Deploy Hook）`);
+    console.log(`  站点：${project.site || '(未配置)'}`);
+    console.log(`  hook：来自${resolved.from}`);
+    const result = await triggerHook(project, resolved);
+    if (!result.ok) {
+      console.error(`  触发失败：HTTP ${result.status} ${result.body}`);
+      return 1;
+    }
+    console.log(`  已触发：HTTP ${result.status}${result.body ? ` · ${result.body}` : ''}`);
+    if (options.wait > 0) {
+      console.log(`\n等 ${options.wait} 秒让新版本起来…`);
+      await sleep(options.wait * 1000);
+    }
+    deployed = true;
   }
 
-  console.log(`触发上线：${name}`);
-  console.log(`  站点：${project.site || '(未配置)'}`);
-  console.log(`  hook：来自${resolved.from}`);
-  const result = await trigger(resolved.hook);
-  if (!result.ok) {
-    console.error(`  触发失败：HTTP ${result.status} ${result.body}`);
-    return 1;
-  }
-  console.log(`  已触发：HTTP ${result.status}${result.body ? ` · ${result.body}` : ''}`);
+  if (!deployed) return 1;
 
-  if (options.wait > 0) {
-    console.log(`\n等 ${options.wait} 秒让新版本起来…`);
-    await sleep(options.wait * 1000);
-  }
-
-  if (options.wait > 0 || options.smoke) {
-    const health = await waitForHealth(project.site, project.health, Math.max(options.wait, 60));
+  if (options.wait > 0 || options.smoke || useApi) {
+    const health = await waitForHealth(project.site, project.health, Math.max(options.wait, 120));
     console.log(`健康检查：${health.ok ? '通过' : '未通过'} · ${health.detail}`);
     if (!health.ok) return 1;
   }

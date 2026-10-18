@@ -1,11 +1,16 @@
 {
-  "_comment": "一键上线的项目清单。hook（部署触发地址）不要写在这里：放到 deploy.hooks.json（已 gitignore）或环境变量里。",
+  "_comment": "一键上线的项目清单。凭据不要写在这里：hook 放 deploy.hooks.json（已 gitignore）或环境变量；Render 走 RENDER_API_KEY。",
   "projects": {
     "travel-world": {
       "site": "https://travel-world-mwdw.onrender.com",
       "health": "/api/health",
       "smoke": "scripts/smoke-prod.mjs",
-      "hookEnv": "DEPLOY_HOOK_TRAVEL_WORLD"
+      "hookEnv": "DEPLOY_HOOK_TRAVEL_WORLD",
+      "render": {
+        "serviceId": "srv-dak39euk1f9s73arb650",
+        "apiKeyEnv": "RENDER_API_KEY",
+        "timeoutSeconds": 900
+      }
     }
   }
 }
