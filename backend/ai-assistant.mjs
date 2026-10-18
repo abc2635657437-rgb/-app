@@ -382,6 +382,24 @@ async function relayUpstream(response, onText) {
 
 // When the configured provider refuses (quota, 5xx, timeout) the desk falls
 // back to the keyless public endpoint rather than giving up.
+// The keyless endpoint answers a plan best with a short prompt and one shot.
+function compactPlanPrompt(message) {
+  return '只输出一张表格，表头必须是 天 | 时间 | 地点 | 类型 | 说明，每行以 | 开头、以 | 结尾；内容：'
+    + String(message || '').slice(0, 120)
+    + '，每天 5 行，类型只写 吃、喝、玩、乐、住、行 中的一个；说明不超过 15 字。不要写别的。';
+}
+
+function syntheticStream(text) {
+  const encoder = new TextEncoder();
+  const frame = 'data: ' + JSON.stringify({ choices: [{ delta: { content: text } }] }) + '\n\ndata: [DONE]\n\n';
+  return {
+    ok: true,
+    body: new ReadableStream({
+      start(controller) { controller.enqueue(encoder.encode(frame)); controller.close(); }
+    })
+  };
+}
+
 function fallbackTarget() {
   const raw = process.env.AI_FALLBACK_URL;
   if (raw === 'off' || raw === 'none') return null;
@@ -526,13 +544,29 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         const fallback = fallbackTarget();
         if (!fallback) throw error;
         console.warn('ai_assistant_fallback', JSON.stringify({ reason: String(error?.message || error).slice(0, 80) }));
-        upstream = await fetch(fallback.url, {
-          method: 'POST',
-          headers: fallback.headers,
-          signal: AbortSignal.timeout(budget),
-          body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages })
-        });
-        if (!upstream.ok || !upstream.body) throw new Error('fallback ' + upstream.status);
+        if (input.mode === 'plan') {
+          // Long structured prompts come back empty here; a compact one works.
+          const plain = await fetch(fallback.url, {
+            method: 'POST',
+            headers: fallback.headers,
+            signal: AbortSignal.timeout(Math.max(budget, 30000)),
+            body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: 1500, stream: false, messages: [{ role: 'user', content: compactPlanPrompt(input.message) }] })
+          });
+          if (!plain.ok) throw new Error('fallback ' + plain.status);
+          const raw = await plain.text();
+          let content = '';
+          try { content = JSON.parse(raw).choices?.[0]?.message?.content || ''; } catch (_) { content = raw; }
+          if (!content.trim()) throw new Error('fallback empty');
+          upstream = syntheticStream(content);
+        } else {
+          upstream = await fetch(fallback.url, {
+            method: 'POST',
+            headers: fallback.headers,
+            signal: AbortSignal.timeout(budget),
+            body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: MAX_TOKENS, stream: true, messages })
+          });
+          if (!upstream.ok || !upstream.body) throw new Error('fallback ' + upstream.status);
+        }
       }
 
       if (wantsStream) {
