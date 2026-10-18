@@ -19,6 +19,7 @@
         runtime.src = 'modules/map/map-web.js?v=33-country-champions';
         runtime.onload = () => {
           window.loadMap = window.initTravelMap;
+          if (document.getElementById('map')?.classList.contains('active')) window.initTravelMap?.();
           const legacyOpen = window.openMapLandmark;
           window.openMapLandmark = async id => {
             if (!window.openSelectedCityGuide) return legacyOpen?.(id);
