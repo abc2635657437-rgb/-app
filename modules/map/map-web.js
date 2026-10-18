@@ -243,7 +243,7 @@
     try {
       data = await loadData();
       if (!window.L) { renderFallback(); status(langText('离线地图 · 使用已缓存地标数据；联网后可启用拖动、缩放和搜索。','Offline map · Showing cached landmarks. Reconnect to pan, zoom and search.')); return; }
-      if (!map) { map = L.map(canvas, { zoomControl: true, worldCopyJump: true,dragging:!coarse,touchZoom:!coarse,scrollWheelZoom:!coarse,doubleClickZoom:!coarse,boxZoom:!coarse }).setView([20, 10], 1); map.on('zoomend', updateMarkerDensity); map.on('moveend',renderOnlineUsers);map.on('moveend',renderMarkers);map.on('moveend',schedulePlaces); }
+      if (!map) { map = L.map(canvas, { zoomControl: true, worldCopyJump: true,dragging:!coarse,touchZoom:!coarse,scrollWheelZoom:!coarse,doubleClickZoom:!coarse,boxZoom:!coarse }).setView([20, 0], 1); map.on('zoomend', updateMarkerDensity); map.on('moveend',renderOnlineUsers);map.on('moveend',renderMarkers);map.on('moveend',schedulePlaces); }
       if (!map._twTileLayer) { map._twTileLayer = TravelMapProviders.tileLayer(map); }
       renderMarkers();
       updateMarkerDensity();
