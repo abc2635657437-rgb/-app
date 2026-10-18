@@ -558,7 +558,9 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       console.warn('ai_assistant_failure', JSON.stringify({ name: error?.name || 'error', message: String(error?.message || error).slice(0, 120) }));
       if (res.headersSent) {
         sseWrite(res, 'delta', { text: '\n' });
-        sseWrite(res, 'done', { answer: groundedFallback(records, input.language), isAI: false, degraded: true, cached: false, disclaimer });
+        const fallbackText = groundedFallback(records, input.language);
+        const fallbackGallery = await photoStrip(fallbackText, resolvePhotos, input, input.language);
+        sseWrite(res, 'done', { answer: fallbackText, isAI: false, degraded: true, cached: false, gallery: fallbackGallery, disclaimer });
         return res.end();
       }
       return respond(groundedFallback(records, input.language), { degraded: true });

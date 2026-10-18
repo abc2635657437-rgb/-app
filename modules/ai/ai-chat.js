@@ -213,7 +213,11 @@
   var planCache = { at: 0, data: null };
 
   function isPlanRequest(text) {
-    return /(?:规划|安排|行程|路线|日程|几天|几日|第\s*[一二三四五六七1-7]\s*天|itinerary|day[- ]by[- ]day|plan\b)/i.test(String(text || ''));
+    const value = String(text || '');
+    if (/(?:规划|安排|行程|路线|日程|几天|几日|第\s*[一二三四五六七1-7]\s*天|itinerary|day[- ]by[- ]day|plan\b)/i.test(value)) return true;
+    // "大理五天", "去京都3天" — a destination and a length is a plan request, even
+    // without the word 安排.
+    return /[\u4e00-\u9fa5]{2,8}\s*[一二三四五六七八九十\d]{1,2}\s*天/.test(value);
   }
 
   function dayLabel(number) {
