@@ -34,7 +34,20 @@ async function entityFor(name) {
   }
 }
 
-export async function resolvePhotos(names) {
+function photoFrom(info) {
+  const meta = info?.extmetadata || {};
+  const url = info?.thumburl || info?.url;
+  if (!url || !/^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(url)) return null;
+  return {
+    url: url.replace('https://upload.wikimedia.org/', 'https://thumb.wikimedia.org/'),
+    page: info.descriptionurl || '',
+    credit: plain(meta.Artist?.value),
+    license: plain(meta.LicenseShortName?.value),
+    reach: 0
+  };
+}
+
+export async function resolvePhotos(names, city) {
   const unique = [...new Set((Array.isArray(names) ? names : []).map(name => String(name || '').trim()).filter(Boolean))];
   const photos = new Map();
   if (!unique.length) return photos;
@@ -48,14 +61,18 @@ export async function resolvePhotos(names) {
 
   let entities = {};
   try {
-    const data = await getJson('https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&props=claims&ids=' + [...new Set(ids.values())].join('|'));
+    const data = await getJson('https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&props=claims|sitelinks&ids=' + [...new Set(ids.values())].join('|'));
     entities = data.entities || {};
   } catch (_) {
     return photos;
   }
 
   const files = new Map();
+  const reach = new Map();
   ids.forEach((id, name) => {
+    // How many language editions carry an article — a defensible stand-in for
+    // "widely known and written about", never presented as a review score.
+    reach.set(name, Object.keys(entities[id]?.sitelinks || {}).length);
     const file = entities[id]?.claims?.P18?.[0]?.mainsnak?.datavalue?.value;
     if (typeof file === 'string' && /\.(jpe?g|webp|png)$/i.test(file) && !/(?:\bflag\b|coat of arms|\blogo\b|\bmap\b|\bdrawing\b|\bpainting\b)/i.test(file)) {
       files.set(id, file);
@@ -75,12 +92,13 @@ export async function resolvePhotos(names) {
         url: url.replace('https://upload.wikimedia.org/', 'https://thumb.wikimedia.org/'),
         page: info.descriptionurl || '',
         credit: plain(meta.Artist?.value),
-        license: plain(meta.LicenseShortName?.value)
+        license: plain(meta.LicenseShortName?.value),
+        reach: reach.get(name) || 0
       });
     });
   } catch (_) { /* fall through to the search pass */ }
 
-  const missing = unique.filter(name => !photos.has(name));
+  let missing = unique.filter(name => !photos.has(name));
   if (!missing.length) return photos;
 
   const searched = await Promise.all(missing.slice(0, 10).map(async name => {
@@ -89,17 +107,9 @@ export async function resolvePhotos(names) {
     try {
       const data = await getJson('https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(name) + '&prop=imageinfo&iiprop=url%7Cextmetadata&iiurlwidth=520');
       const page = Object.values(data.query?.pages || {})[0];
-      const info = page?.imageinfo?.[0];
-      const meta = info?.extmetadata || {};
-      const url = info?.thumburl || info?.url;
-      if (!url || !/^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(url)) return null;
-      const photo = {
-        url: url.replace('https://upload.wikimedia.org/', 'https://thumb.wikimedia.org/'),
-        page: info.descriptionurl || '',
-        credit: plain(meta.Artist?.value),
-        license: plain(meta.LicenseShortName?.value),
-        file: page?.title?.replace(/^File:/, '')
-      };
+      const photo = photoFrom(page?.imageinfo?.[0]);
+      if (!photo) return null;
+      photo.file = page?.title?.replace(/^File:/, '');
       cache.set('search:' + name, { at: Date.now(), photo });
       return [name, photo];
     } catch (_) {
@@ -108,6 +118,20 @@ export async function resolvePhotos(names) {
   }));
 
   searched.filter(Boolean).forEach(([name, photo]) => { if (photo) photos.set(name, photo); });
+
+  // Last pass: the same search with the city attached, which fixes ambiguous names.
+  const stillMissing = unique.filter(name => !photos.has(name) && city);
+  if (stillMissing.length) {
+    const cityHits = await Promise.all(stillMissing.slice(0, 8).map(async name => {
+      try {
+        const data = await getJson('https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(name + ' ' + city) + '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=520');
+        const page = Object.values(data.query?.pages || {})[0];
+        const photo = photoFrom(page?.imageinfo?.[0]);
+        return photo ? [name, photo] : null;
+      } catch (_) { return null; }
+    }));
+    cityHits.filter(Boolean).forEach(([name, photo]) => photos.set(name, photo));
+  }
   return photos;
 }
 

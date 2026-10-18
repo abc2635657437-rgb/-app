@@ -31,6 +31,18 @@ const CITIES = [
   ['迪拜', 'AE'], ['多哈', 'QA'], ['特拉维夫', 'IL']
 ].sort((a, b) => b[0].length - a[0].length);
 
+// Rough, honest list: a 地铁 option only appears where one actually runs.
+const METRO = new Set([
+  '京都', '东京', '大阪', '札幌', '福冈', '名古屋', '首尔', '釜山', '台北', '高雄', '香港', '澳门',
+  '新加坡', '吉隆坡', '曼谷', '雅加达', '马尼拉', '河内', '胡志明',
+  '北京', '上海', '广州', '深圳', '成都', '重庆', '西安', '杭州', '苏州', '南京', '武汉', '长沙',
+  '昆明', '青岛', '大连', '天津', '郑州', '沈阳', '哈尔滨', '乌鲁木齐',
+  '巴黎', '伦敦', '罗马', '米兰', '巴塞罗那', '马德里', '里斯本', '阿姆斯特丹', '柏林', '慕尼黑',
+  '维也纳', '布拉格', '雅典', '伊斯坦布尔', '莫斯科', '圣彼得堡', '迪拜', '开罗',
+  '纽约', '旧金山', '洛杉矶', '芝加哥', '波士顿', '西雅图', '多伦多', '温哥华',
+  '悉尼', '墨尔本', '布里斯班', '奥克兰', '墨西哥城', '开普敦'
+]);
+
 const enc = value => encodeURIComponent(String(value || '').trim());
 
 export function detectRegion(text) {
@@ -68,20 +80,51 @@ function stayLink(city, language) {
   };
 }
 
-function rideLinks(name, country, language) {
+function mapsDir(name, language) {
+  return 'https://www.google.com/maps/dir/?api=1&destination=' + enc(name)
+    + '&travelmode=transit&hl=' + (language === 'en' ? 'en' : 'zh-CN');
+}
+
+function mapsStop(name, language) {
+  return 'https://www.google.com/maps/search/?api=1&query='
+    + enc(name) + (language === 'en' ? '+bus+stop' : '+公交站');
+}
+
+// 地铁 / 公交 / 打车, in the order a traveller decides between them.
+function waysFor(name, region, language) {
+  const country = region?.country || '';
+  const city = region?.city || '';
+  const modes = [];
+  if (METRO.has(city)) {
+    modes.push({
+      mode: 'metro',
+      label: language === 'en' ? 'Metro' : '地铁',
+      provider: country === 'CN' ? 'amap' : 'google',
+      url: country === 'CN'
+        ? 'https://uri.amap.com/search?keyword=' + enc(name) + '&city=' + enc(city)
+        : mapsDir(name, language)
+    });
+  }
+  modes.push({
+    mode: 'bus',
+    label: language === 'en' ? 'Bus' : '公交',
+    provider: country === 'CN' ? 'amap' : 'google',
+    url: country === 'CN'
+      ? 'https://uri.amap.com/search?keyword=' + enc(name + ' 公交站') + '&city=' + enc(city)
+      : mapsStop(name, language)
+  });
   if (country === 'CN') {
-    return [{ kind: 'ride', label: language === 'en' ? 'DiDi' : '滴滴', provider: 'didi', url: 'https://common.diditaxi.com.cn/general/webEntry' }];
+    modes.push({ mode: 'didi', label: '滴滴', provider: 'didi', url: 'https://common.diditaxi.com.cn/general/webEntry' });
+  } else {
+    modes.push({
+      mode: 'uber',
+      label: 'Uber',
+      provider: 'uber',
+      url: 'https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=' + enc(name)
+    });
+    if (SEA.has(country)) modes.push({ mode: 'grab', label: 'Grab', provider: 'grab', url: 'https://www.grab.com/' });
   }
-  const uber = {
-    kind: 'ride',
-    label: 'Uber',
-    provider: 'uber',
-    url: 'https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=' + enc(name)
-  };
-  if (SEA.has(country)) {
-    return [uber, { kind: 'ride', label: 'Grab', provider: 'grab', url: 'https://www.grab.com/' }];
-  }
-  return [uber];
+  return modes;
 }
 
 // One primary action per category plus a way to get there.
@@ -96,6 +139,16 @@ export function linksFor(item, region, language) {
   else if (/住|宿|酒店|hotel|stay|lodg/i.test(kind)) links.push(stayLink(city || name, language));
   else if (/乐|购物|演出|夜|shop|show|night/i.test(kind)) links.push(ticketLink(name, country, language));
   else links.push(ticketLink(name, country, language));
-  links.push(...rideLinks(name, country, language));
+  links.push({
+    kind: 'ways',
+    label: language === 'en' ? 'Getting there' : '怎么去',
+    modes: waysFor(name, region, language)
+  });
+  links.push({
+    kind: 'reviews',
+    label: language === 'en' ? 'Reviews' : '游客评价',
+    provider: 'google',
+    url: 'https://www.google.com/maps/search/?api=1&query=' + enc([name, city].filter(Boolean).join(' '))
+  });
   return links;
 }

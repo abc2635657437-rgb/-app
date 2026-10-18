@@ -70,6 +70,7 @@
       active = null;
       if (options.onError) options.onError(event && event.error ? event.error : 'error');
     };
+    recognition.onstart = function () { if (options.onStart) options.onStart(); };
     recognition.onend = function () {
       active = null;
       if (options.onEnd) options.onEnd(finalText.trim());

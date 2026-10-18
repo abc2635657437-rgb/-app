@@ -17,6 +17,7 @@ import { installMapPlaces, placeIndex } from './map-places.mjs';
 import { installMapTiles, preferredProvider, mapProviderInfo } from './map-tiles.mjs';
 import { installAiCompanions } from './ai-companions.mjs';
 import { installAiAssistant } from './ai-assistant.mjs';
+import { installPlaceInfo } from './place-info.mjs';
 import { installPlaceImages } from './place-images.mjs';
 import { searchTravelKnowledge, knowledgeForPrompt } from './travel-knowledge.mjs';
 
@@ -29,7 +30,7 @@ const anonKey = process.env.SUPABASE_ANON_KEY;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // Same OpenAI-compatible model used by the owner's AgentOS travel assistant.
 const aiProvider = 'agentos-pollinations';
-const aiModel = 'openai-fast';
+const aiModel = process.env.AI_MODEL || 'openai-fast';
 const aiApiKey = '';
 const aiBaseUrl = (process.env.AI_BASE_URL || 'https://text.pollinations.ai').replace(/\/$/, '');
 const nominatimBaseUrl = (process.env.NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '');
@@ -304,6 +305,7 @@ installAiCompanions(app,{requireUser,enforceAiQuota,aiBaseUrl,aiModel});
 // origin so a reply starts rendering after one API hop instead of loading an
 // external web app inside an iframe.
 installAiAssistant(app,{optionalUser,aiBaseUrl,aiModel});
+installPlaceInfo(app);
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
 // China-compliant basemap providers (天地图/高德/腾讯/百度) with OSM and Google

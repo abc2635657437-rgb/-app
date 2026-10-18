@@ -18,6 +18,8 @@ import { detectRegion, linksFor } from './plan-links.mjs';
 const MAX_MESSAGE = 2000;
 const MAX_TOKENS = 1400;
 const PLAN_MAX_TOKENS = 2600;
+// The traveller should not wait longer than this for a first answer.
+const PLAN_BUDGET = 5000;
 const UPSTREAM_TIMEOUT = 60_000;
 const CACHE_TTL = 6 * 60 * 60 * 1000;
 const CACHE_MAX = 400;
@@ -48,8 +50,8 @@ const SYSTEM_PROMPT = [
 // Plan mode gets a deliberately short prompt. The free upstream spends its whole
 // budget on hidden reasoning once the instruction grows; a two-sentence contract
 // plus the question reliably produces the table.
-const PLAN_SYSTEM_ZH = '你是旅行顾问。先写一句有人情味的定调，不要寒暄、不要感叹号，然后只输出一张表格：表头必须是 天 | 时间 | 地点 | 类型 | 说明。每天 5–7 行，类型只能写 吃、喝、玩、乐、住 中的一个，每天至少有一处吃、一处喝；地点用真实的市场、小吃店、老巷、咖啡馆、小馆子这类有人间烟火气的地方，时间用 24 小时制，说明写一句给朋友的建议、不超过 20 字，不要写时长和票价。';
-const PLAN_SYSTEM_EN = 'You are a travel desk. Write one warm framing sentence with no greeting and no exclamation mark, then output only one table with the columns: day | time | place | type | note. Five to seven rows per day; type is one of eat, drink, play, fun, stay, with at least one eat and one drink a day. Choose real street-level places — markets, noodle shops, old lanes, cafes, small restaurants — 24-hour times, and a note of advice for a friend under 20 characters, with no duration and no prices.';
+const PLAN_SYSTEM_ZH = '你是旅行顾问。先写一句有人情味的定调，不要寒暄、不要感叹号，然后只输出一张表格：表头必须是 天 | 时间 | 地点 | 类型 | 说明。每天 6–8 行，类型必须把 吃、喝、玩、乐、住、行 六种都排上（行写清坐什么去下一站，例如“地铁东西线到东山站”）；只写真实存在、游客到过并能被查到的地点，不要编造小店，也不要只写寺庙；时间用 24 小时制，说明写一句给朋友的建议、不超过 20 字，不要写时长和票价。';
+const PLAN_SYSTEM_EN = 'You are a travel desk. Write one warm framing sentence with no greeting and no exclamation mark, then output only one table with the columns: day | time | place | type | note. Six to eight rows per day, and every day must cover all six types: eat, drink, play, fun, stay, move (for move, say how to get to the next stop). Only name real, well-visited places that can be looked up. Choose real street-level places — markets, noodle shops, old lanes, cafes, small restaurants — 24-hour times, and a note of advice for a friend under 20 characters, with no duration and no prices.';
 const PLAN_SYSTEM = { zh: PLAN_SYSTEM_ZH, en: PLAN_SYSTEM_EN };
 
 // Used as a single retry when the first plan attempt comes back empty.
@@ -220,7 +222,16 @@ function parsePlan(answer) {
   return { days, places: places.size };
 }
 
-async function buildPlan(answer, resolvePhotos, context) {
+function starsFor(photo) {
+  const reach = Number(photo?.reach) || 0;
+  if (reach >= 40) return 5;
+  if (reach >= 15) return 4;
+  if (reach >= 5) return 3;
+  if (reach >= 1) return 2;
+  return photo ? 2 : 1;
+}
+
+async function buildPlan(answer, resolvePhotos, context, partial = false) {
   const parsed = parsePlan(answer);
   if (!parsed) return null;
   const names = [];
@@ -229,8 +240,8 @@ async function buildPlan(answer, resolvePhotos, context) {
   if (typeof resolvePhotos === 'function' && names.length) {
     try {
       photos = await Promise.race([
-        resolvePhotos([...new Set(names)].slice(0, 24)),
-        new Promise(resolve => setTimeout(() => resolve(new Map()), 7000))
+        resolvePhotos([...new Set(names)].slice(0, partial ? 8 : 24), detectRegion(context?.message || '')?.city),
+        new Promise(resolve => setTimeout(() => resolve(new Map()), partial ? 1200 : 7000))
       ]);
     } catch (_) { photos = new Map(); }
   }
@@ -243,12 +254,14 @@ async function buildPlan(answer, resolvePhotos, context) {
   const language = context?.language === 'en' ? 'en' : 'zh';
   parsed.days.forEach(day => day.items.forEach(item => {
     item.links = linksFor(item, region, language);
+    item.stars = starsFor(item.photo);
   }));
   return {
     days: parsed.days,
     places: parsed.places,
     photos: photoCount,
     region,
+    partial: Boolean(partial),
     provider: photoCount ? 'Wikidata P18 / Wikimedia Commons' : ''
   };
 }
@@ -385,7 +398,7 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, reso
       const upstream = await fetch(`${aiBaseUrl}/openai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        signal: AbortSignal.timeout(UPSTREAM_TIMEOUT),
+        signal: AbortSignal.timeout(input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT),
         body: JSON.stringify({ model: aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages })
       });
 
@@ -398,7 +411,15 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, reso
           disclaimer
         });
         let answer = '';
-        const finish = await relayUpstream(upstream, async text => { answer += text; sseWrite(res, 'delta', { text }); });
+        let finish = '';
+        let truncated = false;
+        try {
+          finish = await relayUpstream(upstream, async text => { answer += text; sseWrite(res, 'delta', { text }); });
+        } catch (error) {
+          // A plan that ran out of its five seconds is still worth showing.
+          if (input.mode === 'plan' && /Timeout|Abort/i.test(String(error?.name))) truncated = true;
+          else throw error;
+        }
         if (!answer.trim() && input.mode === 'plan') {
           console.warn('ai_assistant_plan_retry', JSON.stringify({ finish }));
           try {
@@ -429,10 +450,10 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, reso
           sseWrite(res, 'delta', { text: answer });
         }
         const sources = records.slice(0, 4).map(item => item.sourceUrl).filter(Boolean);
-        const plan = await buildPlan(answer, resolvePhotos, input);
-        cache.set(cacheKey, { answer, at: Date.now(), degraded: false, sources, plan });
+        const plan = await buildPlan(answer, resolvePhotos, input, truncated);
+        if (!truncated) cache.set(cacheKey, { answer, at: Date.now(), degraded: false, sources, plan });
         if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
-        sseWrite(res, 'done', { answer, isAI: true, finish, cached: false, sources, plan, disclaimer });
+        sseWrite(res, 'done', { answer, isAI: true, finish, truncated, cached: false, sources, plan, disclaimer });
         return res.end();
       }
 

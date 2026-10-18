@@ -147,22 +147,23 @@ const install = optionalUser => {
 
   const kyoto = linksFor({ place: '锦市场', kind: '吃' }, { city: '京都', country: 'JP' }, 'zh');
   assert.equal(kyoto[0].provider, 'tabelog');
-  assert.equal(kyoto[1].provider, 'uber');
-  assert.match(kyoto[1].url, /m\.uber\.com/);
+  const kyotoWays = kyoto.find(link => link.kind === 'ways');
+  assert.deepEqual(kyotoWays.modes.map(mode => mode.mode), ['metro', 'bus', 'uber'], 'metro, bus, then Uber');
+  assert.match(kyotoWays.modes[2].url, /m\.uber\.com/);
 
   const dali = linksFor({ place: '大理古城', kind: '吃' }, { city: '大理', country: 'CN' }, 'zh');
   assert.equal(dali[0].provider, 'dianping');
-  assert.equal(dali[1].provider, 'didi');
+  assert.deepEqual(dali.find(link => link.kind === 'ways').modes.map(mode => mode.mode), ['bus', 'didi'], 'no metro in Dali');
 
   const bangkok = linksFor({ place: 'Chatuchak', kind: '玩' }, { city: '曼谷', country: 'TH' }, 'en');
   assert.equal(bangkok[0].provider, 'klook');
-  assert.deepEqual(bangkok.filter(link => link.kind === 'ride').map(link => link.provider), ['uber', 'grab']);
+  assert.deepEqual(bangkok.find(link => link.kind === 'ways').modes.map(mode => mode.mode), ['metro', 'bus', 'uber', 'grab']);
 
   const stay = linksFor({ place: 'A hotel', kind: '住' }, { city: '京都', country: 'JP' }, 'en');
   assert.equal(stay[0].provider, 'booking');
   assert.match(stay[0].url, /booking\.com\/searchresults/);
 
-  console.log('Plan links passed: 大众点评/滴滴, Tabelog, Klook, Booking, Uber then Grab.');
+  console.log('Plan links passed: 地铁 only where a metro runs, 公交, 滴滴/ Uber / Grab, Tabelog, Klook, Booking.');
 }
 
 server.close();

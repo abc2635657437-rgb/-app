@@ -284,7 +284,7 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   assert.match(body.innerHTML, /<b>衣<\/b>/, 'bold markers become real bold');
   assert.match(body.innerHTML, /锦市场/, 'the streamed text is rendered');
   assert.ok(bubbles[1].querySelector('.ai-chat-sources'), 'sources are attached to the answer');
-  assert.ok(bubbles[1].querySelector('.ai-chat-actions button'), 'the make-a-route action is offered');
+  assert.equal(bubbles[1].querySelector('.ai-chat-actions'), null, 'no route action is offered');
   const saved = JSON.parse(store.get('tw-ai-chat-v1'));
   assert.equal(saved.length, 2);
   assert.equal(saved[1].role, 'assistant');
@@ -331,28 +331,24 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   console.log('AI chat failure passed: upstream errors surface as readable text.');
 }
 
-// 5. The make-a-route action hands a usable draft to the studio.
+// 5. There is no route action any more: the desk answers, it does not publish.
 {
-  const { document, sandbox } = await run({
+  const { document } = await run({
+    auth: anonymousAuth,
     fetchImpl: async () => sseResponse([
       { event: 'delta', data: { text: '京都 2 天路线：清水寺、锦市场、岚山。' } },
       { event: 'done', data: { answer: '京都 2 天路线：清水寺、锦市场、岚山。' } }
-    ]),
-    auth: { ...anonymousAuth, session: () => ({ access_token: 'token' }) }
+    ])
   });
   const panel = document.getElementById('ai').children.find(node => node.id === 'aiChatPanel');
   const textarea = panel.querySelector('.ai-chat-compose textarea');
   textarea.value = '京都 2 天怎么玩';
   panel.querySelector('.ai-chat-compose').dispatch('submit', { preventDefault() {} });
-  await new Promise(resolve => setTimeout(resolve, 120));
-  const button = panel.querySelectorAll('.bubble')[1].querySelector('.ai-chat-actions button');
-  button.onclick();
-  assert.ok(sandbox.__studio, 'openStudio must be called');
-  assert.equal(sandbox.__studio.routeId, null, 'a draft always creates a new route');
-  assert.equal(sandbox.__studio.draft.dest, '京都', 'the destination is extracted from the question');
-  assert.match(sandbox.__studio.draft.tips, /锦市场/, 'the answer is carried over as editable tips');
-  assert.ok(sandbox.__studio.draft.title.length > 0, 'a title is proposed');
-  console.log('AI chat hand-off passed: draft carries destination, title and tips.');
+  await new Promise(resolve => setTimeout(resolve, 140));
+  const bubble = panel.querySelectorAll('.bubble')[1];
+  assert.equal(bubble.querySelector('.ai-chat-actions'), null, 'no route action is offered');
+  assert.equal(panel.querySelector('.ai-chat-actions'), null, 'no route action anywhere');
+  console.log('AI chat actions passed: answers stay answers, with no route hand-off.');
 }
 
 // 6. "Numbered pick + bulleted detail" is read as one entry, so the picks keep
@@ -395,7 +391,7 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
     ttsSupported() { return true; }
   };
   const calls = [];
-  const { document, sandbox } = await run({
+  const { document } = await run({
     auth: anonymousAuth,
     voice,
     fetchImpl: async (url, init) => {
@@ -425,7 +421,6 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   assert.equal(JSON.parse(calls[0].init.body).message, '京都两天怎么玩');
   assert.ok(voice.spoken.length, 'a voice question is answered out loud');
   assert.match(voice.spoken[0], /带薄外套/, 'the whole answer is handed to the voice layer');
-  assert.ok(sandbox.__studio === undefined || true);
   console.log('AI chat voice passed: microphone → same send path → answer read back.');
 }
 
@@ -455,15 +450,15 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
     days: [{
       day: 1,
       items: [
-        { time: '09:00', place: '伏见稻荷大社', kind: '玩', note: '清晨人少，约 2 小时', photo: { url: 'https://thumb.wikimedia.org/a.jpg', page: 'https://commons.wikimedia.org/wiki/File:A' }, links: [{ kind: 'ticket', label: '门票', provider: 'klook', url: 'https://www.klook.com/search/result/?query=x' }, { kind: 'ride', label: 'Uber', provider: 'uber', url: 'https://m.uber.com/ul/?dropoff=x' }] },
-        { time: '12:30', place: '汤豆腐', kind: '食', note: '人均 3,000 日元' }
+        { time: '09:00', place: '伏见稻荷大社', kind: '玩', stars: 2, note: '清晨人少，约 2 小时', photo: { url: 'https://thumb.wikimedia.org/a.jpg', page: 'https://commons.wikimedia.org/wiki/File:A' }, links: [{ kind: 'ticket', label: '门票', provider: 'klook', url: 'https://www.klook.com/search/result/?query=x' }, { kind: 'ways', label: '怎么去', modes: [{ mode: 'metro', label: '地铁', url: 'https://www.google.com/maps/dir/?x' }, { mode: 'bus', label: '公交', url: 'https://www.google.com/maps/search/?x' }, { mode: 'uber', label: 'Uber', url: 'https://m.uber.com/ul/?dropoff=x' }] }] },
+        { time: '12:30', place: '汤豆腐', kind: '食', stars: 4, note: '人均 3,000 日元' }
       ]
     }],
     places: 2,
     photos: 1,
     provider: 'Wikidata P18 / Wikimedia Commons'
   };
-  const { document, sandbox } = await run({
+  const { document } = await run({
     auth: anonymousAuth,
     fetchImpl: async () => sseResponse([
       { event: 'delta', data: { text: '## 衣\n- 薄外套\n\n## 日程\n| 天 | 时间 | 地点 |\n|---|---|---|\n| 1 | 09:00 | 伏见稻荷大社 |\n' } },
@@ -484,8 +479,16 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   assert.ok(card.querySelector('img'), 'a resolved photograph is shown');
   const linkRow = card.querySelector('.ai-chat-plan-links');
   assert.ok(linkRow, 'booking and ride links are attached');
-  assert.equal(linkRow.querySelectorAll('a').length, 2, 'ticket and ride both appear');
+  assert.equal(linkRow.querySelectorAll('a').length, 1, 'the ticket action is a link');
+  assert.ok(linkRow.querySelector('.ai-chat-plan-way'), 'the way-there action is a button');
   assert.match(linkRow.querySelector('a').getAttribute('href'), /klook/);
+  linkRow.querySelector('.ai-chat-plan-way').onclick({ preventDefault() {} });
+  const sheet = document.body.children.find(node => node.className === 'ai-chat-modes');
+  assert.ok(sheet, 'the way-there sheet opens');
+  assert.equal(sheet.querySelectorAll('.ai-chat-mode').length, 3, 'metro, bus and ride are offered');
+  assert.match(sheet.querySelector('.ai-chat-mode').getAttribute('href'), /google\.com\/maps/);
+  sheet.querySelector('.ai-chat-modes-close').onclick();
+  assert.ok(!document.body.children.some(node => node.className === 'ai-chat-modes'), 'the sheet closes');
   assert.ok(card.querySelector('.ai-chat-plan-photo.is-blank'), 'an unresolved place keeps its kind glyph');
   assert.ok(!/\| 1 \| 09:00/.test(bubble.querySelector('.ai-chat-body').innerHTML), 'the duplicate table is removed from the text');
 
@@ -500,11 +503,25 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   chips.find(chip => chip.getAttribute('data-kind') === 'all').onclick();
   assert.equal(stops.filter(stop => !stop.hidden).length, 2, 'clearing the filter restores everything');
 
-  bubble.querySelector('.ai-chat-actions button').onclick();
-  assert.ok(sandbox.__studio, 'the route action opens the studio');
-  assert.equal(sandbox.__studio.draft.plan.days.length, 1, 'the itinerary travels with the draft');
-  assert.equal(sandbox.__studio.draft.plan.days[0].items[0].place, '伏见稻荷大社');
-  console.log('AI chat plan passed: cards, photos, category filter, no duplicated table, studio hand-off.');
+  // Stars: the traveller chooses how high to set the bar.
+  const starBar = card.querySelector('.ai-chat-plan-stars');
+  assert.ok(starBar, 'a star threshold is offered');
+  const fourStars = starBar.children.find(node => node.getAttribute('data-min') === '4');
+  fourStars.onclick();
+  assert.equal(stops.filter(stop => !stop.hidden).length, 1, 'only the four-star stop survives');
+  assert.equal(stops.find(stop => stop.getAttribute('data-kind') === 'play').hidden, true, 'the two-star sight is hidden');
+  starBar.children.find(node => node.getAttribute('data-min') === '0').onclick();
+  assert.equal(stops.filter(stop => !stop.hidden).length, 2, 'clearing the star filter restores everything');
+
+  card.querySelector('.ai-chat-plan-item').onclick();
+  const place = document.body.children.find(node => node.className === 'ai-chat-place');
+  assert.ok(place, 'tapping a stop opens the place sheet');
+  assert.ok(place.querySelector('.ai-chat-place-head b'), 'the place name is in the sheet');
+  assert.ok(place.querySelector('.ai-chat-place-actions'), 'the actions travel with it');
+  place.querySelector('.ai-chat-place-close').onclick();
+  assert.ok(!document.body.children.some(node => node.className === 'ai-chat-place'), 'the place sheet closes');
+
+  console.log('AI chat plan passed: cards, photos, category filter and no duplicated table.');
 }
 
 console.log('All AI chat checks passed.');

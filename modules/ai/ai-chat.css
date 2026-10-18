@@ -7,7 +7,9 @@
    over a photographic page background, so the desk is drawn as its own sheet of
    paper and every colour comes from a token that flips with the theme. */
 
-body .ai-chat-screen{
+/* Tokens live on <body>: the way-there sheet is appended to the document, outside
+   the desk screen, and must inherit the same paper and ink. */
+body{
   --ai-sheet:var(--paper);
   --ai-raised:#fffdf8;
   --ai-rule:var(--line);
@@ -27,7 +29,7 @@ body .ai-chat-screen{
   --ai-shadow:0 14px 34px rgba(23,55,71,.09);
 }
 
-body.journal-preview[data-time-theme="night"] .ai-chat-screen{
+body.journal-preview[data-time-theme="night"]{
   --ai-sheet:#1e282b;
   --ai-raised:#243033;
   --ai-hair:rgba(225,231,225,.14);
@@ -218,17 +220,26 @@ body .ai-chat-plan-head span{font:8.5px/1 Georgia,var(--serif);letter-spacing:.1
 
 body .ai-chat-plan-filters{display:flex;gap:5px;padding:10px 14px 9px;overflow-x:auto;scrollbar-width:none}
 body .ai-chat-plan-filters::-webkit-scrollbar{display:none}
-body .ai-chat-plan-filter{flex:0 0 auto;min-height:28px;padding:0 9px;border:1px solid var(--ai-hair);border-radius:999px;background:transparent;color:var(--ai-soft);font-size:10.5px;letter-spacing:.02em;white-space:nowrap}
+body .ai-chat-plan-filter{flex:0 0 auto;min-height:28px;padding:0 8px;border:1px solid var(--ai-hair);border-radius:999px;background:transparent;color:var(--ai-soft);font-size:10px;letter-spacing:0;white-space:nowrap}
 body .ai-chat-plan-filter.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 
+body .ai-chat-plan-stars{display:flex;align-items:center;gap:5px;padding:0 14px 9px;overflow-x:auto;scrollbar-width:none}
+body .ai-chat-plan-stars::-webkit-scrollbar{display:none}
+body .ai-chat-plan-stars-label{margin-right:2px;color:var(--ai-faint);font-size:10px;letter-spacing:.08em}
+body .ai-chat-plan-star{flex:0 0 auto;min-height:24px;padding:0 8px;border:1px solid var(--ai-hair);border-radius:999px;background:transparent;color:var(--ai-soft);font-size:10px}
+body .ai-chat-plan-star.is-on{border-color:var(--ai-accent);background:var(--ai-accent);color:#fdf8ef}
+body .ai-chat-plan-stars-badge{position:absolute;top:8px;right:8px;z-index:2;padding:2px 6px;border-radius:999px;background:rgba(12,20,22,.62);color:#f7f3e8;font-size:9.5px;letter-spacing:.04em}
 body .ai-chat-plan-day{padding:8px 0 2px}
 body .ai-chat-plan-day + .ai-chat-plan-day{border-top:1px solid var(--ai-hair-soft)}
 body .ai-chat-plan-dayhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 14px 7px}
 body .ai-chat-plan-dayhead b{font-family:var(--serif);font-size:13px;font-weight:500;letter-spacing:.7px;color:var(--ai-accent)}
 body .ai-chat-plan-dayhead span{font-size:10px;color:var(--ai-faint)}
+body .ai-chat-plan-dots{display:inline-flex;gap:3px;flex:1 1 auto;justify-content:center}
+body .ai-chat-plan-dot{display:grid;place-items:center;width:14px;height:14px;border:1px solid var(--ai-hair);border-radius:2px;background:transparent;color:var(--ai-faint);font-family:var(--serif);font-size:9px;font-style:normal;line-height:1;opacity:.45}
+body .ai-chat-plan-dot.is-on{border-color:var(--ai-accent);background:var(--ai-accent);color:#fdf8ef;opacity:1}
 body .ai-chat-plan-strip{display:flex;gap:9px;padding:0 14px 9px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 body .ai-chat-plan-strip::-webkit-scrollbar{display:none}
-body .ai-chat-plan-item{position:relative;flex:0 0 auto;width:132px;height:192px;overflow:hidden;border-radius:3px;background:var(--ai-code);scroll-snap-align:start}
+body .ai-chat-plan-item{position:relative;flex:0 0 auto;width:132px;height:192px;cursor:pointer;overflow:hidden;border-radius:3px;background:var(--ai-code);scroll-snap-align:start}
 body .ai-chat-plan-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 body .ai-chat-plan-photo.is-blank{display:grid;place-items:center;border:1px solid var(--ai-hair);background:var(--ai-raised);color:var(--ai-accent);font-family:var(--serif);font-size:22px}
 body .ai-chat-plan-item::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,18,20,0) 42%,rgba(10,18,20,.84) 100%)}
@@ -239,8 +250,45 @@ body .ai-chat-plan-body small{display:-webkit-box;-webkit-line-clamp:2;-webkit-b
 body .ai-chat-plan-links{display:flex;gap:9px;margin-top:3px}
 body .ai-chat-plan-links a{padding-bottom:1px;border-bottom:1px solid rgba(247,243,232,.55);color:#f7f3e8;font-size:10px;letter-spacing:.04em;text-decoration:none}
 body .ai-chat-plan-links a:hover{border-bottom-color:#f7f3e8}
+body .ai-chat-plan-way{padding:0 0 1px;border:0;border-bottom:1px solid rgba(247,243,232,.55);background:transparent;color:#f7f3e8;font-size:10px;letter-spacing:.04em;white-space:nowrap}
+body .ai-chat-plan-way:hover{border-bottom-color:#f7f3e8}
+
+/* The way there: a small sheet, three or four honest choices. */
+body .ai-chat-modes{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;background:rgba(12,20,22,.42)}
+body .ai-chat-modes-panel{width:min(420px,100%);padding:14px 16px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--ai-rule);background:var(--ai-raised);box-shadow:0 -12px 40px rgba(0,0,0,.24)}
+body .ai-chat-modes-panel header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--ai-hair)}
+body .ai-chat-modes-panel header b{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ai-copy)}
+body .ai-chat-modes-close{padding:0 2px;border:0;background:transparent;color:var(--ai-faint);font-size:22px;line-height:1}
+body .ai-chat-modes-close:hover{color:var(--ai-accent)}
+body .ai-chat-modes-list{display:grid;gap:1px;margin-top:4px}
+body .ai-chat-mode{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:13px 2px;border-bottom:1px solid var(--ai-hair-soft);color:var(--ai-copy);text-decoration:none}
+body .ai-chat-mode:last-child{border-bottom:0}
+body .ai-chat-mode b{font-family:var(--serif);font-size:15px;font-weight:500}
+body .ai-chat-mode small{font-size:11px;color:var(--ai-faint)}
+body .ai-chat-mode:hover b{color:var(--ai-accent)}
 body .ai-chat-plan-item[hidden]{display:none}
 body .ai-chat-plan-day[hidden]{display:none}
+body .ai-chat-plan-partial{margin:0;padding:9px 14px;border-top:1px solid var(--ai-hair-soft);font-size:11px;line-height:1.6;color:var(--ai-faint)}
+
+/* One place, up close: a bigger photograph, a few more of them, and its story. */
+body .ai-chat-place{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,16,18,.55)}
+body .ai-chat-place-panel{position:relative;display:flex;flex-direction:column;width:min(460px,100%);max-height:92dvh;overflow-y:auto;background:var(--ai-sheet);border-top:1px solid var(--ai-rule);box-shadow:0 -16px 50px rgba(0,0,0,.3)}
+body .ai-chat-place-hero{position:relative;flex:0 0 auto;height:212px;background:var(--ai-code)}
+body .ai-chat-place-hero img{display:block;width:100%;height:100%;object-fit:cover}
+body .ai-chat-place-close{position:absolute;top:10px;right:10px;z-index:2;width:32px;height:32px;border:0;border-radius:50%;background:rgba(12,20,22,.55);color:#f7f3e8;font-size:20px;line-height:1}
+body .ai-chat-place-head{padding:14px 16px 2px}
+body .ai-chat-place-head b{display:block;font-family:var(--serif);font-size:21px;font-weight:500;letter-spacing:.4px;color:var(--ai-copy)}
+body .ai-chat-place-head span{display:block;margin-top:4px;font-size:11.5px;line-height:1.6;color:var(--ai-faint)}
+body .ai-chat-place-body{padding:8px 16px calc(20px + env(safe-area-inset-bottom))}
+body .ai-chat-place-summary{margin:6px 0 13px;font-size:13px;line-height:1.9;color:var(--ai-soft)}
+body .ai-chat-place-gallery{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 14px}
+body .ai-chat-place-gallery img{display:block;width:100%;height:112px;object-fit:cover;border-radius:2px}
+body .ai-chat-place-gallery[hidden]{display:none}
+body .ai-chat-place-actions{display:flex;flex-wrap:wrap;gap:8px;padding-top:13px;border-top:1px solid var(--ai-hair)}
+body .ai-chat-place-action{display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border:1px solid var(--ai-rule);border-radius:999px;background:transparent;color:var(--ai-copy);font-size:12px;text-decoration:none}
+body .ai-chat-place-action:hover{border-color:var(--ai-accent);color:var(--ai-accent)}
+body .ai-chat-place-credit{margin:12px 0 0;font-size:10px;line-height:1.6;color:var(--ai-faint)}
+
 body .ai-chat-plan-credit{padding:10px 14px 12px;border-top:1px solid var(--ai-hair-soft);font-size:10px;line-height:1.6;color:var(--ai-faint)}
 
 @media(max-width:360px){
@@ -272,3 +320,155 @@ body.ai-desk-open .ai-float-tab{display:none}
   body .ai-chat-list > .bubble{animation:none}
   body .ai-chat-typing i{animation:none;opacity:.6}
 }
+
+/* ============================================================ refinement pass
+   A quieter, more printed feel: hairline rules instead of boxes, small caps for
+   labels, generous leading, and one accent used sparingly. Everything below
+   overrides the earlier card styles. */
+
+body{
+  --ai-hair:rgba(28,42,44,.16);
+  --ai-hair-soft:rgba(28,42,44,.08);
+  --ai-rule:rgba(28,42,44,.22);
+  --ai-lift:0 18px 44px -28px rgba(24,32,30,.55);
+  --ai-lift-soft:0 10px 30px -24px rgba(24,32,30,.5);
+}
+
+/* The plan reads like a printed page: a cover with an inset frame, then rules. */
+body .ai-chat-plan{margin:18px 0 6px;border:0;background:transparent;box-shadow:none;overflow:visible}
+body .ai-chat-plan-cover{height:176px;border-radius:2px;box-shadow:var(--ai-lift);overflow:hidden}
+body .ai-chat-plan-cover::before{content:"";position:absolute;inset:9px;z-index:1;border:1px solid rgba(255,255,255,.34);pointer-events:none}
+body .ai-chat-plan-cover::after{background:linear-gradient(180deg,rgba(12,20,22,0) 34%,rgba(10,16,18,.78) 100%)}
+body .ai-chat-plan-covertext{left:20px;right:20px;bottom:16px}
+body .ai-chat-plan-covertext b{font-size:21px;letter-spacing:3px;text-shadow:none}
+body .ai-chat-plan-covertext span{margin-top:5px;font-size:8px;letter-spacing:.3em}
+
+/* Filters are text tabs, not pills. */
+body .ai-chat-plan-filters{gap:0;padding:14px 10px 0;border-bottom:0}
+body .ai-chat-plan-filter{min-height:30px;padding:0 7px 9px;border:0;border-bottom:1.5px solid transparent;border-radius:0;background:transparent;color:var(--ai-faint);font-size:9.5px;letter-spacing:.03em}
+body .ai-chat-plan-filter.is-on{border-bottom-color:var(--ink);background:transparent;color:var(--ai-copy);font-weight:600}
+body .ai-chat-plan-stars{display:flex;align-items:center;gap:0;padding:0 14px 12px;border-bottom:1px solid var(--ai-hair-soft)}
+body .ai-chat-plan-stars-label{margin-right:10px;color:var(--ai-faint);font-size:9px;letter-spacing:.24em;text-transform:uppercase}
+body .ai-chat-plan-star{min-height:24px;padding:0 9px;border:0;border-bottom:1px solid transparent;border-radius:0;background:transparent;color:var(--ai-faint);font-size:10px;letter-spacing:.06em}
+body .ai-chat-plan-star.is-on{border-bottom-color:var(--ai-accent);background:transparent;color:var(--ai-accent);font-weight:600}
+
+/* Each day: a ruled header, then one row of photographs. */
+body .ai-chat-plan-day{padding:16px 0 4px}
+body .ai-chat-plan-day + .ai-chat-plan-day{border-top:0}
+body .ai-chat-plan-dayhead{display:flex;align-items:center;gap:10px;padding:0 14px 11px}
+body .ai-chat-plan-dayhead b{font-size:12px;letter-spacing:2.4px;color:var(--ai-copy)}
+body .ai-chat-plan-dayhead::after{content:"";order:2;flex:1 1 auto;height:1px;background:var(--ai-hair-soft)}
+body .ai-chat-plan-dots{order:3;flex:0 0 auto;gap:2px}
+body .ai-chat-plan-dot{width:11px;height:11px;border:1px solid var(--ai-hair);border-radius:0;font-size:7.5px;opacity:.5}
+body .ai-chat-plan-dot.is-on{border-color:var(--ink);background:var(--ink);color:var(--paper);opacity:1}
+body .ai-chat-plan-dayhead > span:last-child{order:4;flex:0 0 auto;font:9px/1 Georgia,var(--serif);letter-spacing:.1em;text-transform:uppercase;color:var(--ai-soft);opacity:.8}
+
+body .ai-chat-plan-strip{gap:11px;padding:0 14px 12px}
+body .ai-chat-plan-item{width:136px;height:196px;border-radius:2px;box-shadow:var(--ai-lift-soft)}
+body .ai-chat-plan-item::before{content:"";position:absolute;inset:0;z-index:1;border:1px solid rgba(255,255,255,.14);pointer-events:none}
+body .ai-chat-plan-item::after{background:linear-gradient(180deg,rgba(10,16,18,0) 38%,rgba(10,16,18,.9) 100%)}
+body .ai-chat-plan-body{left:11px;right:11px;bottom:11px;gap:3px}
+body .ai-chat-plan-time{font-size:8.5px;letter-spacing:.22em;opacity:.75}
+body .ai-chat-plan-body b{font-size:14.5px;letter-spacing:.6px;text-shadow:none}
+body .ai-chat-plan-body small{font-size:10px;line-height:1.5;opacity:.72}
+body .ai-chat-plan-links{gap:10px;margin-top:6px;padding-top:6px;border-top:1px solid rgba(247,243,232,.18)}
+body .ai-chat-plan-links a,body .ai-chat-plan-way{padding-bottom:0;border-bottom:0;font-size:9.5px;letter-spacing:.1em;opacity:.92}
+body .ai-chat-plan-stars-badge{top:9px;right:9px;padding:2px 7px;border:1px solid rgba(247,243,232,.42);border-radius:999px;background:rgba(12,20,22,.34);font-family:Georgia,var(--serif);font-size:9px;letter-spacing:.12em}
+
+body .ai-chat-plan-credit{padding:12px 14px 14px;border-top:1px solid var(--ai-hair-soft);font-size:9.5px;letter-spacing:.04em;line-height:1.8}
+body .ai-chat-plan-partial{padding:11px 14px;border-top:1px solid var(--ai-hair-soft);font-size:10.5px}
+
+/* The place sheet: a photograph, a title, then quiet text. */
+body .ai-chat-place-panel{height:100dvh;max-height:100dvh;background:var(--ai-sheet);box-shadow:0 -24px 60px -30px rgba(16,24,22,.55)}
+body .ai-chat-place-hero{height:236px}
+body .ai-chat-place-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,16,18,0) 62%,rgba(255,255,255,.06) 100%)}
+body .ai-chat-place-head{padding:18px 20px 2px}
+body .ai-chat-place-head b{font-size:24px;letter-spacing:1.6px;line-height:1.35}
+body .ai-chat-place-head span{margin-top:7px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ai-faint)}
+body .ai-chat-place-body{padding:10px 20px calc(22px + env(safe-area-inset-bottom))}
+body .ai-chat-place-summary{margin:10px 0 16px;font-size:13px;line-height:2.05;letter-spacing:.2px;color:var(--ai-copy)}
+body .ai-chat-place-gallery{gap:7px;margin-bottom:16px}
+body .ai-chat-place-gallery img{height:118px;border-radius:1px;box-shadow:var(--ai-lift-soft)}
+body .ai-chat-place-gallery img:nth-child(3):last-child{grid-column:1 / -1;height:146px}
+body .ai-chat-place-actions{gap:14px;padding-top:14px;border-top:1px solid var(--ai-hair)}
+body .ai-chat-place-action{min-height:30px;padding:0 0 3px;border:0;border-bottom:1px solid var(--ai-hair);border-radius:0;background:transparent;font-size:11.5px;letter-spacing:.1em;color:var(--ai-copy)}
+body .ai-chat-place-action:hover{border-bottom-color:var(--ai-accent);color:var(--ai-accent)}
+body .ai-chat-place-credit{margin-top:14px;font-size:9px;letter-spacing:.04em}
+
+/* The way-there sheet, same language. */
+body .ai-chat-modes-panel{padding:18px 20px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -24px 60px -30px rgba(16,24,22,.55)}
+body .ai-chat-modes-panel header{padding-bottom:12px}
+body .ai-chat-modes-panel header b{font-size:17px;letter-spacing:1.2px}
+body .ai-chat-mode{padding:15px 0;border-bottom:1px solid var(--ai-hair-soft)}
+body .ai-chat-mode b{font-size:14.5px;letter-spacing:.6px}
+body .ai-chat-mode small{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+
+/* The desk itself: a quieter composer and more air in the answer. */
+body .ai-chat-answer{line-height:2.05}
+body .ai-chat-answer p{margin-bottom:14px}
+body .ai-chat-body{font-size:13.5px}
+body .ai-chat-turn-meta{font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+body .ai-chat-compose{border-top:1px solid var(--ai-hair-soft);padding-top:10px}
+body .ai-chat-compose textarea{font-size:13.5px;line-height:1.9}
+body .ai-chat-compose button{border-radius:1px}
+
+/* ============================================================ stars + density
+   Rounded gold stars drawn as a background shape, and a tighter rhythm: the
+   card was too airy, so paddings, heights and type come down together. */
+
+body{
+  --ai-star:#E7B45C;
+  --ai-star-soft:rgba(231,180,92,.42);
+}
+
+body .ai-chat-stars{display:inline-flex;align-items:center;gap:2px;vertical-align:middle}
+body .ai-star{display:inline-block;width:9px;height:9px;line-height:0;background-repeat:no-repeat;background-position:center;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.4l2.52 5.13 5.66.82-4.09 3.99.96 5.63L12 16.3l-5.05 2.67.96-5.63-4.09-3.99 5.66-.82z' fill='none' stroke='%23E7B45C' stroke-opacity='.42' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E")}
+body .ai-star.is-on{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.4l2.52 5.13 5.66.82-4.09 3.99.96 5.63L12 16.3l-5.05 2.67.96-5.63-4.09-3.99 5.66-.82z' fill='%23E7B45C' stroke='%23E7B45C' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E")}
+body .ai-chat-plan-stars-badge{position:absolute;top:7px;right:7px;z-index:2;display:inline-flex;gap:1px;padding:4px 6px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(12,20,22,.42);backdrop-filter:blur(3px)}
+body .ai-chat-plan-stars-badge .ai-star{width:8px;height:8px}
+body .ai-chat-place-head span.ai-chat-stars{display:inline-flex;margin:0 8px 0 0}
+body .ai-chat-place-head .ai-star{width:10px;height:10px}
+
+/* Tighter rhythm throughout the plan. */
+body .ai-chat-plan{margin:10px 0 2px}
+body .ai-chat-plan-cover{height:132px}
+body .ai-chat-plan-cover::before{inset:7px}
+body .ai-chat-plan-covertext{left:16px;right:16px;bottom:11px}
+body .ai-chat-plan-covertext b{font-size:17px;letter-spacing:2.2px}
+body .ai-chat-plan-covertext span{margin-top:3px;font-size:7px;letter-spacing:.26em}
+body .ai-chat-plan-filters{padding:8px 10px 0}
+body .ai-chat-plan-filter{min-height:26px;padding:0 7px 6px}
+body .ai-chat-plan-stars{padding:0 12px 7px}
+body .ai-chat-plan-star{min-height:20px;padding:0 8px}
+body .ai-chat-plan-day{padding:9px 0 2px}
+body .ai-chat-plan-dayhead{gap:8px;padding:0 12px 7px}
+body .ai-chat-plan-dayhead b{font-size:11px;letter-spacing:1.8px}
+body .ai-chat-plan-dot{width:10px;height:10px;font-size:7px}
+body .ai-chat-plan-strip{gap:8px;padding:0 12px 8px}
+body .ai-chat-plan-item{width:118px;height:166px}
+body .ai-chat-plan-body{left:9px;right:9px;bottom:9px;gap:2px}
+body .ai-chat-plan-time{font-size:8px;letter-spacing:.18em}
+body .ai-chat-plan-body b{font-size:13px;letter-spacing:.4px}
+body .ai-chat-plan-body small{font-size:9.5px;line-height:1.42}
+body .ai-chat-plan-links{gap:8px;margin-top:4px;padding-top:4px}
+body .ai-chat-plan-links a,body .ai-chat-plan-way{font-size:9px}
+body .ai-chat-plan-credit{padding:8px 12px 10px;font-size:9px;line-height:1.6}
+
+/* Place sheet: same tightening, hero still leads. */
+body .ai-chat-place-hero{height:196px}
+body .ai-chat-place-head{padding:12px 16px 0}
+body .ai-chat-place-head b{font-size:20px;letter-spacing:1.2px}
+body .ai-chat-place-head span{margin-top:5px;font-size:8.5px;letter-spacing:.12em}
+body .ai-chat-place-body{padding:6px 16px calc(18px + env(safe-area-inset-bottom))}
+body .ai-chat-place-summary{margin:6px 0 11px;font-size:12.5px;line-height:1.78;letter-spacing:0}
+body .ai-chat-place-gallery{gap:5px;margin-bottom:11px}
+body .ai-chat-place-gallery img{height:92px}
+body .ai-chat-place-gallery img:nth-child(3):last-child{height:112px}
+body .ai-chat-place-actions{gap:12px;padding-top:9px}
+body .ai-chat-place-action{min-height:26px;font-size:11px}
+body .ai-chat-place-credit{margin-top:9px;font-size:8.5px}
+body .ai-chat-modes-panel{padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
+body .ai-chat-modes-panel header{padding-bottom:9px}
+body .ai-chat-modes-panel header b{font-size:15px}
+body .ai-chat-mode{padding:12px 0}
+

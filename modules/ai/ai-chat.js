@@ -55,6 +55,8 @@
       voiceUnsupported: '这个浏览器不支持语音输入，可以继续打字。',
       voiceDenied: '麦克风没有授权，在浏览器里允许后再试一次。',
       voiceRetry: '没听清，再说一次。',
+      voiceNetwork: '浏览器的语音服务连不上（Chrome / Edge 要访问 Google），先打字吧。',
+      voiceBusy: '语音正在启动，稍等一下再点。',
       voiceReading: '朗读中 · 点按停止',
       stop: '停止',
       stopped: '已停止。',
@@ -69,6 +71,22 @@
       planPlay: '玩',
       planFun: '乐',
       planStay: '住',
+      planMove: '行',
+      planCoverage: '这一天的六件事',
+      planStars: '星级',
+      planStarAll: '全部',
+      planStarHint: '星级看的是这个地方被多少语言的百科收录，不是点评分。',
+      waysTitle: '怎么去 · {place}',
+      waysMetro: '地铁路线',
+      waysBus: '找公交站',
+      waysUber: 'Uber 叫车',
+      waysDidi: '滴滴叫车',
+      waysGrab: 'Grab 叫车',
+      close: '关闭',
+      placeLoading: '正在取这个地方的资料…',
+      placePhotos: '更多照片',
+      placePhotoCredit: '照片来自 Wikimedia Commons，文字来自维基百科（CC BY-SA）。',
+      planPartial: '先给你这一版，想更细可以说一声。',
       planDays: ' 天',
       planPlaces: ' 个地点',
       planPhotos: ' 张照片',
@@ -83,7 +101,9 @@
       error: '顾问暂时不在线，请稍后再问。',
       offline: '网络似乎断开了，检查连接后再试。',
       quota: '问得有点急，稍等片刻再聊。',
-      empty: '先说说要去哪里，我们从这一步开始。'
+      empty: '先说说要去哪里，我们从这一步开始。',
+      noAnswer: '刚才没接上，再说一次试试。',
+      retrying: '再试一次',
     },
     en: {
       title: 'Travel Desk',
@@ -104,6 +124,8 @@
       voiceUnsupported: 'This browser cannot take voice input; typing still works.',
       voiceDenied: 'Microphone access is blocked. Allow it in the browser and retry.',
       voiceRetry: 'I did not catch that. Try again.',
+      voiceNetwork: 'The browser speech service is unreachable here; typing still works.',
+      voiceBusy: 'Voice is starting — give it a second.',
       voiceReading: 'Reading aloud · tap to stop',
       stop: 'Stop',
       stopped: 'Stopped.',
@@ -118,6 +140,22 @@
       planPlay: 'Play',
       planFun: 'Fun',
       planStay: 'Stay',
+      planMove: 'Move',
+      planCoverage: 'All six, today',
+      planStars: 'Stars',
+      planStarAll: 'All',
+      planStarHint: 'Stars reflect how widely a place is documented, not review scores.',
+      waysTitle: 'Getting to {place}',
+      waysMetro: 'Metro route',
+      waysBus: 'Nearest bus stop',
+      waysUber: 'Call an Uber',
+      waysDidi: 'Call a DiDi',
+      waysGrab: 'Call a Grab',
+      close: 'Close',
+      placeLoading: 'Fetching this place…',
+      placePhotos: 'More photographs',
+      placePhotoCredit: 'Photographs from Wikimedia Commons, text from Wikipedia (CC BY-SA).',
+      planPartial: 'A first pass — ask again for more detail.',
       planDays: ' days',
       planPlaces: ' places',
       planPhotos: ' photographs',
@@ -132,7 +170,9 @@
       error: 'The desk is offline. Please try again shortly.',
       offline: 'You appear to be offline. Check the connection and retry.',
       quota: 'That was quick. Give it a moment and ask again.',
-      empty: 'Start with where you are going and we will take it from there.'
+      empty: 'Start with where you are going and we will take it from there.',
+      noAnswer: 'That did not come through. Ask once more.',
+      retrying: 'One more try',
     }
   };
 
@@ -206,8 +246,189 @@
     if (/食|吃|餐|面|饭|market|food|eat/i.test(value)) return 'eat';
     if (/喝|饮|咖啡|茶|酒|bar|cafe|drink/i.test(value)) return 'drink';
     if (/住|宿|酒店|hotel|stay|lodg/i.test(value)) return 'stay';
+    if (/行|交通|移动|地铁|公交|打车|move|transport|transit/i.test(value)) return 'move';
     if (/乐|购物|演出|夜|酒吧|shop|show|night/i.test(value)) return 'fun';
     return 'play';
+  }
+
+  function placeLinks(item, container) {
+    (item.links || []).forEach(function (link) {
+      if (!link) return;
+      if (Array.isArray(link.modes) && link.modes.length) {
+        var ways = document.createElement('button');
+        ways.type = 'button';
+        ways.className = 'ai-chat-place-action';
+        ways.textContent = link.label || '怎么去';
+        ways.onclick = function (event) { if (event && event.stopPropagation) event.stopPropagation(); openWays(item.place, link.modes); };
+        container.append(ways);
+        return;
+      }
+      if (!link.url) return;
+      var action = document.createElement('a');
+      action.className = 'ai-chat-place-action';
+      action.setAttribute('href', link.url);
+      action.setAttribute('target', '_blank');
+      action.setAttribute('rel', 'noopener noreferrer');
+      action.textContent = link.label || link.provider || '·';
+      container.append(action);
+    });
+  }
+
+  // Tapping a stop opens the place itself: a bigger photograph, more of them,
+  // a short encyclopaedic note and the same actions as the card.
+  function openPlace(item) {
+    if (!item) return;
+    var overlay = document.createElement('div');
+    overlay.className = 'ai-chat-place';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+
+    var panel = document.createElement('div');
+    panel.className = 'ai-chat-place-panel';
+
+    var hero = document.createElement('div');
+    hero.className = 'ai-chat-place-hero';
+    if (item.photo && item.photo.url) {
+      var heroImage = document.createElement('img');
+      heroImage.src = item.photo.url;
+      heroImage.alt = item.place;
+      heroImage.referrerPolicy = 'no-referrer';
+      hero.append(heroImage);
+    }
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'ai-chat-place-close';
+    close.setAttribute('aria-label', t().close);
+    close.textContent = '×';
+    close.onclick = function () { overlay.remove(); };
+
+    var head = document.createElement('div');
+    head.className = 'ai-chat-place-head';
+    var title = document.createElement('b');
+    title.textContent = item.place;
+    var meta = document.createElement('span');
+    if (item.stars) meta.append(starsEl(item.stars));
+    var metaText = document.createElement('span');
+    metaText.textContent = [item.kind, item.time, item.note].filter(Boolean).join(' · ');
+    meta.append(metaText);
+    head.append(title, meta);
+
+    var body = document.createElement('div');
+    body.className = 'ai-chat-place-body';
+    var summary = document.createElement('p');
+    summary.className = 'ai-chat-place-summary';
+    summary.textContent = t().placeLoading;
+    var gallery = document.createElement('div');
+    gallery.className = 'ai-chat-place-gallery';
+    var actions = document.createElement('div');
+    actions.className = 'ai-chat-place-actions';
+    placeLinks(item, actions);
+    var credit = document.createElement('p');
+    credit.className = 'ai-chat-place-credit';
+    body.append(summary, gallery, actions);
+
+    panel.append(hero, close, head, body);
+    overlay.append(panel);
+    overlay.onclick = function (event) { if (event.target === overlay) overlay.remove(); };
+    document.body.append(overlay);
+
+    var lang = language() === 'en' ? 'en' : 'zh';
+    fetch('/api/ai/place?name=' + encodeURIComponent(item.place) + '&lang=' + lang)
+      .then(function (response) { return response && response.ok && response.json ? response.json() : null; })
+      .then(function (info) {
+        if (!info) return;
+        if (info.summary && info.summary.text) summary.textContent = info.summary.text;
+        else if (info.description) summary.textContent = info.description;
+        else summary.textContent = '';
+        var photos = (info.photos || []).filter(function (photo) { return photo && photo.url && (!item.photo || photo.url !== item.photo.url); });
+        photos.slice(0, 4).forEach(function (photo) {
+          var image = document.createElement('img');
+          image.src = photo.url;
+          image.alt = info.name || item.place;
+          image.loading = 'lazy';
+          image.referrerPolicy = 'no-referrer';
+          image.onerror = (function (element) {
+            return function () { if (element.parentNode) element.parentNode.removeChild(element); };
+          }(image));
+          gallery.append(image);
+        });
+        gallery.hidden = !gallery.children.length;
+        if (info.summary || info.photos && info.photos.length) body.append(credit);
+        credit.textContent = t().placePhotoCredit;
+      })
+      .catch(function () { summary.textContent = ''; });
+    return overlay;
+  }
+
+  function openWays(place, modes) {
+    var overlay = document.createElement('div');
+    overlay.className = 'ai-chat-modes';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    var panel = document.createElement('div');
+    panel.className = 'ai-chat-modes-panel';
+
+    var head = document.createElement('header');
+    var title = document.createElement('b');
+    title.textContent = t().waysTitle.replace('{place}', place);
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'ai-chat-modes-close';
+    close.setAttribute('aria-label', t().close);
+    close.textContent = '×';
+    close.onclick = function () { overlay.remove(); };
+    head.append(title, close);
+
+    var list = document.createElement('div');
+    list.className = 'ai-chat-modes-list';
+    modes.forEach(function (mode) {
+      var row = document.createElement('a');
+      row.className = 'ai-chat-mode';
+      row.setAttribute('href', mode.url);
+      row.setAttribute('target', '_blank');
+      row.setAttribute('rel', 'noopener noreferrer');
+      var name = document.createElement('b');
+      name.textContent = mode.label;
+      var hint = document.createElement('small');
+      hint.textContent = mode.mode === 'metro' ? t().waysMetro
+        : mode.mode === 'bus' ? t().waysBus
+        : mode.mode === 'didi' ? t().waysDidi
+        : mode.mode === 'grab' ? t().waysGrab : t().waysUber;
+      row.append(name, hint);
+      list.append(row);
+    });
+
+    panel.append(head, list);
+    overlay.append(panel);
+    overlay.onclick = function (event) { if (event.target === overlay) overlay.remove(); };
+    document.body.append(overlay);
+    return overlay;
+  }
+
+  function starsEl(count) {
+    var wrap = document.createElement('span');
+    wrap.className = 'ai-chat-stars';
+    for (var i = 1; i <= 5; i += 1) {
+      var star = document.createElement('i');
+      star.className = 'ai-star' + (i <= count ? ' is-on' : '');
+      wrap.append(star);
+    }
+    return wrap;
+  }
+
+  function applyPlanFilters(card) {
+    var kind = card.getAttribute('data-filter') || 'all';
+    var min = Number(card.getAttribute('data-stars') || 0);
+    Array.prototype.forEach.call(card.querySelectorAll('.ai-chat-plan-day'), function (block) {
+      var visible = 0;
+      Array.prototype.forEach.call(block.querySelectorAll('.ai-chat-plan-item'), function (stop) {
+        var kindOk = kind === 'all' || stop.getAttribute('data-kind') === kind;
+        var starsOk = !min || Number(stop.getAttribute('data-stars') || 0) >= min;
+        stop.hidden = !(kindOk && starsOk);
+        if (!stop.hidden) visible += 1;
+      });
+      block.hidden = visible === 0;
+    });
   }
 
   function planCard(plan) {
@@ -254,7 +475,7 @@
     }
 
     // Category index with live counts, so one tap narrows the whole plan.
-    var counts = { all: 0, eat: 0, drink: 0, play: 0, fun: 0, stay: 0 };
+    var counts = { all: 0, eat: 0, drink: 0, play: 0, fun: 0, stay: 0, move: 0 };
     plan.days.forEach(function (day) {
       day.items.forEach(function (item) {
         counts.all += 1;
@@ -264,33 +485,48 @@
     var filters = document.createElement('nav');
     filters.className = 'ai-chat-plan-filters';
     filters.setAttribute('aria-label', t().planTitle);
-    [['all', t().planAll], ['eat', t().planEat], ['drink', t().planDrink], ['play', t().planPlay], ['fun', t().planFun], ['stay', t().planStay]]
+    [['all', t().planAll], ['eat', t().planEat], ['drink', t().planDrink], ['play', t().planPlay], ['fun', t().planFun], ['stay', t().planStay], ['move', t().planMove]]
       .forEach(function (pair) {
         if (pair[0] !== 'all' && !counts[pair[0]]) return;
         var chip = document.createElement('button');
         chip.type = 'button';
         chip.className = 'ai-chat-plan-filter' + (pair[0] === 'all' ? ' is-on' : '');
         chip.setAttribute('data-kind', pair[0]);
-        chip.textContent = pair[1] + ' ' + counts[pair[0]];
+        chip.textContent = pair[0] === 'all' ? pair[1] : pair[1] + ' ' + counts[pair[0]];
         chip.onclick = function () {
           card.setAttribute('data-filter', pair[0]);
           Array.prototype.forEach.call(filters.children, function (node) {
             node.className = 'ai-chat-plan-filter' + (node === chip ? ' is-on' : '');
           });
-          Array.prototype.forEach.call(card.querySelectorAll('.ai-chat-plan-day'), function (block) {
-            var stops = block.querySelectorAll('.ai-chat-plan-item');
-            var visible = 0;
-            Array.prototype.forEach.call(stops, function (stop) {
-              var match = pair[0] === 'all' || stop.getAttribute('data-kind') === pair[0];
-              stop.hidden = !match;
-              if (match) visible += 1;
-            });
-            block.hidden = visible === 0;
-          });
+          applyPlanFilters(card);
         };
         filters.append(chip);
       });
     card.append(filters);
+
+    var starBar = document.createElement('div');
+    starBar.className = 'ai-chat-plan-stars';
+    var starLabel = document.createElement('span');
+    starLabel.className = 'ai-chat-plan-stars-label';
+    starLabel.textContent = t().planStars;
+    starBar.append(starLabel);
+    [['0', t().planStarAll], ['3', '3★+'], ['4', '4★+'], ['5', '5★']].forEach(function (pair) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ai-chat-plan-star' + (pair[0] === '0' ? ' is-on' : '');
+      button.setAttribute('data-min', pair[0]);
+      button.setAttribute('title', t().planStarHint);
+      button.textContent = pair[1];
+      button.onclick = function () {
+        card.setAttribute('data-stars', pair[0]);
+        Array.prototype.forEach.call(starBar.children, function (node) {
+          if (node.className.indexOf('ai-chat-plan-star') === 0) node.className = node === button ? 'ai-chat-plan-star is-on' : 'ai-chat-plan-star';
+        });
+        applyPlanFilters(card);
+      };
+      starBar.append(button);
+    });
+    card.append(starBar);
 
     plan.days.forEach(function (day) {
       var block = document.createElement('div');
@@ -299,9 +535,22 @@
       dayHead.className = 'ai-chat-plan-dayhead';
       var number = document.createElement('b');
       number.textContent = dayLabel(day.day);
+      var dots = document.createElement('span');
+      dots.className = 'ai-chat-plan-dots';
+      dots.setAttribute('aria-label', t().planCoverage);
+      var present = {};
+      day.items.forEach(function (item) { present[categoryOf(item.kind)] = true; });
+      [['eat', t().planEat], ['drink', t().planDrink], ['play', t().planPlay], ['fun', t().planFun], ['stay', t().planStay], ['move', t().planMove]]
+        .forEach(function (pair) {
+          var dot = document.createElement('i');
+          dot.className = 'ai-chat-plan-dot' + (present[pair[0]] ? ' is-on' : '');
+          dot.setAttribute('title', pair[1]);
+          dot.textContent = pair[1];
+          dots.append(dot);
+        });
       var count = document.createElement('span');
       count.textContent = day.items.length + t().planPlaces;
-      dayHead.append(number, count);
+      dayHead.append(number, dots, count);
       block.append(dayHead);
 
       var strip = document.createElement('div');
@@ -310,6 +559,10 @@
         var stop = document.createElement('article');
         stop.className = 'ai-chat-plan-item';
         stop.setAttribute('data-kind', categoryOf(item.kind));
+        if (item.stars) stop.setAttribute('data-stars', item.stars);
+        stop.onclick = (function (current) {
+          return function () { openPlace(current); };
+        }(item));
         if (item.photo && item.photo.url) {
           var img = document.createElement('img');
           img.className = 'ai-chat-plan-photo';
@@ -340,6 +593,11 @@
         var name = document.createElement('b');
         name.textContent = item.place;
         body.append(time, name);
+        if (item.stars) {
+          var badge = starsEl(item.stars);
+          badge.className = 'ai-chat-stars ai-chat-plan-stars-badge';
+          stop.append(badge);
+        }
         if (item.note) {
           var note = document.createElement('small');
           note.textContent = item.note;
@@ -349,12 +607,27 @@
           var links = document.createElement('span');
           links.className = 'ai-chat-plan-links';
           item.links.slice(0, 2).forEach(function (link) {
-            if (!link || !link.url) return;
+            if (!link) return;
+            if (Array.isArray(link.modes) && link.modes.length) {
+              var ways = document.createElement('button');
+              ways.type = 'button';
+              ways.className = 'ai-chat-plan-way';
+              ways.textContent = link.label || '怎么去';
+              ways.onclick = function (event) {
+                if (event && event.stopPropagation) event.stopPropagation();
+                if (event && event.preventDefault) event.preventDefault();
+                openWays(item.place, link.modes);
+              };
+              links.append(ways);
+              return;
+            }
+            if (!link.url) return;
             var action = document.createElement('a');
             action.setAttribute('href', link.url);
             action.setAttribute('target', '_blank');
             action.setAttribute('rel', 'noopener noreferrer');
             action.textContent = link.label || link.provider || '·';
+            action.onclick = function (event) { if (event && event.stopPropagation) event.stopPropagation(); };
             links.append(action);
           });
           if (links.children.length) body.append(links);
@@ -366,6 +639,12 @@
       card.append(block);
     });
 
+    if (plan.partial) {
+      var partial = document.createElement('p');
+      partial.className = 'ai-chat-plan-partial';
+      partial.textContent = t().planPartial;
+      card.append(partial);
+    }
     if (plan.photos) {
       var credit = document.createElement('footer');
       credit.className = 'ai-chat-plan-credit';
@@ -432,8 +711,13 @@
       onError: function (code) {
         setVoiceState('idle');
         var blocked = code === 'not-allowed' || code === 'service-not-allowed' || code === 'audio-capture';
-        setStatus(code === 'unsupported' ? t().voiceUnsupported : blocked ? t().voiceDenied : t().voiceRetry);
+        var offline = code === 'network' || code === 'language-not-supported';
+        setStatus(code === 'unsupported' ? t().voiceUnsupported
+          : blocked ? t().voiceDenied
+          : offline ? t().voiceNetwork
+          : t().voiceRetry);
       },
+      onStart: function () { setStatus(t().voiceHeard); },
       onEnd: function (text) {
         if (voiceState === 'listening') setVoiceState('idle');
         if (!text) {
@@ -688,16 +972,6 @@
       options.sources.slice(0, 4).forEach(function (url, index) { box.append(linkReference(url, index)); });
       el.append(box);
     }
-    if (options.makeRoute && text) {
-      var actions = document.createElement('div');
-      actions.className = 'ai-chat-actions';
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = t().makeRoute;
-      button.onclick = function () { toRoute(text, options.plan); };
-      actions.append(button);
-      el.append(actions);
-    }
     return el;
   }
 
@@ -720,29 +994,6 @@
   function scrollToEnd() {
     if (!list) return;
     list.scrollTop = list.scrollHeight;
-  }
-
-  // Pull a usable destination and a title out of the conversation so the studio
-  // opens with something the traveller can actually edit.
-  function toRoute(answer, plan) {
-    var A = auth();
-    if (!A || !A.requireLogin()) return;
-    var destination = '';
-    var asked = '';
-    for (var i = turns.length - 1; i >= 0; i -= 1) {
-      if (turns[i].role === 'user' && !asked) asked = turns[i].content;
-      if (asked) break;
-    }
-    var match = String(asked).match(/[\u4e00-\u9fa5A-Za-z][\u4e00-\u9fa5A-Za-z ]{1,18}/);
-    if (match) destination = match[0].trim();
-    var heading = String(answer).split('\n').filter(function (line) { return line.trim(); })[0] || '';
-    var title = (destination ? destination + ' ' : '') + '旅行路线';
-    window.openStudio(null, {
-      title: String(heading).replace(/^[#*\s]+/, '').replace(/\|/g, ' ').trim().slice(0, 90) || title,
-      dest: destination,
-      tips: String(answer).slice(0, 1200),
-      plan: plan || null
-    });
   }
 
   function setStatus(text) { if (status) status.textContent = text || ''; }
@@ -826,7 +1077,24 @@
           if (streaming.body) streaming.body.innerHTML = '<p class="muted">' + esc(t().stopped) + '</p>';
           return;
         }
-        throw new Error(t().empty);
+        // The stream can come back empty on a flaky upstream; one plain request
+        // costs little and usually returns the same answer.
+        try {
+          if (streaming && streaming.body) streaming.body.innerHTML = '<p class="muted">' + esc(t().retrying) + '…</p>';
+          const again = await fetch('/api/ai/assistant', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ message: question, history: history, language: language(), plans: plans, mode: planMode ? 'plan' : 'chat', stream: false })
+          });
+          if (again && again.ok && again.json) {
+            const data = await again.json();
+            if (data && data.answer) {
+              answer = data.answer;
+              if (data.plan) plan = data.plan;
+            }
+          }
+        } catch (_) { /* fall through to the honest message */ }
+        if (!answer.trim()) throw new Error(t().noAnswer);
       }
     } catch (error) {
       var text = error && error.name === 'AbortError' ? t().offline : (error && error.message ? error.message : t().error);
@@ -843,7 +1111,7 @@
 
     // Swap the live bubble for the final one so it carries sources, the route
     // action and the editorial spacing of a finished answer.
-    var finalEl = bubble('ai', answer, { sources: sources, makeRoute: true, plan: plan });
+    var finalEl = bubble('ai', answer, { sources: sources, plan: plan });
     bubbleEl.replaceWith(finalEl);
     turns.push({ role: 'assistant', content: answer, plan: plan });
     save();
