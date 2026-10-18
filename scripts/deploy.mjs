@@ -102,12 +102,14 @@ async function deployViaRender(project) {
   // Pin the deploy to the commit we just pushed: Render otherwise builds whatever
   // ref its git poll saw last, which can be the previous commit.
   const head = (() => {
-    try {
-      const out = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' });
-      return out.status === 0 ? out.stdout.trim() : '';
-    } catch {
-      return '';
+    const candidates = [process.env.GIT_BIN, 'git', 'C:/Users/Administrator/AppData/Local/cc-connect/bin/git.cmd', 'C:/Program Files/Git/cmd/git.exe'].filter(Boolean);
+    for (const bin of candidates) {
+      try {
+        const out = spawnSync(bin, ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' });
+        if (out.status === 0 && out.stdout.trim()) return out.stdout.trim();
+      } catch { /* try the next binary */ }
     }
+    return '';
   })();
   const body = { clearCache: 'do_not_clear' };
   if (head) body.commitId = head;
