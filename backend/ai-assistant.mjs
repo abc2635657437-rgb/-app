@@ -291,7 +291,7 @@ async function photoStrip(answer, resolvePhotos, context, language) {
   try {
     const photos = await Promise.race([
       resolvePhotos(names, detectRegion(context?.message || '')?.city, kinds),
-      new Promise(resolve => setTimeout(() => resolve(new Map()), 3500))
+      new Promise(resolve => setTimeout(() => resolve(new Map()), 8000))
     ]);
     const gallery = names
       .filter(name => photos.get(name) && photos.get(name).url)
