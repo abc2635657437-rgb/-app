@@ -303,6 +303,23 @@ async function photoStrip(answer, resolvePhotos, context, language) {
     // The model often names a category ("洱海边的民宿") rather than a place; the
     // destination itself still gives the answer a real photograph.
     if (gallery.length < 2) {
+      // The question itself names the subject: "洱海周边有什么好玩的" → 洱海.
+      const subject = String(context?.message || '')
+        .replace(/^(请问|帮我|我想|想去|打算去)/, '')
+        .split(/怎么|如何|有什|有什么|周边|附近|推荐|好玩|好吃|值得|几天|多少|吗|呢|[？?，,。.!！]/)[0]
+        .trim();
+      if (subject && subject.length >= 2 && subject.length <= 8 && !gallery.some(item => item.name === subject)) {
+        try {
+          const subjectPhotos = await Promise.race([
+            resolvePhotos([subject], region?.city, { [subject]: '玩', __language: language }),
+            new Promise(resolve => setTimeout(() => resolve(new Map()), 6000))
+          ]);
+          const photo = subjectPhotos.get(subject);
+          if (photo && photo.url) gallery.push({ name: subject, url: photo.url, stars: starsFor(photo), credit: photo.credit || '' });
+        } catch (_) { /* keep whatever we have */ }
+      }
+    }
+    if (gallery.length < 2) {
       if (region?.city && !photos.get(region.city)) {
         try {
           const cityPhotos = await Promise.race([
