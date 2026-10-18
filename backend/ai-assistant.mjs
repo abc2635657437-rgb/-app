@@ -19,7 +19,7 @@ const MAX_MESSAGE = 2000;
 const MAX_TOKENS = 1400;
 const PLAN_MAX_TOKENS = 2600;
 // The traveller should not wait longer than this for a first answer.
-const PLAN_BUDGET = 5000;
+const PLAN_BUDGET = Number(process.env.PLAN_BUDGET_MS) > 0 ? Number(process.env.PLAN_BUDGET_MS) : 5000;
 const UPSTREAM_TIMEOUT = 60_000;
 const CACHE_TTL = 6 * 60 * 60 * 1000;
 const CACHE_MAX = 400;
@@ -380,12 +380,17 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
     // This free proxy spends the entire budget on hidden reasoning whenever a
     // system message is present, so plan mode folds its contract into the user
     // turn and keeps the request to a single message.
+    // Models read a plain question far more reliably than a JSON blob, so the
+    // traveller's words go in as their own turn and the structured material
+    // follows as a short data block.
+    const dataBlock = JSON.stringify({ referenceData: knowledge, myPlans: input.plans || null });
     const messages = input.mode === 'plan'
       ? [{ role: 'user', content: PLAN_SYSTEM[input.language] + '\n\n' + input.message }]
       : [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: SYSTEM_PROMPT + '\n' + context.note },
         ...input.history,
-        { role: 'user', content: JSON.stringify(context) }
+        { role: 'user', content: input.message },
+        { role: 'user', content: '参考资料（JSON，可为空）：' + dataBlock }
       ];
 
     const respond = async (answer, { degraded = false, finish = '' } = {}) => {
