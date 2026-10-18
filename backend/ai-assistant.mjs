@@ -300,7 +300,20 @@ async function relayUpstream(response, onText) {
   return finish;
 }
 
-export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, resolvePhotos = defaultResolvePhotos }) {
+function upstreamTarget(base, key) {
+  const url = String(base || '').replace(/\/+$/, '');
+  const compatible = /\/v\d+[a-z]*$/i.test(url) || /openai|compatible/i.test(process.env.AI_PROVIDER || '');
+  return {
+    url: compatible ? url + '/chat/completions' : url + '/openai',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(key ? { Authorization: 'Bearer ' + key } : {}),
+      ...(compatible ? { 'HTTP-Referer': process.env.PUBLIC_APP_URL || 'https://travel-world-mwdw.onrender.com', 'X-Title': 'Travel World' } : {})
+    }
+  };
+}
+
+export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiApiKey = '', resolvePhotos = defaultResolvePhotos }) {
   const cache = new Map();
   const recent = new Map();
 
@@ -395,9 +408,10 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, reso
     };
 
     try {
-      const upstream = await fetch(`${aiBaseUrl}/openai`, {
+      const target = upstreamTarget(aiBaseUrl, aiApiKey);
+      const upstream = await fetch(target.url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: target.headers,
         signal: AbortSignal.timeout(input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT),
         body: JSON.stringify({ model: aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages })
       });
@@ -423,9 +437,9 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, reso
         if (!answer.trim() && input.mode === 'plan') {
           console.warn('ai_assistant_plan_retry', JSON.stringify({ finish }));
           try {
-            const retry = await fetch(`${aiBaseUrl}/openai`, {
+            const retry = await fetch(target.url, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: target.headers,
               signal: AbortSignal.timeout(UPSTREAM_TIMEOUT),
               body: JSON.stringify({
                 model: aiModel,

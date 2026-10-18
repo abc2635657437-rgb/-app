@@ -304,7 +304,7 @@ installAiCompanions(app,{requireUser,enforceAiQuota,aiBaseUrl,aiModel});
 // Native travel assistant (replaces the third-party iframe): streams from our own
 // origin so a reply starts rendering after one API hop instead of loading an
 // external web app inside an iframe.
-installAiAssistant(app,{optionalUser,aiBaseUrl,aiModel});
+installAiAssistant(app,{optionalUser,aiBaseUrl,aiModel,aiApiKey:process.env.AI_API_KEY||''});
 installPlaceInfo(app);
 app.get('/api/config', (_req, res) => res.json({ supabaseUrl, anonKey }));
 
