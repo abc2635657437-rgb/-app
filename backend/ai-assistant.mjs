@@ -256,7 +256,7 @@ function namesFromAnswer(answer) {
   // Plain bullets carry place names too: "- 洱海：环湖骑行".
   for (const raw of String(answer || '').split('\n')) {
     const line = raw.trim();
-    const bullet = /^[-*·]\s*([^：:，,。;；]{2,12})/.exec(line);
+    const bullet = /^(?:[-*·]|\d{1,2}[.、)])\s*\**([^：:，,。;；]{2,12})/.exec(line);
     if (!bullet) continue;
     const name = bullet[1].replace(/\*\*/g, '').trim();
     if (!name || stop.test(name) || found.includes(name)) continue;
@@ -564,9 +564,23 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
             body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: 1500, stream: false, messages: [{ role: 'user', content: compactPlanPrompt(input.message) }] })
           });
           if (!plain.ok) throw new Error('fallback ' + plain.status);
-          const raw = await plain.text();
+          const rawText = await plain.text();
           let content = '';
-          try { content = JSON.parse(raw).choices?.[0]?.message?.content || ''; } catch (_) { content = raw; }
+          try { content = JSON.parse(rawText).choices?.[0]?.message?.content || ''; } catch (_) { content = rawText; }
+          if (!content.trim()) {
+            // One more try: the free endpoint occasionally returns an empty body.
+            await new Promise(resolve => setTimeout(resolve, 800));
+            const again = await fetch(fallback.url, {
+              method: 'POST',
+              headers: fallback.headers,
+              signal: AbortSignal.timeout(Math.max(budget, 30000)),
+              body: JSON.stringify({ model: fallback.model, temperature: 0.5, max_tokens: 1500, stream: false, messages: [{ role: 'user', content: compactPlanPrompt(input.message) }] })
+            });
+            if (again.ok) {
+              const rawAgain = await again.text();
+              try { content = JSON.parse(rawAgain).choices?.[0]?.message?.content || ''; } catch (_) { content = rawAgain; }
+            }
+          }
           if (!content.trim()) throw new Error('fallback empty');
           upstream = syntheticStream(content);
         } else {
