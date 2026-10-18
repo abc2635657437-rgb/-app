@@ -146,6 +146,14 @@
     return [lat, lon];
   }
 
+  // Outbound Amap URI links always need GCJ-02, regardless of the active basemap.
+  function amapLatLng(latitude, longitude) {
+    const lat = Number(latitude);
+    const lon = Number(longitude);
+    if (!isFinite(lat) || !isFinite(lon)) return [0, 0];
+    return outOfChina(lat, lon) ? [lat, lon] : wgs84ToGcj02(lat, lon);
+  }
+
   function focusPoint(point) {
     if (!point) return [0, 0];
     return focusLatLng(point.latitude, point.longitude);
@@ -220,6 +228,7 @@
     revision() { return revision; },
     // Re-projects a WGS-84 coordinate (or list of them) into the active datum.
     focusLatLng,
+    amapLatLng,
     focusPoint,
     focusList,
     tileLayer,

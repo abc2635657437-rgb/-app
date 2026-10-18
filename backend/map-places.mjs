@@ -46,6 +46,20 @@ export function regionPlaces(places,region,country=''){
   return places.filter(p=>(regionCountries[region]||[]).includes(p.countryCode)&&(!country||p.countryCode===country));
 }
 
+export function popularCityPlaces(places,region='world',country='',limit=1000){
+  const cities=new Map();
+  for(const place of places){
+    if(!place.city||!place.countryCode)continue;
+    const key=place.countryCode+'|'+place.city.trim().toLocaleLowerCase();
+    const current=cities.get(key);
+    if(!current||(place.rank||0)>(current.rank||0))cities.set(key,{...place,destinationCity:place.city,cityPlaceCount:(current?.cityPlaceCount||0)+1});
+    else current.cityPlaceCount++;
+  }
+  return regionPlaces([...cities.values()],region,country)
+    .sort((a,b)=>(b.rank||0)-(a.rank||0)||a.destinationCity.localeCompare(b.destinationCity))
+    .slice(0,Math.max(0,Math.min(1000,limit)));
+}
+
 // Small bbox cache: panning back and forth reuses the same payload instead of
 // re-filtering and re-serialising it.
 const cache=new Map();
@@ -59,10 +73,10 @@ export function installMapPlaces(app){
     const region=String(req.query.region||'china'),country=String(req.query.country||''),page=Number(req.query.page||0);
     if(!regionCountries[region]||(country&&!/^[A-Z]{2}$/.test(country))||!Number.isInteger(page)||page<0||page>2000)return res.status(400).json({error:'Invalid destination filter'});
     try{
-      const idx=await placeIndex(),regional=regionPlaces(idx.sorted,region),matches=regionPlaces(regional,region,country);
-      const countries=[...new Set(regional.map(p=>p.countryCode))].sort();
+      const idx=await placeIndex(),popular=popularCityPlaces(idx.catalog.places,region,'',1000),matches=regionPlaces(popular,region,country);
+      const countries=[...new Set(popular.map(p=>p.countryCode))].sort();
       res.set('Cache-Control','public, max-age=120');
-      res.json({places:matches.slice(page*8,page*8+8).map(p=>({...p,sourceUrl:'https://www.wikidata.org/wiki/'+p.id})),total:matches.length,countries,page,pageSize:8,license:idx.catalog.license,attribution:idx.catalog.attribution});
+      res.json({places:matches.slice(page*8,page*8+8).map(p=>({...p,sourceUrl:'https://www.wikidata.org/wiki/'+p.id})),total:matches.length,countries,page,pageSize:8,license:idx.catalog.license,attribution:idx.catalog.attribution,rankBasis:'Source-provided rank from the curated Wikidata-derived place catalogue; it is not visitor-count data.'});
     }catch(_){res.status(503).json({error:'Destination directory unavailable'});}
   });
   app.get('/api/map/places',async(req,res)=>{

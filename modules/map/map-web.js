@@ -1,5 +1,5 @@
 (function () {
-  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=11-westlake-guide';document.head.append(photoStyles);
+  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=30-global-category-icons';document.head.append(photoStyles);
   let map;
   let markers = [];
   let routeLayer;
@@ -27,13 +27,32 @@
   const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
   const twp = (point) => (window.TravelMapProviders ? window.TravelMapProviders.focusPoint(point) : [point.latitude, point.longitude]);
   async function loadData() {
-    const key = 'tw-map-cache-v5';
+    const key = 'tw-map-cache-v7-global-1000-verified-images';
     try {
       const cached = localStorage.getItem(key);
       if (cached) return JSON.parse(cached);
       const response = await fetch('modules/data/landmarks.json?v=3', { cache: 'no-cache' });
       if (!response.ok) throw new Error('landmark data ' + response.status);
       const value = await response.json();
+      const base = Array.isArray(value.landmarks) ? value.landmarks : [];
+      try {
+        const catalogResponse = await fetch('/modules/data/global-landmark-guide-catalog.json?v=20261018-verified-2', { cache: 'no-cache' });
+        if (catalogResponse.ok) {
+          const catalog = await catalogResponse.json();
+          const normalize = name => String(name || '').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+          const distance = (a, b) => Math.hypot((Number(a.latitude) - Number(b.latitude)) * 111, (Number(a.longitude) - Number(b.longitude)) * 85);
+          const merged = (catalog.places || []).map(place => {
+            const match = base.find(item => item.wikidataId === place.id || item.globalId === place.id ||
+              (item.countryCode === place.countryCode && normalize(item.name) === normalize(place.name) && distance(item, place) < 8));
+            return match
+              ? { ...match, ...place, id: match.id, globalId: place.id, wikidataId: place.id, globalRank: Number(place.rank) || 0, globalCatalog: true, icon: match.icon || '📍', image: match.image || '' }
+              : { ...place, globalCatalog: true, icon: '📍', image: '' };
+          });
+          value.globalCatalogCount = (catalog.places || []).length;
+          value.landmarks = merged;
+        }
+      } catch (catalogError) { console.warn('Global landmark catalogue unavailable; keeping the curated map:', catalogError); }
+      if (!value.landmarks) value.landmarks = base;
       localStorage.setItem(key, JSON.stringify(value));
       return value;
     } catch (error) {
@@ -97,14 +116,27 @@
     if (!map || !data) return;
     const {clusterPoints}=await clusterModule;
     clearMarkers();
-    const overviewIds=new Set(['cn-great-wall','fr-eiffel','us-liberty','jp-tokyo-tower','au-opera','br-christ','eg-pyramids','za-table-mountain','sg-merlion','gb-big-ben','pe-machu-picchu']);
-    const visible=data.landmarks.filter(p=>map.getBounds().contains(twp(p))&&(map.getZoom()>=4||overviewIds.has(p.id))&&!nearbyPlaces.some(n=>placePhotos.get(n.id)&&Math.abs(n.latitude-p.latitude)<.01&&Math.abs(n.longitude-p.longitude)<.01));
-    clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),map.getZoom()>=8?0:62).forEach(group=>{
-      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';const image=document.createElement('img');image.src=representative.image;image.alt='';const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(image,count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(12,map.getZoom()+3)}));markers.push(marker);return;}
+    const zoom=map.getZoom(),limit=zoom<5?5:zoom<7?12:zoom<8?30:Infinity;
+    const ranked=[...data.landmarks].sort((a,b)=>(Number(b.globalRank||b.rank)||0)-(Number(a.globalRank||a.rank)||0));
+    const perCountry=new Map();
+    const visible=ranked.filter(place=>{
+      if(!map.getBounds().contains(twp(place))||nearbyPlaces.some(n=>placePhotos.has(n.id)&&Math.abs(n.latitude-place.latitude)<.01&&Math.abs(n.longitude-place.longitude)<.01))return false;
+      if(!Number.isFinite(limit))return true;
+      const country=place.countryCode||place.country_en||place.country||'unknown',count=perCountry.get(country)||0;
+      if(count>=limit)return false;perCountry.set(country,count+1);return true;
+    });
+    const clusterRadius=zoom>=15?0:zoom>=11?18:zoom>=8?40:zoom>=5?62:88;
+    clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),clusterRadius).forEach(group=>{
+      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';if(representative.image){const image=document.createElement('img');image.src=representative.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-landmark-group-symbol';symbol.textContent=representative.icon||'📍';pin.append(symbol);}const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(16,map.getZoom()+3)}));markers.push(marker);return;}
       const source=group.items[0],item=localized(source);
-      const pin=document.createElement('div');pin.className='tw-q-pin__body';const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(image,label);
+      const pin=document.createElement('div');pin.className='tw-q-pin__body';if(item.image){const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-q-pin__icon';symbol.textContent=item.icon||'📍';pin.append(symbol);}const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(label);
       const icon = L.divIcon({ className: 'tw-q-pin', html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
-      const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup('<strong>' + source.icon + ' ' + item.name + '</strong><br>' + item.country + ' · ' + item.city + '<br><button onclick="window.openMapLandmark(\'' + source.id + '\')">' + langText('查看详情','View details') + '</button>');
+      const popup = document.createElement('div');
+      const title = document.createElement('strong'); title.textContent = (source.icon || '📍') + ' ' + item.name; popup.append(title, document.createElement('br'));
+      const location = document.createElement('span'); location.textContent = item.country + ' · ' + item.city; popup.append(location, document.createElement('br'));
+      const details = document.createElement('button'); details.type = 'button'; details.textContent = langText('查看详情','View details');
+      details.addEventListener('click', () => openLandmark(source.id)); popup.append(details);
+      const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup(popup);
       markers.push(marker);
     });
   }
@@ -134,7 +166,7 @@
     }
   }
   function openPhotoPlace(place,photo,group){
-    if(place.id==='cn-west-lake'&&window.openWestLakeGuide){window.openWestLakeGuide(place,photo);return;}
+    if(window.openSelectedCityGuide){window.openSelectedCityGuide(place,photo);return;}
     document.getElementById('photoPlaceDialog')?.remove();
     const dialog=document.createElement('dialog');dialog.id='photoPlaceDialog';dialog.className='tw-photo-detail';dialog.setAttribute('aria-label',langText(place.name,place.name_en));
     backgroundData.then(backgrounds=>{const art=backgrounds[place.id];if(!art||!/^\/assets\/route-photos\/[a-z0-9-]+\.png$/.test(art.image))return;const artImage=matchMedia('(max-width:600px)').matches&&art.mobileImage?art.mobileImage:art.image;dialog.classList.add('place-gathered');dialog.style.setProperty('--place-art','url("'+artImage+'")');if(place.id!=='Q45178'){const note=document.createElement('small');note.className='place-art-credit';note.textContent=langText('Gathered 艺术衍生背景，非现场实拍。源图：','Gathered artistic derivative, not documentary photography. Source: ')+art.sourceAuthor+' · '+art.license;const source=document.createElement('a');source.href=art.sourceUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent=langText('背景来源与署名','Background source and attribution');note.append(source);dialog.append(note);}});
@@ -206,24 +238,22 @@
       loadOnlineUsers();
       clearInterval(onlineRefreshTimer);
       onlineRefreshTimer = setInterval(loadOnlineUsers, 30_000);
-      status(langText('在线地图 · 已加载 ','Online map · Loaded ') + data.landmarks.length + langText(' 个地标；地图数据支持本地缓存。',' landmarks. Map data is cached locally.'));
+      status(langText('在线地图 · 全球精选目录 ','Online map · Global curated catalogue ') + (data.globalCatalogCount || data.landmarks.length) + langText(' 个地点；缩小时按国家精选，放大后逐步展开。',' places; zoom out for country highlights and zoom in for detail.'));
       const savedRoute = JSON.parse(localStorage.getItem('tw-map-route') || '[]');
       if (!window.travelMapSkipSavedRoute && savedRoute.length > 1) setTimeout(() => window.showTravelRoute(savedRoute), 80);
     } catch (error) { status(langText('地图数据加载失败：','Failed to load map data: ') + error.message); }
   }
   async function openLandmark(id) {
-    const source = (data && data.landmarks || []).find(entry => entry.id === id);
+    if (!data) {
+      try { data = await loadData(); }
+      catch (_) { status(langText('地点详情暂时无法加载，请稍后重试。','Place details could not load. Please try again.')); return; }
+    }
+    const source = (data && data.landmarks || []).find(entry => entry.id === id || entry.globalId === id);
     if (!source) return;const item=localized(source);
     if (map) map.setView(twp(source), 11);
-    if(id==='cn-west-lake'&&window.openWestLakeGuide){window.openWestLakeGuide(source);return;}
+    if(window.openSelectedCityGuide){try{window.openSelectedCityGuide(source,source.image?{url:source.image,sourceUrl:source.image}:null);return;}catch(error){console.error('Selected city guide failed:',error);status(langText('新版地点详情暂时打不开：','The new place guide could not open: ')+(error?.message||''));return;}}
     const artworkIds={'cn-great-wall':'Q12501','fr-eiffel':'Q243','in-taj-mahal':'Q9141','fr-louvre':'Q19675','us-liberty':'Q9202','au-opera':'Q45178','cn-west-lake':'Q10866444','jp-kiyomizu':'jp-kiyomizu','gb-big-ben':'gb-big-ben','cn-oriental-pearl':'cn-oriental-pearl','jp-fuji':'jp-fuji','cn-forbidden-city':'cn-forbidden-city','cn-zhangjiajie':'cn-zhangjiajie','it-colosseum':'it-colosseum','es-sagrada':'es-sagrada','gr-acropolis':'gr-acropolis','us-golden-gate':'us-golden-gate','us-grand-canyon':'us-grand-canyon','ca-niagara':'ca-niagara','sg-merlion':'sg-merlion','ae-burj-khalifa':'ae-burj-khalifa','pe-machu-picchu':'pe-machu-picchu','br-christ':'br-christ','eg-pyramids':'eg-pyramids','au-great-barrier':'au-great-barrier','jp-tokyo-tower':'jp-tokyo-tower','kr-gyeongbokgung':'kr-gyeongbokgung','th-grand-palace':'th-grand-palace','vn-ha-long':'vn-ha-long','id-borobudur':'id-borobudur','tr-hagia-sophia':'tr-hagia-sophia','cn-erhai':'cn-erhai','mx-chichen-itza':'mx-chichen-itza','za-table-mountain':'za-table-mountain','nz-milford':'nz-milford','ru-hermitage':'ru-hermitage','my-petronas':'my-petronas','np-everest':'np-everest','jo-petra':'jo-petra','de-neuschwanstein':'de-neuschwanstein','pt-belem':'pt-belem'};
     const artworkId=artworkIds[id],art=(await backgroundData)[artworkId];
-    if(id==='cn-west-lake'){
-      try{
-        const payload=await fetch('/api/map/place-images?ids=Q10866444').then(r=>r.json()),photo=payload.photos?.Q10866444;
-        if(photo){photo.url=photo.url.replace('/250px-','/960px-');openPhotoPlace({...source,id:'cn-west-lake',countryCode:'CN',sourceUrl:photo.sourceUrl},photo,[source]);return;}
-      }catch(_){}
-    }
     if(art){openPhotoPlace({...source,id:artworkId,countryCode:source.country_en||source.country,sourceUrl:art.sourceUrl},{url:art.sourceImage||art.image.replace('gathered-background.png','source.jpg'),sourceUrl:art.sourceUrl,credit:art.sourceAuthor,license:art.license},[source]);return;}
     if(new URLSearchParams(location.search).get('preview')==='journal'){
       status(langText('正在关联地点实拍与详情…','Linking sourced place photographs…'));

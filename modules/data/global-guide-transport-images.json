@@ -1,0 +1,6 @@
+{
+  "walk": {"src":"/assets/destination-guides/transport-walk-ai-1.jpg","alt":"步行游览的 AI 场景示意","label":"AI 生成交通示意","prompt":"A sunlit pedestrian path beside greenery, small distant travelers, vivid natural travel photography, generic location, no text or logos."},
+  "metro": {"src":"/assets/destination-guides/transport-metro-ai-1.jpg","alt":"地铁列车的 AI 场景示意","label":"AI 生成交通示意","prompt":"A modern silver metro train at a clean station, detailed perspective, warm light and teal accents, generic transport illustration, no readable names or logos."},
+  "bus": {"src":"/assets/destination-guides/transport-bus-ai-1.jpg","alt":"城市公交的 AI 场景示意","label":"AI 生成交通示意","prompt":"A city bus on a leafy sunlit boulevard, vivid blue sky and green foliage, generic transport illustration, no logos or route names."},
+  "car": {"src":"/assets/destination-guides/transport-car-ai-1.jpg","alt":"打车出行的 AI 场景示意","label":"AI 生成交通示意","prompt":"A clean ride-hailing sedan waiting safely at a city curb, warm sunlight, no brand badges, readable license plates or logos, generic transport illustration."}
+}

@@ -162,6 +162,8 @@
     wrap.innerHTML = `<svg viewBox="0 0 48 48" focusable="false">${iconPaths[name] || iconPaths.go}</svg>`;
     return wrap;
   };
+  // One approved icon set for West Lake and every destination guide.
+  window.TravelGuideIcon = icon;
 
   function openWestLakeGuide(selected = {}) {
     document.getElementById('photoPlaceDialog')?.remove();

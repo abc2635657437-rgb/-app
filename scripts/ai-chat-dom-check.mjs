@@ -184,7 +184,7 @@ function makeWindow() {
   return { sandbox, store };
 }
 
-async function run({ fetchImpl, auth, auto = false }) {
+async function run({ fetchImpl, auth, auto = false, voice = null }) {
   const document = makeDocument();
   const { sandbox, store } = makeWindow();
   sandbox.document = document;
@@ -193,6 +193,7 @@ async function run({ fetchImpl, auth, auto = false }) {
   sandbox.TravelWorldAuth = auth;
   sandbox.TravelWorldI18n = { language: () => 'zh' };
   sandbox.openStudio = (routeId, draft) => { sandbox.__studio = { routeId, draft }; };
+  sandbox.TravelWorldVoice = voice;
   if (auto) sandbox.location.search = '?auto=1';
 
   // The module is an IIFE that reads these names as globals; passing them as
@@ -352,6 +353,158 @@ const anonymousAuth = { request: async () => [], session: () => null, requireLog
   assert.match(sandbox.__studio.draft.tips, /锦市场/, 'the answer is carried over as editable tips');
   assert.ok(sandbox.__studio.draft.title.length > 0, 'a title is proposed');
   console.log('AI chat hand-off passed: draft carries destination, title and tips.');
+}
+
+// 6. "Numbered pick + bulleted detail" is read as one entry, so the picks keep
+//    counting up instead of every detail restarting the list at 01.
+{
+  const answer = '## 食\n1. **祇园料亭**\n- 怀石料理，适合晚餐\n1. **锦市场**\n- 试吃抹茶甜点';
+  const { document } = await run({
+    fetchImpl: async () => sseResponse([
+      { event: 'delta', data: { text: answer } },
+      { event: 'done', data: { answer } }
+    ]),
+    auth: anonymousAuth
+  });
+  const panel = document.getElementById('ai').children.find(node => node.id === 'aiChatPanel');
+  const textarea = panel.querySelector('.ai-chat-compose textarea');
+  textarea.value = '京都吃什么';
+  panel.querySelector('.ai-chat-compose').dispatch('submit', { preventDefault() {} });
+  await new Promise(resolve => setTimeout(resolve, 120));
+  const body = panel.querySelectorAll('.bubble')[1].querySelector('.ai-chat-body');
+  const html = body.innerHTML;
+  assert.equal((html.match(/<ol>/g) || []).length, 1, 'the picks stay in one ordered list');
+  assert.equal((html.match(/<li>/g) || []).length, 2, 'each pick is one entry, details do not open a list');
+  assert.match(html, /class="ai-chat-detail">怀石料理/, 'the detail line lives inside the pick');
+  console.log('AI chat list shape passed: numbered picks absorb their detail lines.');
+}
+
+// 7. Voice: the microphone drives the same send path, and a spoken answer is
+//    read back with markdown furniture stripped.
+{
+  const voice = {
+    listenCalls: 0,
+    options: null,
+    spoken: [],
+    listen(options) { this.listenCalls += 1; this.options = options; return true; },
+    stopListening() {},
+    speak(text) { this.spoken.push(text); return true; },
+    stopSpeaking() {},
+    speaking() { return false; },
+    sttSupported() { return true; },
+    ttsSupported() { return true; }
+  };
+  const calls = [];
+  const { document, sandbox } = await run({
+    auth: anonymousAuth,
+    voice,
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      return sseResponse([
+        { event: 'delta', data: { text: '**衣**：带薄外套。\n' } },
+        { event: 'done', data: { answer: '**衣**：带薄外套。' } }
+      ]);
+    }
+  });
+  const panel = document.getElementById('ai').children.find(node => node.id === 'aiChatPanel');
+  const mic = panel.querySelector('.ai-chat-mic');
+  assert.ok(mic, 'a microphone button must exist');
+  assert.ok(!mic.hidden, 'the microphone is shown when recognition is available');
+
+  mic.onclick({ preventDefault() {} });
+  assert.equal(voice.listenCalls, 1, 'tapping the microphone starts recognition');
+  assert.equal(voice.options.lang, 'zh-CN', 'recognition follows the interface language');
+
+  voice.options.onInterim('京都两天');
+  const textarea = panel.querySelector('.ai-chat-compose textarea');
+  assert.equal(textarea.value, '京都两天', 'interim speech fills the composer');
+
+  voice.options.onEnd('京都两天怎么玩');
+  await new Promise(resolve => setTimeout(resolve, 140));
+  assert.equal(calls.length, 1, 'a spoken question goes through the same request path');
+  assert.equal(JSON.parse(calls[0].init.body).message, '京都两天怎么玩');
+  assert.ok(voice.spoken.length, 'a voice question is answered out loud');
+  assert.match(voice.spoken[0], /带薄外套/, 'the whole answer is handed to the voice layer');
+  assert.ok(sandbox.__studio === undefined || true);
+  console.log('AI chat voice passed: microphone → same send path → answer read back.');
+}
+
+// 8. The voice layer itself: markdown furniture must not be read aloud.
+{
+  const code = await readFile(new URL('../modules/ai/ai-voice.js', import.meta.url), 'utf8');
+  const utterances = [];
+  const fakeWindow = {
+    speechSynthesis: { speak: utterance => utterances.push(utterance), cancel() {}, speaking: false, pending: false },
+    SpeechSynthesisUtterance: class { constructor(text) { this.text = text; } },
+    SpeechRecognition: class {}
+  };
+  const api = new Function('window', code + '\nreturn window.TravelWorldVoice;')(fakeWindow);
+  assert.ok(api, 'the module exposes TravelWorldVoice');
+  const spoken = api.plain('## 衣\n- **薄外套**：早晚凉。\n\n| 天数 | 安排 |\n|---|---|\n| 1 | 清水寺 |');
+  assert.ok(!/[#*|]/.test(spoken), 'headings, bold and table pipes are stripped');
+  assert.match(spoken, /薄外套/, 'the words survive');
+  assert.ok(api.speak('## 食\n**汤豆腐**：好吃。第二条。', 'zh-CN'), 'speak queues an utterance');
+  assert.ok(utterances.length >= 1, 'speech synthesis received text');
+  assert.ok(utterances.some(item => /汤豆腐/.test(item.text)), 'queued speech is the cleaned sentence');
+  console.log('AI voice module passed: clean speech text and queued utterances.');
+}
+
+// 9. A day plan arrives as cards with real places, times and photographs.
+{
+  const plan = {
+    days: [{
+      day: 1,
+      items: [
+        { time: '09:00', place: '伏见稻荷大社', kind: '玩', note: '清晨人少，约 2 小时', photo: { url: 'https://thumb.wikimedia.org/a.jpg', page: 'https://commons.wikimedia.org/wiki/File:A' }, links: [{ kind: 'ticket', label: '门票', provider: 'klook', url: 'https://www.klook.com/search/result/?query=x' }, { kind: 'ride', label: 'Uber', provider: 'uber', url: 'https://m.uber.com/ul/?dropoff=x' }] },
+        { time: '12:30', place: '汤豆腐', kind: '食', note: '人均 3,000 日元' }
+      ]
+    }],
+    places: 2,
+    photos: 1,
+    provider: 'Wikidata P18 / Wikimedia Commons'
+  };
+  const { document, sandbox } = await run({
+    auth: anonymousAuth,
+    fetchImpl: async () => sseResponse([
+      { event: 'delta', data: { text: '## 衣\n- 薄外套\n\n## 日程\n| 天 | 时间 | 地点 |\n|---|---|---|\n| 1 | 09:00 | 伏见稻荷大社 |\n' } },
+      { event: 'done', data: { answer: '## 衣\n- 薄外套\n\n## 日程\n| 天 | 时间 | 地点 |\n|---|---|---|\n| 1 | 09:00 | 伏见稻荷大社 |', plan } }
+    ])
+  });
+  const panel = document.getElementById('ai').children.find(node => node.id === 'aiChatPanel');
+  const textarea = panel.querySelector('.ai-chat-compose textarea');
+  textarea.value = '帮我排一版京都五天行程';
+  panel.querySelector('.ai-chat-compose').dispatch('submit', { preventDefault() {} });
+  await new Promise(resolve => setTimeout(resolve, 140));
+  const bubble = panel.querySelectorAll('.bubble')[1];
+  const card = bubble.querySelector('.ai-chat-plan');
+  assert.ok(card, 'the itinerary is rendered as a plan card');
+  assert.equal(card.querySelectorAll('.ai-chat-plan-day').length, 1);
+  assert.equal(card.querySelectorAll('.ai-chat-plan-item').length, 2);
+  assert.match(card.querySelector('.ai-chat-plan-body b').textContent, /伏见稻荷/);
+  assert.ok(card.querySelector('img'), 'a resolved photograph is shown');
+  const linkRow = card.querySelector('.ai-chat-plan-links');
+  assert.ok(linkRow, 'booking and ride links are attached');
+  assert.equal(linkRow.querySelectorAll('a').length, 2, 'ticket and ride both appear');
+  assert.match(linkRow.querySelector('a').getAttribute('href'), /klook/);
+  assert.ok(card.querySelector('.ai-chat-plan-photo.is-blank'), 'an unresolved place keeps its kind glyph');
+  assert.ok(!/\| 1 \| 09:00/.test(bubble.querySelector('.ai-chat-body').innerHTML), 'the duplicate table is removed from the text');
+
+  // The category index narrows the plan without a re-render.
+  const chips = card.querySelectorAll('.ai-chat-plan-filter');
+  assert.ok(chips.length >= 2, 'category chips are offered');
+  const eatChip = chips.find(chip => chip.getAttribute('data-kind') === 'eat');
+  eatChip.onclick();
+  const stops = card.querySelectorAll('.ai-chat-plan-item');
+  assert.equal(stops.filter(stop => !stop.hidden).length, 1, 'only food survives the 吃 filter');
+  assert.equal(stops.find(stop => stop.getAttribute('data-kind') === 'play').hidden, true, 'sights are hidden');
+  chips.find(chip => chip.getAttribute('data-kind') === 'all').onclick();
+  assert.equal(stops.filter(stop => !stop.hidden).length, 2, 'clearing the filter restores everything');
+
+  bubble.querySelector('.ai-chat-actions button').onclick();
+  assert.ok(sandbox.__studio, 'the route action opens the studio');
+  assert.equal(sandbox.__studio.draft.plan.days.length, 1, 'the itinerary travels with the draft');
+  assert.equal(sandbox.__studio.draft.plan.days[0].items[0].place, '伏见稻荷大社');
+  console.log('AI chat plan passed: cards, photos, category filter, no duplicated table, studio hand-off.');
 }
 
 console.log('All AI chat checks passed.');

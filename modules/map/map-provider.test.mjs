@@ -79,10 +79,14 @@ function load({ timeZone = 'Europe/Paris', providers = null, protocol = 'https:'
   // Default provider is WGS-84, so nothing moves.
   assert.deepEqual(norm(api.focusLatLng(39.9042, 116.4074)), [39.9042, 116.4074], 'on a WGS-84 basemap the coordinate is passed through');
   assert.deepEqual(norm(api.focusLatLng(48.8566, 2.3522)), [48.8566, 2.3522], 'and nothing outside China is corrected, on any provider');
+  const westLakeAmap = api.amapLatLng(30.2431, 120.1503);
+  assert.deepEqual(norm(westLakeAmap).map(value => Number(value.toFixed(6))), [30.240777, 120.155006], 'Amap always receives GCJ-02 coordinates, independent of the active basemap');
+  assert.deepEqual(norm(api.amapLatLng(48.8566, 2.3522)), [48.8566, 2.3522], 'Amap leaves destinations outside China untouched');
 
   api.apply({ providers: [{ id: 'amap', datum: 'gcj02', direct: null, subdomains: '1234' }, { id: 'osm', datum: 'wgs84', direct: 'https://t{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', subdomains: 'abc' }], default: 'amap' });
   assert.equal(api.active(), 'amap', 'the backend preference wins once known');
   assert.equal(api.datum(), 'gcj02');
+  assert.deepEqual(norm(api.amapLatLng(30.2431, 120.1503)), norm(westLakeAmap), 'the outbound Amap coordinate is stable after provider changes');
   assert.deepEqual(norm(api.focusLatLng(48.8566, 2.3522)), [48.8566, 2.3522], 'still untouched on the GCJ-02 provider');
   assert.deepEqual(norm(api.focusLatLng(39.9042, 116.4074)).map(v => Number(v.toFixed(6))), [39.905603, 116.413642], 'WGS-84 Beijing re-projects to the published GCJ-02 position');
   const shanghai = api.focusLatLng(31.2304, 121.4737);

@@ -31,7 +31,7 @@ const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const aiProvider = 'agentos-pollinations';
 const aiModel = 'openai-fast';
 const aiApiKey = '';
-const aiBaseUrl = 'https://text.pollinations.ai';
+const aiBaseUrl = (process.env.AI_BASE_URL || 'https://text.pollinations.ai').replace(/\/$/, '');
 const nominatimBaseUrl = (process.env.NOMINATIM_BASE_URL || 'https://nominatim.openstreetmap.org').replace(/\/$/, '');
 const osrmBaseUrl = (process.env.OSRM_BASE_URL || 'https://router.project-osrm.org').replace(/\/$/, '');
 const openMeteoBaseUrl = (process.env.OPEN_METEO_BASE_URL || 'https://api.open-meteo.com').replace(/\/$/, '');
@@ -1130,7 +1130,15 @@ app.get('/api/ai/conversations/:id', requireUser, async (req, res) => {
 app.post('/api/routes/map-place', requireUser, async (req, res) => {
   const landmarkId = String(req.body?.landmarkId || '');
   const landmarks = JSON.parse(await readFile(landmarkFile, 'utf8')).landmarks || [];
-  const landmark = landmarks.find(item => item.id === landmarkId); if (!landmark) return res.status(404).json({ error: '地标不存在' });
+  let landmark = landmarks.find(item => item.id === landmarkId);
+  if (!landmark && /^Q\d+$/.test(landmarkId)) {
+    try {
+      const catalog = JSON.parse(await readFile(path.resolve(backendDir, '..', 'modules', 'data', 'global-landmark-guide-catalog.json'), 'utf8'));
+      const place = (catalog.places || []).find(item => item.id === landmarkId);
+      if (place) landmark = { ...place, globalCatalog: true, sourceUrl: place.sourceUrl || place.wikidataEntityUrl };
+    } catch { /* Keep the existing curated-map route path available if the optional catalogue is absent. */ }
+  }
+  if (!landmark) return res.status(404).json({ error: '地标不存在' });
   let routeId = req.body?.routeId || null, route;
   if (routeId) { const result = await admin.from('routes').select('*').eq('id', routeId).eq('owner_id', req.user.id).single(); route = result.data; }
   if (!route) {
@@ -1142,7 +1150,7 @@ app.post('/api/routes/map-place', requireUser, async (req, res) => {
   const { data: existing } = await admin.from('trip_places').select('id').eq('trip_day_id', day.id).eq('external_place_id', landmark.id).maybeSingle();
   if (existing) return res.json({ routeId, placeId: existing.id, added: false });
   const { count } = await admin.from('trip_places').select('id', { count: 'exact', head: true }).eq('trip_day_id', day.id);
-  const { data: place, error } = await admin.from('trip_places').insert({ trip_day_id: day.id, external_place_id: landmark.id, provider: 'Travel World catalog', name: landmark.name, category: landmark.category, latitude: landmark.latitude, longitude: landmark.longitude, reason: landmark.description, verification_status: 'verified', sort_order: count || 0 }).select().single();
+  const { data: place, error } = await admin.from('trip_places').insert({ trip_day_id: day.id, external_place_id: landmark.id, provider: landmark.globalCatalog ? 'Global landmark catalogue' : 'Travel World catalog', name: landmark.name, category: landmark.category, latitude: landmark.latitude, longitude: landmark.longitude, reason: landmark.description_zh || landmark.description_en || landmark.description || null, verification_status: landmark.globalCatalog ? 'unverified' : 'verified', source_url: landmark.sourceUrl || landmark.wikidataEntityUrl || null, sort_order: count || 0 }).select().single();
   if (error) return res.status(400).json({ error: error.message }); res.status(201).json({ routeId, placeId: place.id, added: true });
 });
 

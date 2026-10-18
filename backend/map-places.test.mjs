@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {parseBounds,mapCatalog,placesInBounds,regionPlaces} from './map-places.mjs';
+import {parseBounds,mapCatalog,placesInBounds,regionPlaces,popularCityPlaces} from './map-places.mjs';
 assert.deepEqual(parseBounds('-34,151,-33,152'),[-34,151,-33,152]);
 for(const value of ['',',,,','0,0,1,999','1,2,0,3','0,0,90,180','0,0,1,2);bad'])assert.throws(()=>parseBounds(value));
 const d=await mapCatalog();assert(d.places.length>20000);assert(d.places.filter(p=>p.countryCode==='CN').length>=200);assert(d.places.filter(p=>p.countryCode==='AU').length>=100);assert(!d.places.some(p=>/airport|railway station|hospital/i.test(p.name_en)));
@@ -8,6 +8,7 @@ assert(d.places.every(p=>p.name&&p.name_en&&Number.isFinite(p.latitude)&&Number.
 const sydney=placesInBounds(d.places,[-34,150.7,-33.5,151.5]);assert(sydney.length>20);assert(sydney.every(p=>p.latitude>= -34&&p.longitude>=150.7));
 assert(regionPlaces(d.places,'china').length>=200);
 assert.equal(regionPlaces(d.places,'world').length,d.places.length);
+const popular=popularCityPlaces(d.places);assert.equal(popular.length,1000);assert.equal(new Set(popular.map(p=>p.countryCode+'|'+p.destinationCity)).size,1000);assert(popular.every((p,i)=>i===0||popular[i-1].rank>=p.rank));assert(popular.some(p=>p.countryCode==='CN'));assert(popular.some(p=>p.countryCode==='US'));
 assert(regionPlaces(d.places,'oceania','AU').length>=100);
 assert(regionPlaces(d.places,'asia','JP').length>=100);
 assert(regionPlaces(d.places,'europe','FR').every(p=>p.countryCode==='FR'));

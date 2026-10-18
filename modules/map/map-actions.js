@@ -4,8 +4,8 @@
     if (!window.TravelWorldAuth?.requireLogin?.()) return;
     try {
       const result = await window.TravelWorldAuth.request('/api/routes/map-place', { method: 'POST', body: JSON.stringify({ landmarkId, routeId: currentRouteId() }) });
-      localStorage.setItem('tw-map-route-id', result.routeId); alert(result.added ? '已加入我的旅行路线' : '这个地点已经在路线中');
-    } catch (error) { alert('加入路线失败：' + error.message); }
+      localStorage.setItem('tw-map-route-id', result.routeId); window.TravelWorldAuth.toast(result.added ? '已加入我的旅行路线' : '这个地点已经在路线中');
+    } catch (error) { window.TravelWorldAuth.toast('加入路线暂时没有成功，请稍后重试。'); }
   };
   window.planLandmarkWithAi = landmarkId => {
     const landmark = window.currentMapLandmark;

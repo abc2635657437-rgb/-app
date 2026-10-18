@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "policy": "Hand-picked, open-licensed Wikimedia Commons photographs for the first screen of 现在去哪儿. Every file keeps its author, licence and source page; the server resolves the metadata from Commons at request time. Places without an entry fall back to Wikidata P18, preferring a larger landscape photograph when the canonical image is small or portrait.",
+  "files": {
+    "Q85": {
+      "file": "Pyramids of the Giza Necropolis.jpg",
+      "note": "Giza plateau panorama instead of a random Cairo building"
+    },
+    "Q232771": {
+      "file": "20241103 Bell Tower of Shaolin Temple with Ginkgo Tree.jpg",
+      "note": "2024 autumn, Bell Tower framed by ginkgo"
+    },
+    "Q168400": {
+      "file": "Canton Tower at Night 20230722.jpg",
+      "note": "2023 night skyline"
+    },
+    "Q223207": {
+      "file": "Shanghai Skyline from a tour boat (Pudong).jpg",
+      "note": "Lujiazui skyline with the Oriental Pearl Tower"
+    },
+    "Q1632027": {
+      "file": "West facade of St. Sophia Cathedral, Harbin (20230721150450).jpg",
+      "note": "2023 summer facade"
+    }
+  }
+}

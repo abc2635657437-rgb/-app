@@ -206,6 +206,34 @@
   };
 
   window.closeStudio = function () { go(returnToPublisher ? 'publish' : 'home'); };
+  // An itinerary from the travel desk arrives as days and stops; carry it into
+  // the editable 衣·食·住·行·玩 rows so publishing starts from real content.
+  function planKindOf(kind) {
+    var value = String(kind || '');
+    if (/食|餐|吃|美食|food|eat/i.test(value)) return 'food';
+    if (/住|宿|酒店|stay|hotel|lodg/i.test(value)) return 'stay';
+    if (/行|交通|移动|move|transport|transit/i.test(value)) return 'move';
+    if (/衣|穿搭|wear/i.test(value)) return 'outfit';
+    return 'play';
+  }
+
+  function applyPlanDraft(plan) {
+    var keys = { food: 'food', stay: 'stay', move: 'move', outfit: 'outfit', play: 'play' };
+    (plan.days || []).slice(0, 10).forEach(function (day) {
+      (day.items || []).slice(0, 8).forEach(function (item) {
+        if (!item || !item.place) return;
+        var note = [item.time, item.note].filter(Boolean).join(' · ').slice(0, 120);
+        var key = keys[planKindOf(item.kind)] || 'play';
+        state.plan[key].push({ title: String(item.place).slice(0, 80), note: note, price: '' });
+        state.itinerary.push({
+          title: '第 ' + (day.day || 1) + ' 天 ' + (item.time ? item.time + ' ' : '') + String(item.place).slice(0, 60),
+          note: String(item.note || '').slice(0, 120),
+          price: ''
+        });
+      });
+    });
+  }
+
   window.openStudio = async function (routeId, draft, options) {
     if (!auth().requireLogin()) return;
     returnToPublisher = Boolean(options && options.returnToPublisher);
@@ -230,6 +258,12 @@
       if (draft.season) season.value = String(draft.season).slice(0, 60);
       if (draft.budget) budget.value = String(draft.budget).slice(0, 40);
       if (draft.tips) tips.value = String(draft.tips).slice(0, 1200);
+      if (draft.plan && Array.isArray(draft.plan.days)) {
+        applyPlanDraft(draft.plan);
+        var draftPane = document.getElementById('studioPlanPane');
+        if (draftPane) draftPane.innerHTML = '';
+        renderPlan();
+      }
     }
     if (routeId) {
       try {

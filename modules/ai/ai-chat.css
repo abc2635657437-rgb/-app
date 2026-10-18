@@ -1,41 +1,274 @@
-/* Travel assistant screen: a native chat surface that replaces the old iframe.
-   Mobile first — the panel never exceeds the viewport width and the composer
-   stays pinned above the bottom navigation. */
-.ai-chat-screen{padding-bottom:18px}
-.ai-chat-panel{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-.ai-chat-chrome{align-items:center}
-.ai-chat-label{font-size:15px;color:var(--ink)}
-.ai-chat-chrome button{padding:6px 10px;font-size:12px}
-.ai-chat-prompts{display:flex;flex-wrap:wrap;gap:6px;max-width:100%}
-.ai-chat-prompt{display:inline-flex;align-items:center;gap:5px;margin:0;white-space:nowrap}
-.ai-chat-prompt b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:800}
-.ai-chat-list{display:flex;flex-direction:column;gap:10px;min-height:180px;max-height:52vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:2px}
-.ai-chat-hello{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 14px;text-align:center;border:1px dashed #cdd8d3;border-radius:16px;background:#fff9}
-.ai-chat-hero{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;font-size:15px;font-weight:800}
-.ai-chat-hello b{font-size:16px;color:var(--ink)}
-.ai-chat-hello p{margin:0;max-width:34ch;font-size:13px;line-height:1.6}
-.bubble.ai .ai-chat-body{max-width:100%;overflow-wrap:anywhere}
-.bubble.ai .ai-chat-body p{margin:0 0 8px}
-.bubble.ai .ai-chat-body p:last-child{margin-bottom:0}
-.bubble.ai .ai-chat-body h3{font-size:16px;line-height:1.35;margin:12px 0 6px;color:var(--ink)}
-.bubble.ai .ai-chat-body h4{font-size:14px;margin:10px 0 5px;color:var(--ink)}
-.bubble.ai .ai-chat-body ul{margin:0 0 8px;padding-left:20px}
-.bubble.ai .ai-chat-body li{margin:3px 0;line-height:1.55}
-.bubble.ai .ai-chat-body blockquote{margin:6px 0;padding:6px 10px;border-left:3px solid #d7c9b4;background:#f4f0e6;border-radius:0 8px 8px 0}
-.bubble.ai .ai-chat-body hr{border:0;border-top:1px solid #e3e0d6;margin:10px 0}
-.bubble.ai .ai-chat-body a{color:var(--accent);text-underline-offset:2px}
-.bubble.ai .ai-chat-body table{width:100%;border-collapse:collapse;font-size:12px;display:block;overflow-x:auto}
-.bubble.ai .ai-chat-body th,.bubble.ai .ai-chat-body td{border:1px solid #e3e0d6;padding:5px 7px;text-align:left;vertical-align:top}
-.ai-chat-sources{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:9px;padding-top:8px;border-top:1px dashed #e0e5df;font-size:11px;color:var(--muted)}
-.ai-chat-sources a{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#47706b}
-.ai-chat-actions{margin-top:9px}
-.ai-chat-note{margin:0;font-size:11px;line-height:1.55;color:var(--muted)}
-.ai-chat-compose{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid #e0e6e1;border-radius:14px;background:#fff}
-.ai-chat-compose textarea{min-height:44px;max-height:132px;margin:0;border:1px solid #dfe6e1;background:#f4f7f4;resize:none;font-size:15px;line-height:1.5}
-.ai-chat-status{font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ai-chat-signin{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;border:1px solid #e2d9c8;border-radius:12px;background:#fbf7ee;font-size:12px;color:#5d6a6e}
-@media(max-width:360px){
-  .ai-chat-list{max-height:46vh}
-  .ai-chat-prompt{padding:6px 9px;font-size:11px}
+/* Travel desk — the in-app travel consultant.
+   Editorial paper surface, hairline rules and a serif voice: this screen has to
+   read like a page of the same journal as Home and Explore, not like a generic
+   chat widget.
+
+   The app runs a day/night journal theme (body.journal-preview[data-time-theme])
+   over a photographic page background, so the desk is drawn as its own sheet of
+   paper and every colour comes from a token that flips with the theme. */
+
+body .ai-chat-screen{
+  --ai-sheet:var(--paper);
+  --ai-raised:#fffdf8;
+  --ai-rule:var(--line);
+  --ai-hair:#e6e0d2;
+  --ai-hair-soft:#eee9dc;
+  --ai-copy:var(--ink);
+  --ai-soft:#6b7270;
+  --ai-faint:#8d8778;
+  --ai-accent:#a8482f;
+  --ai-gold:#b09055;
+  --ai-code:#efe9db;
+  --ai-error-bg:#f8ece2;
+  --ai-error-fg:#8a432f;
+  --ai-user-bg:#2b4a56;
+  --ai-user-fg:#f7f3e8;
+  --ai-send-fg:var(--paper);
+  --ai-shadow:0 14px 34px rgba(23,55,71,.09);
 }
-@media(prefers-color-scheme:dark){.ai-chat-hello{background:#ffffff08}}
+
+body.journal-preview[data-time-theme="night"] .ai-chat-screen{
+  --ai-sheet:#1e282b;
+  --ai-raised:#243033;
+  --ai-hair:rgba(225,231,225,.14);
+  --ai-hair-soft:rgba(225,231,225,.09);
+  --ai-copy:#ece8de;
+  --ai-soft:#c2c1b9;
+  --ai-faint:#a8a69b;
+  --ai-accent:#e0927a;
+  --ai-gold:#8a7a58;
+  --ai-code:#2b373a;
+  --ai-error-bg:#3a2b27;
+  --ai-error-fg:#f0b3a1;
+  --ai-user-bg:#33545f;
+  --ai-user-fg:#f4f1e9;
+  --ai-send-fg:#1c2528;
+  --ai-shadow:0 18px 40px rgba(0,0,0,.34);
+}
+
+body .ai-chat-screen{padding-bottom:18px}
+
+/* This is a working desk, not a landing page: the editorial intro is set
+   smaller than on the feed screens so the conversation and the composer fit a
+   phone viewport, and it steps aside once the conversation starts. */
+/* The journal theme pins .title to 32px!important, so the desk intro has to
+   say it louder to stay a compact heading rather than a three-line hero. */
+body .ai-chat-screen.screen > .title{font-size:22px!important;line-height:1.55!important;letter-spacing:.5px;margin:8px 0 4px!important}
+body .ai-chat-screen.screen > .sub{font-size:12px;line-height:1.75;margin:0 0 8px;color:var(--muted)}
+body .ai-chat-screen.screen.is-chatting > .eyebrow,
+body .ai-chat-screen.screen.is-chatting > .title,
+body .ai-chat-screen.screen.is-chatting > .sub{display:none}
+
+/* ------------------------------------------------------------------- sheet */
+body .ai-chat-panel{display:flex;flex-direction:column;margin-top:16px;padding:14px 14px 12px;border:1px solid var(--ai-rule);background:var(--ai-sheet);box-shadow:var(--ai-shadow)}
+body .ai-chat-screen.is-chatting .ai-chat-panel{margin-top:0}
+/* Once the conversation starts the index has done its job: give the answer the room. */
+body .ai-chat-screen.is-chatting .ai-chat-prompts{display:none}
+
+body .ai-chat-masthead{display:flex;align-items:center;gap:12px;padding:0 0 13px;border-bottom:1px solid var(--ai-rule)}
+body .ai-chat-seal{flex:0 0 auto;display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--ai-accent);color:var(--ai-accent);font-family:var(--serif);font-size:17px;line-height:1;transform:rotate(-2deg);box-shadow:inset 0 0 0 3px var(--ai-sheet),inset 0 0 0 4px var(--ai-accent)}
+body .ai-chat-identity{display:grid;gap:4px;min-width:0;margin-right:auto}
+body .ai-chat-label{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:.5px;color:var(--ai-copy);line-height:1.3}
+body .ai-chat-kicker{font:9px/1 Georgia,var(--serif);font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--ai-faint)}
+body .ai-chat-clear{align-self:center;margin-left:2px;padding:10px 0 10px 11px;border-left:1px solid var(--ai-hair);white-space:nowrap;border:0;background:transparent;color:var(--ai-faint);font-size:11px;letter-spacing:.5px;text-decoration:underline;text-decoration-color:var(--ai-hair);text-underline-offset:4px}
+body .ai-chat-clear:hover{color:var(--ai-accent)}
+
+/* -------------------------------------------------------------- transcript */
+body .ai-chat-list{display:flex;flex-direction:column;gap:28px;min-height:180px;max-height:min(46vh,440px);padding:20px 0 4px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ai-hair) transparent}
+body .ai-chat-screen.is-chatting .ai-chat-list{max-height:calc(100dvh - 340px);min-height:170px}
+body .ai-chat-list::-webkit-scrollbar{width:3px}
+body .ai-chat-list::-webkit-scrollbar-thumb{background:var(--ai-hair)}
+
+/* First visit: a consultation card rather than an empty chat box. */
+body .ai-chat-hello{position:relative;padding:20px 16px 10px;border:1px solid var(--ai-hair);background:var(--ai-raised)}
+body .ai-chat-hello::before{content:"";position:absolute;top:-1px;left:18px;width:44px;height:2px;background:var(--ai-accent)}
+body .ai-chat-quote{margin:0;font-family:var(--serif);font-size:18px;line-height:1.7;letter-spacing:.4px;color:var(--ai-copy)}
+body .ai-chat-brief{margin:10px 0 0;font-size:12px;line-height:1.85;color:var(--ai-soft)}
+body .ai-chat-example{display:grid;gap:4px;width:100%;margin-top:14px;padding:11px 0 0;border:0;border-top:1px solid var(--ai-hair);background:transparent;text-align:left;color:var(--ai-copy)}
+body .ai-chat-example span{font:9px/1 Georgia,var(--serif);letter-spacing:.18em;text-transform:uppercase;color:var(--ai-faint)}
+body .ai-chat-example b{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1.65;letter-spacing:.3px}
+body .ai-chat-example b::after{content:" →";display:inline-block;color:var(--ai-accent);transition:transform .2s}
+body .ai-chat-example:hover b::after{transform:translateX(3px)}
+body .ai-chat-example:hover b{color:var(--ai-accent)}
+
+body .ai-chat-signin{display:inline-flex;align-items:center;gap:6px;margin:0;padding:0;border:0;font-size:10.5px;line-height:1;color:var(--ai-faint)}
+body .ai-chat-signin::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--ai-accent);flex:0 0 auto}
+body .ai-chat-signin button{padding:6px 0;border:0;background:transparent;color:var(--ai-accent);font-size:10.5px;white-space:nowrap;text-decoration:underline;text-decoration-color:var(--ai-hair);text-underline-offset:3px}
+
+/* ----------------------------------------------------------------- answers */
+body .ai-chat-screen .bubble.ai{position:relative;max-width:100%;margin:0;padding:0 0 0 15px;border:0;border-left:1px solid var(--ai-hair);border-radius:0;background:transparent;white-space:normal;color:inherit}
+body .ai-chat-author{display:flex;align-items:center;gap:7px;margin-bottom:9px;font:9px/1 Georgia,var(--serif);letter-spacing:.18em;text-transform:uppercase;color:var(--ai-faint)}
+body .ai-chat-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ai-accent)}
+body .ai-chat-body{font-size:14.5px;line-height:1.9;color:var(--ai-copy);overflow-wrap:anywhere}
+body .ai-chat-body p{margin:0 0 11px}
+body .ai-chat-body .ai-chat-lede{font-family:var(--serif);font-size:15.5px;line-height:1.95;letter-spacing:.2px}
+body .ai-chat-body p:last-child{margin-bottom:0}
+body .ai-chat-body b{font-weight:600}
+body .ai-chat-body{counter-reset:ai-section}
+body .ai-chat-body h3{counter-increment:ai-section;font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.5;letter-spacing:.4px;margin:22px 0 9px;padding-bottom:7px;border-bottom:1px solid var(--ai-hair);color:var(--ai-copy)}
+body .ai-chat-body h3::before{content:counter(ai-section,decimal-leading-zero);margin-right:9px;font:10px/1 Georgia,var(--serif);letter-spacing:.08em;color:var(--ai-accent);vertical-align:3px}
+body .ai-chat-body h3:first-child{margin-top:0}
+body .ai-chat-body h4{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.5;margin:18px 0 6px;color:var(--ai-copy)}
+body .ai-chat-body h4::before{content:"";width:3px;height:13px;background:var(--ai-accent);flex:0 0 auto}
+body .ai-chat-body h4:first-child{margin-top:0}
+body .ai-chat-body ul{margin:0 0 11px;padding-left:17px;list-style:disc}
+body .ai-chat-body ul li{margin:5px 0;line-height:1.78}
+body .ai-chat-body ul li::marker{color:var(--ai-gold)}
+body .ai-chat-body ol{margin:0 0 11px;padding-left:0;list-style:none;counter-reset:ai-step}
+body .ai-chat-body ol li{position:relative;margin:7px 0;padding-left:23px;line-height:1.78;counter-increment:ai-step}
+body .ai-chat-body ol li::before{content:counter(ai-step,decimal-leading-zero);position:absolute;left:0;top:.28em;font:10px/1.6 Georgia,var(--serif);letter-spacing:.04em;color:var(--ai-accent)}
+body .ai-chat-body ol li .ai-chat-detail{display:block;margin-top:3px;font-size:13px;line-height:1.72;color:var(--ai-soft)}
+body .ai-chat-body blockquote{margin:14px 0;padding:2px 0 2px 13px;border-left:2px solid var(--ai-gold);background:transparent;border-radius:0;font-family:var(--serif);font-size:13.5px;line-height:1.85;color:var(--ai-soft)}
+body .ai-chat-body blockquote p{margin:0}
+body .ai-chat-body hr{margin:18px 0;border:0;border-top:1px solid var(--ai-hair)}
+body .ai-chat-body a{color:var(--ai-accent);text-decoration:none;border-bottom:1px solid var(--ai-hair)}
+body .ai-chat-body a:hover{border-bottom-color:var(--ai-accent)}
+body .ai-chat-body code{padding:1px 5px;background:var(--ai-code);border-radius:2px;font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:12.5px}
+body .ai-chat-body table{display:block;width:100%;margin:14px 0;overflow-x:auto;border-collapse:collapse;font-size:12px}
+body .ai-chat-body th{padding:8px 7px;border-bottom:1px solid var(--ai-gold);font:9px/1.5 Georgia,var(--serif);font-weight:400;letter-spacing:.06em;text-transform:uppercase;text-align:left;color:var(--ai-faint);white-space:nowrap}
+body .ai-chat-body td{padding:8px 7px;border-bottom:1px solid var(--ai-hair-soft);vertical-align:top;line-height:1.65;text-align:left}
+body .ai-chat-body tr:last-child td{border-bottom:0}
+
+body .ai-chat-screen .ai-chat-sources{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 11px;margin-top:15px;padding-top:10px;border-top:1px dashed var(--ai-hair);font-size:10.5px;color:var(--ai-faint)}
+body .ai-chat-sources b{font:9px/1 Georgia,var(--serif);font-weight:400;letter-spacing:.16em;text-transform:uppercase}
+body .ai-chat-sources a{max-width:172px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ai-soft);text-decoration:underline;text-decoration-color:var(--ai-hair);text-underline-offset:3px}
+body .ai-chat-ref{margin-right:2px;font-family:Georgia,var(--serif);color:var(--ai-accent)}
+body .ai-chat-actions{margin-top:15px}
+body .ai-chat-actions button{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;padding:11px 14px;border:1px solid var(--ai-rule);border-radius:0;background:transparent;color:var(--ai-copy);font-family:var(--serif);font-size:13.5px;letter-spacing:.6px;transition:background .2s,border-color .2s,color .2s}
+body .ai-chat-actions button::after{content:"→";font-family:Georgia,var(--serif);color:var(--ai-accent);transition:transform .2s,color .2s}
+body .ai-chat-actions button:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+body .ai-chat-actions button:hover::after{color:var(--ai-accent);transform:translateX(3px)}
+
+/* Questions from the traveller. */
+body .ai-chat-screen .bubble.me{align-self:flex-end;max-width:84%;margin:0;padding:11px 14px;border:0;border-radius:2px 2px 0 2px;background:var(--ai-user-bg);color:var(--ai-user-fg);font-size:14px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
+body .ai-chat-error{padding:11px 14px;border-left:2px solid var(--ai-accent);background:var(--ai-error-bg);font-size:13px;line-height:1.75;color:var(--ai-error-fg)}
+
+body .ai-chat-typing{display:inline-flex;align-items:center;gap:5px;padding:7px 0}
+body .ai-chat-typing i{width:4px;height:4px;border-radius:50%;background:var(--ai-accent);animation:ai-chat-blink 1.2s infinite}
+body .ai-chat-typing i:nth-child(2){animation-delay:.16s}
+body .ai-chat-typing i:nth-child(3){animation-delay:.32s}
+@keyframes ai-chat-blink{0%,60%,100%{opacity:.22;transform:translateY(0)}30%{opacity:1;transform:translateY(-1px)}}
+@keyframes ai-chat-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+body .ai-chat-list > .bubble,body .ai-chat-list > .ai-chat-turn{animation:ai-chat-in .42s cubic-bezier(.22,1,.36,1) both}
+body .ai-chat-turn{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+body .ai-chat-turn-meta{font:9px/1 Georgia,var(--serif);letter-spacing:.18em;text-transform:uppercase;color:var(--ai-faint)}
+
+/* Six subjects as a compact index: three across, two rows, hairlines between.
+   A scroller would clip the last chip on a 390px phone; this shows all six. */
+body .ai-chat-prompts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:4px;border-top:1px solid var(--ai-rule);border-bottom:1px solid var(--ai-rule)}
+body .ai-chat-prompt{display:flex;align-items:center;gap:7px;min-height:44px;margin:0;padding:0 10px;border:0;border-right:1px solid var(--ai-hair);border-bottom:1px solid var(--ai-hair);border-radius:0;background:transparent;color:var(--ai-copy);font-size:11.5px;letter-spacing:.2px;white-space:nowrap;transition:background .18s,color .18s}
+body .ai-chat-prompt:nth-child(3n){border-right:0}
+body .ai-chat-prompt:nth-child(n+4){border-bottom:0}
+body .ai-chat-prompt b{display:grid;place-items:center;width:18px;height:18px;border:1px solid var(--ai-rule);border-radius:0;background:transparent;color:var(--ai-accent);font-family:var(--serif);font-size:11px;font-weight:400;line-height:1}
+body .ai-chat-prompt:hover{background:var(--ai-raised)}
+body .ai-chat-prompt:hover b{border-color:var(--ai-accent)}
+
+/* ------------------------------------------------------------------- input */
+body .ai-chat-note{margin:12px 0 0;padding-top:9px;border-top:1px solid var(--ai-hair-soft);font-size:10.5px;line-height:1.7;color:var(--ai-faint)}
+body .ai-chat-compose{display:grid;gap:0;margin-top:9px;padding:10px 12px 7px;border:1px solid var(--ai-rule);border-radius:0;background:var(--ai-raised);transition:border-color .2s,box-shadow .2s}
+body .ai-chat-compose:focus-within{border-color:var(--ai-faint);box-shadow:0 0 0 3px rgba(23,55,71,.06)}
+body .ai-chat-compose textarea{width:100%;min-height:40px;max-height:140px;margin:0;padding:2px 0;border:0;border-radius:0;background:transparent;resize:none;font:15px/1.65 inherit;color:var(--ink)}
+body .ai-chat-compose textarea:focus,body .ai-chat-compose textarea:focus-visible{outline:none}
+body .ai-chat-compose textarea::placeholder{font-family:var(--serif);letter-spacing:.4px;color:var(--ai-faint)}
+body .ai-chat-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:5px;padding-top:8px;border-top:1px solid var(--ai-hair-soft)}
+body .ai-chat-tools-left{display:flex;align-items:center;gap:9px;min-width:0;overflow:hidden}
+body .ai-chat-hint{font:10px/1.5 Georgia,var(--serif);letter-spacing:.03em;color:var(--ai-faint)}
+body .ai-chat-compose.is-busy .ai-chat-hint{display:none}
+body .ai-chat-status{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif);font-size:11px;font-style:italic;color:var(--ai-faint)}
+body .ai-chat-buttons{display:flex;flex:0 0 auto;align-items:center;gap:8px}
+body .ai-chat-stop{padding:6px 2px;border:0;background:transparent;color:var(--ai-faint);font-size:11px;text-decoration:underline;text-underline-offset:3px}
+body .ai-chat-stop:hover{color:var(--ai-accent)}
+body .ai-chat-send{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:2px;background:var(--ink);color:var(--ai-send-fg);font-family:Georgia,var(--serif);font-size:16px;line-height:1;transition:transform .15s,opacity .2s}
+body .ai-chat-send:hover{opacity:.86}
+body .ai-chat-send:active{transform:translateY(1px)}
+
+/* ------------------------------------------------------------------- voice */
+body .ai-chat-speak{align-self:center;padding:10px 0 10px 10px;border:0;background:transparent;color:var(--ai-faint);font-size:11px;letter-spacing:.5px;white-space:nowrap}
+body .ai-chat-speak::before{content:"";display:inline-block;width:5px;height:5px;margin-right:5px;border:1px solid var(--ai-faint);border-radius:50%;vertical-align:1px}
+body .ai-chat-speak[aria-pressed="true"]{color:var(--ai-accent)}
+body .ai-chat-speak[aria-pressed="true"]::before{border-color:var(--ai-accent);background:var(--ai-accent)}
+body .ai-chat-speak.is-speaking::before{animation:ai-voice-dot 1.1s ease-in-out infinite}
+body .ai-chat-mic{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--ai-rule);border-radius:2px;background:transparent;color:var(--ai-copy);transition:border-color .2s,color .2s,background .2s,transform .2s}
+body .ai-chat-mic svg{width:17px;height:17px}
+body .ai-chat-mic:hover{border-color:var(--ai-accent);color:var(--ai-accent)}
+body .ai-chat-mic[hidden]{display:none}
+body .ai-chat-speak[hidden]{display:none}
+body .ai-chat-mic.is-listening{border-color:var(--ai-accent);background:rgba(168,72,47,.07);color:var(--ai-accent);animation:ai-mic-listen 1.3s ease-in-out infinite}
+body .ai-chat-mic:disabled{opacity:.4;cursor:default}
+@keyframes ai-mic-listen{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes ai-voice-dot{0%,100%{opacity:1}50%{opacity:.15}}
+
+/* --------------------------------------------------------------- day plan */
+/* A compact photo page: a short cover, a category index, and one swipeable
+   strip of photographs per day. Every stop is a picture with a time, a name and
+   one line of advice — no grids, no tables, nothing to study. */
+body .ai-chat-plan{margin:14px 0 4px;border:1px solid var(--ai-hair);background:var(--ai-raised);overflow:hidden}
+body .ai-chat-plan-cover{position:relative;display:block;height:152px;background:var(--ai-code)}
+body .ai-chat-plan-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+body .ai-chat-plan-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,20,22,0) 30%,rgba(12,20,22,.74) 100%)}
+body .ai-chat-plan-cover.is-empty{background:var(--ai-raised)}
+body .ai-chat-plan-cover.is-empty::after{display:none}
+body .ai-chat-plan-cover.is-empty .ai-chat-plan-covertext{color:var(--ai-copy)}
+body .ai-chat-plan-covertext{position:absolute;left:14px;right:14px;bottom:11px;z-index:1;color:#f7f3e8}
+body .ai-chat-plan-covertext b{display:block;font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:1.2px;text-shadow:0 1px 14px rgba(0,0,0,.4)}
+body .ai-chat-plan-covertext span{display:block;margin-top:3px;font:8.5px/1 Georgia,var(--serif);letter-spacing:.18em;text-transform:uppercase;opacity:.82}
+body .ai-chat-plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--ai-rule)}
+body .ai-chat-plan-head b{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--ai-copy)}
+body .ai-chat-plan-head span{font:8.5px/1 Georgia,var(--serif);letter-spacing:.14em;text-transform:uppercase;color:var(--ai-faint)}
+
+body .ai-chat-plan-filters{display:flex;gap:5px;padding:10px 14px 9px;overflow-x:auto;scrollbar-width:none}
+body .ai-chat-plan-filters::-webkit-scrollbar{display:none}
+body .ai-chat-plan-filter{flex:0 0 auto;min-height:28px;padding:0 9px;border:1px solid var(--ai-hair);border-radius:999px;background:transparent;color:var(--ai-soft);font-size:10.5px;letter-spacing:.02em;white-space:nowrap}
+body .ai-chat-plan-filter.is-on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+body .ai-chat-plan-day{padding:8px 0 2px}
+body .ai-chat-plan-day + .ai-chat-plan-day{border-top:1px solid var(--ai-hair-soft)}
+body .ai-chat-plan-dayhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:0 14px 7px}
+body .ai-chat-plan-dayhead b{font-family:var(--serif);font-size:13px;font-weight:500;letter-spacing:.7px;color:var(--ai-accent)}
+body .ai-chat-plan-dayhead span{font-size:10px;color:var(--ai-faint)}
+body .ai-chat-plan-strip{display:flex;gap:9px;padding:0 14px 9px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+body .ai-chat-plan-strip::-webkit-scrollbar{display:none}
+body .ai-chat-plan-item{position:relative;flex:0 0 auto;width:132px;height:192px;overflow:hidden;border-radius:3px;background:var(--ai-code);scroll-snap-align:start}
+body .ai-chat-plan-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+body .ai-chat-plan-photo.is-blank{display:grid;place-items:center;border:1px solid var(--ai-hair);background:var(--ai-raised);color:var(--ai-accent);font-family:var(--serif);font-size:22px}
+body .ai-chat-plan-item::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,18,20,0) 42%,rgba(10,18,20,.84) 100%)}
+body .ai-chat-plan-body{position:absolute;left:10px;right:10px;bottom:9px;z-index:1;display:grid;gap:2px;color:#f7f3e8}
+body .ai-chat-plan-time{font:9px/1.3 Georgia,var(--serif);letter-spacing:.12em;opacity:.92}
+body .ai-chat-plan-body b{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1.3;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+body .ai-chat-plan-body small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:10.5px;line-height:1.45;opacity:.86}
+body .ai-chat-plan-links{display:flex;gap:9px;margin-top:3px}
+body .ai-chat-plan-links a{padding-bottom:1px;border-bottom:1px solid rgba(247,243,232,.55);color:#f7f3e8;font-size:10px;letter-spacing:.04em;text-decoration:none}
+body .ai-chat-plan-links a:hover{border-bottom-color:#f7f3e8}
+body .ai-chat-plan-item[hidden]{display:none}
+body .ai-chat-plan-day[hidden]{display:none}
+body .ai-chat-plan-credit{padding:10px 14px 12px;border-top:1px solid var(--ai-hair-soft);font-size:10px;line-height:1.6;color:var(--ai-faint)}
+
+@media(max-width:360px){
+  body .ai-chat-screen.screen > .title{font-size:20px!important;letter-spacing:0}
+  body .ai-chat-panel{padding:12px 11px 10px;margin-top:12px}
+  body .ai-chat-list{max-height:44vh;gap:22px;padding:16px 0 4px}
+  body .ai-chat-quote{font-size:16px}
+  body .ai-chat-brief{font-size:11.5px}
+  body .ai-chat-hello{padding:18px 14px 9px}
+  body .ai-chat-kicker{display:none}
+  body .ai-chat-seal{width:32px;height:32px;font-size:15px}
+  body .ai-chat-prompt{padding:0 8px;font-size:10.5px;gap:5px}
+  body .ai-chat-prompt b{width:16px;height:16px;font-size:10px}
+  body .ai-chat-hint{display:none}
+  body .ai-chat-speak{display:none}
+  body .ai-chat-plan-item{width:118px;height:178px}
+  body .ai-chat-plan-body b{font-size:13px}
+  body .ai-chat-plan-body small{font-size:10px}
+}
+
+/* The floating entry keeps the journal theme's own circular treatment; the desk
+   simply steps it aside while it is open, so it never covers the composer. */
+body.journal-preview.ai-desk-open .ai-float,
+body.journal-preview.ai-desk-open .ai-float-tab,
+body.ai-desk-open .ai-float,
+body.ai-desk-open .ai-float-tab{display:none}
+
+@media(prefers-reduced-motion:reduce){
+  body .ai-chat-list > .bubble{animation:none}
+  body .ai-chat-typing i{animation:none;opacity:.6}
+}

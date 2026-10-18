@@ -1,5 +1,5 @@
 (function () {
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=50-westlake-guide', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=17-global-guide-images', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
   window.loadMap = function () { if (window.initTravelMap) window.initTravelMap(); else { const status = document.getElementById('mapStatus'); if (status) status.textContent = '正在加载在线地图…'; } };
   const css = document.createElement('link');
   css.rel = 'stylesheet';
@@ -9,22 +9,65 @@
   style.textContent = '.tw-q-pin,.tw-route-pin,.tw-user-pin{background:transparent;border:0}.tw-q-pin__body{display:flex;align-items:center;gap:5px;width:max-content;max-width:130px;background:#fff;border:2px solid #173f4f;border-radius:18px;padding:4px 8px 4px 5px;box-shadow:0 5px 12px #173f4f38;transform:translate(-8px,-8px)}.tw-q-pin__icon{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#f6dfbf;font-size:17px}.tw-q-pin__label{font-size:11px;font-weight:800;color:#173f4f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tw-route-pin__body{display:grid;place-items:center;width:28px;height:28px;border:2px solid #fff;border-radius:50%;background:#d17d57;color:#fff;font-size:12px;font-weight:800;box-shadow:0 4px 10px #173f4f45}.tw-user-pin__arrow{position:relative;z-index:2;display:grid;place-items:center;width:28px;height:28px;border:3px solid #fff;border-radius:50%;background:#1f7a8c;color:#fff;font-size:16px;transform:rotate(-45deg);box-shadow:0 4px 12px #173f4f66}.tw-user-pin__pulse{position:absolute;inset:0;border-radius:50%;background:#1f7a8c44;animation:twPulse 1.8s infinite}@keyframes twPulse{50%{transform:scale(1.65);opacity:0}}.map-controls{display:grid;grid-template-columns:1fr auto auto;gap:7px;margin-bottom:10px}.map-controls input{min-width:0;border:1px solid #dfe6e1;border-radius:9px;padding:9px}.leaflet-popup-content button{border:0;background:#173f4f;color:#fff;border-radius:12px;padding:6px 9px;margin-top:7px}';
   document.head.appendChild(style);
   const provider = document.createElement('script');
-  provider.src = 'modules/map/map-provider.js?v=6';
+  provider.src = 'modules/map/map-provider.js?v=7';
   provider.onload = () => {
     const leaflet = document.createElement('script');
     leaflet.src = '/vendor/leaflet/leaflet.js';
     const loadRuntime = () => {
       const appendRuntime = () => {
         const runtime = document.createElement('script');
-        runtime.src = 'modules/map/map-web.js?v=16-westlake-guide';
-        runtime.onload = () => { window.loadMap = window.initTravelMap; const landmark=new URLSearchParams(location.search).get('landmark');if(landmark){window.go('map');window.initTravelMap().then(()=>window.openMapLandmark(landmark));} };
+        runtime.src = 'modules/map/map-web.js?v=32-global-category-icons';
+        runtime.onload = () => {
+          window.loadMap = window.initTravelMap;
+          const legacyOpen = window.openMapLandmark;
+          window.openMapLandmark = async id => {
+            if (!window.openSelectedCityGuide) return legacyOpen?.(id);
+            if (id === 'cn-west-lake') return window.openSelectedCityGuide({ id, name: '西湖', city: '杭州', country: '中国', latitude: 30.2431, longitude: 120.1503 });
+            try {
+              const response = await fetch('/modules/data/landmarks.json?v=3');
+              const data = await response.json();
+              const place = data.landmarks?.find(item => item.id === id);
+              if (place) return window.openSelectedCityGuide(place, place.image ? { url: place.image, sourceUrl: place.image } : null);
+            } catch {}
+            try {
+              const response = await fetch('/modules/data/global-landmark-guide-catalog.json?v=20261018-verified-2');
+              const data = await response.json();
+              const place = data.places?.find(item => item.id === id);
+              if (place) return window.openSelectedCityGuide(place);
+            } catch {}
+            return legacyOpen?.(id);
+          };
+          const landmark = new URLSearchParams(location.search).get('landmark');
+          if (landmark) {
+            if (landmark === 'cn-west-lake') {
+              window.openSelectedCityGuide({ id: landmark, name: '西湖', city: '杭州', country: '中国', latitude: 30.2431, longitude: 120.1503 });
+            } else {
+              window.go('map');
+              Promise.resolve(window.initTravelMap?.()).then(() => window.openMapLandmark(landmark));
+            }
+          }
+        };
         document.body.appendChild(runtime);
       };
-      const guide = document.createElement('script');
-      guide.src = 'modules/map/west-lake-interactive-guide.js?v=1-westlake-template';
-      guide.onload = appendRuntime;
-      guide.onerror = appendRuntime;
-      document.body.appendChild(guide);
+      const loadSelectedGuide = () => {
+        const guide = document.createElement('script');
+        guide.src = 'modules/map/selected-city-guide.js?v=11-westlake-interactive-v1';
+        guide.onload = loadGlobalGuide;
+        guide.onerror = loadGlobalGuide;
+        document.body.appendChild(guide);
+      };
+      const loadGlobalGuide = () => {
+        const guide = document.createElement('script');
+        guide.src = 'modules/map/global-landmark-guide.js?v=20261018-global-21-ai-images';
+        guide.onload = appendRuntime;
+        guide.onerror = appendRuntime;
+        document.body.appendChild(guide);
+      };
+      const westLake = document.createElement('script');
+      westLake.src = 'modules/map/west-lake-interactive-guide.js?v=8-shared-guide-icons';
+      westLake.onload = loadSelectedGuide;
+      westLake.onerror = loadSelectedGuide;
+      document.body.appendChild(westLake);
     };
     leaflet.onload = loadRuntime;
     leaflet.onerror = loadRuntime;

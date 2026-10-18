@@ -7,6 +7,7 @@
   const state = () => JSON.parse(localStorage.getItem('tw-state') || '{}');
   const fallback = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><rect width="100%" height="100%" fill="#e8eee9"/><text x="50%" y="56%" text-anchor="middle" font-size="54" fill="#173f4f">TW</text></svg>');
   const setPage = html => { const section = document.getElementById('profile'); if (section) section.innerHTML = html; };
+  let cityFavoritesCatalogPromise;
 
   function render() {
     const loggedIn = Boolean(auth()?.session?.());
@@ -46,10 +47,22 @@
       const paths = { posts: '/api/community/me/posts', favorites: '/api/community/favorites', likes: '/api/community/me/likes', comments: '/api/community/me/comments', following: '/api/community/following', followers: '/api/community/followers', interactions: '/api/community/interactions', routes: '/api/community/me/routes' };
       let items = await auth().request(paths[type]);
       let favoriteRoutes = [];
+      let cityFavorites = [];
       if (type === 'favorites') favoriteRoutes = await auth().request('/api/routes/favorite-items');
+      if (type === 'favorites') {
+        const userId = auth().session()?.user?.id || 'guest';
+        let savedIds = [];
+        try { savedIds = JSON.parse(localStorage.getItem('tw-city-favorites:' + userId) || '[]'); } catch {}
+        if (savedIds.length) {
+          cityFavoritesCatalogPromise ||= fetch('/modules/data/global-landmark-guide-catalog.json').then(response => response.ok ? response.json() : { places: [] }).catch(() => ({ places: [] }));
+          const catalog = await cityFavoritesCatalogPromise;
+          const byId = new Map((catalog.places || []).map(place => [place.id, place]));
+          cityFavorites = savedIds.map(id => byId.get(id) || (id === 'cn-west-lake' ? { id, name: '西湖', name_en: 'West Lake', city: '杭州', country: '中国' } : null)).filter(Boolean);
+        }
+      }
       let body = '';
       if (type === 'posts') body = items.map(item => post(item, type)).join('');
-      if (type === 'favorites') body = items.map(item => post(item, type)).join('') + favoriteRoutes.map(item => window.TravelPostUI.routeCard(item)+'<button class="btn alt small" onclick="removeProfileRouteFavorite(\'' + item.id + '\')">取消收藏</button>').join('');
+      if (type === 'favorites') body = items.map(item => post(item, type)).join('') + favoriteRoutes.map(item => window.TravelPostUI.routeCard(item)+'<button class="btn alt small" onclick="removeProfileRouteFavorite(\'' + item.id + '\')">取消收藏</button>').join('') + cityFavorites.map(item => '<article class="card profile-city-favorite"><div><b>' + safe(item.name || item.name_en) + '</b><small>' + safe([item.city, item.country].filter(Boolean).join(' · ')) + ' · 景点导览</small></div><button class="btn alt small" onclick="openProfileCityFavorite(\'' + safe(item.id) + '\')">打开导览</button><button class="btn alt small" onclick="removeProfileCityFavorite(\'' + safe(item.id) + '\')">移除</button></article>').join('');
       if (type === 'likes') body = items.map(item => post(item, type)).join('');
       if (type === 'comments') body = items.map(item => '<article class="profile-comment-card"><p>' + safe(item.content) + '</p><small>' + safe(item.posts?.title || '旅行记录') + ' · ' + new Date(item.created_at).toLocaleDateString() + '</small><button class="btn alt small" onclick="openPostDetail(\'' + item.post_id + '\')">' + label('查看原帖','View post') + '</button></article>').join('');
       if (type === 'following') body = items.map(item => person(item, '<div class="profile-row-actions"><button onclick="openDirectChat(\'' + item.id + '\')">私聊</button><button onclick="toggleProfileFollow(\'' + item.id + '\',\'following\')">取消关注</button><button onclick="blockProfile(\'' + item.id + '\')">屏蔽</button></div>')).join('');
@@ -66,6 +79,22 @@
   window.deleteProfilePost = async id => { if (!confirm('删除这篇发布？删除后无法恢复。')) return; try { await auth().request('/api/community/posts/' + id, { method: 'DELETE' }); await loadProfile(); await openProfilePanel('posts'); window.dispatchEvent(new Event('tw-auth-change')); } catch (error) { alert(error.message); } };
   window.removeProfileFavorite = async id => { try { await auth().request('/api/community/posts/' + id + '/favorite', { method: 'POST' }); await loadProfile(); await openProfilePanel('favorites'); } catch (error) { alert(error.message); } };
   window.removeProfileRouteFavorite = async id => { try { await auth().request('/api/routes/' + id + '/favorite', { method: 'POST' }); await openProfilePanel('favorites'); } catch (error) { alert(error.message); } };
+  window.openProfileCityFavorite = async id => {
+    if (id === 'cn-west-lake') return window.openSelectedCityGuide?.({ id, name: '西湖', name_en: 'West Lake', city: '杭州', country: '中国', countryCode: 'CN' });
+    try {
+      cityFavoritesCatalogPromise ||= fetch('/modules/data/global-landmark-guide-catalog.json').then(response => response.ok ? response.json() : { places: [] });
+      const catalog = await cityFavoritesCatalogPromise;
+      const place = (catalog.places || []).find(item => item.id === id);
+      if (!place) throw new Error('找不到这条景点记录');
+      window.openSelectedCityGuide?.(place);
+    } catch (error) { auth().toast?.(error.message || '景点导览暂时无法打开'); }
+  };
+  window.removeProfileCityFavorite = async id => {
+    const userId = auth().session()?.user?.id || 'guest';
+    const key = 'tw-city-favorites:' + userId;
+    try { const ids = JSON.parse(localStorage.getItem(key) || '[]'); localStorage.setItem(key, JSON.stringify(ids.filter(value => value !== id))); await openProfilePanel('favorites'); }
+    catch (error) { auth().toast?.(error.message || '移除失败'); }
+  };
   window.editProfileRoute = async (id, oldTitle, oldDestination) => { const title = prompt('路线名称', oldTitle); if (title === null) return; const destination = prompt('目的地', oldDestination); if (destination === null) return; try { await auth().request('/api/routes/' + id, { method: 'PATCH', body: JSON.stringify({ title: title.trim(), destination: destination.trim() }) }); await openProfilePanel('routes'); } catch (error) { alert(error.message); } };
   window.publishProfileRoute = async (id, isPublic) => { try { await auth().request('/api/routes/' + id, { method: 'PATCH', body: JSON.stringify({ is_public: isPublic }) }); await openProfilePanel('routes'); } catch (error) { alert(error.message); } };
   window.deleteProfileRoute = async id => { if (!confirm('删除这条路线？')) return; try { await auth().request('/api/routes/' + id, { method: 'DELETE' }); await openProfilePanel('routes'); } catch (error) { alert(error.message); } };

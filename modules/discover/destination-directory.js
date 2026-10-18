@@ -12,12 +12,30 @@ export async function renderDestinationDirectory(region){
     [['',t('全部国家 / 地区','All countries / regions')],...data.countries.map(code=>[code,names.of(code)])].forEach(([value,text])=>{const option=document.createElement('option');option.value=value;option.textContent=text;option.selected=value===country;select.append(option);});select.onchange=()=>{country=select.value;page=0;renderDestinationDirectory(region);};label.append(select);controls.append(label);
     const total=document.createElement('small');total.textContent=data.total+t(' 个有来源的地点 · 景点目录，非完整行程',' sourced places · place directory, not full itineraries');controls.append(total);
     if(!data.places.length){feedback.textContent=t('该筛选暂无地点资料。','No places match this filter.');return;}
-    const photosResponse=await fetch('/api/map/place-images?ids='+data.places.map(p=>p.id).join('|'),{signal:AbortSignal.timeout(30000)}),photosData=await photosResponse.json();if(sequence!==requestId)return;if(!photosResponse.ok)throw new Error();
+    const photosResponse=await fetch('/api/map/place-images?w=1280&ids='+data.places.map(p=>p.id).join('|'),{signal:AbortSignal.timeout(30000)}),photosData=await photosResponse.json();if(sequence!==requestId)return;if(!photosResponse.ok)throw new Error();
     root.replaceChildren();let count=0;
-    data.places.forEach(place=>{const photo=photosData.photos?.[place.id];if(!photo)return;count++;const card=document.createElement('button');card.className='destination-photo-card';const image=document.createElement('img');image.src=photo.url;image.alt=t(place.name,place.name_en);image.loading='lazy';image.width=160;image.height=110;const title=document.createElement('strong');title.textContent=image.alt;const location=document.createElement('small');location.textContent=[place.city,names.of(place.countryCode)].filter(Boolean).join(' · ');card.append(image,title,location);card.onclick=()=>window.openSourcedMapPlace?.(place,photo);image.onerror=()=>{image.remove();const note=document.createElement('small');note.textContent=t('照片暂不可用','Photograph unavailable');card.prepend(note);};root.append(card);});
+    data.places.forEach(place=>{const photo=photosData.photos?.[place.id];if(!photo)return;count++;
+      const card=document.createElement('button');card.type='button';card.className='destination-photo-card';
+      const media=document.createElement('span');media.className='destination-photo-media is-loading';
+      const image=document.createElement('img');
+      image.src=photo.url;if(photo.srcset)image.srcset=photo.srcset;image.sizes='(max-width:520px) 46vw, 240px';
+      image.alt=t(place.destinationCity||place.name,place.destinationCity||place.name_en);
+      image.loading='lazy';image.decoding='async';image.width=800;image.height=600;
+      const year=(photo.date||'').match(/\b(20\d{2})\b/);const badge=document.createElement('span');badge.className='destination-photo-year';
+      if(year&&Number(year[1])>=2023){badge.textContent=year[1];media.append(badge);}
+      media.append(image);
+      const caption=document.createElement('span');caption.className='destination-photo-copy';
+      const title=document.createElement('strong');title.textContent=image.alt;
+      const location=document.createElement('small');location.textContent=[names.of(place.countryCode),place.name].filter(Boolean).join(' · ');
+      caption.append(title,location);card.append(media,caption);
+      card.onclick=()=>window.openSourcedMapPlace?.({...place,destinationCity:place.destinationCity},photo);
+      image.onload=()=>media.classList.remove('is-loading');
+      image.onerror=()=>{media.remove();const note=document.createElement('small');note.className='destination-photo-missing';note.textContent=t('照片暂不可用','Photograph unavailable');card.prepend(note);};
+      root.append(card);
+    });
     if(!count){feedback.textContent=t('本页地点暂无已关联的授权照片，请翻页查看。','No licensed photographs are linked on this page. Try the next page.');root.append(feedback);}
     const pagination=document.createElement('nav');pagination.className='destination-pagination';pagination.setAttribute('aria-label',t('地点分页','Destination pages'));
     const previous=document.createElement('button'),next=document.createElement('button'),position=document.createElement('span');previous.textContent=t('上一页','Previous');previous.disabled=page===0;previous.onclick=()=>{page--;renderDestinationDirectory(region);};next.textContent=t('更多地点','More places');next.disabled=(page+1)*data.pageSize>=data.total;next.onclick=()=>{page++;renderDestinationDirectory(region);};position.textContent=(page+1)+' / '+Math.max(1,Math.ceil(data.total/data.pageSize));pagination.append(previous,position,next);root.append(pagination);
-    const credit=document.createElement('small');credit.className='destination-source-note';credit.textContent=t('地点数据：Audiala · CC BY 4.0。照片来源、作者及授权见详情。季节适宜性、吃住与费用尚未逐条核实。','Place data: Audiala · CC BY 4.0. Photo authors and licenses appear in details. Seasonal suitability, food, stays and prices are not yet verified for each place.');root.append(credit);
+    const credit=document.createElement('small');credit.className='destination-source-note';credit.textContent=t('全球热门城市候选：按目录提供的知名度分值排序（不是游客量排名）。照片为 Wikimedia Commons 的授权实拍，高清版本按屏幕自动选择，作者与许可见地点详情；2023 年后的照片会标出拍摄年份。地点数据：Audiala · CC BY 4.0。','Popular-city candidates ranked by the catalogue’s notability score (not visitor counts). Photographs are licensed Wikimedia Commons images, served at screen-appropriate resolution; authorship and licence are shown on the place page, and photographs taken since 2023 carry their year. Place data: Audiala · CC BY 4.0.');root.append(credit);
   }catch(_){if(sequence===requestId){feedback.textContent=t('照片资料暂时无法载入，请重试。','Photographs could not load. Please retry.');const retry=document.createElement('button');retry.textContent=t('重试','Retry');retry.onclick=()=>renderDestinationDirectory(region);root.replaceChildren(feedback,retry);}}
 }
