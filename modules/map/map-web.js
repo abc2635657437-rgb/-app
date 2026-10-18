@@ -22,6 +22,7 @@
   const coarse=matchMedia('(pointer:coarse)').matches;
   const langText=(zh,en)=>window.TravelWorldI18n?.language?.()==='en'?en:zh;
   const localized=item=>{if(window.TravelWorldI18n?.language?.()!=='en')return item;const result={...item};['name','description','country','city','bestSeason','duration','nearby','food','stay','transport','tags'].forEach(key=>{if(item[key+'_en'])result[key]=item[key+'_en'];});return result;};
+  const toneOf=place=>{const c=String(place?.category||'').toLowerCase();if(/(hist|fort|monument|archae|ruin|castle|temple|church|mosque|palace|cathedral|memorial)/.test(c))return 'history';if(/(nature|lake|mountain|park|island|waterfall|glacier|reef|valley|cave|desert|forest|river|sea)/.test(c))return 'nature';if(/(city|tower|bridge|building|square|market|stadium|museum)/.test(c))return 'city';return 'other';};
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
   // The catalogue is WGS-84; the active basemap may not be. Re-project here.
   const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
@@ -141,14 +142,27 @@
     });
     const clusterRadius=zoom>=13?0:zoom<4?0:zoom<6?55:zoom<8?40:zoom<10?26:18;
     clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),clusterRadius).forEach(group=>{
-      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';if(representative.image){const image=document.createElement('img');image.src=representative.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-marker-dot';pin.append(symbol);}const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(16,map.getZoom()+3)}));markers.push(marker);return;}
+      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';if(representative.image){const image=document.createElement('img');image.src=representative.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-marker-dot';pin.append(symbol);}const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster tone-'+toneOf(representative),html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(16,map.getZoom()+3)}));markers.push(marker);return;}
       const source=group.items[0],item=localized(source);
       const pin=document.createElement('div');pin.className='tw-q-pin__body';if(item.image){const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-q-pin__icon';pin.append(symbol);}const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(label);
-      const icon = L.divIcon({ className: 'tw-q-pin', html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
+      const icon = L.divIcon({ className: 'tw-q-pin tone-'+toneOf(source), html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
       const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map);
       marker.on('click', () => openLandmark(source.id, { focus: false }));
       markers.push(marker);
     });
+  }
+  function renderLegend() {
+    const canvas = document.getElementById('mapCanvas');
+    if (!canvas || !canvas.parentElement) return;
+    let legend = canvas.parentElement.querySelector('.map-legend');
+    if (!legend) { legend = document.createElement('div'); legend.className = 'map-legend'; canvas.after(legend); }
+    const labels = [['history', '历史遗迹', 'Heritage'], ['nature', '自然风景', 'Nature'], ['city', '城市地标', 'City']];
+    legend.replaceChildren(...labels.map(([tone, zh, en]) => {
+      const item = document.createElement('span'); item.className = 'tone-' + tone;
+      const label = document.createElement('b'); label.textContent = langText(zh, en);
+      item.append(document.createElement('i'), label);
+      return item;
+    }));
   }
   function updateMarkerDensity() { const canvas=document.getElementById('mapCanvas'); if(!canvas||!map)return; const zoom=map.getZoom(); canvas.classList.toggle('map-country-champions',zoom<4); canvas.classList.toggle('map-compact-labels',zoom>=4&&zoom<5); }
   async function renderNearbyPlaces(){
@@ -243,6 +257,7 @@
       if (!map._twTileLayer) { map._twTileLayer = TravelMapProviders.tileLayer(map); }
       renderMarkers();
       updateMarkerDensity();
+      renderLegend();
       watchProvider();
       setTimeout(() => map.invalidateSize(), 0);
       loadOnlineUsers();
@@ -337,7 +352,7 @@
   }
   window.initTravelMap = initMap;
   window.activateTravelMap=()=>{if(!map)return;['dragging','touchZoom','scrollWheelZoom','doubleClickZoom','boxZoom','keyboard'].forEach(name=>map[name]?.enable());status(langText('地图交互已开启；现在可以拖动、缩放和点击地标。','Map interaction is active. You can now pan, zoom and open markers.'));};
-  window.refreshTravelMapLocale=()=>{if(!data)return;renderMarkers();if(document.getElementById('landmarkDetailOverlay')&&window.currentMapLandmark)window.showLandmark(window.currentMapLandmark);};
+  window.refreshTravelMapLocale=()=>{if(!data)return;renderMarkers();renderLegend();if(document.getElementById('landmarkDetailOverlay')&&window.currentMapLandmark)window.showLandmark(window.currentMapLandmark);};
   window.searchTravelMap = searchPlace;
   window.locateTravelMap = locateUser;
   window.toggleMapLocationSharing = toggleSharing;

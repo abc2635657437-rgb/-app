@@ -142,6 +142,28 @@ body.journal-preview #map .tw-landmark-group img{width:46px!important;height:46p
 body.journal-preview #map .tw-landmark-group .tw-marker-dot{position:absolute;top:50%;left:50%;width:24px;height:24px;margin:-12px 0 0 -12px;box-shadow:0 0 0 4px #fff,0 2px 7px #17374733}
 body.journal-preview #map.map-country-champions .tw-q-pin__label{display:block!important}
 body.journal-preview #map.map-country-champions .tw-q-pin__body{max-width:140px}
+/* Colorful travel-atlas treatment for the Explore map. */
+body.journal-preview #map>.map-card-primary{position:relative;padding:9px;border:1px solid #d9c094;border-radius:20px;background:linear-gradient(165deg,#fff9ec 0%,#f6e9d1 58%,#efdfc2 100%);box-shadow:0 20px 44px rgba(23,57,71,.18),inset 0 2px 0 #fff8,inset 0 -2px 0 rgba(160,130,80,.16)}
+body.journal-preview #map>.map-card-primary::after{content:"Q ATLAS";position:absolute;z-index:500;top:-10px;right:18px;padding:5px 10px;border-radius:999px;background:linear-gradient(135deg,#cf6a4a,#d9a441);color:#fff;font:700 9px/1 Georgia,serif;letter-spacing:1.6px;box-shadow:0 5px 12px rgba(23,57,71,.24);pointer-events:none}
+body.journal-preview #map .map-canvas{position:relative;border:1px solid #cdb68d;border-radius:15px;background:radial-gradient(circle at 28% 18%,#d7f2f4,#8fd0d8 46%,#4f9db3 100%);box-shadow:0 0 0 4px rgba(255,255,255,.55),0 12px 26px rgba(23,57,71,.16) inset}
+body.journal-preview #map .map-canvas::after{content:"";position:absolute;inset:0;z-index:400;pointer-events:none;border-radius:inherit;background:linear-gradient(155deg,rgba(255,205,120,.24),transparent 34%,rgba(47,143,131,.17) 68%,rgba(207,106,74,.15));mix-blend-mode:soft-light}
+body.journal-preview #map .leaflet-tile-pane{filter:saturate(1.75) contrast(1.06) brightness(1.04)}
+body.journal-preview #map .tone-history{--tone:#cf6a4a}
+body.journal-preview #map .tone-nature{--tone:#2f8f83}
+body.journal-preview #map .tone-city{--tone:#d9a441}
+body.journal-preview #map .tone-other{--tone:#4f86a6}
+body.journal-preview #map .tw-q-pin .tw-q-pin__body{border:3px solid var(--tone,#e8dcc4);background:#fffdf7;box-shadow:0 7px 16px rgba(23,57,71,.24),0 0 0 2px rgba(255,255,255,.72);transition:transform .24s cubic-bezier(.2,.7,.2,1),box-shadow .24s}
+body.journal-preview #map .tw-q-pin:hover .tw-q-pin__body,body.journal-preview #map .tw-q-pin:focus-visible .tw-q-pin__body{transform:translate(-8px,-8px) scale(1.09);box-shadow:0 10px 22px rgba(23,57,71,.3),0 0 0 2px rgba(255,255,255,.85)}
+body.journal-preview #map .tw-q-pin__label{border:1px solid rgba(160,130,80,.34);background:#fffdf7;color:#26424c;box-shadow:0 3px 8px rgba(23,57,71,.18);font-weight:700}
+body.journal-preview #map .tw-q-pin__label::before{content:"";display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%;background:var(--tone,#d9a441);vertical-align:1px}
+body.journal-preview #map .tw-landmark-group img{border-color:var(--tone,#fff);box-shadow:0 4px 12px rgba(23,57,71,.28)}
+body.journal-preview #map .tw-landmark-group .tw-marker-dot{background:var(--tone,#d9a441)}
+body.journal-preview #map .tw-cluster-count{background:linear-gradient(135deg,#cf6a4a,#d9a441);border:2px solid #fff;box-shadow:0 4px 9px rgba(23,57,71,.26)}
+body.journal-preview #map .tw-marker-dot{background:var(--tone,#d9a441)}
+body.journal-preview #map .map-legend{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:9px 2px 0}
+body.journal-preview #map .map-legend span{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border:1px solid rgba(160,130,80,.3);border-radius:999px;background:#fffaf0d9;color:#3b5359;font:600 10px/1.2 system-ui}
+body.journal-preview #map .map-legend i{display:block;width:8px;height:8px;border-radius:50%;background:var(--tone);box-shadow:0 0 0 2px #fff}
+body.journal-preview #map .map-legend b{font-weight:600}
 body.journal-preview #routeLibrary>.head:first-child,body.journal-preview #routeFilters,body.journal-preview #routeGrid{display:none}
 body.journal-preview #whereNowGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
 body.journal-preview #whereNowGrid:has(.where-now-card){grid-template-columns:1fr}
