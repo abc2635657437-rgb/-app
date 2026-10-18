@@ -380,6 +380,18 @@ async function relayUpstream(response, onText) {
   return finish;
 }
 
+// When the configured provider refuses (quota, 5xx, timeout) the desk falls
+// back to the keyless public endpoint rather than giving up.
+function fallbackTarget() {
+  const raw = process.env.AI_FALLBACK_URL;
+  if (raw === 'off' || raw === 'none') return null;
+  return {
+    url: (raw || 'https://text.pollinations.ai').replace(/\/+$/, '') + '/openai',
+    model: process.env.AI_FALLBACK_MODEL || 'openai-fast',
+    headers: { 'Content-Type': 'application/json' }
+  };
+}
+
 function upstreamTarget(base, key) {
   const url = String(base || '').replace(/\/+$/, '');
   const compatible = /\/v\d+[a-z]*$/i.test(url) || /openai|compatible/i.test(process.env.AI_PROVIDER || '');
@@ -499,14 +511,29 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       // OpenRouter reasoning models otherwise spill their thinking into the
       // answer; ask for the final text only.
       const reasoning = /openrouter\.ai/i.test(String(aiBaseUrl)) ? { reasoning: { exclude: true } } : {};
-      const upstream = await fetch(target.url, {
-        method: 'POST',
-        headers: target.headers,
-        signal: AbortSignal.timeout(input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT),
-        body: JSON.stringify({ model: input.mode === 'plan' ? (aiPlanModel || aiModel) : aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning })
-      });
-
-      if (!upstream.ok || !upstream.body) throw new Error(`upstream ${upstream.status}`);
+      const budget = input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT;
+      const requestBody = model => JSON.stringify({ model, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning });
+      let upstream;
+      try {
+        upstream = await fetch(target.url, {
+          method: 'POST',
+          headers: target.headers,
+          signal: AbortSignal.timeout(budget),
+          body: requestBody(input.mode === 'plan' ? (aiPlanModel || aiModel) : aiModel)
+        });
+        if (!upstream.ok || !upstream.body) throw new Error('upstream ' + upstream.status);
+      } catch (error) {
+        const fallback = fallbackTarget();
+        if (!fallback) throw error;
+        console.warn('ai_assistant_fallback', JSON.stringify({ reason: String(error?.message || error).slice(0, 80) }));
+        upstream = await fetch(fallback.url, {
+          method: 'POST',
+          headers: fallback.headers,
+          signal: AbortSignal.timeout(budget),
+          body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages })
+        });
+        if (!upstream.ok || !upstream.body) throw new Error('fallback ' + upstream.status);
+      }
 
       if (wantsStream) {
         openStream({

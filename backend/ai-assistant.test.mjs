@@ -175,6 +175,7 @@ server.close();
 {
   // Port 9 (discard) refuses the connection, which is exactly the failure the
   // fallback has to survive: unreachable upstream, model timeout, 5xx upstream.
+  process.env.AI_FALLBACK_URL = 'off'; // the fallback has its own test elsewhere
   const scoped = express();
   scoped.use(express.json({ limit: '2mb' }));
   installAiAssistant(scoped, { optionalUser: noUser, aiBaseUrl: 'http://127.0.0.1:9/unused', aiModel: 'test-model' });
@@ -192,6 +193,7 @@ server.close();
   assert.ok(payload.answer.length > 0, 'a degraded answer must still be readable');
   assert.match(payload.disclaimer, /AI/);
   srv.close();
+  delete process.env.AI_FALLBACK_URL;
 }
 
 // 4. Input validation rejects empty and oversized questions.
