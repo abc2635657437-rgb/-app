@@ -259,7 +259,21 @@ function namesFromAnswer(answer) {
 async function photoStrip(answer, resolvePhotos, context, language) {
   if (typeof resolvePhotos !== 'function') return [];
   const names = namesFromAnswer(answer);
-  if (!names.length) return [];
+  const region = detectRegion(context?.message || '');
+  if (!names.length) {
+    // Nothing concrete to photograph, but the destination still has a face.
+    if (!region?.city) return [];
+    try {
+      const cityPhotos = await Promise.race([
+        resolvePhotos([region.city], region.city, { [region.city]: '玩', __language: language }),
+        new Promise(resolve => setTimeout(() => resolve(new Map()), 2500))
+      ]);
+      const photo = cityPhotos.get(region.city);
+      return photo && photo.url ? [{ name: region.city, url: photo.url, stars: starsFor(photo), credit: photo.credit || '' }] : [];
+    } catch (_) {
+      return [];
+    }
+  }
   const kinds = {};
   names.forEach(name => { kinds[name] = '玩'; });
   kinds.__language = language;
@@ -275,7 +289,6 @@ async function photoStrip(answer, resolvePhotos, context, language) {
     // The model often names a category ("洱海边的民宿") rather than a place; the
     // destination itself still gives the answer a real photograph.
     if (gallery.length < 2) {
-      const region = detectRegion(context?.message || '');
       if (region?.city && !photos.get(region.city)) {
         try {
           const cityPhotos = await Promise.race([
