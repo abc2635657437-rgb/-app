@@ -415,11 +415,14 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
 
     try {
       const target = upstreamTarget(aiBaseUrl, aiApiKey);
+      // OpenRouter reasoning models otherwise spill their thinking into the
+      // answer; ask for the final text only.
+      const reasoning = /openrouter\.ai/i.test(String(aiBaseUrl)) ? { reasoning: { exclude: true } } : {};
       const upstream = await fetch(target.url, {
         method: 'POST',
         headers: target.headers,
         signal: AbortSignal.timeout(input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT),
-        body: JSON.stringify({ model: aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages })
+        body: JSON.stringify({ model: aiModel, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning })
       });
 
       if (!upstream.ok || !upstream.body) throw new Error(`upstream ${upstream.status}`);
@@ -452,7 +455,8 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiAp
                 temperature: 0.2,
                 max_tokens: 1600,
                 stream: true,
-                messages: [{ role: 'user', content: PLAN_ONLY_PROMPT + '\n\n' + input.message }]
+                messages: [{ role: 'user', content: PLAN_ONLY_PROMPT + '\n\n' + input.message }],
+                ...reasoning
               })
             });
             if (retry.ok && retry.body) {
