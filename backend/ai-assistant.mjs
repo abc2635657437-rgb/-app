@@ -269,7 +269,10 @@ function namesFromAnswer(answer) {
 
 async function photoStrip(answer, resolvePhotos, context, language) {
   if (typeof resolvePhotos !== 'function') return [];
-  const names = namesFromAnswer(answer);
+  const rawNames = namesFromAnswer(answer);
+  // "洱海环湖" is an activity, "洱海" is the place: keep the head noun so the
+  // photograph lookup has something real to find.
+  const names = [...new Set(rawNames.map(name => name.replace(/(环湖|徒步|漫步|骑行|游船|古城漫步|观景|夜景|日出|日落|小吃街|度假村|客栈)$/u, '')).filter(name => name.length >= 2))];
   const region = detectRegion(context?.message || '');
   if (!names.length) {
     // Nothing concrete to photograph, but the destination still has a face.
