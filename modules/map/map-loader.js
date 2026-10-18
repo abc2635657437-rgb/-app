@@ -16,7 +16,7 @@
     const loadRuntime = () => {
       const appendRuntime = () => {
         const runtime = document.createElement('script');
-        runtime.src = 'modules/map/map-web.js?v=32-global-category-icons';
+        runtime.src = 'modules/map/map-web.js?v=33-country-champions';
         runtime.onload = () => {
           window.loadMap = window.initTravelMap;
           const legacyOpen = window.openMapLandmark;

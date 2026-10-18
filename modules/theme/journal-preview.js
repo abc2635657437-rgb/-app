@@ -1,7 +1,7 @@
 (function(){
   // The approved five-page journal is the only home shell.
   document.body.classList.add('journal-preview');
-  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=18-rounded-buddy';document.head.append(css);
+  const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=19-map-champions';document.head.append(css);
   const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
   applyTimeTheme();window.setInterval(applyTimeTheme,60_000);
   const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};

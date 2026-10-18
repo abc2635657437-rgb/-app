@@ -27,7 +27,7 @@
   const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
   const twp = (point) => (window.TravelMapProviders ? window.TravelMapProviders.focusPoint(point) : [point.latitude, point.longitude]);
   async function loadData() {
-    const key = 'tw-map-cache-v7-global-1000-verified-images';
+    const key = 'tw-map-cache-v8-curated-pool';
     try {
       const cached = localStorage.getItem(key);
       if (cached) return JSON.parse(cached);
@@ -53,6 +53,7 @@
         }
       } catch (catalogError) { console.warn('Global landmark catalogue unavailable; keeping the curated map:', catalogError); }
       if (!value.landmarks) value.landmarks = base;
+      value.curated = base;
       localStorage.setItem(key, JSON.stringify(value));
       return value;
     } catch (error) {
@@ -107,7 +108,7 @@
       const top = Math.max(6, Math.min(88, ((90 - Number(item.latitude)) / 180) * 100));
       pin.style.left = left + '%';
       pin.style.top = top + '%';
-      pin.innerHTML = item.icon + '<small>' + item.name + '</small>';
+      pin.innerHTML = '<span class="tw-marker-dot"></span><small>' + item.name + '</small>';
       pin.onclick = () => openLandmark(source.id);
       canvas.appendChild(pin);
     });
@@ -116,23 +117,36 @@
     if (!map || !data) return;
     const {clusterPoints}=await clusterModule;
     clearMarkers();
-    const zoom=map.getZoom(),limit=zoom<5?5:zoom<7?12:zoom<8?30:Infinity;
-    const ranked=[...data.landmarks].sort((a,b)=>(Number(b.globalRank||b.rank)||0)-(Number(a.globalRank||a.rank)||0));
+    const zoom=map.getZoom();
+    const countryOf=place=>place.countryCode||place.country_en||place.country||'unknown';
+    const curated=Array.isArray(data.curated)?data.curated:[];
+    const pool=zoom<4&&curated.length?curated:data.landmarks;
+    const rankScore=place=>Number(place.rating)||Number(place.globalRank||place.rank)||0;
+    const ranked=[...pool].sort((a,b)=>rankScore(b)-rankScore(a));
+    // One champion per country on the world view; more countries and more
+    // places per country appear only as the map is zoomed in.
+    const champions=new Map();
+    ranked.forEach(place=>{const country=countryOf(place);if(!champions.has(country))champions.set(country,place);});
+    const countryBudget=pool===curated?(zoom<3?12:24):Infinity;
+    const allowedCountries=Number.isFinite(countryBudget)?new Set([...champions.values()].sort((a,b)=>rankScore(b)-rankScore(a)).slice(0,countryBudget).map(countryOf)):null;
+    const perCountryLimit=zoom<4?1:zoom<5?2:zoom<6?3:zoom<8?6:zoom<10?12:Infinity;
     const perCountry=new Map();
     const visible=ranked.filter(place=>{
       if(!map.getBounds().contains(twp(place))||nearbyPlaces.some(n=>placePhotos.has(n.id)&&Math.abs(n.latitude-place.latitude)<.01&&Math.abs(n.longitude-place.longitude)<.01))return false;
-      if(!Number.isFinite(limit))return true;
-      const country=place.countryCode||place.country_en||place.country||'unknown',count=perCountry.get(country)||0;
-      if(count>=limit)return false;perCountry.set(country,count+1);return true;
+      const country=countryOf(place);
+      if(allowedCountries&&!allowedCountries.has(country))return false;
+      if(!Number.isFinite(perCountryLimit))return true;
+      const count=perCountry.get(country)||0;
+      if(count>=perCountryLimit)return false;perCountry.set(country,count+1);return true;
     });
-    const clusterRadius=zoom>=15?0:zoom>=11?18:zoom>=8?40:zoom>=5?62:88;
+    const clusterRadius=zoom>=13?0:zoom<4?0:zoom<6?55:zoom<8?40:zoom<10?26:18;
     clusterPoints(visible,p=>map.latLngToLayerPoint(twp(p)),clusterRadius).forEach(group=>{
-      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';if(representative.image){const image=document.createElement('img');image.src=representative.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-landmark-group-symbol';symbol.textContent=representative.icon||'📍';pin.append(symbol);}const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(16,map.getZoom()+3)}));markers.push(marker);return;}
+      if(group.items.length>1){const representative=localized(group.items[0]),pin=document.createElement('div');pin.className='tw-landmark-group';if(representative.image){const image=document.createElement('img');image.src=representative.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-marker-dot';pin.append(symbol);}const count=document.createElement('span');count.className='tw-cluster-count';count.textContent=group.items.length;const label=document.createElement('small');label.textContent=representative.name;pin.append(count,label);const marker=L.marker(twp(group),{title:group.items.length+langText(' 个精选地标，点击展开',' curated landmarks; zoom in'),icon:L.divIcon({className:'tw-landmark-cluster',html:pin,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(map);marker.on('click',()=>map.fitBounds(group.items.map(p=>twp(p)),{padding:[30,30],maxZoom:Math.min(16,map.getZoom()+3)}));markers.push(marker);return;}
       const source=group.items[0],item=localized(source);
-      const pin=document.createElement('div');pin.className='tw-q-pin__body';if(item.image){const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-q-pin__icon';symbol.textContent=item.icon||'📍';pin.append(symbol);}const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(label);
+      const pin=document.createElement('div');pin.className='tw-q-pin__body';if(item.image){const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-q-pin__icon';pin.append(symbol);}const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(label);
       const icon = L.divIcon({ className: 'tw-q-pin', html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
       const popup = document.createElement('div');
-      const title = document.createElement('strong'); title.textContent = (source.icon || '📍') + ' ' + item.name; popup.append(title, document.createElement('br'));
+      const title = document.createElement('strong'); title.textContent = item.name; popup.append(title, document.createElement('br'));
       const location = document.createElement('span'); location.textContent = item.country + ' · ' + item.city; popup.append(location, document.createElement('br'));
       const details = document.createElement('button'); details.type = 'button'; details.textContent = langText('查看详情','View details');
       details.addEventListener('click', () => openLandmark(source.id)); popup.append(details);
@@ -140,7 +154,7 @@
       markers.push(marker);
     });
   }
-  function updateMarkerDensity() { document.getElementById('mapCanvas')?.classList.toggle('map-compact-labels', Boolean(map && map.getZoom() < 5)); }
+  function updateMarkerDensity() { const canvas=document.getElementById('mapCanvas'); if(!canvas||!map)return; const zoom=map.getZoom(); canvas.classList.toggle('map-country-champions',zoom<4); canvas.classList.toggle('map-compact-labels',zoom>=4&&zoom<5); }
   async function renderNearbyPlaces(){
     if(!map||!window.L)return;
     const {clusterPoints}=await clusterModule;
@@ -284,7 +298,7 @@
       if (!results.length) return status(langText('没有找到“','No results found for “') + raw + '”.');
       const result = results[0], lat = Number(result.latitude), lon = Number(result.longitude);
       map.setView(tw([lat, lon]), 13);
-      const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon">📍</span><span class="tw-q-pin__label">' + raw.replace(/[<>]/g, '') + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
+      const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon"><span class="tw-marker-dot"></span></span><span class="tw-q-pin__label">' + raw.replace(/[<>]/g, '') + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
       const marker = L.marker(tw([lat, lon]), { icon }).addTo(map).bindPopup(result.displayName).openPopup(); markers.push(marker);
       status(langText('在线地图已定位：','Located on the map: ') + result.displayName);
     } catch (_) { status(langText('在线搜索暂时不可用；仍可浏览已缓存的 ','Online search is temporarily unavailable. You can still browse ') + (data?.landmarks?.length || 0) + langText(' 个地标。',' cached landmarks.')); }
