@@ -1,0 +1,11 @@
+{
+  "_comment": "一键上线的项目清单。hook（部署触发地址）不要写在这里：放到 deploy.hooks.json（已 gitignore）或环境变量里。",
+  "projects": {
+    "travel-world": {
+      "site": "https://travel-world-mwdw.onrender.com",
+      "health": "/api/health",
+      "smoke": "scripts/smoke-prod.mjs",
+      "hookEnv": "DEPLOY_HOOK_TRAVEL_WORLD"
+    }
+  }
+}
