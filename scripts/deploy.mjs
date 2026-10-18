@@ -99,7 +99,19 @@ async function renderApi(project, method, pathname, body) {
 async function deployViaRender(project) {
   const sid = project.render.serviceId;
   const timeoutSeconds = project.render.timeoutSeconds || 900;
-  let deploy = await renderApi(project, 'POST', `/services/${sid}/deploys`, { clearCache: 'do_not_clear' });
+  // Pin the deploy to the commit we just pushed: Render otherwise builds whatever
+  // ref its git poll saw last, which can be the previous commit.
+  const head = (() => {
+    try {
+      const out = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' });
+      return out.status === 0 ? out.stdout.trim() : '';
+    } catch {
+      return '';
+    }
+  })();
+  const body = { clearCache: 'do_not_clear' };
+  if (head) body.commitId = head;
+  let deploy = await renderApi(project, 'POST', `/services/${sid}/deploys`, body);
   // Render sometimes answers the trigger with an empty body; the deploy still
   // exists, so fall back to the newest one in the list.
   if (!deploy?.id) {
