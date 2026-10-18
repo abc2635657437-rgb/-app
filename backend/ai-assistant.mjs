@@ -480,7 +480,7 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         cache.set(cacheKey, { answer, at: Date.now(), degraded, sources, plan });
         if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
       }
-      const gallery = !degraded && !plan ? await photoStrip(answer, resolvePhotos, input, input.language) : [];
+      const gallery = !plan ? await photoStrip(answer, resolvePhotos, input, input.language) : [];
       return res.json({
         answer,
         gallery,
