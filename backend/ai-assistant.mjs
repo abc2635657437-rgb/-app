@@ -268,9 +268,26 @@ async function photoStrip(answer, resolvePhotos, context, language) {
       resolvePhotos(names, detectRegion(context?.message || '')?.city, kinds),
       new Promise(resolve => setTimeout(() => resolve(new Map()), 3500))
     ]);
-    return names
+    const gallery = names
       .filter(name => photos.get(name) && photos.get(name).url)
       .map(name => ({ name, url: photos.get(name).url, stars: starsFor(photos.get(name)), credit: photos.get(name).credit || '' }));
+
+    // The model often names a category ("洱海边的民宿") rather than a place; the
+    // destination itself still gives the answer a real photograph.
+    if (gallery.length < 2) {
+      const region = detectRegion(context?.message || '');
+      if (region?.city && !photos.get(region.city)) {
+        try {
+          const cityPhotos = await Promise.race([
+            resolvePhotos([region.city], region.city, { [region.city]: '玩', __language: language }),
+            new Promise(resolve => setTimeout(() => resolve(new Map()), 2500))
+          ]);
+          const photo = cityPhotos.get(region.city);
+          if (photo && photo.url) gallery.push({ name: region.city, url: photo.url, stars: starsFor(photo), credit: photo.credit || '' });
+        } catch (_) { /* a photo-less answer is still an answer */ }
+      }
+    }
+    return gallery;
   } catch (_) {
     return [];
   }
