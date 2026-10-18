@@ -2,7 +2,15 @@
 
 线上服务在 Render 上跑：服务名 `travel-world`（id `srv-dak39euk1f9s73arb650`），正式站 https://travel-world-mwdw.onrender.com ，代码从 GitHub 的 `main` 分支拉取。
 
-⚠️ 这个服务的 Auto-Deploy 开关虽然已通过 API 打开（`autoDeploy=yes`、`autoDeployTrigger=commit`），但实测 **push 之后不会自动部署**——推完 5 分钟，`/v1/services/{id}/deploys` 里没有任何新记录，`last-modified` 也没变。所以发布请走下面的一键上线命令，别等自动部署。
+发布走 Render API，一把梭：
+
+```
+node scripts/deploy.mjs travel-world --smoke
+```
+
+它会 `POST /v1/services/{id}/deploys`，然后轮询到 `live`，再做健康检查和冒烟。凭据在本机 `deploy.local.json` 的 `renderApiKey`（已 gitignore），仓库里不留 key。
+
+Auto-Deploy 在面板上是 `On Commit`，但实测推代码后不一定触发，所以别等它——上面的命令才是发布方式。
 
 ## 一键上线（本机）
 
@@ -51,12 +59,9 @@ NODE_ENV=production PORT=8787 node backend/server.mjs
    - 打开页面 → 悬浮球进顾问台 → 问一句「帮我排一版京都三天日程」，五秒内应看到回复（半成品会带「先给你这一版」）；
    - Service Worker 缓存名已升到 `travel-world-offline-v105-travel-desk`，老用户刷新一次就换新。
 
-## 还需要什么才能由我直接发
+## 现在能不能由我直接发
 
-这台机器上**没有 git、没有 GitHub token、没有 Render API key**。部署脚本（`scripts/deploy.mjs`）已经就位，现在只差一条**部署触发地址**：Render Deploy Hook（`https://api.render.com/deploy/srv-…`）。给到这条地址，我就能直接发，并且发完自动做健康检查 + 冒烟。
+能。本机已有 Render API key（`deploy.local.json`，gitignore），`node scripts/deploy.mjs travel-world --smoke` 就能触发部署、等到 `live`、跑完健康检查和冒烟，全程不需要人为点击。
 
-- 一个 Render Deploy Hook URL（最快，一条地址即可），或
-- 一个 GitHub Personal Access Token（能推这个仓库，推完仍需 Deploy Hook 或 Auto-Deploy），或
-- 在 Render 打开 Auto-Deploy 后由别人推代码。
-
-另外 `--tunnel` 选项：用仓库里的 `cloudflared.exe` 起一个临时公网地址给外部看，但不是正式部署（地址随机、关掉就失效），需要你同意才会跑。
+- 换机器时：把 key 设成环境变量 `RENDER_API_KEY`，或在 `deploy.local.json` 里写 `{ "renderApiKey": "rnd_…" }`；
+- 没有 API key 时退回 Deploy Hook：`--hook` 参数 > 环境变量 `DEPLOY_HOOK_TRAVEL_WORLD` > `deploy.hooks.json`（hook 只能触发、拿不到状态，需要配 `--wait`）。

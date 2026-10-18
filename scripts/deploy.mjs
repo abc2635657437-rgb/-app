@@ -99,7 +99,15 @@ async function renderApi(project, method, pathname, body) {
 async function deployViaRender(project) {
   const sid = project.render.serviceId;
   const timeoutSeconds = project.render.timeoutSeconds || 900;
-  const deploy = await renderApi(project, 'POST', `/services/${sid}/deploys`, { clearCache: 'do_not_clear' });
+  let deploy = await renderApi(project, 'POST', `/services/${sid}/deploys`, { clearCache: 'do_not_clear' });
+  // Render sometimes answers the trigger with an empty body; the deploy still
+  // exists, so fall back to the newest one in the list.
+  if (!deploy?.id) {
+    const latest = await renderApi(project, 'GET', `/services/${sid}/deploys?limit=1`);
+    const first = Array.isArray(latest) ? latest[0] : latest;
+    deploy = first?.deploy || first || null;
+  }
+  if (!deploy?.id) throw new Error('触发请求成功了，但 Render 没有返回部署 id，也查不到最新的部署');
   const sha = deploy.commit?.id ? deploy.commit.id.slice(0, 7) : '?';
   const firstLine = (deploy.commit?.message || '').split('\n')[0];
   console.log(`  已触发：${deploy.id} · commit ${sha}${firstLine ? ` · ${firstLine}` : ''}`);
