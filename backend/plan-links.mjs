@@ -71,7 +71,15 @@ function ticketLink(name, country, language) {
   return { kind: 'ticket', label, provider: 'getyourguide', url: 'https://www.getyourguide.com/s/?q=' + enc(name) };
 }
 
-function stayLink(city, language) {
+function stayLink(city, language, country) {
+  if (country === 'CN') {
+    return {
+      kind: 'stay',
+      label: language === 'en' ? 'Meituan' : '美团酒店',
+      provider: 'meituan',
+      url: 'https://hotel.meituan.com/'
+    };
+  }
   return {
     kind: 'stay',
     label: language === 'en' ? 'Stays' : '住宿',
@@ -136,7 +144,7 @@ export function linksFor(item, region, language) {
   const links = [];
   if (/吃|食|餐|饭|market|food|eat/i.test(kind)) links.push(foodLink(name, country, language));
   else if (/喝|饮|咖啡|茶|酒|bar|cafe|drink/i.test(kind)) links.push(foodLink(name, country, language));
-  else if (/住|宿|酒店|hotel|stay|lodg/i.test(kind)) links.push(stayLink(city || name, language));
+  else if (/住|宿|酒店|hotel|stay|lodg/i.test(kind)) links.push(stayLink(city || name, language, country));
   else if (/乐|购物|演出|夜|shop|show|night/i.test(kind)) links.push(ticketLink(name, country, language));
   else links.push(ticketLink(name, country, language));
   links.push({

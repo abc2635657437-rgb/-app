@@ -240,6 +240,42 @@ function starsFor(photo) {
   return photo ? 2 : 1;
 }
 
+// Names worth a photograph: bold segments in the answer that look like places,
+// not headings, labels or sentences.
+function namesFromAnswer(answer) {
+  const stop = /^(衣|食|住|行|玩|乐|小贴士|注意|预算|交通|行程|总结|建议|tips?)$/i;
+  const found = [];
+  const pattern = /\*\*([^*\n]{2,14})\*\*/g;
+  let match;
+  while ((match = pattern.exec(String(answer || ''))) !== null) {
+    const name = match[1].replace(/[：:（(].*$/, '').trim();
+    if (!name || stop.test(name)) continue;
+    if (/[，。！？!?,.]/.test(name)) continue;
+    if (!found.includes(name)) found.push(name);
+  }
+  return found.slice(0, 6);
+}
+
+async function photoStrip(answer, resolvePhotos, context, language) {
+  if (typeof resolvePhotos !== 'function') return [];
+  const names = namesFromAnswer(answer);
+  if (!names.length) return [];
+  const kinds = {};
+  names.forEach(name => { kinds[name] = '玩'; });
+  kinds.__language = language;
+  try {
+    const photos = await Promise.race([
+      resolvePhotos(names, detectRegion(context?.message || '')?.city, kinds),
+      new Promise(resolve => setTimeout(() => resolve(new Map()), 3500))
+    ]);
+    return names
+      .filter(name => photos.get(name) && photos.get(name).url)
+      .map(name => ({ name, url: photos.get(name).url, stars: starsFor(photos.get(name)), credit: photos.get(name).credit || '' }));
+  } catch (_) {
+    return [];
+  }
+}
+
 async function buildPlan(answer, resolvePhotos, context, partial = false) {
   const parsed = parsePlan(answer);
   if (!parsed) return null;
@@ -267,6 +303,8 @@ async function buildPlan(answer, resolvePhotos, context, partial = false) {
   parsed.days.forEach(day => day.items.forEach(item => {
     item.links = linksFor(item, region, language);
     item.stars = starsFor(item.photo);
+    const price = /[¥￥]\s?(\d{2,5}(?:\s?[-–~]\s?\d{2,5})?)/.exec(item.note || '');
+    if (/住|宿|hotel|stay|lodg/i.test(item.kind || '') && price) item.price = '¥' + price[1];
   }));
   return {
     days: parsed.days,
@@ -412,8 +450,10 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         cache.set(cacheKey, { answer, at: Date.now(), degraded, sources, plan });
         if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
       }
+      const gallery = !degraded && !plan ? await photoStrip(answer, resolvePhotos, input, input.language) : [];
       return res.json({
         answer,
+        gallery,
         isAI: !degraded,
         degraded,
         finish,
@@ -488,7 +528,8 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         const plan = await buildPlan(answer, resolvePhotos, input, truncated);
         if (!truncated) cache.set(cacheKey, { answer, at: Date.now(), degraded: false, sources, plan });
         if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
-        sseWrite(res, 'done', { answer, isAI: true, finish, truncated, cached: false, sources, plan, disclaimer });
+        const gallery = plan ? [] : await photoStrip(answer, resolvePhotos, input, input.language);
+        sseWrite(res, 'done', { answer, isAI: true, finish, truncated, cached: false, sources, plan, gallery, disclaimer });
         return res.end();
       }
 

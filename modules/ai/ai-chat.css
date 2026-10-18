@@ -488,3 +488,11 @@ body .ai-chat-plan-stars-badge .ai-star{width:9px;height:9px}
   body .ai-chat-plan-body b{font-size:15px}
 }
 
+/* Photographs for an answer that is not a day plan. */
+body .ai-chat-gallery{display:flex;gap:8px;padding:12px 0 2px;overflow-x:auto;scrollbar-width:none}
+body .ai-chat-gallery::-webkit-scrollbar{display:none}
+body .ai-chat-gallery figure{flex:0 0 auto;width:136px;margin:0}
+body .ai-chat-gallery img{display:block;width:136px;height:100px;object-fit:cover;border-radius:2px;box-shadow:var(--ai-lift-soft)}
+body .ai-chat-gallery figcaption{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:10.5px;color:var(--ai-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .ai-chat-plan-price{justify-self:start;margin-top:2px;padding:1px 7px;border:1px solid rgba(247,243,232,.42);border-radius:999px;color:#f7f3e8;font-family:Georgia,var(--serif);font-size:9.5px;letter-spacing:.04em}
+

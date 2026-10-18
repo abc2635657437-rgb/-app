@@ -554,6 +554,7 @@
       block.append(dayHead);
 
       var strip = document.createElement('div');
+      var galleryEl = strip;
       strip.className = 'ai-chat-plan-strip';
       day.items.forEach(function (item) {
         var stop = document.createElement('article');
@@ -597,6 +598,12 @@
           var badge = starsEl(item.stars);
           badge.className = 'ai-chat-stars ai-chat-plan-stars-badge';
           stop.append(badge);
+        }
+        if (item.price) {
+          var price = document.createElement('span');
+          price.className = 'ai-chat-plan-price';
+          price.textContent = item.price + ' / 晚';
+          body.append(price);
         }
         if (item.note) {
           var note = document.createElement('small');
@@ -948,6 +955,29 @@
 
     var body = document.createElement('div');
     body.className = 'ai-chat-body';
+    var galleryEl = null;
+    if (Array.isArray(options.gallery) && options.gallery.length && !options.plan) {
+      var strip = document.createElement('div');
+      strip.className = 'ai-chat-gallery';
+      options.gallery.forEach(function (photo) {
+        if (!photo || !photo.url) return;
+        var card = document.createElement('figure');
+        var image = document.createElement('img');
+        image.src = photo.url;
+        image.alt = photo.name || '';
+        image.loading = 'lazy';
+        image.referrerPolicy = 'no-referrer';
+        image.onerror = function (event) {
+          var node = event && event.target;
+          if (node && node.parentNode && node.parentNode.parentNode) node.parentNode.parentNode.removeChild(node.parentNode);
+        };
+        var caption = document.createElement('figcaption');
+        caption.textContent = photo.name || '';
+        if (photo.stars) caption.appendChild(starsEl(photo.stars));
+        card.append(image, caption);
+        strip.append(card);
+      });
+    }
     if (options.plan) {
       text = withoutPlanSection(text);
       if (!text) text = t().planIntro;
@@ -956,6 +986,7 @@
       body.innerHTML = '<span class="ai-chat-typing"><i></i><i></i><i></i></span>';
     } else {
       body.innerHTML = format(text);
+      if (galleryEl) body.append(galleryEl);
       // A one-sentence opening reads as the lede of a page, not as body copy.
       var first = body.children && body.children[0];
       if (first && String(first.tagName || '').toUpperCase() === 'P') first.className = 'ai-chat-lede';
@@ -1012,6 +1043,7 @@
     var answer = '';
     var sources = [];
     var plan = null;
+    var gallery = [];
     var frame = 0;
     function paint() {
       frame = 0;
@@ -1068,6 +1100,8 @@
           if (event === 'done') {
             if (payload.answer) answer = payload.answer;
             if (payload.plan) plan = payload.plan;
+            if (Array.isArray(payload.gallery)) gallery = payload.gallery;
+            if (Array.isArray(payload.gallery)) gallery = payload.gallery;
           }
         }
       }
@@ -1111,7 +1145,7 @@
 
     // Swap the live bubble for the final one so it carries sources, the route
     // action and the editorial spacing of a finished answer.
-    var finalEl = bubble('ai', answer, { sources: sources, plan: plan });
+    var finalEl = bubble('ai', answer, { sources: sources, plan: plan, gallery: gallery });
     bubbleEl.replaceWith(finalEl);
     turns.push({ role: 'assistant', content: answer, plan: plan });
     save();
