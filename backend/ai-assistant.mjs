@@ -253,6 +253,17 @@ function namesFromAnswer(answer) {
     if (/[，。！？!?,.]/.test(name)) continue;
     if (!found.includes(name)) found.push(name);
   }
+  // Plain bullets carry place names too: "- 洱海：环湖骑行".
+  for (const raw of String(answer || '').split('\n')) {
+    const line = raw.trim();
+    const bullet = /^[-*·]\s*([^：:，,。;；]{2,12})/.exec(line);
+    if (!bullet) continue;
+    const name = bullet[1].replace(/\*\*/g, '').trim();
+    if (!name || stop.test(name) || found.includes(name)) continue;
+    if (/[0-9]|建议|注意|预算|大约|可以|记得|不要/.test(name)) continue;
+    found.push(name);
+    if (found.length >= 8) break;
+  }
   return found.slice(0, 6);
 }
 
@@ -386,7 +397,7 @@ async function relayUpstream(response, onText) {
 function compactPlanPrompt(message) {
   return '只输出一张表格，表头必须是 天 | 时间 | 地点 | 类型 | 说明，每行以 | 开头、以 | 结尾；内容：'
     + String(message || '').slice(0, 120)
-    + '，每天 5 行，类型只写 吃、喝、玩、乐、住、行 中的一个；说明不超过 15 字。不要写别的。';
+    + '，每天 5 行，时间按 上午/中午/下午/傍晚/晚上 排；类型只写 吃、喝、玩、乐、住、行 中的一个；地点要具体、不要重复同一个地方，只用当地有名的景点、街区、市场、餐厅；说明不超过 15 字。不要写别的。';
 }
 
 function syntheticStream(text) {

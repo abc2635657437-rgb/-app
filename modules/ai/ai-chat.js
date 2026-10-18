@@ -11,7 +11,7 @@
 // escaped before a small block parser turns it into markup.
 (function () {
   var STORE = 'tw-ai-chat-v1';
-  var VERSION = '17-travel-desk';
+  var VERSION = '18-photo-plan';
   var MAX_TURNS = 30;
   var MAX_HISTORY = 8;
   // Injected like map-web.js injects photo-places.css, so the stylesheet travels
