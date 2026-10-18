@@ -16,7 +16,7 @@
     const loadRuntime = () => {
       const appendRuntime = () => {
         const runtime = document.createElement('script');
-        runtime.src = 'modules/map/map-web.js?v=34-map-autostart';
+        runtime.src = 'modules/map/map-web.js?v=35-curated-details';
         runtime.onload = () => {
           window.loadMap = window.initTravelMap;
           if (document.getElementById('map')?.classList.contains('active')) window.initTravelMap?.();

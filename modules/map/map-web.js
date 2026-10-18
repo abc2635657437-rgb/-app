@@ -145,12 +145,8 @@
       const source=group.items[0],item=localized(source);
       const pin=document.createElement('div');pin.className='tw-q-pin__body';if(item.image){const image=document.createElement('img');image.className='tw-landmark-thumb';image.src=item.image;image.alt='';pin.append(image);}else{const symbol=document.createElement('span');symbol.className='tw-q-pin__icon';pin.append(symbol);}const label=document.createElement('span');label.className='tw-q-pin__label';label.textContent=item.name;pin.append(label);
       const icon = L.divIcon({ className: 'tw-q-pin', html:pin, iconSize: [30, 30], iconAnchor: [15, 15] });
-      const popup = document.createElement('div');
-      const title = document.createElement('strong'); title.textContent = item.name; popup.append(title, document.createElement('br'));
-      const location = document.createElement('span'); location.textContent = item.country + ' · ' + item.city; popup.append(location, document.createElement('br'));
-      const details = document.createElement('button'); details.type = 'button'; details.textContent = langText('查看详情','View details');
-      details.addEventListener('click', () => openLandmark(source.id)); popup.append(details);
-      const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map).bindPopup(popup);
+      const marker = L.marker(twp(source), { icon, title: item.name, zIndexOffset: 200 }).addTo(map);
+      marker.on('click', () => openLandmark(source.id, { focus: false }));
       markers.push(marker);
     });
   }
@@ -257,14 +253,14 @@
       if (!window.travelMapSkipSavedRoute && savedRoute.length > 1) setTimeout(() => window.showTravelRoute(savedRoute), 80);
     } catch (error) { status(langText('地图数据加载失败：','Failed to load map data: ') + error.message); }
   }
-  async function openLandmark(id) {
+  async function openLandmark(id, options = {}) {
     if (!data) {
       try { data = await loadData(); }
       catch (_) { status(langText('地点详情暂时无法加载，请稍后重试。','Place details could not load. Please try again.')); return; }
     }
-    const source = (data && data.landmarks || []).find(entry => entry.id === id || entry.globalId === id);
+    const source = [...(data?.curated || []), ...(data?.landmarks || [])].find(entry => entry.id === id || entry.globalId === id || entry.wikidataId === id);
     if (!source) return;const item=localized(source);
-    if (map) map.setView(twp(source), 11);
+    if (map && options.focus !== false) map.setView(twp(source), 11);
     if(window.openSelectedCityGuide){try{window.openSelectedCityGuide(source,source.image?{url:source.image,sourceUrl:source.image}:null);return;}catch(error){console.error('Selected city guide failed:',error);status(langText('新版地点详情暂时打不开：','The new place guide could not open: ')+(error?.message||''));return;}}
     const artworkIds={'cn-great-wall':'Q12501','fr-eiffel':'Q243','in-taj-mahal':'Q9141','fr-louvre':'Q19675','us-liberty':'Q9202','au-opera':'Q45178','cn-west-lake':'Q10866444','jp-kiyomizu':'jp-kiyomizu','gb-big-ben':'gb-big-ben','cn-oriental-pearl':'cn-oriental-pearl','jp-fuji':'jp-fuji','cn-forbidden-city':'cn-forbidden-city','cn-zhangjiajie':'cn-zhangjiajie','it-colosseum':'it-colosseum','es-sagrada':'es-sagrada','gr-acropolis':'gr-acropolis','us-golden-gate':'us-golden-gate','us-grand-canyon':'us-grand-canyon','ca-niagara':'ca-niagara','sg-merlion':'sg-merlion','ae-burj-khalifa':'ae-burj-khalifa','pe-machu-picchu':'pe-machu-picchu','br-christ':'br-christ','eg-pyramids':'eg-pyramids','au-great-barrier':'au-great-barrier','jp-tokyo-tower':'jp-tokyo-tower','kr-gyeongbokgung':'kr-gyeongbokgung','th-grand-palace':'th-grand-palace','vn-ha-long':'vn-ha-long','id-borobudur':'id-borobudur','tr-hagia-sophia':'tr-hagia-sophia','cn-erhai':'cn-erhai','mx-chichen-itza':'mx-chichen-itza','za-table-mountain':'za-table-mountain','nz-milford':'nz-milford','ru-hermitage':'ru-hermitage','my-petronas':'my-petronas','np-everest':'np-everest','jo-petra':'jo-petra','de-neuschwanstein':'de-neuschwanstein','pt-belem':'pt-belem'};
     const artworkId=artworkIds[id],art=(await backgroundData)[artworkId];
