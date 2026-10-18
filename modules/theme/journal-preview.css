@@ -248,3 +248,38 @@ body.journal-preview[data-time-theme="night"] .ai-float svg{color:#f2eee6}
 @media(max-width:360px){body.journal-preview #profile .profile-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 @media(min-width:800px){body.journal-preview .app{border:0!important;box-shadow:none!important}}
+
+/* ── 旅友页：底栏贴边 + 卡片圆角 ───────────────────────────── */
+@media (max-width: 899.98px) {
+  body .nav,
+  body.journal-preview .nav {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    border-inline: 0;
+    border-radius: 0;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+body.journal-preview #friends .card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin: 12px 0;
+  background: #f8f5ed;
+  box-shadow: 0 6px 18px rgba(23, 57, 71, .06);
+}
+
+body.journal-preview[data-time-theme="night"] #friends .card {
+  background: rgba(28, 37, 40, .94);
+  border-color: #3f4c50;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .32);
+}
+
+body.journal-preview #friends #buddyPlans > .card {
+  border-left: 3px solid #a9864c;
+}
