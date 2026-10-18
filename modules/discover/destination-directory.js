@@ -1,5 +1,6 @@
 let country='',page=0,requestId=0,lastRegion='',root;
 const t=(zh,en)=>window.TravelWorldI18n?.language?.()==='en'?en:zh;
+const english=()=>window.TravelWorldI18n?.language?.()==='en';
 export async function renderDestinationDirectory(region){
   root=document.getElementById('whereNowGrid');if(!root)return;
   if(region!==lastRegion){lastRegion=region;country='';page=0;}
@@ -15,18 +16,22 @@ export async function renderDestinationDirectory(region){
     const photosResponse=await fetch('/api/map/place-images?w=1280&ids='+data.places.map(p=>p.id).join('|'),{signal:AbortSignal.timeout(30000)}),photosData=await photosResponse.json();if(sequence!==requestId)return;if(!photosResponse.ok)throw new Error();
     root.replaceChildren();let count=0;
     data.places.forEach(place=>{const photo=photosData.photos?.[place.id];if(!photo)return;count++;
+      const isEnglish=english();
+      const displayName=isEnglish?(place.name_en||place.name):(place.name||place.name_en);
+      const countryName=names.of(place.countryCode)||'';
       const card=document.createElement('button');card.type='button';card.className='destination-photo-card';
       const media=document.createElement('span');media.className='destination-photo-media is-loading';
       const image=document.createElement('img');
       image.src=photo.url;if(photo.srcset)image.srcset=photo.srcset;image.sizes='(max-width:520px) 46vw, 240px';
-      image.alt=t(place.destinationCity||place.name,place.destinationCity||place.name_en);
+      image.alt=displayName;
       image.loading='lazy';image.decoding='async';image.width=800;image.height=600;
       const year=(photo.date||'').match(/\b(20\d{2})\b/);const badge=document.createElement('span');badge.className='destination-photo-year';
       if(year&&Number(year[1])>=2023){badge.textContent=year[1];media.append(badge);}
       media.append(image);
       const caption=document.createElement('span');caption.className='destination-photo-copy';
-      const title=document.createElement('strong');title.textContent=image.alt;
-      const location=document.createElement('small');location.textContent=[names.of(place.countryCode),place.name].filter(Boolean).join(' · ');
+      const title=document.createElement('strong');title.textContent=displayName;
+      const location=document.createElement('small');
+      location.textContent=isEnglish?[countryName,place.destinationCity||place.city].filter(Boolean).join(' · '):countryName;
       caption.append(title,location);card.append(media,caption);
       card.onclick=()=>window.openSourcedMapPlace?.({...place,destinationCity:place.destinationCity},photo);
       image.onload=()=>media.classList.remove('is-loading');
