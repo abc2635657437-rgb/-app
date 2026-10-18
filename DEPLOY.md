@@ -1,6 +1,6 @@
 # 部署 / Deploy
 
-线上服务在 Render 上跑（`render.yaml` → `travel-world`），代码从 GitHub 的 `main` 分支拉取，`autoDeploy: true`：推到 `main` 就应该直接发到正式站。如果推完没动静，说明这个服务不是蓝图托管、或蓝图自动同步关着——去 Render 面板打开该服务的 Auto-Deploy，或用下面的 Deploy Hook 手动触发一次。
+线上服务在 Render 上跑：服务名 `travel-world`（id `srv-dak39euk1f9s73arb650`），正式站 https://travel-world-mwdw.onrender.com ，代码从 GitHub 的 `main` 分支拉取。2026-10-19 已通过 Render API 打开自动部署（`autoDeploy=yes`、`autoDeployTrigger=commit`），并实测发布一次：deploy `dep-dbaivve1egvs73at5f90` → `live`，8 条关键路由 + 51 个预缓存资源全部通过。此后 push 到 `main` 即自动上线。
 
 ## 一键上线（本机）
 
