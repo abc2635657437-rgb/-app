@@ -684,3 +684,67 @@ body.journal-preview .nav button.active {
   background: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* the home hero lost its dimensions when the journal sheet was removed */
+#home .uk-hero,
+#home .journal-hero {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 230px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+#home .journal-hero-link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#home .journal-hero img,
+#home .uk-hero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#home .journal-hero-copy,
+#home .journal-hero-caption {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  color: #fff;
+}
+
+
+/* hero caption, final position */
+#home .journal-hero .journal-hero-caption {
+  position: absolute;
+  top: 12px;
+  bottom: auto;
+  left: 12px;
+  right: auto;
+  width: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(12, 30, 26, 0.42);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+#home .journal-hero .journal-hero-copy {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}

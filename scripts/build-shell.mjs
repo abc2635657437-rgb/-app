@@ -138,7 +138,7 @@ ${headContent}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${stylesheetLinks}
 ${inlineStyle}
-<link rel="stylesheet" href="/modules/theme/shell-skin.css?v=4">
+<link rel="stylesheet" href="/modules/theme/shell-skin.css?v=7">
 ${extraStyle}
 </head>
 <body>
