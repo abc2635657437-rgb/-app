@@ -173,5 +173,17 @@
   };
 </script>
 <script type="module" src="/modules/explore3d/explore3d.js?v=6"></script>
+<script>
+  // Every tab inside this frame belongs to the shell: ask the parent to
+  // switch screens instead of reloading the whole app.
+  document.addEventListener("click", function (event) {
+    var link = event.target.closest ? event.target.closest('a[href*="screen="]') : null;
+    if (!link || window.top === window.self) return;
+    var match = /screen=([a-z]+)/.exec(link.getAttribute('href') || '');
+    if (!match) return;
+    event.preventDefault();
+    window.top.postMessage({ type: "tw:navigate", screen: match[1] }, "*");
+  }, true);
+</script>
 </body>
 </html>

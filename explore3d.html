@@ -33,6 +33,7 @@
   body .nav .nav-icon { font-size: 18px; }
   body .nav button { border: 0; background: transparent; }
   body .topbar-profile {
+    border: 0; cursor: pointer;
     position: fixed; top: calc(12px + env(safe-area-inset-top)); right: 16px; z-index: 45;
     width: 40px; height: 40px; border-radius: 50%; background: #fff;
     box-shadow: 0 4px 14px rgba(12, 42, 37, .18); display: none; place-items: center;
@@ -41,7 +42,7 @@
   body[data-screen="map"] .topbar-profile { display: grid; }
   body .home-avatar {
     width: 38px; height: 38px; border-radius: 50%; margin-left: 8px;
-    display: inline-grid; place-items: center; text-decoration: none;
+    display: inline-grid; place-items: center; text-decoration: none; border: 0; cursor: pointer;
     background: #fff; color: #16483c; font-size: 14px;
     box-shadow: 0 2px 8px rgba(12, 42, 37, 0.18);
   }
@@ -59,7 +60,7 @@
 </head>
 <body>
 <main class="app">
-<section id="home" class="screen active"><div class="home-community"><div class="community-top"><div><div class="eyebrow">TRAVEL WORLD</div><div class="community-brand">同路人</div></div><button class="publish-button" onclick="openPublisher()" aria-label="发布内容"><span>＋</span> 发布</button><a class="home-avatar" href="/explore3d.html?screen=profile" aria-label="我的">我</a></div><div class="home-tabs"><span class="home-tab active" id="recommendTab" onclick="setFeed('recommend')">推荐</span><span class="home-tab" id="followingTab" onclick="setFeed('following')">关注</span></div><div id="communityFeed"></div></div></section>
+<section id="home" class="screen active"><div class="home-community"><div class="community-top"><div><div class="eyebrow">TRAVEL WORLD</div><div class="community-brand">同路人</div></div><button class="publish-button" onclick="openPublisher()" aria-label="发布内容"><span>＋</span> 发布</button><button class="home-avatar" type="button" onclick="go('profile')" aria-label="我的">我</button></div><div class="home-tabs"><span class="home-tab active" id="recommendTab" onclick="setFeed('recommend')">推荐</span><span class="home-tab" id="followingTab" onclick="setFeed('following')">关注</span></div><div id="communityFeed"></div></div></section>
 <section id="publish" class="screen publish-page"><div class="route-page-head"><button onclick="go('home')" aria-label="返回">‹</button><div><small>NEW JOURNAL</small><h1>发布旅行记录</h1></div><button class="route-save" id="publishPostButton" onclick="publishPost()">发布</button></div><div class="publish-editor"><input id="composeTitle" class="publish-title" maxlength="120" placeholder="标题（选填）"><textarea id="composeText" placeholder="写下此刻的见闻、感受或建议…"></textarea><input id="composeLocation" class="input" placeholder="地点（选填），例如 Kyoto, Japan"><label class="publish-media-pick">＋ 添加照片 / 视频<input id="composeMedia" type="file" multiple accept="image/*,video/*,.heic,.heif" onchange="selectCommunityMedia(event)"></label><div id="composeMediaHint" class="muted">最多 8 个文件</div><div id="composeMediaList" class="compose-preview-grid"></div><div class="publish-section-head"><b>关联路线（选填）</b><button onclick="openRouteEditor(null,{returnToPublisher:true})">创建路线</button></div><div id="selectedPublishRoute"></div><div id="publishRouteChoices" class="publish-route-choices"></div><p class="muted">文字、媒体和路线可任意组合；发布失败时内容会保留在本页。</p></div></section>
 
 <section id="friends" class="screen"><div class="eyebrow">TRAVEL BUDDIES</div><div class="title">寻找同行的人</div><div class="tabs"><span class="tab active">推荐</span><span class="tab">我的申请</span><span class="tab">已匹配</span></div><div class="card"><b>匹配你的旅伴</b><div class="muted">只展示共同计划的人，申请每日最多 3 次。</div><div class="grid"><input class="input" placeholder="年龄"><input class="input" placeholder="预算"><input class="input" placeholder="出发日期"><input class="input" placeholder="兴趣：摄影"></div></div><div class="card row"><img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300"><div style="flex:1"><b>Mia · 28 · 上海</b><div class="muted">共同兴趣：咖啡 · 街拍</div></div><button class="btn alt small" onclick="alert('申请已发送')">申请同行</button></div><div class="card row"><img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300"><div style="flex:1"><b>Leo · 31 · 柏林</b><div class="muted">共同兴趣：徒步 · 建筑</div></div><button class="btn alt small" onclick="alert('申请已发送')">申请同行</button></div></section>
@@ -104,7 +105,7 @@
   <button class="nav-publish" data-id="publish" onclick="(window.openPublisher||function(){go('publish')})()"><span class="nav-publish__mark">＋</span><span class="nav-publish__label">发布</span></button>
   <button data-id="friends" onclick="go('friends')"><span class="nav-icon">◍</span><br>旅友</button>
 </nav>
-<a class="topbar-profile" href="/index.html?screen=profile" aria-label="我的">我</a>
+<button class="topbar-profile" type="button" onclick="go('profile')" aria-label="我的">我</button>
 <div id="status" role="status"></div>
 <div id="toast" role="alert"></div>
 <script>
@@ -131,6 +132,14 @@ const rates={CNY:1,USD:.138,EUR:.127,JPY:20.4};let state=JSON.parse(localStorage
 <script src="modules/navigation/global-back.js?v=14" defer></script>
 <script src="/modules/theme/journal-preview.js?v=21-color-atlas" defer></script>
 <script>
+  // The embedded explore page cannot call go() across documents, so it posts
+  // the screen it wants and this switches in place.
+  window.addEventListener('message', function (event) {
+    var data = event.data || {};
+    if (data.type !== 'tw:navigate' || !data.screen) return;
+    if (document.getElementById(data.screen) && typeof window.go === 'function') window.go(data.screen);
+  });
+
   // Screen bookkeeping: other modules also assign window.go, so the current
   // screen is derived from the DOM rather than from a wrapped function.
   (function () {

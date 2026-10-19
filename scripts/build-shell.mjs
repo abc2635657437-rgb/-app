@@ -35,7 +35,7 @@ const inlineBoot = pick(app, /<script>\s*const rates=[\s\S]*?<\/script>/, 'inlin
 let mainWithoutMap = mainBlock.replace(/<section id="map"[\s\S]*?<\/section>/, '');
 mainWithoutMap = mainWithoutMap.replace(
   /(<button class="publish-button"[^>]*>[\s\S]*?<\/button>)/,
-  '$1<a class="home-avatar" href="/explore3d.html?screen=profile" aria-label="我的">我</a>'
+  "$1<button class=\"home-avatar\" type=\"button\" onclick=\"go('profile')\" aria-label=\"我的\">我</button>"
 );
 if (!mainWithoutMap.includes('id="home"')) throw new Error('home section missing');
 
@@ -93,6 +93,7 @@ const extraStyle = `<style>
   body .nav .nav-icon { font-size: 18px; }
   body .nav button { border: 0; background: transparent; }
   body .topbar-profile {
+    border: 0; cursor: pointer;
     position: fixed; top: calc(12px + env(safe-area-inset-top)); right: 16px; z-index: 45;
     width: 40px; height: 40px; border-radius: 50%; background: #fff;
     box-shadow: 0 4px 14px rgba(12, 42, 37, .18); display: none; place-items: center;
@@ -101,7 +102,7 @@ const extraStyle = `<style>
   body[data-screen="map"] .topbar-profile { display: grid; }
   body .home-avatar {
     width: 38px; height: 38px; border-radius: 50%; margin-left: 8px;
-    display: inline-grid; place-items: center; text-decoration: none;
+    display: inline-grid; place-items: center; text-decoration: none; border: 0; cursor: pointer;
     background: #fff; color: #16483c; font-size: 14px;
     box-shadow: 0 2px 8px rgba(12, 42, 37, 0.18);
   }
@@ -134,12 +135,20 @@ ${sprite}
 </section>
 <span class="currency-label" hidden></span>
 ${nav}
-<a class="topbar-profile" href="/index.html?screen=profile" aria-label="我的">我</a>
+<button class="topbar-profile" type="button" onclick="go('profile')" aria-label="我的">我</button>
 <div id="status" role="status"></div>
 <div id="toast" role="alert"></div>
 ${inlineBoot}
 ${modules.join('\n')}
 <script>
+  // The embedded explore page cannot call go() across documents, so it posts
+  // the screen it wants and this switches in place.
+  window.addEventListener('message', function (event) {
+    var data = event.data || {};
+    if (data.type !== 'tw:navigate' || !data.screen) return;
+    if (document.getElementById(data.screen) && typeof window.go === 'function') window.go(data.screen);
+  });
+
   // Screen bookkeeping: other modules also assign window.go, so the current
   // screen is derived from the DOM rather than from a wrapped function.
   (function () {
@@ -188,6 +197,21 @@ let embedded = readFileSync('scripts/explore-scene.html', 'utf8');
 embedded = embedded.split('/index.html?screen=').join('/explore3d.html?screen=');
 embedded = embedded.split('href="/index.html"').join('href="/explore3d.html?screen=profile"');
 embedded = embedded.split('<a ').join('<a target="_top" ');
+embedded = embedded.replace('</body>', [
+  '<script>',
+  '  // Every tab inside this frame belongs to the shell: ask the parent to',
+  '  // switch screens instead of reloading the whole app.',
+  '  document.addEventListener("click", function (event) {',
+  "    var link = event.target.closest ? event.target.closest('a[href*=\"screen=\"]') : null;",
+  '    if (!link || window.top === window.self) return;',
+  "    var match = /screen=([a-z]+)/.exec(link.getAttribute('href') || '');",
+  '    if (!match) return;',
+  '    event.preventDefault();',
+  '    window.top.postMessage({ type: "tw:navigate", screen: match[1] }, "*");',
+  '  }, true);',
+  '<\/script>',
+  '</body>',
+].join('\n'));
 embedded = embedded.split('/modules/explore3d/explore3d.js?v=3').join('/modules/explore3d/explore3d.js?v=5');
 embedded = embedded.split('/modules/explore3d/explore3d.css?v=4').join('/modules/explore3d/explore3d.css?v=5');
 writeFileSync('explore3d-explore.html', embedded);
