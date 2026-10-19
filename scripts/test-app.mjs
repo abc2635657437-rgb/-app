@@ -103,14 +103,15 @@ try {
       chips: d.querySelectorAll('.chip').length,
       cards: d.querySelectorAll('.place-card').length,
       controls: d.querySelectorAll('.map-btn').length,
+      overview: !!d.querySelector('.overview'),
     });
   })()`);
   const frameState = JSON.parse(frame);
   check('explore frame loaded', frameState.ok);
   check('explore scene ready', frameState.ready === true);
   check('canvas has size', frameState.canvas !== 'none' && frameState.canvas !== '0x0', frameState.canvas);
-  check('chips / cards / controls present', frameState.chips === 7 && frameState.cards >= 4 && frameState.controls === 6,
-    `${frameState.chips} chips, ${frameState.cards} cards, ${frameState.controls} controls`);
+  check('chips / cards / controls present', frameState.chips === 7 && frameState.cards >= 4 && frameState.controls === 5 && frameState.overview === true,
+    `${frameState.chips} chips, ${frameState.cards} cards, ${frameState.controls} controls + overview`);
 
   // tap the water inside the frame
   const ripple = await evaluate(`(() => {

@@ -209,6 +209,9 @@ function updatePoiLayer() {
     const point = project(world);
     if (!point) continue;
     if (point.x < 84 || point.x > width - 84 || point.y < 196 || point.y > height - 292) continue;
+    // the hero destination card occupies the top-left corner; a place card
+    // underneath it is unreadable and unclickable
+    if (point.y < 300 && point.x < 336) continue;
     if (point.x < 310 && point.y < 248) continue;
     if (placed.some(other => Math.hypot(other.x - point.x, other.y - point.y) < minGap)) continue;
     placed.push(point);
@@ -866,7 +869,8 @@ $('zoomOut').addEventListener('click', () => {
   markInteraction();
   rig.zoom(1.6);
 });
-$('resetView').addEventListener('click', () => {
+// the 全景 control already restores the opening framing, so this optional
+$('resetView')?.addEventListener('click', () => {
   markInteraction();
   resetView();
 });
