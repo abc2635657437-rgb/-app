@@ -722,14 +722,24 @@ function qualityGovernor() {
   }
 }
 
+let hiddenWarmFrames = 0;
+
 function frame() {
   const screen = document.body.dataset.screen;
   if (screen && screen !== 'map') {
-    // another tab is showing: keep the loop alive but do no work
+    // Another tab is showing: keep the loop alive but do no work — except for
+    // a few frames right after boot, which compile the shader programs. Paying
+    // that while hidden keeps the first reveal free.
     clock.getDelta();
+    if (hiddenWarmFrames < 3 && window.__explore3dReady) {
+      hiddenWarmFrames += 1;
+      if (hiddenWarmFrames === 1) renderer.compile(scene, camera);
+      renderer.render(scene, camera);
+    }
     requestAnimationFrame(frame);
     return;
   }
+  hiddenWarmFrames = 0;
   const dt = Math.min(clock.getDelta(), 0.05);
   elapsed += dt;
 

@@ -70,12 +70,19 @@ const extraStyle = `<style>
     inset: 0;
     z-index: 20;
     padding: 0;
-    display: none;
     background: #dfeae6;
     overflow: hidden;
     --nav-h: 72px;
+    /* laid out at full size even while another screen shows, so the renderer
+       inside already has its buffers when this becomes visible */
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
   }
-  body .screen--explore.active { display: block; }
+  body .screen--explore.active {
+    visibility: visible;
+    pointer-events: auto;
+  }
   body .screen--explore > * { --nav-h: 72px; }
   body .nav { z-index: 40; display: grid; grid-template-columns: repeat(5, 1fr); }
   body .nav .nav-publish { position: relative; margin-top: -22px; display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; }
@@ -112,7 +119,9 @@ const extraStyle = `<style>
   }
   /* the explore screen is its own full-bleed surface: the app column must not
      bleed through above or below it */
-  body[data-screen="map"] .app { visibility: hidden; }
+  /* the explore surface is opaque and covers the viewport, so the app column
+     underneath needs no hiding — hiding it forced a full re-raster on every
+     switch */
   body[data-screen="map"] .ai-float,
   body[data-screen="map"] .global-back { display: none !important; }
   /* the embedded explore document brings its own five-item bar */
