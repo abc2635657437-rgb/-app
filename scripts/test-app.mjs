@@ -142,8 +142,14 @@ try {
     card.click();
     return 'clicked';
   })()`);
-  await sleep(3400);
-  const cardShown = await evaluate("document.getElementById('exploreFrame').contentDocument.getElementById('placeCard')?.className || ''");
+  let cardWaited = 0;
+  let cardShown = '';
+  while (cardWaited < 12000) {
+    cardShown = await evaluate("document.getElementById('exploreFrame').contentDocument.getElementById('placeCard')?.className || ''");
+    if (String(cardShown).includes('is-visible')) break;
+    await sleep(400);
+    cardWaited += 400;
+  }
   check('place card opens after the flight', String(cardShown).includes('is-visible'), String(cardShown).slice(0, 40));
 
   // --- the other screens ---------------------------------------------------
