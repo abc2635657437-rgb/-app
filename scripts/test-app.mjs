@@ -176,6 +176,11 @@ try {
   check('explore tab returns to 首页 in place', (await screenNow()) === 'home');
   check('frame still alive after tab tap', await evaluate("!!document.getElementById('exploreFrame')"));
 
+  // a broken GLSL compiles to a black surface and never throws; the scene
+  // records those failures itself
+  const shaderErrors = await evaluate("(() => { const d = document.getElementById('exploreFrame')?.contentDocument; return d && d.defaultView.__shaderErrors ? d.defaultView.__shaderErrors.length : -1; })()");
+  check('no shader compile errors', shaderErrors === 0, String(shaderErrors));
+
   check('no console errors', errors.length === 0, errors.slice(0, 2).join(' | '));
 } catch (error) {
   console.log('HARNESS_ERROR', error.message);

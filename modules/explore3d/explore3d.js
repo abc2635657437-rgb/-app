@@ -20,6 +20,20 @@ const WEATHER_URL = '/api/weather?latitude=30.243&longitude=120.145';
 
 const $ = id => document.getElementById(id);
 
+// A GLSL mistake does not throw: the material silently renders black, which is
+// how a broken water shader shipped once. Record it so the test suite fails.
+window.__shaderErrors = [];
+const originalConsoleError = console.error.bind(console);
+console.error = (...args) => {
+  try {
+    const text = args.map(String).join(' ');
+    if (text.includes('Shader Error') || text.includes('Program Info Log')) {
+      window.__shaderErrors.push(text.slice(0, 400));
+    }
+  } catch (_) { /* never let the guard break logging */ }
+  originalConsoleError(...args);
+};
+
 /** Leave the frame when this page is embedded in the app shell. */
 function topNavigate(url) {
   if (window.top !== window.self) {
@@ -122,8 +136,21 @@ performance.mark('explore:lake');
 lake.group.visible = false;
 scene.add(lake.group);
 
+// Two fog regimes: a wide one for the globe, a short one for the lake. Without
+// the short one the plate has no aerial perspective and every roof is equally
+// crisp no matter how far away it is.
 const fog = new THREE.Fog(0xdfeef2, 1e7, 2e7);
 scene.fog = fog;
+
+const LAKE_FOG = { color: 0xd9e6e0, near: 0.55, far: 11 };
+const SPACE_FOG = { color: 0xdfeef2, near: 1e7, far: 2e7 };
+function updateFog(altitude) {
+  const target = altitude < 400 ? LAKE_FOG : SPACE_FOG;
+  if (fog.near === target.near) return;
+  fog.near = target.near;
+  fog.far = target.far;
+  fog.color.setHex(target.color);
+}
 
 const rig = new ExploreCamera(camera, stage);
 
@@ -755,6 +782,7 @@ function frame() {
     idleBase = null;
   }
 
+  updateFog(rig.altitude);
   rig.updateParallax(dt);
   rig.update(dt);
   if (rig.flying) rig.apply();

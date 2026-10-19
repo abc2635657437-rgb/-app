@@ -298,15 +298,15 @@ function flatShaded(geometry) {
 // The reference is a bright spring morning, so the land is saturated and the
 // water is turquoise rather than the slate of the dusk pass.
 const C = {
-  grass: 0x5d9b48,
-  grassDry: 0x8ab34f,
-  forest: 0x2f6b3c,
-  soil: 0x9b7f56,
+  grass: 0x6d8f4d,
+  grassDry: 0x92a95c,
+  forest: 0x3d6a47,
+  soil: 0x9c8460,
   rock: 0x8d8878,
   stone: 0xbdb6a2,
   sand: 0xdcc99b,
   urban: 0xc9c3b1,
-  waterShallow: 0x9fdcd6,
+  waterShallow: 0x9fc3ba,
   waterDeep: 0x147d96,
   roofTile: 0x5a6670,
   roofWarm: 0x8a4f38,
@@ -556,6 +556,8 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
     vertexColors: true,
     map: meadowTexture,
     side: THREE.FrontSide,
+    // a warm grey multiplier: the vertex palette alone reads as lawn
+    color: 0xe3e7d6,
   });
   const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
   terrain.name = 'terrain';
@@ -733,8 +735,8 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
         vec3 R = reflect(-V, N);
         vec3 sky = mix(uSkyHorizon, uSkyTop, clamp(R.y * 1.6 + 0.15, 0.0, 1.0));
 
-        vec3 body = mix(uShallow, uDeep, smoothstep(0.05, 0.75, mask.r));
-        body *= 1.18 + 0.22 * clamp(L.y + 0.35, 0.0, 1.0);
+        vec3 body = mix(uShallow, uDeep, smoothstep(0.04, 0.82, mask.r));
+        body *= 1.10 + 0.18 * clamp(L.y + 0.35, 0.0, 1.0);
 
         // Wind streaks: slow bands of slightly lighter water, the thing that
         // makes a real lake look brushed rather than poured.
@@ -746,6 +748,11 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
         // read is the thing that made the first pass look like paint.
         float depthNoise = noise(p * 0.0026 + vec2(3.1, -1.7)) * 0.6 + noise(p * 0.0074 - vec2(1.3, 2.9)) * 0.4;
         body *= 0.88 + depthNoise * 0.26;
+
+        // Shore band: shallow water over silt is paler and slightly green, and the
+        // edge breaks up instead of drawing a clean outline.
+        float shoreBand = smoothstep(0.22, 0.04, mask.r) * (0.55 + 0.45 * noise(p * 0.02 + vec2(uTime * 0.01, 0.0)));
+        body = mix(body, vec3(0.74, 0.80, 0.72), shoreBand * 0.14);
 
         float spec = pow(max(dot(N, H), 0.0), 180.0) * 3.6
                    + pow(max(dot(N, H), 0.0), 18.0) * 0.16;
@@ -970,8 +977,8 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
       const onCauseway = index >= causewayTreeStart && index < causewayTreeEnd;
       const roll = rng();
       const base = onCauseway
-        ? (roll < 0.52 ? 0xef9fbc : roll < 0.82 ? 0x5da34a : 0x2f6b3c)
-        : (roll < 0.6 ? 0x5da34a : roll < 0.86 ? 0x2f6b3c : 0xf0a1bd);
+        ? (roll < 0.52 ? 0xef9fbc : roll < 0.82 ? 0x5da34a : 0x3d6a47)
+        : (roll < 0.6 ? 0x5da34a : roll < 0.86 ? 0x3d6a47 : 0xf0a1bd);
       color.setHex(base).offsetHSL((rng() - 0.5) * 0.04, (rng() - 0.5) * 0.1, (rng() - 0.5) * 0.09);
       canopies.setColorAt(index, color);
     });
@@ -1634,8 +1641,8 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
       bounce.color.setHex(dusk ? 0xffcfa0 : 0xdff0f5);
       bounce.intensity = dusk ? 0.35 : 0.5;
 
-      waterUniforms.uDeep.value.setHex(dusk ? 0x143c4a : 0x147d96);
-      waterUniforms.uShallow.value.setHex(dusk ? 0x4d8b8c : 0x63c6c9);
+      waterUniforms.uDeep.value.setHex(dusk ? 0x123a44 : 0x2f7b7d);
+      waterUniforms.uShallow.value.setHex(dusk ? 0x4c8283 : 0x93c6b6);
       waterUniforms.uSkyTop.value.setHex(dusk ? 0x6d94a6 : 0x8fc6e2);
       waterUniforms.uSkyHorizon.value.setHex(dusk ? 0xcbbfa6 : 0xe8ecd8);
 
