@@ -91,6 +91,13 @@ const extraStyle = `<style>
   }
   body .nav .nav-publish__label { font-size: 10px; color: #4c6a61; }
   body .nav .nav-icon { font-size: 18px; }
+  /* chat-web injects its tab wherever it likes; the bar's order is decided by
+     CSS so it cannot depend on when that injection lands */
+  #appNav [data-id="home"] { order: 1; }
+  #appNav [data-id="map"] { order: 2; }
+  #appNav .nav-publish { order: 3; }
+  #appNav [data-id="messages"] { order: 4; }
+  #appNav [data-id="friends"] { order: 5; }
   body .nav button { border: 0; background: transparent; }
   body .topbar-profile {
     border: 0; cursor: pointer;
