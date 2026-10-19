@@ -11,6 +11,90 @@
 
 import * as THREE from '/modules/vendor/three/three.module.js';
 
+
+/** Canvas textures: everything here is drawn at runtime, so there is no asset
+ *  download and no licence to track. Kept small (256²) because they tile. */
+function makeCanvas(size = 256) {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  return { canvas, ctx: canvas.getContext('2d') };
+}
+
+function toTexture(canvas, repeat = 1) {
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(repeat, repeat);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
+/** Barrel tiles: rows of half-rounds with a highlight on each ridge. */
+function roofTileTexture() {
+  const { canvas, ctx } = makeCanvas();
+  ctx.fillStyle = '#3b454e';
+  ctx.fillRect(0, 0, 256, 256);
+  const row = 32;
+  for (let y = 0; y < 256; y += row) {
+    for (let x = 0; x < 256; x += 16) {
+      const g = ctx.createLinearGradient(x, 0, x + 16, 0);
+      g.addColorStop(0, '#2b333a');
+      g.addColorStop(0.45, '#5b6772');
+      g.addColorStop(0.6, '#6d7a86');
+      g.addColorStop(1, '#2b333a');
+      ctx.fillStyle = g;
+      ctx.fillRect(x, y, 16, row);
+    }
+    ctx.fillStyle = 'rgba(20,24,28,0.55)';
+    ctx.fillRect(0, y + row - 3, 256, 3);
+  }
+  // weathering
+  for (let i = 0; i < 900; i += 1) {
+    ctx.fillStyle = 'rgba(120,130,120,' + (Math.random() * 0.06).toFixed(3) + ')';
+    ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  return toTexture(canvas, 3);
+}
+
+/** Lime plaster: warm, slightly mottled, with damp staining near the base. */
+function plasterTexture() {
+  const { canvas, ctx } = makeCanvas();
+  ctx.fillStyle = '#e6d7b6';
+  ctx.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 4000; i += 1) {
+    const shade = Math.random() > 0.5 ? 255 : 180;
+    ctx.fillStyle = 'rgba(' + shade + ',' + (shade - 12) + ',' + (shade - 40) + ',' + (Math.random() * 0.05).toFixed(3) + ')';
+    ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  const g = ctx.createLinearGradient(0, 200, 0, 256);
+  g.addColorStop(0, 'rgba(120,110,90,0)');
+  g.addColorStop(1, 'rgba(110,100,80,0.35)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 200, 256, 56);
+  return toTexture(canvas, 2);
+}
+
+/** Cut stone: mottled grey with a faint course line. */
+function stoneTexture() {
+  const { canvas, ctx } = makeCanvas();
+  ctx.fillStyle = '#b6b1a2';
+  ctx.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 5000; i += 1) {
+    ctx.fillStyle = 'rgba(90,88,80,' + (Math.random() * 0.08).toFixed(3) + ')';
+    ctx.fillRect(Math.random() * 256, Math.random() * 256, 2, 2);
+  }
+  ctx.strokeStyle = 'rgba(80,78,70,0.35)';
+  ctx.lineWidth = 2;
+  for (let y = 0; y < 256; y += 64) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(256, y);
+    ctx.stroke();
+  }
+  return toTexture(canvas, 2);
+}
+
 const PALETTE = {
   roofTile: 0x4c5a63,
   roofRidge: 0x39464f,
@@ -35,8 +119,8 @@ function makeEave(radius, rise, track, material, segments = 8) {
     const t = i / steps;
     // A Chinese eave runs outward much further than it rises: nearly flat for
     // the first two thirds, then lifting into an upturned lip.
-    const r = radius * (0.55 + 1.0 * t);
-    const y = rise * (0.12 * t + 0.88 * Math.pow(t, 3.2));
+    const r = radius * (0.5 + 1.1 * t);
+    const y = rise * (0.62 * t + 0.38 * Math.pow(t, 2.6));
     points.push(new THREE.Vector2(r, y));
   }
   // the fascia: a short drop at the rim gives the roof visible thickness
@@ -60,11 +144,12 @@ function makeGallery(radius, height, track, material, segments = 8) {
 
 function buildPagoda({ tiers = 5, baseRadius = 11, tierHeight = 8, track }) {
   const group = new THREE.Group();
-  // warm plaster rather than white, and a deep red band under every eave
-  const wall = new THREE.MeshLambertMaterial({ color: 0xe8d9b8 });
-  const tile = new THREE.MeshLambertMaterial({ color: 0x46525c, flatShading: true, side: THREE.DoubleSide });
-  const ridge = new THREE.MeshLambertMaterial({ color: 0x2f3a42, flatShading: true });
-  const lacquer = new THREE.MeshLambertMaterial({ color: 0x8f3a26 });
+  // Standard materials so the tile catches a highlight and the plaster stays
+  // matte; flat colour is what made the first version read as plastic.
+  const wall = new THREE.MeshStandardMaterial({ color: 0xe8d9b8, map: plasterTexture(), roughness: 0.92, metalness: 0 });
+  const tile = new THREE.MeshStandardMaterial({ color: 0xffffff, map: roofTileTexture(), roughness: 0.55, metalness: 0.12, side: THREE.DoubleSide });
+  const ridge = new THREE.MeshStandardMaterial({ color: 0x2f3a42, roughness: 0.5, metalness: 0.15, flatShading: true });
+  const lacquer = new THREE.MeshStandardMaterial({ color: 0x8f3a26, roughness: 0.6, metalness: 0.05 });
   const gold = new THREE.MeshLambertMaterial({ color: PALETTE.gold });
   const glow = new THREE.MeshLambertMaterial({ color: 0x2b2f30 });
   [wall, tile, ridge, lacquer, gold, glow].forEach(track);
@@ -77,7 +162,7 @@ function buildPagoda({ tiers = 5, baseRadius = 11, tierHeight = 8, track }) {
     [baseRadius * 1.34, 1.1],
   ];
   for (const [radius, height] of platform) {
-    const step = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 1.02, height, 8), track(new THREE.MeshLambertMaterial({ color: PALETTE.stone })) || new THREE.MeshLambertMaterial({ color: PALETTE.stone }));
+    const step = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius * 1.02, height, 8), track(new THREE.MeshStandardMaterial({ color: 0xffffff, map: stoneTexture(), roughness: 0.95 })) || new THREE.MeshLambertMaterial({ color: PALETTE.stone }));
     track(step.geometry);
     step.position.y = y + height / 2;
     step.castShadow = true;
@@ -117,9 +202,26 @@ function buildPagoda({ tiers = 5, baseRadius = 11, tierHeight = 8, track }) {
     group.add(band);
 
     // eave, sitting on top of the storey and overhanging it
-    const eave = makeEave(radius * 1.45, height * 0.30, track, tile);
+    const eave = makeEave(radius * 1.35, height * 0.62, track, tile);
     eave.position.y = y + height;
     group.add(eave);
+
+    // 翼角: the corners lift away from the roof plane. Eight small swept horns
+    // do more for the silhouette than any amount of extra body geometry.
+    for (let corner = 0; corner < 8; corner += 1) {
+      const angle = (corner / 8) * Math.PI * 2 + Math.PI / 8;
+      const horn = new THREE.Mesh(new THREE.ConeGeometry(radius * 0.17, height * 0.3, 4), ridge);
+      track(horn.geometry);
+      horn.position.set(
+        Math.cos(angle) * radius * 1.28,
+        y + height + height * 0.34,
+        Math.sin(angle) * radius * 1.28
+      );
+      // lean outward so it continues the roof's curve rather than stabbing it
+      horn.rotation.z = Math.cos(angle) * 0.34;
+      horn.rotation.x = -Math.sin(angle) * 0.34;
+      group.add(horn);
+    }
 
     // ridge line under each eave corner reads as structure at distance
     const drum = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.72, radius * 0.72, height * 0.12, 8), lacquer);
@@ -166,8 +268,8 @@ function buildBridge({ track }) {
   // profile with a hole gives the opening and the spandrels in one piece, which
   // is what the stacked boxes could never read as.
   const group = new THREE.Group();
-  const stone = new THREE.MeshLambertMaterial({ color: PALETTE.stone, flatShading: true });
-  const coping = new THREE.MeshLambertMaterial({ color: PALETTE.stoneDark, flatShading: true });
+  const stone = new THREE.MeshStandardMaterial({ color: 0xffffff, map: stoneTexture(), roughness: 0.95, metalness: 0 });
+  const coping = new THREE.MeshStandardMaterial({ color: 0xa8a294, roughness: 0.9 });
   [stone, coping].forEach(track);
 
   const span = 44;
@@ -305,8 +407,8 @@ function buildStoneLantern({ track }) {
 
 function buildHall({ width = 16, depth = 11, height = 5.4, roof = PALETTE.roofTile, walls = PALETTE.wallWhite } = {}, { track } = {}) {
   const hall = new THREE.Group();
-  const wallMaterial = new THREE.MeshLambertMaterial({ color: walls });
-  const roofMaterial = new THREE.MeshLambertMaterial({ color: roof, flatShading: true });
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: walls, map: plasterTexture(), roughness: 0.92 });
+  const roofMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, map: roofTileTexture(), roughness: 0.55, metalness: 0.12 });
   const woodMaterial = new THREE.MeshLambertMaterial({ color: PALETTE.wood });
   const stoneMaterial = new THREE.MeshLambertMaterial({ color: PALETTE.stoneDark });
   [wallMaterial, roofMaterial, woodMaterial, stoneMaterial].forEach(track);

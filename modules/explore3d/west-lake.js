@@ -1120,10 +1120,10 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
   }
   // 湖心亭 and 小瀛洲 pavilions, plus a few halls on the north shore.
   for (const [lat, lon, opts] of [
-    [30.2455, 120.1445, { width: 11, depth: 8, height: 4.4, roof: 0x5b6b6f }],
-    [30.2295, 120.1425, { width: 15, depth: 10, height: 5, roof: 0x545f66 }],
-    [30.2566, 120.1392, { width: 20, depth: 12, height: 6, roof: 0x4c5359 }],
-    [30.2540, 120.1560, { width: 17, depth: 11, height: 5.5, roof: 0x55544a }],
+    [30.2455, 120.1445, { width: 7, depth: 5, height: 3.4, roof: 0x5b6b6f }],
+    [30.2295, 120.1425, { width: 8, depth: 6, height: 3.6, roof: 0x545f66 }],
+    [30.2566, 120.1392, { width: 9, depth: 6, height: 4, roof: 0x4c5359 }],
+    [30.2540, 120.1560, { width: 8, depth: 6, height: 3.8, roof: 0x55544a }],
   ]) {
     const p = geoToLocal(lat, lon);
     const hall = buildHall(opts);
