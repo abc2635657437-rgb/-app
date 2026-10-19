@@ -337,12 +337,14 @@ function buildHall({ width = 16, depth = 11, height = 5.4, roof = PALETTE.roofTi
   }
 
   // hipped roof: a four-sided pyramid, slightly oversailing
+  // The roof overhangs the walls by a little, not by a lot: a cone that is
+  // wider than the building reads as a floating plate.
   const roofHeight = Math.min(width, depth) * 0.42;
-  const roofMesh = new THREE.Mesh(new THREE.ConeGeometry(width * 0.78, roofHeight, 4), roofMaterial);
+  const roofMesh = new THREE.Mesh(new THREE.ConeGeometry(width * 0.72, roofHeight, 4), roofMaterial);
   track(roofMesh.geometry);
   roofMesh.rotation.y = Math.PI / 4;
   roofMesh.position.y = 0.8 + height + roofHeight / 2 - 0.15;
-  roofMesh.scale.z = depth / width * 1.15;
+  roofMesh.scale.z = (depth / width) * 1.08;
   roofMesh.castShadow = true;
   hall.add(roofMesh);
 

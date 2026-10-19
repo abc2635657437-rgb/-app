@@ -462,7 +462,7 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
   // metre-scale triangles while the far hills stay cheap, and the curvature
   // term makes the 30 km apron bend with the planet instead of floating flat.
   const terrainGeometry = (() => {
-    const positions = [];
+    let positions = [];
     const colors = [];
     const uvs = [];
     const indices = [];
@@ -903,7 +903,7 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
     };
     canopyMaterial.onBeforeCompile = patch;
 
-    const positions = [];
+    let positions = [];
     const rng = (() => {
       let seed = 90210;
       return () => {
@@ -947,6 +947,25 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
       if (lakeSignedDistance(x, z) > 18 && heightAt(x, z) < 70) positions.push({ x, z, scale: 0.7 + rng() * 0.8 });
     }
 
+    // Keep a clearing around each landmark and along the camera's approach from
+    // the south, so a place can actually be seen when the camera flies to it.
+    const treeClearings = [
+      geoToLocal(30.2317, 120.1492), // 雷峰塔
+      geoToLocal(30.2592, 120.1483), // 断桥
+      geoToLocal(30.2274, 120.1431), // 三潭印月
+      geoToLocal(30.2601, 120.1442), // 保俶塔
+    ].map(point => ({ x: point.x, z: point.z }));
+
+    const isCleared = (x, z) => treeClearings.some(spot => {
+      const distance = Math.hypot(x - spot.x, z - spot.z);
+      if (distance < 58) return true;
+      // south of the landmark (smaller z) and within the approach wedge
+      if (distance < 150 && z < spot.z && Math.abs(x - spot.x) < (spot.z - z) * 0.8) return true;
+      return false;
+    });
+
+    positions = positions.filter(tree => !isCleared(tree.x, tree.z));
+
     const canopies = new THREE.InstancedMesh(canopyGeometry, canopyMaterial, positions.length);
     const trunks = new THREE.InstancedMesh(trunkGeometry, trunkMaterial, positions.length);
     canopies.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
@@ -955,13 +974,13 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
     const color = new THREE.Color();
     positions.forEach((tree, index) => {
       const h = surfaceAt(tree.x, tree.z);
-      const size = 19 * tree.scale;
+      const size = 16 * tree.scale;
       const yaw = rng() * Math.PI * 2;
       quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
       matrix.compose(
         new THREE.Vector3(tree.x, h, tree.z),
         quaternion,
-        new THREE.Vector3(size * 0.62, size, size * 0.62)
+        new THREE.Vector3(size * 0.34, size, size * 0.34)
       );
       canopies.setMatrixAt(index, matrix);
       matrix.compose(
