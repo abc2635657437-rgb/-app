@@ -1236,7 +1236,8 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
 
     const wallMaterial = track(new THREE.MeshLambertMaterial({ color: 0xd9d2c2 }));
     const roofMaterial = track(new THREE.MeshLambertMaterial({ color: 0x6a7278, flatShading: true }));
-    const count = tiers.buildings;
+    // main town + a dense shoreline ring (see the second pass below)
+    const count = Math.round(tiers.buildings * 1.85);
     const walls = new THREE.InstancedMesh(wallGeometry, wallMaterial, count);
     const roofs = new THREE.InstancedMesh(roofGeometry, roofMaterial, count);
     const rng = (() => {
@@ -1282,6 +1283,44 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
       walls.setColorAt(placed, color);
       placed += 1;
     }
+    // A second pass that hugs the shoreline. The painted reference is mostly
+    // a ring of small white houses right at the water, so this band does more
+    // for the "lived-in lake" look than anything further out.
+    let shoreGuard = 0;
+    while (placed < count && shoreGuard < count * 60) {
+      shoreGuard += 1;
+      const angle = rng() * Math.PI * 2;
+      const rad = 700 + Math.pow(rng(), 0.5) * 2600;
+      const x = Math.cos(angle) * rad;
+      const z = Math.sin(angle) * rad * 1.05;
+      const sdf = lakeSignedDistance(x, z);
+      if (sdf < 45 || sdf > 330) continue;
+      const h = heightAt(x, z);
+      if (h > 40) continue;
+      const width = 22 + rng() * 34;
+      const depth = 20 + rng() * 30;
+      const height = 11 + rng() * 15;
+      const yaw = Math.floor(rng() * 16) * (Math.PI / 8);
+      quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+      matrix.compose(
+        new THREE.Vector3(x, surfaceAt(x, z), z),
+        quaternion,
+        new THREE.Vector3(width, height, depth)
+      );
+      walls.setMatrixAt(placed, matrix);
+      matrix.compose(
+        new THREE.Vector3(x, surfaceAt(x, z) + height, z),
+        quaternion,
+        new THREE.Vector3(width * 1.18, height * 0.36, depth * 1.18)
+      );
+      roofs.setMatrixAt(placed, matrix);
+      // a few warm brick walls among the white ones
+      const warm = rng() < 0.18;
+      color.setHex(warm ? 0xd8b49a : 0xf1ead9).offsetHSL(0, (rng() - 0.5) * 0.05, (rng() - 0.5) * 0.06);
+      walls.setColorAt(placed, color);
+      placed += 1;
+    }
+
     walls.count = placed;
     roofs.count = placed;
     walls.instanceMatrix.needsUpdate = true;
