@@ -180,6 +180,13 @@ ${modules.join('\n')}
       };
       new MutationObserver(placeChat).observe(nav, { childList: true });
       placeChat();
+      // the injected tab can land later than load on a cold production start,
+      // so keep checking for a few seconds as well
+      var tries = 0;
+      var settle = setInterval(function () {
+        placeChat();
+        if (++tries > 24) clearInterval(settle);
+      }, 250);
     });
   })();
 </script>
