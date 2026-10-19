@@ -9,10 +9,6 @@
 // navigation and the screen wiring below are new.
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
-
-// keep the scoped copy in step with the source stylesheet
-execFileSync(process.execPath, ['scripts/scope-explore-css.mjs'], { stdio: 'inherit' });
 
 const app = readFileSync('index.html', 'utf8');
 const explore = readFileSync('scripts/explore-scene.html', 'utf8');
@@ -129,9 +125,9 @@ const shell = `<!doctype html>
 <html lang="zh-CN">
 <head>
 ${headContent}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${stylesheetLinks}
 ${inlineStyle}
-<link rel="stylesheet" href="/modules/explore3d/explore3d.scoped.css?v=1">
 ${extraStyle}
 </head>
 <body>
