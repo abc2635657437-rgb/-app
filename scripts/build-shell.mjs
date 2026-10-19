@@ -32,7 +32,11 @@ const modules = [...app.matchAll(/<script src="([^"]+)"[^>]*><\/script>/g)].map(
 const inlineBoot = pick(app, /<script>\s*const rates=[\s\S]*?<\/script>/, 'inline boot script');
 
 // The old explore screen lives inside <main>; the new one is a full-bleed sibling.
-const mainWithoutMap = mainBlock.replace(/<section id="map"[\s\S]*?<\/section>/, '');
+let mainWithoutMap = mainBlock.replace(/<section id="map"[\s\S]*?<\/section>/, '');
+mainWithoutMap = mainWithoutMap.replace(
+  /(<button class="publish-button"[^>]*>[\s\S]*?<\/button>)/,
+  '$1<a class="home-avatar" href="/explore3d.html?screen=profile" aria-label="我的">我</a>'
+);
 if (!mainWithoutMap.includes('id="home"')) throw new Error('home section missing');
 
 // --- from the explore page ------------------------------------------------
@@ -58,7 +62,7 @@ if (!chrome.includes('id="stage"')) throw new Error('explore stage missing');
 const nav = `<nav class="nav" id="appNav">
   <button data-id="home" onclick="go('home')"><span class="nav-icon">⌂</span><br>首页</button>
   <button data-id="map" onclick="go('map')"><span class="nav-icon">◉</span><br>探索</button>
-  <button class="nav-publish" data-id="publish" onclick="go('publish')"><span class="nav-publish__mark">＋</span><span class="nav-publish__label">发布</span></button>
+  <button class="nav-publish" data-id="publish" onclick="(window.openPublisher||function(){go('publish')})()"><span class="nav-publish__mark">＋</span><span class="nav-publish__label">发布</span></button>
   <button data-id="friends" onclick="go('friends')"><span class="nav-icon">◍</span><br>旅友</button>
 </nav>`;
 
@@ -95,6 +99,12 @@ const extraStyle = `<style>
     color: #16483c; font-size: 15px; text-decoration: none;
   }
   body[data-screen="map"] .topbar-profile { display: grid; }
+  body .home-avatar {
+    width: 38px; height: 38px; border-radius: 50%; margin-left: 8px;
+    display: inline-grid; place-items: center; text-decoration: none;
+    background: #fff; color: #16483c; font-size: 14px;
+    box-shadow: 0 2px 8px rgba(12, 42, 37, 0.18);
+  }
   /* the explore screen is its own full-bleed surface: the app column must not
      bleed through above or below it */
   body[data-screen="map"] .app { visibility: hidden; }
@@ -170,4 +180,17 @@ ${modules.join('\n')}
 
 writeFileSync('explore3d.html', shell);
 console.log('wrote explore3d.html', shell.length, 'bytes');
+
+// --- the embedded explore document ----------------------------------------
+// The standalone scene page, with links that point at the shell and openings
+// that leave the frame, so a tab tap really changes the app's screen.
+let embedded = readFileSync('scripts/explore-scene.html', 'utf8');
+embedded = embedded.split('/index.html?screen=').join('/explore3d.html?screen=');
+embedded = embedded.split('href="/index.html"').join('href="/explore3d.html?screen=profile"');
+embedded = embedded.split('<a ').join('<a target="_top" ');
+embedded = embedded.split('/modules/explore3d/explore3d.js?v=3').join('/modules/explore3d/explore3d.js?v=5');
+embedded = embedded.split('/modules/explore3d/explore3d.css?v=4').join('/modules/explore3d/explore3d.css?v=5');
+writeFileSync('explore3d-explore.html', embedded);
+console.log('wrote explore3d-explore.html', embedded.length, 'bytes');
+
 console.log('modules:', modules.length, '| chrome:', chrome.length, '| style:', inlineStyle.length);

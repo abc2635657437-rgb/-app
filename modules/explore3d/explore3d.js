@@ -19,6 +19,19 @@ const ONLINE_USERS_URL = '/api/map/online-users';
 const WEATHER_URL = '/api/weather?latitude=30.243&longitude=120.145';
 
 const $ = id => document.getElementById(id);
+
+/** Leave the frame when this page is embedded in the app shell. */
+function topNavigate(url) {
+  if (window.top !== window.self) {
+    try {
+      window.top.location.href = url;
+      return;
+    } catch (_) {
+      /* cross-origin parent: fall through */
+    }
+  }
+  window.location.href = url;
+}
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const RAD = Math.PI / 180;
 
@@ -399,10 +412,15 @@ function focusPlace(place) {
     { lat: place.lat, lon: place.lon, altitude: 0.42, heading: 20 * RAD, tilt: 66 * RAD },
     {
       duration: 2600,
-      onArrive: () => {
+            onArrive: () => {
         rig.setMode('local');
         document.body.dataset.mode = 'local';
-        setStatus(`${place.name} · 拖动环绕，滚轮升降`);
+        showPlaceCard({
+          title: place.name,
+          meta: place.en + ' · 杭州西湖',
+          body: place.badge + ' · ' + place.tags.join(' · ') + '。拖动环绕，滚轮或双指缩放。',
+          action: { label: '回到全球', handler: flyToGlobe },
+        });
       },
     }
   );
@@ -576,6 +594,28 @@ function setStatus(text) {
   el.classList.add('is-visible');
   clearTimeout(statusTimer);
   statusTimer = setTimeout(() => el.classList.remove('is-visible'), 4200);
+}
+
+function showPlaceCard({ title, meta, body, action }) {
+  const card = $('placeCard');
+  if (!card) return;
+  $('placeCardTitle').textContent = title || '';
+  $('placeCardMeta').textContent = meta || '';
+  $('placeCardBody').textContent = body || '';
+  const button = $('placeCardAction');
+  if (action) {
+    button.hidden = false;
+    button.textContent = action.label;
+    button.onclick = action.handler;
+  } else {
+    button.hidden = true;
+    button.onclick = null;
+  }
+  card.classList.add('is-visible');
+}
+
+function hidePlaceCard() {
+  $('placeCard')?.classList.remove('is-visible');
 }
 
 let toastTimer = 0;
@@ -870,8 +910,9 @@ $('navExplore')?.addEventListener('click', () => {
   flyToLake();
 });
 $('navPublish')?.addEventListener('click', () => {
-  window.location.href = '/explore3d.html?screen=publish';
+  topNavigate('/explore3d.html?screen=publish');
 });
+$('placeCardClose').addEventListener('click', hidePlaceCard);
 $('travelerSheetClose').addEventListener('click', () => $('travelerSheet').classList.remove('is-visible'));
 $('travelerSheet').addEventListener('click', event => {
   if (event.target === $('travelerSheet')) $('travelerSheet').classList.remove('is-visible');

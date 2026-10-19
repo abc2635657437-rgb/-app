@@ -66,7 +66,7 @@
         <svg class="ic"><use href="#i-bell"/></svg>
         <span class="icon-btn__dot"></span>
       </button>
-      <a class="avatar" href="/explore3d.html?screen=profile" aria-label="我的"><span class="avatar__img" aria-hidden="true"></span></a>
+      <a target="_top" class="avatar" href="/explore3d.html?screen=profile" aria-label="我的"><span class="avatar__img" aria-hidden="true"></span></a>
     </div>
   </header>
 
@@ -129,15 +129,25 @@
   </section>
 
   <nav class="bottom-nav" id="bottomNav">
-    <a class="nav-item" href="/explore3d.html?screen=home"><svg class="ic nav-item__icon"><use href="#i-home"/></svg>首页</a>
+    <a target="_top" class="nav-item" href="/explore3d.html?screen=home"><svg class="ic nav-item__icon"><use href="#i-home"/></svg>首页</a>
     <button class="nav-item is-active" type="button" id="navExplore"><svg class="ic nav-item__icon"><use href="#i-explore"/></svg>探索</button>
     <button class="nav-item nav-item--publish" type="button" id="navPublish" aria-label="发布">
       <span class="publish-mark"><svg class="ic"><use href="#i-plus"/></svg></span>
       <span class="publish-label">发布</span>
     </button>
-    <a class="nav-item" href="/explore3d.html?screen=messages"><svg class="ic nav-item__icon"><use href="#i-chat"/></svg>聊天</a>
-    <a class="nav-item" href="/explore3d.html?screen=friends"><svg class="ic nav-item__icon"><use href="#i-people"/></svg>旅友</a>
+    <a target="_top" class="nav-item" href="/explore3d.html?screen=messages"><svg class="ic nav-item__icon"><use href="#i-chat"/></svg>聊天</a>
+    <a target="_top" class="nav-item" href="/explore3d.html?screen=friends"><svg class="ic nav-item__icon"><use href="#i-people"/></svg>旅友</a>
   </nav>
+
+  <div id="placeCard" class="place-brief" role="dialog" aria-label="景点简介">
+    <div class="place-brief__card">
+      <button class="place-brief__close" id="placeCardClose" type="button" aria-label="关闭">✕</button>
+      <p class="place-brief__meta" id="placeCardMeta"></p>
+      <h2 class="place-brief__title" id="placeCardTitle"></h2>
+      <p class="place-brief__body" id="placeCardBody"></p>
+      <button class="place-brief__action" id="placeCardAction" type="button" hidden></button>
+    </div>
+  </div>
 
   <div id="travelerSheet" class="traveler-sheet">
     <div class="traveler-sheet__card" role="dialog" aria-label="旅友资料">
@@ -162,6 +172,6 @@
     document.querySelectorAll('.dm-overlay').forEach(node => node.remove());
   };
 </script>
-<script type="module" src="/modules/explore3d/explore3d.js?v=3"></script>
+<script type="module" src="/modules/explore3d/explore3d.js?v=6"></script>
 </body>
 </html>

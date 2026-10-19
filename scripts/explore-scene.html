@@ -139,6 +139,16 @@
     <a class="nav-item" href="/index.html?screen=friends"><svg class="ic nav-item__icon"><use href="#i-people"/></svg>旅友</a>
   </nav>
 
+  <div id="placeCard" class="place-brief" role="dialog" aria-label="景点简介">
+    <div class="place-brief__card">
+      <button class="place-brief__close" id="placeCardClose" type="button" aria-label="关闭">✕</button>
+      <p class="place-brief__meta" id="placeCardMeta"></p>
+      <h2 class="place-brief__title" id="placeCardTitle"></h2>
+      <p class="place-brief__body" id="placeCardBody"></p>
+      <button class="place-brief__action" id="placeCardAction" type="button" hidden></button>
+    </div>
+  </div>
+
   <div id="travelerSheet" class="traveler-sheet">
     <div class="traveler-sheet__card" role="dialog" aria-label="旅友资料">
       <button class="traveler-sheet__close" id="travelerSheetClose" type="button">关闭</button>
@@ -162,6 +172,6 @@
     document.querySelectorAll('.dm-overlay').forEach(node => node.remove());
   };
 </script>
-<script type="module" src="/modules/explore3d/explore3d.js?v=3"></script>
+<script type="module" src="/modules/explore3d/explore3d.js?v=6"></script>
 </body>
 </html>

@@ -1154,3 +1154,63 @@ body.is-low .dof { display: none; }
   .poi--hero .poi__pin { animation: none; }
   .loading-mark::after { animation: none; }
 }
+
+
+/* --------------------------------------------------- place brief (tap) */
+#map .place-brief {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(var(--nav-h) + var(--sheet-h) + 16px + var(--safe-bottom));
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.26s ease, transform 0.26s ease;
+}
+.place-brief.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#map .place-brief__card {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px 16px 15px;
+  box-shadow: 0 14px 36px rgba(10, 40, 30, 0.26);
+}
+#map .place-brief__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: #f2f6f4;
+  color: #5d7a72;
+  font-size: 11px;
+  cursor: pointer;
+}
+#map .place-brief__meta {
+  margin: 0 0 3px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c9a253;
+}
+#map .place-brief__title {
+  margin: 0 0 6px;
+  font-family: "Songti SC", Georgia, serif;
+  font-size: 20px;
+  color: #123029;
+}
+.place-brief__body { margin: 0; font-size: 12.5px; line-height: 1.7; color: #47635a; }
+#map .place-brief__action {
+  margin-top: 12px;
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 16px;
+  background: #0f7a5a;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.place-brief__action[hidden] { display: none; }
