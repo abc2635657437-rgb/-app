@@ -12,6 +12,7 @@
 // north tangent. Local coordinates are metres, +X east, +Y up, +Z south.
 
 import * as THREE from '/modules/vendor/three/three.module.js';
+import { createModelKit } from '/modules/explore3d/westlake-models.js';
 import { EARTH_RADIUS, geoToVec3, northTangent, eastTangent } from './globe.js';
 
 export const WEST_LAKE = {
@@ -1001,190 +1002,39 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
   // --- hero landmarks ------------------------------------------------------
 
   /** 雷峰塔: five tapering eaves on an octagonal core, with a lit gallery. */
+  const models = createModelKit({ track, palette: { roofTile: C.roofTile, wallWhite: C.wallWhite } });
+
+  /** 雷峰塔: octagonal, five storeys, flared eaves, gold finial. */
   function buildLeifeng() {
-    const pagoda = new THREE.Group();
-    const lacquer = new THREE.MeshLambertMaterial({ color: C.lacquer });
-    const wall = new THREE.MeshLambertMaterial({ color: 0xd8c8a8 });
-    const tile = new THREE.MeshLambertMaterial({ color: C.roofTile, flatShading: true });
-    const glint = new THREE.MeshBasicMaterial({ color: 0xffcf8a });
-    [lacquer, wall, tile, glint].forEach(track);
-
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(13.5, 15, 7, 8), new THREE.MeshLambertMaterial({ color: 0xb8b2a4 }));
-    base.position.y = 3.5;
-    base.castShadow = true;
-    base.receiveShadow = true;
-    track(base.geometry);
-    track(base.material);
-    pagoda.add(base);
-
-    let y = 7;
-    let radius = 10.4;
-    for (let tier = 0; tier < 5; tier += 1) {
-      const height = tier === 0 ? 10.5 : 8.4 - tier * 0.5;
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.9, radius, height, 8), wall);
-      body.position.y = y + height / 2;
-      body.castShadow = true;
-      body.receiveShadow = true;
-      pagoda.add(body);
-
-      // The gallery: a ring of small lit windows around each tier.
-      const windows = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.915, radius * 0.915, height * 0.34, 8, 1, true), glint);
-      windows.position.y = y + height * 0.52;
-      pagoda.add(windows);
-
-      // The eave: a shallow cone with a kicked-up rim, which is what makes a
-      // Chinese pagoda silhouette read at 40 px.
-      const eave = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.92, radius * 1.42, 1.5, 8, 1), tile);
-      eave.position.y = y + height + 0.4;
-      eave.castShadow = true;
-      pagoda.add(eave);
-      const upturn = new THREE.Mesh(new THREE.TorusGeometry(radius * 1.32, 0.34, 4, 16), tile);
-      upturn.rotation.x = Math.PI / 2;
-      upturn.position.y = y + height + 1.1;
-      pagoda.add(upturn);
-
-      y += height + 1.2;
-      radius *= 0.86;
-    }
-
-    // Finial: stacked rings and a gilded spire.
-    const spire = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.5, 7.5, 6), new THREE.MeshLambertMaterial({ color: C.gold }));
-    spire.position.y = y + 3.7;
-    pagoda.add(spire);
-    for (let ring = 0; ring < 5; ring += 1) {
-      const r = new THREE.Mesh(new THREE.TorusGeometry(1.4 - ring * 0.1, 0.16, 4, 12), spire.material);
-      r.rotation.x = Math.PI / 2;
-      r.position.y = y + 1.6 + ring * 1.1;
-      pagoda.add(r);
-    }
-    pagoda.traverse(node => {
-      if (node.isMesh) node.castShadow = true;
-    });
-    return pagoda;
+    return models.leifeng();
   }
+
 
   /** 保俶塔: the slender brick spire on 宝石山. */
   function buildBaochu() {
-    const pagoda = new THREE.Group();
-    const brick = new THREE.MeshLambertMaterial({ color: 0xb9ab92, flatShading: true });
-    track(brick);
-    let y = 0;
-    let radius = 2.6;
-    for (let tier = 0; tier < 7; tier += 1) {
-      const height = 4.2 - tier * 0.28;
-      const body = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.94, radius, height, 8), brick);
-      body.position.y = y + height / 2;
-      body.castShadow = true;
-      pagoda.add(body);
-      const ring = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.25, radius * 1.25, 0.3, 8), brick);
-      ring.position.y = y + height;
-      pagoda.add(ring);
-      y += height + 0.32;
-      radius *= 0.9;
-    }
-    const tip = new THREE.Mesh(new THREE.ConeGeometry(0.5, 3.6, 8), brick);
-    tip.position.y = y + 1.8;
-    pagoda.add(tip);
-    return pagoda;
+    return models.baochu();
   }
 
   /** 三潭印月: three stone lanterns floating south of the island. */
   function buildThreePools() {
-    const stone = new THREE.MeshLambertMaterial({ color: 0xa8a396, flatShading: true });
-    track(stone);
+    // three lanterns, placed where the originals stood
     const trio = new THREE.Group();
-    const pool = (x, z) => {
-      const tower = new THREE.Group();
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.9, 1.1, 8), stone);
-      base.position.y = 0.3;
-      const body = new THREE.Mesh(new THREE.SphereGeometry(2.1, 10, 8), stone);
-      body.position.y = 2.2;
-      body.scale.y = 0.85;
-      const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 1.6, 8), stone);
-      neck.position.y = 4.1;
-      const cap = new THREE.Mesh(new THREE.ConeGeometry(1.5, 1.4, 8), stone);
-      cap.position.y = 5.4;
-      // The five round openings that give the place its name.
-      for (let i = 0; i < 5; i += 1) {
-        const hole = new THREE.Mesh(
-          new THREE.CircleGeometry(0.38, 8),
-          new THREE.MeshBasicMaterial({ color: 0x2a2118 })
-        );
-        const angle = (i / 5) * Math.PI * 2;
-        hole.position.set(Math.cos(angle) * 1.85, 2.2, Math.sin(angle) * 1.85);
-        hole.lookAt(new THREE.Vector3(Math.cos(angle) * 4, 2.2, Math.sin(angle) * 4));
-        tower.add(hole);
-        track(hole.material);
-        track(hole.geometry);
-      }
-      tower.add(base, body, neck, cap);
-      tower.position.set(x, 0, z);
-      return tower;
-    };
-    trio.add(pool(-70, 120), pool(0, 168), pool(64, 96));
+    for (const [x, z] of [[-70, 120], [0, 168], [64, 96]]) {
+      const lantern = models.stoneLantern();
+      lantern.position.set(x, 0, z);
+      trio.add(lantern);
+    }
     return trio;
   }
 
   /** 断桥: a low stone arch with a balustrade, carrying 白堤. */
   function buildBrokenBridge() {
-    const bridge = new THREE.Group();
-    const stone = new THREE.MeshLambertMaterial({ color: 0xbcb6a6, flatShading: true });
-    track(stone);
-    const span = 42;
-    const width = 9;
-    const segments = 16;
-    const deck = [];
-    for (let i = 0; i <= segments; i += 1) {
-      const t = i / segments;
-      const x = (t - 0.5) * span;
-      const y = Math.sin(t * Math.PI) * 3.4;
-      deck.push([x, y]);
-      const block = new THREE.Mesh(new THREE.BoxGeometry(span / segments + 0.4, 1.2, width), stone);
-      block.position.set(x, y - 0.55, 0);
-      block.castShadow = true;
-      block.receiveShadow = true;
-      bridge.add(block);
-    }
-    for (const side of [-1, 1]) {
-      for (let i = 0; i < deck.length - 1; i += 1) {
-        const [x0, y0] = deck[i];
-        const [x1, y1] = deck[i + 1];
-        const rail = new THREE.Mesh(new THREE.BoxGeometry(Math.hypot(x1 - x0, y1 - y0), 1.1, 0.4), stone);
-        rail.position.set((x0 + x1) / 2, (y0 + y1) / 2 + 0.75, (side * width) / 2);
-        rail.rotation.z = Math.atan2(y1 - y0, x1 - x0);
-        bridge.add(rail);
-      }
-      for (const [x, y] of deck) {
-        const post = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.5, 0.7), stone);
-        post.position.set(x, y + 0.75, (side * width) / 2);
-        bridge.add(post);
-      }
-    }
-    return bridge;
+    return models.brokenBridge();
   }
 
   /** A Hangzhou hall: white walls, dark tile roof, upturned eaves. */
-  function buildHall({ width = 16, depth = 11, height = 5.4, roof = C.roofTile, walls = C.wallWhite } = {}) {
-    const hall = new THREE.Group();
-    const wallMaterial = new THREE.MeshLambertMaterial({ color: walls });
-    const roofMaterial = new THREE.MeshLambertMaterial({ color: roof, flatShading: true });
-    track(wallMaterial);
-    track(roofMaterial);
-    const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), wallMaterial);
-    body.position.y = height / 2;
-    body.castShadow = true;
-    body.receiveShadow = true;
-    hall.add(body);
-
-    const roofGeometry = new THREE.ConeGeometry(width * 0.78, height * 0.85, 4);
-    roofGeometry.rotateY(Math.PI / 4);
-    const roofMesh = new THREE.Mesh(roofGeometry, roofMaterial);
-    roofMesh.position.y = height + height * 0.42;
-    roofMesh.scale.set(1, 1, depth / width);
-    roofMesh.castShadow = true;
-    hall.add(roofMesh);
-    track(roofGeometry);
-    return hall;
+  function buildHall(options) {
+    return models.hall(options || {});
   }
 
   const landmarkExtras = new THREE.Group();
