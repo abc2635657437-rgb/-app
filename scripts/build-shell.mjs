@@ -9,6 +9,7 @@
 // navigation and the screen wiring below are new.
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 const app = readFileSync('index.html', 'utf8');
 const explore = readFileSync('scripts/explore-scene.html', 'utf8');
@@ -237,5 +238,10 @@ embedded = embedded.split('/modules/explore3d/explore3d.js?v=3').join('/modules/
 embedded = embedded.split('/modules/explore3d/explore3d.css?v=4').join('/modules/explore3d/explore3d.css?v=5');
 writeFileSync('explore3d-explore.html', embedded);
 console.log('wrote explore3d-explore.html', embedded.length, 'bytes');
+
+// A service worker with a stray quote shipped once and silently disabled
+// offline support: every URL it listed was reachable and the file still failed
+// to evaluate. The build now checks that what it emits actually parses.
+execFileSync(process.execPath, ['scripts/check-syntax.mjs'], { stdio: 'inherit' });
 
 console.log('modules:', modules.length, '| chrome:', chrome.length, '| style:', inlineStyle.length);
