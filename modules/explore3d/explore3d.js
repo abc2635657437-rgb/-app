@@ -677,6 +677,13 @@ function qualityGovernor() {
 }
 
 function frame() {
+  const screen = document.body.dataset.screen;
+  if (screen && screen !== 'map') {
+    // another tab is showing: keep the loop alive but do no work
+    clock.getDelta();
+    requestAnimationFrame(frame);
+    return;
+  }
   const dt = Math.min(clock.getDelta(), 0.05);
   elapsed += dt;
 
@@ -858,12 +865,12 @@ $('filterBtn').addEventListener('click', () => {
   setSheetExpanded(true);
   toast('已展开筛选面板');
 });
-$('navExplore').addEventListener('click', () => {
+$('navExplore')?.addEventListener('click', () => {
   markInteraction();
   flyToLake();
 });
-$('navPublish').addEventListener('click', () => {
-  window.location.href = '/index.html?screen=publish';
+$('navPublish')?.addEventListener('click', () => {
+  window.location.href = '/explore3d.html?screen=publish';
 });
 $('travelerSheetClose').addEventListener('click', () => $('travelerSheet').classList.remove('is-visible'));
 $('travelerSheet').addEventListener('click', event => {

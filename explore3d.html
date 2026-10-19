@@ -1,16 +1,65 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#eaf3f0">
-<title>探索 · 西湖 3D 地图 | Travel World 同路人</title>
-<meta name="description" content="从太空飞向杭州西湖：实时渲染的湖面、游船、塔与正在共享位置的旅友。">
-<meta name="robots" content="noindex">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#f4efe4"><title>Travel World 同路人｜全球旅行路线、地图与旅行助手</title><meta name="description" content="Travel World 同路人提供全球旅行灵感、真实路线、Q版地图、旅行分享、旅友交流与 AI 旅行助手。"><meta name="keywords" content="Travel World,同路人,旅行助手,旅行路线,旅游地图,AI旅行规划,全球旅行"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="preconnect" href="https://travel-world-mwdw.onrender.com"><link rel="dns-prefetch" href="https://travel-world-mwdw.onrender.com"><link rel="canonical" href="https://travel-world-mwdw.onrender.com/"><meta property="og:type" content="website"><meta property="og:site_name" content="Travel World 同路人"><meta property="og:title" content="Travel World 同路人｜全球旅行路线、地图与旅行助手"><meta property="og:description" content="探索全球目的地、真实旅行路线和旅友内容，使用 AI 旅行助手规划下一程。"><meta property="og:url" content="https://travel-world-mwdw.onrender.com/"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Travel World 同路人","alternateName":["Travel World","同路人"],"url":"https://travel-world-mwdw.onrender.com/","inLanguage":["zh-CN","en"]}</script>
 <link rel="stylesheet" href="/modules/theme/ukiyoe.css?v=12">
-<link rel="stylesheet" href="/modules/explore3d/explore3d.css?v=3">
+<style>
+:root{--ink:#173f4f;--cream:#f7f5f0;--muted:#718087;--accent:#d17d57}*{box-sizing:border-box}body{margin:0;background:#e8eeea;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;color:#19333d}.app{max-width:480px;min-height:100vh;margin:auto;background:var(--cream);padding:24px 18px 92px}.screen{display:none}.screen.active{display:block}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:800}.title{font-size:34px;line-height:1.12;font-weight:800;color:var(--ink);margin-top:8px}.sub,.muted{color:var(--muted);line-height:1.5}.sub{margin:14px 0 20px}.card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 7px 20px #203a4110}.head,.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.head{margin:26px 0 12px}.head h2{font-size:21px;margin:0;color:var(--ink)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.input,select{width:100%;padding:12px;border:1px solid transparent;background:#f2f6f3;border-radius:10px;margin:5px 0;font:inherit;color:inherit}.btn{border:0;border-radius:999px;padding:12px 17px;background:var(--ink);color:#fff;font-weight:700;cursor:pointer}.btn.alt{background:#fff;color:var(--ink);border:1px solid #b7c2c0}.pill{display:inline-block;padding:7px 11px;border-radius:999px;background:#eef3ef;color:#366052;font-size:12px;margin:4px 4px 0 0;cursor:pointer}.pill.active{background:var(--ink);color:#fff}.photo{width:100%;height:145px;object-fit:cover;border-radius:12px}.tabs{display:flex;gap:20px;border-bottom:1px solid #dde5df;margin:22px 0 14px}.tab{padding-bottom:10px;color:var(--muted);cursor:pointer}.tab.active{color:var(--ink);font-weight:700;border-bottom:3px solid var(--accent)}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover}.bubble{padding:12px 14px;border-radius:15px;max-width:88%;margin:10px 0;line-height:1.45;white-space:pre-line}.bubble.ai{background:#fff}.bubble.me{background:var(--ink);color:#fff;margin-left:auto}.nav{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:#fff;border-top:1px solid #e9ece8;display:flex;justify-content:space-around;padding:9px 4px 12px}.nav button{border:0;background:none;color:#8b9698;font-size:12px;cursor:pointer}.nav button.active{color:var(--ink);font-weight:800}.toggle{display:flex;background:#eef3ef;border-radius:10px;padding:3px}.toggle button{border:0;background:transparent;border-radius:8px;padding:8px 10px;color:var(--muted);font-weight:700}.toggle button.active{background:#fff;color:var(--ink);box-shadow:0 2px 6px #173f4f18}.small{padding:8px 12px;font-size:12px}.plan-item{padding:10px 0;border-bottom:1px solid #edf0ed}.plan-item:last-child{border:0}.map-canvas{min-height:360px;border-radius:14px;background:linear-gradient(135deg,#d9eee8,#f6dfbf);position:relative;overflow:hidden;background-image:radial-gradient(#fff8 1px,transparent 1px);background-size:24px 24px}.map-pin{position:absolute;border:0;background:#fff;border-radius:16px;padding:8px 10px;font-size:22px;box-shadow:0 4px 12px #173f4f33;cursor:pointer}.map-pin small{display:block;font-size:10px;color:var(--ink);font-weight:700}.map-card{padding:12px}.home-community{padding-top:4px}.community-top{display:flex;justify-content:space-between;align-items:center}.community-brand{font-size:23px;font-weight:800;letter-spacing:.5px;color:var(--ink)}.publish-button{width:42px;height:42px;border-radius:50%;border:1px solid #b7c2c0;background:#fff;color:var(--ink);font-size:25px;line-height:38px;cursor:pointer}.home-tabs{margin:28px 0 18px;display:flex;gap:24px;border-bottom:1px solid #dde5df}.home-tab{padding-bottom:10px;font-size:14px;color:var(--muted);cursor:pointer}.home-tab.active{color:var(--ink);font-weight:700;border-bottom:2px solid var(--accent)}.post-card{background:#fff;border-radius:16px;overflow:hidden;margin:0 0 22px;box-shadow:0 7px 20px #203a410c}.post-image{width:100%;height:260px;object-fit:cover;display:block}.post-content{padding:15px 16px 13px}.post-author{display:flex;align-items:center;gap:10px}.post-author-name{font-size:14px;font-weight:700;color:var(--ink)}.post-location{font-size:12px;color:var(--muted);margin-top:2px}.post-title{font-size:18px;line-height:1.3;font-weight:700;color:var(--ink);margin-top:15px}.post-copy{font-size:14px;line-height:1.55;color:#53656b;margin:7px 0 10px}.post-tag{font-size:12px;color:#477064;margin-right:10px}.post-actions{display:flex;align-items:center;gap:18px;margin-top:15px;color:#718087;font-size:13px}.post-actions button{border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer}.post-actions .is-liked{color:#ba6449}.post-map{border:0;background:#eef3ef;color:#366052;border-radius:999px;padding:7px 12px;font-size:12px;cursor:pointer}.comment-row{display:flex;gap:8px;margin-top:13px}.comment-row input{flex:1;border:0;border-bottom:1px solid #dfe6e1;padding:8px 2px;font:inherit;outline:0}.comment-row button{border:0;background:none;color:var(--ink);font-weight:700;cursor:pointer}.compose-panel{display:none;background:#fff;border:1px solid #dfe6e1;border-radius:14px;padding:14px;margin:0 0 18px}.compose-panel.open{display:block}.compose-panel textarea{width:100%;min-height:78px;border:0;background:#f2f6f3;border-radius:10px;padding:10px;font:inherit;resize:vertical}.compose-panel input{width:100%;border:0;border-bottom:1px solid #dfe6e1;padding:10px 2px;font:inherit}.compose-panel .btn{margin-top:10px}</style>
+<link rel="stylesheet" href="/modules/explore3d/explore3d.scoped.css?v=1">
+<style>
+  /* The explore screen is full-bleed and sits above the app column. */
+  body .screen--explore {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    padding: 0;
+    display: none;
+    background: #dfeae6;
+    overflow: hidden;
+    --nav-h: 72px;
+  }
+  body .screen--explore.active { display: block; }
+  body .screen--explore > * { --nav-h: 72px; }
+  body .nav { z-index: 40; display: grid; grid-template-columns: repeat(5, 1fr); }
+  body .nav .nav-publish { position: relative; margin-top: -22px; display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; }
+  body .nav .nav-publish__mark {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(160deg, #1c8f68, #0b5f46);
+    color: #fff; font-size: 26px; line-height: 46px; text-align: center;
+    box-shadow: 0 10px 22px rgba(12, 92, 68, 0.38), 0 0 0 4px #f8f6f0;
+    display: block;
+  }
+  body .nav .nav-publish__label { font-size: 10px; color: #4c6a61; }
+  body .nav .nav-icon { font-size: 18px; }
+  body .nav button { border: 0; background: transparent; }
+  body .topbar-profile {
+    position: fixed; top: calc(12px + env(safe-area-inset-top)); right: 16px; z-index: 45;
+    width: 40px; height: 40px; border-radius: 50%; background: #fff;
+    box-shadow: 0 4px 14px rgba(12, 42, 37, .18); display: none; place-items: center;
+    color: #16483c; font-size: 15px; text-decoration: none;
+  }
+  body[data-screen="map"] .topbar-profile { display: grid; }
+  /* the explore screen is its own full-bleed surface: the app column must not
+     bleed through above or below it */
+  body[data-screen="map"] .app { visibility: hidden; }
+  body[data-screen="map"] .ai-float,
+  body[data-screen="map"] .global-back { display: none !important; }
+  /* the embedded explore document brings its own five-item bar */
+  body[data-screen="map"] .nav { display: none; }
+  body[data-screen="map"] .nav button { color: #4c6a61; }
+  body[data-screen="map"] .nav .nav-icon { color: #4c6a61; }
+  body[data-screen="map"] .nav button[data-id="map"] { color: #0f7a5a; font-weight: 700; }
+</style>
 </head>
 <body>
+<main class="app">
+<section id="home" class="screen active"><div class="home-community"><div class="community-top"><div><div class="eyebrow">TRAVEL WORLD</div><div class="community-brand">同路人</div></div><button class="publish-button" onclick="openPublisher()" aria-label="发布内容"><span>＋</span> 发布</button></div><div class="home-tabs"><span class="home-tab active" id="recommendTab" onclick="setFeed('recommend')">推荐</span><span class="home-tab" id="followingTab" onclick="setFeed('following')">关注</span></div><div id="communityFeed"></div></div></section>
+<section id="publish" class="screen publish-page"><div class="route-page-head"><button onclick="go('home')" aria-label="返回">‹</button><div><small>NEW JOURNAL</small><h1>发布旅行记录</h1></div><button class="route-save" id="publishPostButton" onclick="publishPost()">发布</button></div><div class="publish-editor"><input id="composeTitle" class="publish-title" maxlength="120" placeholder="标题（选填）"><textarea id="composeText" placeholder="写下此刻的见闻、感受或建议…"></textarea><input id="composeLocation" class="input" placeholder="地点（选填），例如 Kyoto, Japan"><label class="publish-media-pick">＋ 添加照片 / 视频<input id="composeMedia" type="file" multiple accept="image/*,video/*,.heic,.heif" onchange="selectCommunityMedia(event)"></label><div id="composeMediaHint" class="muted">最多 8 个文件</div><div id="composeMediaList" class="compose-preview-grid"></div><div class="publish-section-head"><b>关联路线（选填）</b><button onclick="openRouteEditor(null,{returnToPublisher:true})">创建路线</button></div><div id="selectedPublishRoute"></div><div id="publishRouteChoices" class="publish-route-choices"></div><p class="muted">文字、媒体和路线可任意组合；发布失败时内容会保留在本页。</p></div></section>
+
+<section id="friends" class="screen"><div class="eyebrow">TRAVEL BUDDIES</div><div class="title">寻找同行的人</div><div class="tabs"><span class="tab active">推荐</span><span class="tab">我的申请</span><span class="tab">已匹配</span></div><div class="card"><b>匹配你的旅伴</b><div class="muted">只展示共同计划的人，申请每日最多 3 次。</div><div class="grid"><input class="input" placeholder="年龄"><input class="input" placeholder="预算"><input class="input" placeholder="出发日期"><input class="input" placeholder="兴趣：摄影"></div></div><div class="card row"><img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300"><div style="flex:1"><b>Mia · 28 · 上海</b><div class="muted">共同兴趣：咖啡 · 街拍</div></div><button class="btn alt small" onclick="alert('申请已发送')">申请同行</button></div><div class="card row"><img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300"><div style="flex:1"><b>Leo · 31 · 柏林</b><div class="muted">共同兴趣：徒步 · 建筑</div></div><button class="btn alt small" onclick="alert('申请已发送')">申请同行</button></div></section>
+<section id="ai" class="screen"><div class="eyebrow">TRAVEL ATELIER · 旅途顾问</div><div class="title">问一句，<br>把衣·食·住·行·玩理清楚。</div><div class="sub">说清目的地、天数与预算，顾问给出能照着走的建议。</div></section>
+<section id="profile" class="screen"><div class="eyebrow">MY SPACE</div><div class="title">我的旅行设置</div><div class="card"><b>版本</b><div class="toggle" style="margin-top:10px"><button id="cnBtn" onclick="setVersion('cn')">中国版</button><button id="globalBtn" onclick="setVersion('global')">Global Edition</button></div><div class="muted" style="margin-top:8px" id="versionNote">中国版默认使用 CNY</div></div><div class="card"><b>语言 / Language</b><div class="toggle" style="margin-top:10px"><button id="zhBtn" onclick="setLang('zh')">简体中文</button><button id="enBtn" onclick="setLang('en')">English</button></div></div><div class="card"><div class="row"><div><b>默认货币</b><div class="muted">路线与预算显示货币</div></div><select id="currency" onchange="setCurrency(this.value)"><option>CNY</option><option>USD</option><option>EUR</option><option>JPY</option></select></div><div style="margin-top:12px"><span class="pill">Visa</span><span class="pill">微信支付</span><span class="pill">支付宝</span><span class="pill">当地现金</span></div></div><div class="card"><b>本地保存</b><div class="muted" style="margin-top:6px">版本、语言、货币和最近路线只保存在此浏览器。</div></div></section>
+</main>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.2"/><path d="m15.4 15.4 4.2 4.2"/></symbol>
@@ -39,129 +88,76 @@
     <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.4 2.6 5.4 6 .8-4.4 4.1 1.2 5.9L12 16.7 6.6 19.6l1.2-5.9L3.4 9.6l6-.8L12 3.4Z" fill="currentColor" stroke="none"/></symbol>
   </defs>
 </svg>
-
-<div id="app">
-  <canvas id="scene" aria-label="可旋转缩放的三维西湖地图"></canvas>
-  <div id="stage" aria-hidden="true"></div>
-
-  <!-- depth of field: the two blurred bands are what turn a 3D render into a
-       photograph of a very small place -->
-  <div class="dof dof--top" aria-hidden="true"></div>
-  <div class="dof dof--bottom" aria-hidden="true"></div>
-  <div class="grade" aria-hidden="true"></div>
-
-  <div id="pinLayer"></div>
-  <div id="poiLayer"></div>
-  <div id="socialLayer"></div>
-
-  <header class="topbar" id="topbar">
-    <div class="brand">
-      <h1 class="brand__logo">Travel World</h1>
-      <p class="brand__tag">和有趣的人，一起看更大的世界</p>
-    </div>
-    <div class="topbar__actions">
-      <button class="icon-btn" id="searchToggle" type="button" aria-label="搜索"><svg class="ic"><use href="#i-search"/></svg></button>
-      <button class="icon-btn" id="mapModeToggle" type="button" aria-label="切换视角"><svg class="ic"><use href="#i-map"/></svg></button>
-      <button class="icon-btn icon-btn--bell" id="inboxToggle" type="button" aria-label="消息">
-        <svg class="ic"><use href="#i-bell"/></svg>
-        <span class="icon-btn__dot"></span>
-      </button>
-      <a class="avatar" href="/index.html" aria-label="我的"><span class="avatar__img" aria-hidden="true"></span></a>
-    </div>
-  </header>
-
-  <div class="searchbar" id="searchbar">
-    <svg class="ic searchbar__icon"><use href="#i-search"/></svg>
-    <input id="searchInput" type="search" autocomplete="off" aria-label="搜索目的地、城市或景点" placeholder="搜索目的地、城市或景点（如：杭州 西湖）">
-    <button class="filter-btn" id="filterBtn" type="button"><svg class="ic"><use href="#i-filter"/></svg>筛选</button>
-  </div>
-  <div id="searchResults" hidden></div>
-
-  <div class="chips" id="chips" role="tablist" aria-label="景点分类">
-    <button class="chip is-active" data-cat="all" role="tab" aria-selected="true"><svg class="ic chip__icon"><use href="#i-grid"/></svg>全部</button>
-    <button class="chip" data-cat="nature" role="tab"><svg class="ic chip__icon"><use href="#i-nature"/></svg>自然风光</button>
-    <button class="chip" data-cat="history" role="tab"><svg class="ic chip__icon"><use href="#i-history"/></svg>历史人文</button>
-    <button class="chip" data-cat="food" role="tab"><svg class="ic chip__icon"><use href="#i-food"/></svg>美食</button>
-    <button class="chip" data-cat="stay" role="tab"><svg class="ic chip__icon"><use href="#i-stay"/></svg>住宿</button>
-    <button class="chip" data-cat="play" role="tab"><svg class="ic chip__icon"><use href="#i-play"/></svg>玩乐</button>
-    <button class="chip" data-cat="outdoor" role="tab"><svg class="ic chip__icon"><use href="#i-outdoor"/></svg>户外</button>
-  </div>
-
-  <button class="hero-card" id="heroCard" type="button">
-    <img class="hero-card__thumb" id="heroThumb" alt="" src="/assets/explore3d/spots/hupanjui.jpg">
-    <span class="hero-card__main">
-      <b class="hero-card__title">杭州 · 西湖</b>
-      <span class="hero-card__sub">Hangzhou · West Lake</span>
-      <span class="hero-card__quote">“人间天堂，最忆是杭州”</span>
-    </span>
-    <span class="hero-card__aside">
-      <span class="weather" id="weatherChip"><i class="weather__dot"></i>--°C</span>
-      <svg class="ic hero-card__chevron"><use href="#i-chevron"/></svg>
-    </span>
-  </button>
-
-  <div class="map-controls">
-    <button class="map-btn" id="layerBtn" type="button" aria-label="图层"><svg class="ic"><use href="#i-layers"/></svg></button>
-    <button class="map-btn" id="locateBtn" type="button" aria-label="定位我的位置"><svg class="ic"><use href="#i-locate"/></svg></button>
-    <button class="map-btn" id="zoomIn" type="button" aria-label="放大"><svg class="ic"><use href="#i-plus"/></svg></button>
-    <button class="map-btn" id="zoomOut" type="button" aria-label="缩小"><svg class="ic"><use href="#i-minus"/></svg></button>
-    <button class="map-btn" id="compassBtn" type="button" aria-label="指北"><svg class="ic map-btn__needle"><use href="#i-compass"/></svg></button>
-    <button class="map-btn" id="resetView" type="button" aria-label="回到初始视角"><svg class="ic"><use href="#i-target"/></svg></button>
-    <button class="overview" id="overviewBtn" type="button" aria-label="全景">
-      <span class="overview__map"></span>
-      <span class="overview__label">全景</span>
-    </button>
-  </div>
-
-  <section class="sheet" id="sheet">
-    <button class="sheet__handle" id="sheetHandle" type="button" aria-label="展开或收起"></button>
-    <nav class="sheet__tabs" id="sheetTabs" aria-label="景点分类">
-      <button class="sheet__tab is-active" data-tab="recommend">推荐</button>
-      <button class="sheet__tab" data-tab="nearby">附近</button>
-      <button class="sheet__tab" data-tab="dest">目的地</button>
-      <button class="sheet__tab" data-tab="food">美食</button>
-      <button class="sheet__tab" data-tab="play">玩乐</button>
-      <button class="sheet__tab" data-tab="stay">住宿</button>
-      <button class="sheet__tab" data-tab="photo">拍照</button>
-      <button class="sheet__tab" data-tab="route">路线</button>
-    </nav>
-    <div class="sheet__cards" id="sheetCards"></div>
-  </section>
-
-  <nav class="bottom-nav" id="bottomNav">
-    <a class="nav-item" href="/index.html?screen=home"><svg class="ic nav-item__icon"><use href="#i-home"/></svg>首页</a>
-    <button class="nav-item is-active" type="button" id="navExplore"><svg class="ic nav-item__icon"><use href="#i-explore"/></svg>探索</button>
-    <button class="nav-item nav-item--publish" type="button" id="navPublish" aria-label="发布">
-      <span class="publish-mark"><svg class="ic"><use href="#i-plus"/></svg></span>
-      <span class="publish-label">发布</span>
-    </button>
-    <a class="nav-item" href="/index.html?screen=messages"><svg class="ic nav-item__icon"><use href="#i-chat"/></svg>聊天</a>
-    <a class="nav-item" href="/index.html?screen=friends"><svg class="ic nav-item__icon"><use href="#i-people"/></svg>旅友</a>
-  </nav>
-
-  <div id="travelerSheet" class="traveler-sheet">
-    <div class="traveler-sheet__card" role="dialog" aria-label="旅友资料">
-      <button class="traveler-sheet__close" id="travelerSheetClose" type="button">关闭</button>
-      <div id="travelerSheetBody"></div>
-    </div>
-  </div>
-
-  <div id="status" role="status"></div>
-  <div id="toast" role="alert"></div>
-
-  <div id="loading" class="is-visible">
-    <div class="loading-mark"></div>
-    <p class="loading-title">正在展开西湖</p>
-    <p class="loading-note" id="loadingNote">读取地形贴图与地标…</p>
-  </div>
-</div>
-
-<script src="/modules/auth/auth-web.js?v=14" defer></script>
+<section id="map" class="screen screen--explore" style="position:fixed;inset:0;left:0;top:0;width:100%;height:100%;padding:0;margin:0;z-index:20;overflow:hidden;background:#dfeae6">
+<iframe id="exploreFrame" title="西湖探索" src="/explore3d-explore.html" loading="lazy" style="display:block;width:100%;height:100%;border:0;background:#dfeae6"></iframe>
+</section>
+<span class="currency-label" hidden></span>
+<nav class="nav" id="appNav">
+  <button data-id="home" onclick="go('home')"><span class="nav-icon">⌂</span><br>首页</button>
+  <button data-id="map" onclick="go('map')"><span class="nav-icon">◉</span><br>探索</button>
+  <button class="nav-publish" data-id="publish" onclick="go('publish')"><span class="nav-publish__mark">＋</span><span class="nav-publish__label">发布</span></button>
+  <button data-id="friends" onclick="go('friends')"><span class="nav-icon">◍</span><br>旅友</button>
+</nav>
+<a class="topbar-profile" href="/index.html?screen=profile" aria-label="我的">我</a>
+<div id="status" role="status"></div>
+<div id="toast" role="alert"></div>
 <script>
-  window.go = window.go || function () {
-    document.querySelectorAll('.dm-overlay').forEach(node => node.remove());
-  };
+const rates={CNY:1,USD:.138,EUR:.127,JPY:20.4};let state=JSON.parse(localStorage.getItem('tw-state')||'{}');state.version??='cn';state.lang??='zh';state.currency??=(state.version==='global'?'USD':'CNY');const i18n={zh:{settings:'设置',homeTitle:'The World<br>is Your Playground.',homeSub:'真实内容、灵感路线与旅途伙伴，<br>从下一次出发开始连接世界。',hero:'下一站，去看海',plan:'开始规划路线',askAI:'问问 AI',inspiration:'本周灵感',food:'今天吃什么',discoverTitle:'下一站，去哪里',filters:'旅行参数',generate:'生成 AI 路线',destinations:'目的地灵感'},en:{settings:'Settings',homeTitle:'The World<br>is Your Playground.',homeSub:'Real places, thoughtful routes and travel buddies for your next departure.',hero:'Next stop: the sea',plan:'Plan a route',askAI:'Ask AI',inspiration:'Weekly inspiration',food:'What to eat today',discoverTitle:'Where to go depends on<br>how you want to live.',filters:'Trip details',generate:'Generate AI route',destinations:'Destination ideas'}};function save(){localStorage.setItem('tw-state',JSON.stringify(state))}function go(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.id===id));scrollTo(0,0)}function setVersion(v){state.version=v;state.currency=v==='global'?'USD':'CNY';save();renderSettings()}function setLang(l){state.lang=l;save();renderSettings()}function setCurrency(c){state.currency=c;save();renderSettings()}function renderSettings(){const t=i18n[state.lang];document.querySelectorAll('[data-i18n]').forEach(x=>x.innerHTML=t[x.dataset.i18n]);['cnBtn','globalBtn','zhBtn','enBtn'].forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(state.version==='cn'?'cnBtn':'globalBtn').classList.add('active');document.getElementById(state.lang==='zh'?'zhBtn':'enBtn').classList.add('active');document.getElementById('currency').value=state.currency;document.querySelector('.currency-label').textContent=state.currency;document.getElementById('versionNote').textContent=state.version==='cn'?(state.lang==='zh'?'中国版默认使用 CNY':'China Edition defaults to CNY'):(state.lang==='zh'?'Global Edition 默认使用 USD':'Global Edition defaults to USD');document.documentElement.lang=state.lang==='zh'?'zh-CN':'en'}function showLandmark(x){window.currentMapLandmark=x;document.getElementById('landmarkCard').innerHTML='<div class="card"><div class="row"><b>'+x.icon+' '+x.name+'</b><span class="pill">★ '+x.rating+'</span></div><div class="muted">'+x.country+' · '+x.city+' · 推荐：'+x.bestSeason+'</div><p>'+x.description+'</p><span class="pill">'+x.tags.join(' · ')+'</span><div class="row" style="margin-top:14px"><button class="btn small" onclick="addLandmark(&quot;'+x.id+'&quot;)">加入我的旅行路线</button><button class="btn alt small" onclick="planLandmarkWithAi(&quot;'+x.id+'&quot;)">让 AI 规划这里</button></div></div>'}renderSettings();go('home');
 </script>
-<script type="module" src="/modules/explore3d/explore3d.js?v=3"></script>
+<script src="modules/auth/auth-web.js?v=14" defer></script>
+<script src="modules/services/image-service.js?v=14" defer></script>
+<script src="modules/community/post-ui.js?v=14" defer></script>
+<script src="modules/community/home-api.js?v=14" defer></script>
+<script src="modules/map/map-loader.js?v=36-color-atlas" defer></script>
+<script src="modules/map/landmark-gallery.js?v=14" defer></script>
+<script src="modules/routes/route-web.js?v=14" defer></script>
+<script src="modules/routes/route-studio.js?v=15-publish-entry" defer></script>
+<script src="modules/ai/ai-voice.js?v=1" defer></script>
+<script src="modules/ai/ai-chat.js?v=18-photo-plan" defer></script>
+<script src="modules/discover/discover-web.js?v=18-locale-labels" defer></script>
+<script src="modules/map/map-actions.js?v=16" defer></script>
+<script src="modules/community/floating-ai.js?v=14" defer></script>
+<script src="modules/buddies/buddy-web.js?v=14" defer></script>
+<script src="modules/profile/profile-web.js?v=14" defer></script>
+<script src="modules/chat/chat-web.js?v=14" defer></script>
+<script src="modules/theme/ukiyoe.js?v=15-journal-only" defer></script>
+<script src="modules/i18n/i18n.js?v=15-noop-lang-guard" defer></script>
+<script src="modules/navigation/global-back.js?v=14" defer></script>
+<script src="/modules/theme/journal-preview.js?v=21-color-atlas" defer></script>
+<script>
+  // Screen bookkeeping: other modules also assign window.go, so the current
+  // screen is derived from the DOM rather than from a wrapped function.
+  (function () {
+    var last = null;
+    function sync() {
+      var active = document.querySelector('.screen.active');
+      var id = active ? active.id : 'home';
+      if (id === last) return;
+      last = id;
+      document.body.dataset.screen = id;
+      window.dispatchEvent(new CustomEvent('tw:screen', { detail: id }));
+    }
+    setInterval(sync, 250);
+    addEventListener('load', function () {
+      var wanted = new URLSearchParams(location.search).get('screen');
+      if (wanted && document.getElementById(wanted)) {
+        if (typeof window.go === 'function') window.go(wanted);
+        else document.querySelectorAll('.screen').forEach(function (node) { node.classList.toggle('active', node.id === wanted); });
+      }
+      sync();
+
+      // chat-web injects its tab after 探索; the design wants it after 发布,
+      // and the injection lands after load, so watch the bar.
+      var nav = document.getElementById('appNav');
+      var placeChat = function () {
+        var chat = nav.querySelector('[data-id="messages"]');
+        var publish = nav.querySelector('.nav-publish');
+        if (chat && publish && chat.previousElementSibling !== publish) publish.after(chat);
+      };
+      new MutationObserver(placeChat).observe(nav, { childList: true });
+      placeChat();
+    });
+  })();
+</script>
 </body>
 </html>

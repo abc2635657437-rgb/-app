@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#eaf3f0">
+<title>探索 · 西湖 3D 地图 | Travel World 同路人</title>
+<meta name="description" content="从太空飞向杭州西湖：实时渲染的湖面、游船、塔与正在共享位置的旅友。">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/modules/theme/ukiyoe.css?v=12">
+<link rel="stylesheet" href="/modules/explore3d/explore3d.css?v=3">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.2"/><path d="m15.4 15.4 4.2 4.2"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 3.8 3.4 6.1v13.6L9 17.4l6 2.3 5.6-2.3V3.8L15 6.1 9 3.8Z"/><path d="M9 3.8v13.6M15 6.1v13.6"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.2 9.8a5.8 5.8 0 0 1 11.6 0c0 3.9 1.3 5.2 1.3 5.2H4.9s1.3-1.3 1.3-5.2Z"/><path d="M10 18.6a2.1 2.1 0 0 0 4 0"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 7.5h9M17 7.5h3M4 12h3.5M11.5 12h8.5M4 16.5h9M17 16.5h3"/><circle cx="15" cy="7.5" r="1.8"/><circle cx="9.5" cy="12" r="1.8"/><circle cx="15" cy="16.5" r="1.8"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.6" y="3.6" width="7" height="7" rx="2.2" fill="currentColor" stroke="none"/><rect x="13.4" y="3.6" width="7" height="7" rx="2.2" fill="currentColor" stroke="none"/><rect x="3.6" y="13.4" width="7" height="7" rx="2.2" fill="currentColor" stroke="none"/><rect x="13.4" y="13.4" width="7" height="7" rx="2.2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-nature" viewBox="0 0 24 24"><path d="M2.8 18.6 9.2 8.2l3.4 6.1M21.2 18.6 15.4 9l-2.3 4.1"/><path d="M2.8 18.6h18.4"/><circle cx="17.8" cy="5.8" r="1.7"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3.8 9.4h16.4M6.2 9.4 12 4l5.8 5.4"/><path d="M6.6 9.6v8.2M17.4 9.6v8.2M3.8 18.4h16.4"/><path d="M10 17.8v-5h4v5"/></symbol>
+    <symbol id="i-food" viewBox="0 0 24 24"><path d="M7 3.6v6.1a2.4 2.4 0 0 0 4.8 0V3.6"/><path d="M9.4 9.7v10.7"/><path d="M17.2 20.4V3.8c-1.9.6-3 2.3-3 4.6 0 2 .9 3.4 3 3.9"/></symbol>
+    <symbol id="i-stay" viewBox="0 0 24 24"><path d="M3 18.4V8.6M3 13.8h18v4.6M21 18.4v-4.6"/><path d="M3 10.6h8.2a3 3 0 0 1 3 3v.2"/><circle cx="7.4" cy="8.3" r="2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M3.4 8.7h3.2l1.5-2.2h7.8l1.5 2.2h3.2v9.5H3.4V8.7Z"/><circle cx="12" cy="13.2" r="3.1"/></symbol>
+    <symbol id="i-outdoor" viewBox="0 0 24 24"><circle cx="13.6" cy="4.5" r="1.9"/><path d="M14 8.1 11.2 11.3l2.6 2.2-1.6 6.2"/><path d="M13.8 13.5l4 2.2.8 4"/><path d="M11.2 11.3 8 12.9l-1 3"/><path d="M4.2 20.6 6.2 15"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3.4 8.6 4.4L12 12.2 3.4 7.8 12 3.4Z"/><path d="m4.6 11.6 7.4 3.8 7.4-3.8"/><path d="m4.6 15.8 7.4 3.8 7.4-3.8"/></symbol>
+    <symbol id="i-locate" viewBox="0 0 24 24"><path d="M20.6 3.4 3.8 9.9l6.9 2.9 2.9 6.9 7-16.3Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.6v12.8M5.6 12h12.8"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5.6 12h12.8"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.4"/><circle cx="12" cy="12" r="2.1"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M15.4 8.6 13.6 13.6 8.6 15.4l1.8-5 5-1.8Z" fill="#c2603f" stroke="none"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.6 12 4l8 6.6V20H4v-9.4Z"/><path d="M9.6 20v-5.4h4.8V20"/></symbol>
+    <symbol id="i-explore" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M15.4 8.6 13.6 13.6 8.6 15.4l1.8-5 5-1.8Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M3.8 6.2h16.4v9.4H9.4L5 19.2v-3.6H3.8V6.2Z"/><path d="M8.2 10.3h7.6M8.2 12.8h4.8"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="2.6"/><path d="M3.8 19.4c0-3 2.3-5.2 5.2-5.2s5.2 2.2 5.2 5.2"/><circle cx="16.8" cy="9.2" r="2.1"/><path d="M15 19.4c0-2.3 1.5-4 3.6-4 1.2 0 2.1.5 2.6 1.3"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.3-7-9.2A4.2 4.2 0 0 1 12 7.8 4.2 4.2 0 0 1 19 10.8c0 4.9-7 9.2-7 9.2Z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.4 2.6 5.4 6 .8-4.4 4.1 1.2 5.9L12 16.7 6.6 19.6l1.2-5.9L3.4 9.6l6-.8L12 3.4Z" fill="currentColor" stroke="none"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <canvas id="scene" aria-label="可旋转缩放的三维西湖地图"></canvas>
+  <div id="stage" aria-hidden="true"></div>
+
+  <!-- depth of field: the two blurred bands are what turn a 3D render into a
+       photograph of a very small place -->
+  <div class="dof dof--top" aria-hidden="true"></div>
+  <div class="dof dof--bottom" aria-hidden="true"></div>
+  <div class="grade" aria-hidden="true"></div>
+
+  <div id="pinLayer"></div>
+  <div id="poiLayer"></div>
+  <div id="socialLayer"></div>
+
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <h1 class="brand__logo">Travel World</h1>
+      <p class="brand__tag">和有趣的人，一起看更大的世界</p>
+    </div>
+    <div class="topbar__actions">
+      <button class="icon-btn" id="searchToggle" type="button" aria-label="搜索"><svg class="ic"><use href="#i-search"/></svg></button>
+      <button class="icon-btn" id="mapModeToggle" type="button" aria-label="切换视角"><svg class="ic"><use href="#i-map"/></svg></button>
+      <button class="icon-btn icon-btn--bell" id="inboxToggle" type="button" aria-label="消息">
+        <svg class="ic"><use href="#i-bell"/></svg>
+        <span class="icon-btn__dot"></span>
+      </button>
+      <a class="avatar" href="/explore3d.html?screen=profile" aria-label="我的"><span class="avatar__img" aria-hidden="true"></span></a>
+    </div>
+  </header>
+
+  <div class="searchbar" id="searchbar">
+    <svg class="ic searchbar__icon"><use href="#i-search"/></svg>
+    <input id="searchInput" type="search" autocomplete="off" aria-label="搜索目的地、城市或景点" placeholder="搜索目的地、城市或景点（如：杭州 西湖）">
+    <button class="filter-btn" id="filterBtn" type="button"><svg class="ic"><use href="#i-filter"/></svg>筛选</button>
+  </div>
+  <div id="searchResults" hidden></div>
+
+  <div class="chips" id="chips" role="tablist" aria-label="景点分类">
+    <button class="chip is-active" data-cat="all" role="tab" aria-selected="true"><svg class="ic chip__icon"><use href="#i-grid"/></svg>全部</button>
+    <button class="chip" data-cat="nature" role="tab"><svg class="ic chip__icon"><use href="#i-nature"/></svg>自然风光</button>
+    <button class="chip" data-cat="history" role="tab"><svg class="ic chip__icon"><use href="#i-history"/></svg>历史人文</button>
+    <button class="chip" data-cat="food" role="tab"><svg class="ic chip__icon"><use href="#i-food"/></svg>美食</button>
+    <button class="chip" data-cat="stay" role="tab"><svg class="ic chip__icon"><use href="#i-stay"/></svg>住宿</button>
+    <button class="chip" data-cat="play" role="tab"><svg class="ic chip__icon"><use href="#i-play"/></svg>玩乐</button>
+    <button class="chip" data-cat="outdoor" role="tab"><svg class="ic chip__icon"><use href="#i-outdoor"/></svg>户外</button>
+  </div>
+
+  <button class="hero-card" id="heroCard" type="button">
+    <img class="hero-card__thumb" id="heroThumb" alt="" src="/assets/explore3d/spots/hupanjui.jpg">
+    <span class="hero-card__main">
+      <b class="hero-card__title">杭州 · 西湖</b>
+      <span class="hero-card__sub">Hangzhou · West Lake</span>
+      <span class="hero-card__quote">“人间天堂，最忆是杭州”</span>
+    </span>
+    <span class="hero-card__aside">
+      <span class="weather" id="weatherChip"><i class="weather__dot"></i>--°C</span>
+      <svg class="ic hero-card__chevron"><use href="#i-chevron"/></svg>
+    </span>
+  </button>
+
+  <div class="view-controls">
+    <button class="map-btn" id="layerBtn" type="button" aria-label="图层"><svg class="ic"><use href="#i-layers"/></svg></button>
+    <button class="map-btn" id="locateBtn" type="button" aria-label="定位我的位置"><svg class="ic"><use href="#i-locate"/></svg></button>
+    <button class="map-btn" id="zoomIn" type="button" aria-label="放大"><svg class="ic"><use href="#i-plus"/></svg></button>
+    <button class="map-btn" id="zoomOut" type="button" aria-label="缩小"><svg class="ic"><use href="#i-minus"/></svg></button>
+    <button class="map-btn" id="compassBtn" type="button" aria-label="指北"><svg class="ic map-btn__needle"><use href="#i-compass"/></svg></button>
+    <button class="map-btn" id="resetView" type="button" aria-label="回到初始视角"><svg class="ic"><use href="#i-target"/></svg></button>
+    <button class="overview" id="overviewBtn" type="button" aria-label="全景">
+      <span class="overview__map"></span>
+      <span class="overview__label">全景</span>
+    </button>
+  </div>
+
+  <section class="sheet" id="sheet">
+    <button class="sheet__handle" id="sheetHandle" type="button" aria-label="展开或收起"></button>
+    <nav class="sheet__tabs" id="sheetTabs" aria-label="景点分类">
+      <button class="sheet__tab is-active" data-tab="recommend">推荐</button>
+      <button class="sheet__tab" data-tab="nearby">附近</button>
+      <button class="sheet__tab" data-tab="dest">目的地</button>
+      <button class="sheet__tab" data-tab="food">美食</button>
+      <button class="sheet__tab" data-tab="play">玩乐</button>
+      <button class="sheet__tab" data-tab="stay">住宿</button>
+      <button class="sheet__tab" data-tab="photo">拍照</button>
+      <button class="sheet__tab" data-tab="route">路线</button>
+    </nav>
+    <div class="sheet__cards" id="sheetCards"></div>
+  </section>
+
+  <nav class="bottom-nav" id="bottomNav">
+    <a class="nav-item" href="/explore3d.html?screen=home"><svg class="ic nav-item__icon"><use href="#i-home"/></svg>首页</a>
+    <button class="nav-item is-active" type="button" id="navExplore"><svg class="ic nav-item__icon"><use href="#i-explore"/></svg>探索</button>
+    <button class="nav-item nav-item--publish" type="button" id="navPublish" aria-label="发布">
+      <span class="publish-mark"><svg class="ic"><use href="#i-plus"/></svg></span>
+      <span class="publish-label">发布</span>
+    </button>
+    <a class="nav-item" href="/explore3d.html?screen=messages"><svg class="ic nav-item__icon"><use href="#i-chat"/></svg>聊天</a>
+    <a class="nav-item" href="/explore3d.html?screen=friends"><svg class="ic nav-item__icon"><use href="#i-people"/></svg>旅友</a>
+  </nav>
+
+  <div id="travelerSheet" class="traveler-sheet">
+    <div class="traveler-sheet__card" role="dialog" aria-label="旅友资料">
+      <button class="traveler-sheet__close" id="travelerSheetClose" type="button">关闭</button>
+      <div id="travelerSheetBody"></div>
+    </div>
+  </div>
+
+  <div id="status" role="status"></div>
+  <div id="toast" role="alert"></div>
+
+  <div id="loading" class="is-visible">
+    <div class="loading-mark"></div>
+    <p class="loading-title">正在展开西湖</p>
+    <p class="loading-note" id="loadingNote">读取地形贴图与地标…</p>
+  </div>
+</div>
+
+<script src="/modules/auth/auth-web.js?v=14" defer></script>
+<script>
+  window.go = window.go || function () {
+    document.querySelectorAll('.dm-overlay').forEach(node => node.remove());
+  };
+</script>
+<script type="module" src="/modules/explore3d/explore3d.js?v=3"></script>
+</body>
+</html>

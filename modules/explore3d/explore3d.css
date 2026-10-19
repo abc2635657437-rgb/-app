@@ -705,7 +705,7 @@ body.is-low .dof { display: none; }
 }
 
 /* --------------------------------------------------------- map controls */
-.map-controls {
+.view-controls {
   position: absolute;
   right: 14px;
   bottom: calc(var(--nav-h) + var(--sheet-h) + 20px + var(--safe-bottom));
@@ -1139,7 +1139,7 @@ body.is-low .dof { display: none; }
   :root { --sheet-h: 224px; }
   .topbar, .searchbar, .chips, .sheet, .bottom-nav { left: 50%; right: auto; width: min(560px, 100%); transform: translateX(-50%); }
   .hero-card { left: 50%; margin-left: -264px; }
-  .map-controls { right: max(18px, calc(50vw - 300px)); }
+  .view-controls { right: max(18px, calc(50vw - 300px)); }
   #app::before, #app::after { display: none; }
 }
 
