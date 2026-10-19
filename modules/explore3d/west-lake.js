@@ -1037,21 +1037,53 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
     return models.hall(options || {});
   }
 
+  /**
+   * A landmark must not stand in the lake. If its ground height is at or below
+   * the waterline, walk outward along the shore until it finds land, and return
+   * the point plus the ground height there.
+   */
+  function landNear(x, z, maxRadius = 900) {
+    const height = surfaceAt(x, z);
+    if (height > 1.2) return { x, z, y: height };
+    for (let radius = 40; radius <= maxRadius; radius += 40) {
+      const steps = 16;
+      for (let i = 0; i < steps; i += 1) {
+        const angle = (i / steps) * Math.PI * 2;
+        const nx = x + Math.cos(angle) * radius;
+        const nz = z + Math.sin(angle) * radius;
+        const h = surfaceAt(nx, nz);
+        if (h > 1.2) return { x: nx, z: nz, y: h };
+      }
+    }
+    return { x, z, y: Math.max(height, 0) };
+  }
+
+
+
+
+
+  // landmarks that moved onto land: applied once spotLocal exists
+  const spotMoves = [];
+
   const landmarkExtras = new THREE.Group();
   landmarkExtras.name = 'landmarks';
   group.add(landmarkExtras);
 
   const leifeng = buildLeifeng();
   {
-    const p = geoToLocal(30.2317, 120.1492);
-    leifeng.position.set(p.x, surfaceAt(p.x, p.z), p.z);
+    const raw = geoToLocal(30.2317, 120.1492);
+    const p = landNear(raw.x, raw.z);
+    leifeng.position.set(p.x, p.y, p.z);
     leifeng.rotation.y = -0.35;
+    spotMoves.push(['leifeng-pagoda', p.x, p.y, p.z]);
     landmarkExtras.add(leifeng);
   }
   {
-    const p = geoToLocal(30.2601, 120.1442);
+    const rawBaochu = geoToLocal(30.2601, 120.1442);
+    const p = landNear(rawBaochu.x, rawBaochu.z);
     const baochu = buildBaochu();
-    baochu.position.set(p.x, surfaceAt(p.x, p.z), p.z);
+    baochu.position.set(p.x, p.y, p.z);
+    spotMoves.push(['baochu-pagoda', p.x, p.y, p.z]);
     landmarkExtras.add(baochu);
   }
   {
@@ -1428,6 +1460,19 @@ export function createWestLake({ renderer, sunDirection, quality = 'high' }) {
     const local = geoToLocal(spot.lat, spot.lon);
     return { ...spot, x: local.x, z: local.z, y: Math.max(surfaceAt(local.x, local.z), 0) };
   });
+
+  // Landmarks walked onto dry ground must move in the record too, or the camera
+  // still flies to the water they used to stand in.
+  for (const [id, x, y, z] of spotMoves) {
+    const spot = spotLocal.find(entry => entry.id === id);
+    if (!spot) continue;
+    const geo = localToGeo(x, z);
+    spot.x = x;
+    spot.z = z;
+    spot.y = y;
+    spot.lat = geo.lat;
+    spot.lon = geo.lon;
+  }
 
   return {
     group,

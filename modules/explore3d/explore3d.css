@@ -1214,3 +1214,27 @@ body.is-low .dof { display: none; }
   cursor: pointer;
 }
 .place-brief__action[hidden] { display: none; }
+
+
+/* ---------------------------------------------------- focus mode (a place)
+   While a landmark is being looked at, the browsing chrome steps aside so the
+   building is not framed behind a card. */
+body[data-focus="place"] .searchbar,
+body[data-focus="place"] .chips,
+body[data-focus="place"] .hero-card,
+body[data-focus="place"] .sheet,
+body[data-focus="place"] .poi,
+body[data-focus="place"] .traveler {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+body[data-focus="place"] .place-brief {
+  bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+body[data-focus="place"] .view-controls {
+  bottom: calc(18px + env(safe-area-inset-bottom));
+}

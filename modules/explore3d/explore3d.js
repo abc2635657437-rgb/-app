@@ -441,13 +441,36 @@ async function openTraveler(userId) {
 // --- camera actions --------------------------------------------------------
 
 function focusPlace(place) {
+  // Use the scene's own record when there is one: a landmark that had to be
+  // moved onto dry ground is no longer at its map pin's coordinates.
+  const spot = lake.spots.find(entry => entry.id === place.id);
+  const targetLat = spot ? spot.lat : place.lat;
+  const targetLon = spot ? spot.lon : place.lon;
+
+  // Frame the landmark rather than standing on it. The camera is pulled back
+  // along the view direction so the building sits above the bottom sheet, and
+  // its height comes from the building instead of one fixed altitude.
+  // Stand due south of the landmark and look north at it: the heading no longer
+  // depends on guessing which way the scene's north points.
+  const heading = 0;
+  const tilt = 58 * RAD;
+  const height = spot && spot.height ? spot.height : (place.height || 20);
+  const cameraAltitude = Math.min(0.5, Math.max(0.18, height * 0.0038));
+  const backOff = (cameraAltitude * 0.9) / Math.tan(tilt) * 0.85; // km
+  const metresPerDegLat = 110574;
+  const metresPerDegLon = 111320 * Math.cos((targetLat * Math.PI) / 180);
+  const camLat = targetLat - (backOff * 1000) / metresPerDegLat;
+  const camLon = targetLon;
+
   rig.flyTo(
-    { lat: place.lat, lon: place.lon, altitude: 0.42, heading: 20 * RAD, tilt: 66 * RAD },
+    { lat: camLat, lon: camLon, altitude: cameraAltitude, heading, tilt },
     {
       duration: 2600,
             onArrive: () => {
         rig.setMode('local');
         document.body.dataset.mode = 'local';
+        // the chrome would otherwise sit on top of whatever we frame
+        document.body.dataset.focus = 'place';
         showPlaceCard({
           title: place.name,
           meta: place.en + ' · 杭州西湖',
@@ -491,7 +514,12 @@ function globeFitAltitude() {
   return EARTH_RADIUS / Math.sin(half) - EARTH_RADIUS;
 }
 
+function clearFocus() {
+  delete document.body.dataset.focus;
+}
+
 function flyToGlobe() {
+  clearFocus();
   rig.setMode('flying');
   document.body.dataset.mode = 'flying';
   rig.flyTo(
@@ -649,6 +677,7 @@ function showPlaceCard({ title, meta, body, action }) {
 
 function hidePlaceCard() {
   $('placeCard')?.classList.remove('is-visible');
+  clearFocus();
 }
 
 let toastTimer = 0;
