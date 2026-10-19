@@ -89,7 +89,16 @@ try {
 
   // --- explore -------------------------------------------------------------
   await evaluate("go('map')");
-  await sleep(5000);
+  // a cold production instance can take several seconds to build the scene, so
+  // wait for readiness instead of assuming a fixed delay
+  let waited = 0;
+  while (waited < 25000) {
+    const ready = await evaluate("(() => { const d = document.getElementById('exploreFrame')?.contentDocument; return !!(d && d.defaultView.__explore3dReady); })()");
+    if (ready === true) break;
+    await sleep(500);
+    waited += 500;
+  }
+  await sleep(600);
   check('探索 screen active', (await screenNow()) === 'map');
   const frame = await evaluate(`(() => {
     const f = document.getElementById('exploreFrame');
