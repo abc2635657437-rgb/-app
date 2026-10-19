@@ -129,6 +129,7 @@ ${headContent}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${stylesheetLinks}
 ${inlineStyle}
+<link rel="stylesheet" href="/modules/theme/shell-skin.css?v=4">
 ${extraStyle}
 </head>
 <body>
@@ -196,6 +197,22 @@ ${modules.join('\n')}
       // until the screen was shown — that wait is what the visitor felt. Load
       // it once the feed has settled: by the time 探索 is tapped the scene is
       // already built, and the scene itself stays paused until it is shown.
+      // journal-preview.js paints the whole app as a dark ink journal and
+      // injects its own stylesheet. The shell has its own light language, so
+      // the class and that sheet are removed — the module keeps running, its
+      // exports still work, only its skin is gone.
+      var stripJournal = function () {
+        document.body.classList.remove('journal-preview');
+        document.querySelectorAll('link[href*="journal-preview.css"]').forEach(function (link) { link.remove(); });
+      };
+      stripJournal();
+      new MutationObserver(stripJournal).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+      // the theme files arrive from modules after this point; re-append the
+      // skin so it stays the last word on the three repainted screens
+      var skin = document.querySelector('link[href*="shell-skin.css"]');
+      if (skin) document.head.appendChild(skin);
+
       var frame = document.getElementById('exploreFrame');
       var warmExploreFrame = function () {
         if (frame && !frame.getAttribute('src')) frame.setAttribute('src', frame.dataset.src);
