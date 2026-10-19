@@ -134,7 +134,7 @@ ${extraStyle}
 ${mainWithoutMap}
 ${sprite}
 <section id="map" class="screen screen--explore" style="position:fixed;inset:0;left:0;top:0;width:100%;height:100%;padding:0;margin:0;z-index:20;overflow:hidden;background:#dfeae6">
-<iframe id="exploreFrame" title="西湖探索" src="/explore3d-explore.html" loading="lazy" style="display:block;width:100%;height:100%;border:0;background:#dfeae6"></iframe>
+<iframe id="exploreFrame" title="西湖探索" data-src="/explore3d-explore.html" style="display:block;width:100%;height:100%;border:0;background:#dfeae6"></iframe>
 </section>
 <span class="currency-label" hidden></span>
 ${nav}
@@ -190,6 +190,17 @@ ${modules.join('\n')}
         placeChat();
         if (++tries > 24) clearInterval(settle);
       }, 250);
+
+      // The explore document used to be a lazy iframe, so nothing downloaded
+      // until the screen was shown — that wait is what the visitor felt. Load
+      // it once the feed has settled: by the time 探索 is tapped the scene is
+      // already built, and the scene itself stays paused until it is shown.
+      var frame = document.getElementById('exploreFrame');
+      var warmExploreFrame = function () {
+        if (frame && !frame.getAttribute('src')) frame.setAttribute('src', frame.dataset.src);
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(warmExploreFrame, { timeout: 1500 });
+      else setTimeout(warmExploreFrame, 1200);
     });
   })();
 </script>

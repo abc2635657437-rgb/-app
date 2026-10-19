@@ -112,10 +112,13 @@ const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerH
 // agree about where the sun is.
 const sunDirection = geoToVec3(24, 86, 1).normalize();
 
+performance.mark('explore:boot');
 const globe = createGlobe({ renderer, sunDirection });
+performance.mark('explore:globe');
 scene.add(globe.group, globe.stars);
 
 const lake = createWestLake({ renderer, sunDirection, quality: state.tier });
+performance.mark('explore:lake');
 lake.group.visible = false;
 scene.add(lake.group);
 
@@ -957,6 +960,10 @@ async function boot() {
   renderSheet();
   loadWeather();
   loadOnlineUsers(true);
+  performance.mark('explore:ready');
+  performance.measure('boot', 'explore:boot', 'explore:globe');
+  performance.measure('lake', 'explore:globe', 'explore:lake');
+  performance.measure('first-frame', 'explore:lake', 'explore:ready');
   window.__explore3dReady = true;
   setStatus('拖动旋转视角，滚轮或双指缩放');
   requestAnimationFrame(frame);
