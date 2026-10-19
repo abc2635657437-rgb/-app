@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.mjs",
     "check": "node --check server.mjs && node --check backend/server.mjs",
-    "deploy": "node scripts/deploy.mjs"
+    "deploy": "node scripts/deploy.mjs",
+    "test:app": "node scripts/test-app.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
