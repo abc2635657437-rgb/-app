@@ -440,6 +440,38 @@ async function openTraveler(userId) {
 
 // --- camera actions --------------------------------------------------------
 
+/**
+ * Aim the camera at a landmark by measurement instead of by formula: project
+ * the target and binary-search the tilt until it sits in the upper part of the
+ * frame (above the place card, below the top bar).`_tilt_ is monotonic in this
+ * rig, so a dozen halvings are enough and the cost is paid once.
+ */
+function frameTargetOnScreen(lat, lon, height) {
+  if (!lake || !lake.poseAt) return;
+  const target = lake.poseAt(lat, lon, (height || 20) * 0.55);
+  const probe = target.clone();
+
+  const projectedY = () => {
+    rig.apply();
+    camera.updateMatrixWorld(true);
+    probe.copy(target).project(camera);
+    return probe.y;
+  };
+
+  let low = 0;         // looks further down
+  let high = 1.2;      // looks further up
+  for (let i = 0; i < 14; i += 1) {
+    const mid = (low + high) / 2;
+    rig.tilt = mid;
+    const y = projectedY();
+    // y grows as the camera looks further down, so aim for a little above centre
+    if (y > 0.28) low = mid;
+    else high = mid;
+  }
+  rig.tilt = (low + high) / 2;
+  rig.apply();
+}
+
 function focusPlace(place) {
   // Use the scene's own record when there is one: a landmark that had to be
   // moved onto dry ground is no longer at its map pin's coordinates.
@@ -450,13 +482,16 @@ function focusPlace(place) {
   // Frame the landmark rather than standing on it. The camera is pulled back
   // along the view direction so the building sits above the bottom sheet, and
   // its height comes from the building instead of one fixed altitude.
-  // Stand due south of the landmark and look north at it: the heading no longer
-  // depends on guessing which way the scene's north points.
+  // Stand due south of the landmark and look north at it. tilt is inverted in
+  // this rig — 0 looks down 30.2°, larger values look up — so the old 58° had
+  // the camera staring at the sky and the building landing off-screen.
   const heading = 0;
-  const tilt = 58 * RAD;
+  const tilt = 0;
   const height = spot && spot.height ? spot.height : (place.height || 20);
-  const cameraAltitude = Math.min(0.5, Math.max(0.18, height * 0.0038));
-  const backOff = (cameraAltitude * 0.9) / Math.tan(tilt) * 0.85; // km
+  const cameraAltitude = Math.min(0.36, Math.max(0.09, height * 0.0019));
+  // 30.2° is what tilt 0 gives; the rest is geometry
+  const DEPRESSION_TAN = Math.tan((30.2 * Math.PI) / 180);
+  const backOff = cameraAltitude / DEPRESSION_TAN; // km
   const metresPerDegLat = 110574;
   const metresPerDegLon = 111320 * Math.cos((targetLat * Math.PI) / 180);
   const camLat = targetLat - (backOff * 1000) / metresPerDegLat;
@@ -469,8 +504,9 @@ function focusPlace(place) {
             onArrive: () => {
         rig.setMode('local');
         document.body.dataset.mode = 'local';
-        // the chrome would otherwise sit on top of whatever we frame
+        // The chrome would otherwise sit on top of whatever we frame.
         document.body.dataset.focus = 'place';
+        frameTargetOnScreen(targetLat, targetLon, height);
         showPlaceCard({
           title: place.name,
           meta: place.en + ' · 杭州西湖',

@@ -30,16 +30,17 @@ const PALETTE = {
  */
 function makeEave(radius, rise, track, material, segments = 8) {
   const points = [];
-  const steps = 7;
+  const steps = 9;
   for (let i = 0; i <= steps; i += 1) {
     const t = i / steps;
-    // concave curve: shallow at the body, kicking up at the rim
-    const r = radius * (0.42 + 0.58 * t);
-    const y = rise * Math.pow(t, 1.9);
+    // A Chinese eave runs outward much further than it rises: nearly flat for
+    // the first two thirds, then lifting into an upturned lip.
+    const r = radius * (0.55 + 1.0 * t);
+    const y = rise * (0.12 * t + 0.88 * Math.pow(t, 3.2));
     points.push(new THREE.Vector2(r, y));
   }
-  // the lip: a short vertical drop so the roof has thickness
-  points.push(new THREE.Vector2(radius, rise - rise * 0.16));
+  // the fascia: a short drop at the rim gives the roof visible thickness
+  points.push(new THREE.Vector2(radius * 1.55, rise - rise * 0.28));
   const geometry = new THREE.LatheGeometry(points, segments);
   track(geometry);
   const mesh = new THREE.Mesh(geometry, material);
@@ -59,12 +60,13 @@ function makeGallery(radius, height, track, material, segments = 8) {
 
 function buildPagoda({ tiers = 5, baseRadius = 11, tierHeight = 8, track }) {
   const group = new THREE.Group();
-  const wall = new THREE.MeshLambertMaterial({ color: PALETTE.wallWhite });
-  const tile = new THREE.MeshLambertMaterial({ color: PALETTE.roofTile, flatShading: true });
-  const ridge = new THREE.MeshLambertMaterial({ color: PALETTE.roofRidge, flatShading: true });
-  const lacquer = new THREE.MeshLambertMaterial({ color: PALETTE.lacquer });
+  // warm plaster rather than white, and a deep red band under every eave
+  const wall = new THREE.MeshLambertMaterial({ color: 0xe8d9b8 });
+  const tile = new THREE.MeshLambertMaterial({ color: 0x46525c, flatShading: true, side: THREE.DoubleSide });
+  const ridge = new THREE.MeshLambertMaterial({ color: 0x2f3a42, flatShading: true });
+  const lacquer = new THREE.MeshLambertMaterial({ color: 0x8f3a26 });
   const gold = new THREE.MeshLambertMaterial({ color: PALETTE.gold });
-  const glow = new THREE.MeshBasicMaterial({ color: PALETTE.glow });
+  const glow = new THREE.MeshLambertMaterial({ color: 0x2b2f30 });
   [wall, tile, ridge, lacquer, gold, glow].forEach(track);
 
   // --- stepped stone platform ---
@@ -108,8 +110,14 @@ function buildPagoda({ tiers = 5, baseRadius = 11, tierHeight = 8, track }) {
     gallery.position.y = y + height * 0.46;
     group.add(gallery);
 
+    // bracket band (dougong) under the eave
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(radius * 1.05, radius * 1.02, height * 0.1, 8), lacquer);
+    track(band.geometry);
+    band.position.y = y + height - height * 0.05;
+    group.add(band);
+
     // eave, sitting on top of the storey and overhanging it
-    const eave = makeEave(radius * 1.42, height * 0.30, track, tile);
+    const eave = makeEave(radius * 1.45, height * 0.30, track, tile);
     eave.position.y = y + height;
     group.add(eave);
 
