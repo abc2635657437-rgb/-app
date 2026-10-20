@@ -325,3 +325,153 @@ body.journal-preview[data-time-theme="night"] #map .map-controls .btn {
 body.journal-preview[data-time-theme="night"] #map .map-controls input::placeholder {
   color: #8a8f88 !important;
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   柔光纸本 · Soft paper journal (2026-10)
+   Calmer backdrops and a quieter reading voice for Home, Explore, Chat,
+   Travel buddies and My space. Appended last, so it only softens what the
+   earlier layers already lay out; nothing here changes structure or flow.
+   ═════════════════════════════════════════════════════════════════════ */
+
+body.journal-preview{
+  --tw-serif:"Songti SC","Noto Serif SC","STSong","SimSun",Georgia,serif;
+  --tw-sans:"PingFang SC","Noto Sans SC","MiSans","HarmonyOS Sans SC","Source Han Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  font-family:var(--tw-sans);
+  font-size:15px;
+  line-height:1.75;
+  letter-spacing:.012em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* The place artwork becomes a hint of colour behind a sheet of paper. */
+body.journal-preview[data-page-bg="great-wall"]::before{background-image:url('/assets/route-photos/soft/page-bg-great-wall-soft.jpg?v=1')}
+body.journal-preview[data-page-bg="zhangjiajie"]::before{background-image:url('/assets/route-photos/soft/page-bg-zhangjiajie-soft.jpg?v=1')}
+body.journal-preview[data-page-bg="west-lake"]::before{background-image:url('/assets/route-photos/soft/page-bg-west-lake-soft.jpg?v=1')}
+body.journal-preview[data-page-bg="erhai"]::before{background-image:url('/assets/route-photos/soft/page-bg-erhai-soft.jpg?v=1')}
+body.journal-preview[data-page-bg="potala"]::before{background-image:url('/assets/route-photos/soft/page-bg-potala-soft.jpg?v=1')}
+
+body.journal-preview::before{
+  background-color:#f8f5ed;
+  background-position:center 24%;
+  background-size:cover;
+  filter:saturate(.86) contrast(.94) brightness(1.03);
+}
+
+/* The veil rides on its own layer, so the per-page image rules keep winning on
+   ::before without the gradient having to be repeated five times. */
+body.journal-preview::after{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(250,247,240,.82) 0%,
+      rgba(250,247,240,.72) 16%,
+      rgba(250,247,240,.63) 48%,
+      rgba(250,247,240,.70) 76%,
+      rgba(250,247,240,.86) 100%);
+}
+
+body.journal-preview[data-time-theme="night"]::after{
+  background:
+    linear-gradient(180deg,
+      rgba(15,21,23,.93) 0%,
+      rgba(15,21,23,.87) 45%,
+      rgba(15,21,23,.92) 100%);
+}
+
+/* ── Type: song type for the voice, a quiet sans for the reading ─────── */
+body.journal-preview :is(.title,.community-brand,.journal-profile-head h1,.journal-hero-copy h1,.post-title,.where-now-card h3,.destination-photo-copy strong,.dm-summary b,.dm-header b,h1,h2,h3){
+  font-family:var(--tw-serif)!important;
+  font-weight:600!important;
+  font-synthesis:none;
+  -webkit-text-stroke:0!important;
+  text-shadow:none!important;
+}
+body.journal-preview .title,
+body.journal-preview .journal-profile-head h1{font-size:30px!important;line-height:1.38!important;letter-spacing:.035em}
+body.journal-preview .community-brand{font-size:24px!important;letter-spacing:.12em}
+body.journal-preview .post-title{font-size:19px!important;line-height:1.52;letter-spacing:.02em;margin-top:12px}
+body.journal-preview #whereNow h2{font-size:23px!important;line-height:1.42;letter-spacing:.03em}
+body.journal-preview:not([data-time-theme="night"]) :is(.title,.journal-profile-head h1,.community-brand,.post-title,#whereNow h2,.where-now-card h3){color:#1f3f4b}
+
+body.journal-preview .post-copy{font-size:14.5px;line-height:1.8;letter-spacing:.01em}
+body.journal-preview:not([data-time-theme="night"]) .post-copy{color:#4b5f66}
+body.journal-preview .muted,
+body.journal-preview .sub{font-size:13.5px;line-height:1.72}
+body.journal-preview:not([data-time-theme="night"]) :is(.muted,.sub){color:#5c6a65}
+body.journal-preview .journal-buddy-subtitle{font-size:14px;line-height:1.7;padding-bottom:26px}
+body.journal-preview:not([data-time-theme="night"]) .journal-buddy-subtitle{color:#5c6a65}
+
+body.journal-preview .community-top .eyebrow{font:600 10px/1.5 var(--tw-sans)!important;letter-spacing:.24em!important;margin-bottom:4px}
+body.journal-preview:not([data-time-theme="night"]) .community-top .eyebrow{color:#96795d!important}
+body.journal-preview .home-tabs{margin:16px 0 14px;gap:24px}
+body.journal-preview .home-tab{font-size:13.5px!important;font-weight:500!important;letter-spacing:.06em!important}
+body.journal-preview .journal-tabs button,
+body.journal-preview .journal-trip-filters button{font-size:13.5px!important;font-weight:500!important;letter-spacing:.03em}
+body.journal-preview #whereNow>.head small,
+body.journal-preview .where-now>.head small{font-size:10px;letter-spacing:.18em}
+body.journal-preview:not([data-time-theme="night"]) :is(#whereNow>.head small,.where-now>.head small){color:#8d7458}
+body.journal-preview .journal-profile-head button{font-size:14px;font-weight:500}
+body.journal-preview:not([data-time-theme="night"]) .journal-profile-head button{color:#4a5f66}
+
+/* ── Surfaces: paper rather than white cards on a photo ──────────────── */
+body.journal-preview:not([data-time-theme="night"]) .card,
+body.journal-preview:not([data-time-theme="night"]) .post-card{background:rgba(251,248,241,.90)}
+body.journal-preview:not([data-time-theme="night"]) .home-feed-grid>.home-feed-card,
+body.journal-preview:not([data-time-theme="night"]) #communityFeed.home-feed-masonry>.post-card{
+  background:rgba(251,248,241,.93);
+  border:1px solid rgba(166,145,108,.26);
+  box-shadow:0 6px 20px rgba(63,52,34,.06);
+}
+body.journal-preview:not([data-time-theme="night"]) #friends .card{
+  background:rgba(251,248,241,.93);
+  border-color:rgba(166,145,108,.28);
+  box-shadow:0 6px 20px rgba(63,52,34,.05);
+}
+body.journal-preview #friends #buddyPlans>.card{border-left:2px solid #b99a6a}
+body.journal-preview:not([data-time-theme="night"]) #profile .profile-links button,
+body.journal-preview:not([data-time-theme="night"]) #profile .profile-links button:nth-child(n+4){
+  background:rgba(251,248,241,.74)!important;
+  border:1px solid rgba(166,145,108,.26)!important;
+  color:#304b56!important;
+  font-size:13.5px;
+  letter-spacing:.02em;
+  box-shadow:none;
+}
+body.journal-preview:not([data-time-theme="night"]) #friends .journal-trip-filters button.active,
+body.journal-preview:not([data-time-theme="night"]) #friends .journal-trip-filters button:last-child{background:#b04d39;color:#fdf9f1}
+
+/* ── Navigation and small labels: read at arm's length ──────────────── */
+body.journal-preview .nav{background:rgba(250,247,240,.95);backdrop-filter:blur(18px);border-top:1px solid rgba(151,138,112,.26)}
+body.journal-preview .nav button{font-size:11.5px!important;font-weight:500!important;letter-spacing:.04em!important;line-height:1.7}
+body.journal-preview:not([data-time-theme="night"]) .nav button{color:#66736d!important}
+body.journal-preview .nav button.active{font-weight:600!important}
+body.journal-preview:not([data-time-theme="night"]) .nav button.active{color:var(--accent)!important}
+body.journal-preview[data-time-theme="night"] .nav{background:rgba(20,28,30,.94);border-top-color:rgba(225,231,225,.14)}
+body.journal-preview:not([data-time-theme="night"]) .journal-hero-caption{font-size:11px;letter-spacing:.04em}
+
+/* Explore sits directly on the artwork: keep its labels on paper. */
+body.journal-preview #map .map-controls input,
+body.journal-preview #map .map-controls .btn{font-size:13.5px}
+body.journal-preview .destination-region-tabs button{font-size:12.5px;letter-spacing:.02em}
+body.journal-preview #map #mapStatus{font-size:12px;line-height:1.6;letter-spacing:.02em!important}
+body.journal-preview #map .map-legend span{font-size:11px;letter-spacing:.02em}
+
+/* The atlas is information, not decoration: keep its colour but take the glare off. */
+body.journal-preview #map .leaflet-tile-pane{filter:saturate(1.16) contrast(1.01) brightness(1.04)}
+body.journal-preview #map .map-canvas{box-shadow:0 0 0 4px rgba(255,255,255,.5),inset 0 8px 20px rgba(23,57,71,.10)}
+
+/* ── The small print: nothing below 12px that has to be read ─────────── */
+body.journal-preview #communityFeed.home-feed-masonry .post-title{font-size:16.5px!important;line-height:1.45}
+body.journal-preview #communityFeed.home-feed-masonry .post-copy{font:13px/1.62 var(--tw-sans);letter-spacing:.01em}
+body.journal-preview #communityFeed.home-feed-masonry .post-author-name{font-size:12px}
+body.journal-preview #communityFeed.home-feed-masonry .post-actions{font-size:12px}
+
+body.journal-preview #map .tw-q-pin__label{font-size:10.5px!important;font-weight:600!important;letter-spacing:.01em}
+body.journal-preview .destination-photo-copy small{font-size:12px;line-height:1.55}
+body.journal-preview .destination-source-note{font-size:11.5px}
+body.journal-preview .where-now>.head .muted{font-size:11.5px}

@@ -1,5 +1,5 @@
 (function () {
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=17-global-guide-images', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=18-soft', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
   window.loadMap = function () {
     // Already built: nothing to do.
     if (document.querySelector('.leaflet-container')) return;
