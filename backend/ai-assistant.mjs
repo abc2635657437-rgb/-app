@@ -44,6 +44,12 @@ const UPSTREAM_WINDOW = Number(process.env.AI_UPSTREAM_WINDOW_MS) > 0
 const GATE_MAX_WAIT = Number(process.env.AI_GATE_MAX_WAIT_MS) > 0
   ? Number(process.env.AI_GATE_MAX_WAIT_MS)
   : 9_000;
+// A healthy reply starts streaming in three to four seconds. Silence past this
+// means the request is queued behind another visitor's share of the upstream
+// window, and waiting out the full budget only wastes the visitor's patience.
+const FIRST_TOKEN_DEADLINE = Number(process.env.AI_FIRST_TOKEN_MS) > 0
+  ? Number(process.env.AI_FIRST_TOKEN_MS)
+  : 15_000;
 
 // Kept short and concrete. The assistant must cover the five planning axes the
 // product is built around (衣 food/lodging/transport/play) and must not invent
@@ -428,6 +434,9 @@ function timedRequestSignal(parent, milliseconds) {
   else parent.addEventListener('abort', onAbort, { once: true });
   return {
     signal: controller.signal,
+    // Lets a caller cancel on its own condition — the first-token deadline uses
+    // this to tell "the model is thinking" from "we are queued behind someone".
+    abort(reason) { try { controller.abort(reason); } catch (_) { /* already gone */ } },
     dispose() {
       clearTimeout(timer);
       parent.removeEventListener('abort', onAbort);
@@ -746,13 +755,26 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         let answer = '';
         let finish = '';
         let truncated = false;
+        let firstToken = false;
+        // Give up on silence rather than on a fixed clock: a queued request never
+        // produces text, so the visitor hears the truth in 15 s instead of 40.
+        const deadline = setTimeout(() => {
+          if (!firstToken) activeUpstreamRequest?.abort(new DOMException('No first token', 'TimeoutError'));
+        }, FIRST_TOKEN_DEADLINE);
         try {
-          finish = await relayUpstream(upstream, async text => { answer += text; sseWrite(res, 'delta', { text }); });
+          finish = await relayUpstream(upstream, async text => {
+            if (!firstToken) { firstToken = true; clearTimeout(deadline); }
+            answer += text;
+            sseWrite(res, 'delta', { text });
+          });
         } catch (error) {
           if (clientAbort.signal.aborted) throw error;
+          // Nothing arrived at all: the desk was queued, not cut off mid-plan.
+          if (!firstToken) { error.exhausted = true; throw error; }
           if (input.mode === 'plan' && /Timeout|Abort/i.test(String(error?.name))) truncated = true;
           else throw error;
         } finally {
+          clearTimeout(deadline);
           activeUpstreamRequest?.dispose();
           activeUpstreamRequest = null;
         }
@@ -780,7 +802,10 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       return respond(answer.trim() || groundedFallback(records, input.language), { degraded: !answer.trim(), finish });
     } catch (error) {
       if (clientAbort.signal.aborted || res.destroyed) return;
-      const exhausted = error?.status === 402 || error?.status === 429;
+      const exhausted = error?.exhausted === true || error?.status === 402 || error?.status === 429;
+      // Silence from the upstream is proof the shared window is busy, so the gate
+      // closes here too and the next visitor is told the truth immediately.
+      if (error?.exhausted) noteUpstreamUse();
       console.warn('ai_assistant_failure', JSON.stringify({ mode: input.mode, name: error?.name || 'error', status: error?.status || 0, exhausted }));
       // A refused quota is not a network problem, and saying so saves the
       // visitor from hunting for a fault on their own device.
