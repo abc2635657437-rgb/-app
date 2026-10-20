@@ -1,6 +1,24 @@
 (function () {
   if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('/sw.js?v=17-global-guide-images', { updateViaCache: 'none' }).then(registration => registration.update()).catch(() => {});
-  window.loadMap = function () { if (window.initTravelMap) window.initTravelMap(); else { const status = document.getElementById('mapStatus'); if (status) status.textContent = '正在加载在线地图…'; } };
+  window.loadMap = function () {
+    // Already built: nothing to do.
+    if (document.querySelector('.leaflet-container')) return;
+    if (window.initTravelMap) { window.initTravelMap(); return; }
+    const status = document.getElementById('mapStatus');
+    if (status) status.textContent = '正在加载在线地图…';
+    // map-web.js is a classic script that executes after this one. Poll for its
+    // hook instead of checking once, or a cold load never shows the map.
+    let tries = 0;
+    const timer = setInterval(() => {
+      tries += 1;
+      if (window.initTravelMap) {
+        clearInterval(timer);
+        if (!document.querySelector('.leaflet-container')) window.initTravelMap();
+        return;
+      }
+      if (tries >= 60) clearInterval(timer);
+    }, 250);
+  };
   const css = document.createElement('link');
   css.rel = 'stylesheet';
   css.href = '/vendor/leaflet/leaflet.css';
