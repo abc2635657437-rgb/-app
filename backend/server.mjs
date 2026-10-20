@@ -20,6 +20,7 @@ import { installAiAssistant } from './ai-assistant.mjs';
 import { installPlaceInfo } from './place-info.mjs';
 import { installPlaceImages } from './place-images.mjs';
 import { searchTravelKnowledge, knowledgeForPrompt } from './travel-knowledge.mjs';
+import { cleanPublicPosts, postFingerprint, postTextIssues, isPublicQualityPost } from '../modules/community/post-quality.js';
 
 dotenv.config({ path: fileURLToPath(new URL('.env', import.meta.url)) });
 
@@ -652,15 +653,16 @@ app.post('/api/users/me/avatar', requireUser, upload.single('file'), async (req,
 
 app.get('/api/community/feed', async (req, res) => {
   const limit = Math.min(Math.max(Number(req.query.limit || 30), 1), 100);
-  const { data, error } = await publicPostQuery().limit(limit);
+  const { data, error } = await publicPostQuery().limit(Math.min(100, limit * 4));
   if (error) return res.status(500).json({ error: error.message });
-  res.json(data || []);
+  res.json(cleanPublicPosts(data, limit));
 });
 
 app.get('/api/community/posts/:postId', optionalUser, async (req, res) => {
   const { data, error } = await publicPostQuery().eq('id', req.params.postId).maybeSingle();
   if (error) return res.status(500).json({ error: error.message });
   if (!data) return res.status(404).json({ error: '帖子不存在' });
+  if (req.user?.id !== data.author_id && !isPublicQualityPost(data)) return res.status(404).json({ error: '帖子暂不可公开查看' });
   res.json(data);
 });
 
@@ -668,19 +670,31 @@ app.get('/api/community/feed/following', requireUser, async (req, res) => {
   const { data: follows, error: followError } = await admin.from('follows').select('following_id').eq('follower_id', req.user.id);
   if (followError) return res.status(500).json({ error: followError.message });
   const ids = (follows || []).map(item => item.following_id); if (!ids.length) return res.json([]);
-  const { data, error } = await publicPostQuery().in('author_id', ids).limit(50);
-  if (error) return res.status(500).json({ error: error.message }); res.json(data || []);
+  const { data, error } = await publicPostQuery().in('author_id', ids).limit(100);
+  if (error) return res.status(500).json({ error: error.message }); res.json(cleanPublicPosts(data, 50));
 });
 
 app.post('/api/community/posts', requireUser, async (req, res) => {
-  const { title = '', content = '', type = 'story', location_name = null, country = null, city = null, latitude = null, longitude = null, route_id = null } = req.body || {};
+  const { type = 'story', country = null, latitude = null, longitude = null, route_id = null } = req.body || {};
+  const title = String(req.body?.title || '').trim().slice(0, 120);
+  const content = String(req.body?.content || '').trim().slice(0, 4000);
+  const location_name = String(req.body?.location_name || '').trim().slice(0, 160) || null;
+  const city = String(req.body?.city || '').trim().slice(0, 100) || null;
   const clientRequestId=String(req.body?.clientRequestId||req.get('Idempotency-Key')||'');
   if(clientRequestId&&!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(clientRequestId))return res.status(400).json({error:'无效的发布请求标识'});
-  if (!String(title).trim() && !String(content).trim() && !route_id && !['photo','video'].includes(type)) return res.status(400).json({ error: '请添加文字、媒体或路线' });
+  const issues = postTextIssues({ title, content, location_name, city });
+  if (issues.length) return res.status(400).json({ error: issues[0], issues });
+  if (clientRequestId) {
+    const { data: existing } = await admin.from('posts').select('*').eq('author_id', req.user.id).eq('client_request_id', clientRequestId).maybeSingle();
+    if (existing) return res.status(200).json({ ...existing, idempotent: true });
+  }
   if (route_id) {
     const { data: ownedRoute } = await admin.from('routes').select('id').eq('id', route_id).eq('owner_id', req.user.id).maybeSingle();
     if (!ownedRoute) return res.status(403).json({ error: '只能绑定自己的路线' });
   }
+  const fingerprint = postFingerprint({ title, content, location_name, city });
+  const { data: recentPosts } = await admin.from('posts').select('title,content,location_name,city,route_id').eq('author_id', req.user.id).order('created_at', { ascending: false }).limit(30);
+  if ((recentPosts || []).some(post => postFingerprint(post) === fingerprint)) return res.status(409).json({ error: '这条旅行记录已发布过' });
   const { data, error } = await admin.from('posts').insert({ author_id: req.user.id, title, content, type, location_name, country, city, latitude, longitude, route_id,client_request_id:clientRequestId||null }).select().single();
   if(error?.code==='23505'&&clientRequestId){const{data:existing}=await admin.from('posts').select('*').eq('author_id',req.user.id).eq('client_request_id',clientRequestId).single();return res.status(200).json({...existing,idempotent:true});}
   if (error) return res.status(400).json({ error: error.message });

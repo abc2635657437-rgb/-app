@@ -1,17 +1,39 @@
 (function(){
   // The approved five-page journal is the only home shell.
   document.body.classList.add('journal-preview');
+  document.documentElement.classList.add('journal-preview');
   const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=22-soft';document.head.append(css);
+  const productCss=document.createElement('link');productCss.rel='stylesheet';productCss.href='/modules/theme/mobile-product-system.css?v=1';document.head.append(productCss);
   const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
   applyTimeTheme();window.setInterval(applyTimeTheme,60_000);
-  const pageBackgrounds={home:'great-wall',map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
-  const setPageBackground=id=>{if(pageBackgrounds[id])document.body.dataset.pageBg=pageBackgrounds[id];};
+  const pageBackgrounds={map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
+  Object.values(pageBackgrounds).forEach(name=>{const image=new Image();image.decoding='async';image.src=`/assets/route-photos/soft/page-bg-${name}-soft.jpg?v=1`;});
+  const setPageBackground=id=>{if(pageBackgrounds[id])document.body.dataset.pageBg=pageBackgrounds[id];else delete document.body.dataset.pageBg;};
   const baseGo=window.go;
-  if(baseGo)window.go=function(id,...args){const result=baseGo.call(this,id,...args);setPageBackground(id);return result;};
+  const syncPage=id=>{
+    document.body.dataset.activePage=id;
+    document.querySelectorAll('.nav button[data-id]').forEach(button=>{
+      if(button.dataset.id===id)button.setAttribute('aria-current','page');
+      else button.removeAttribute('aria-current');
+    });
+  };
+  if(baseGo)window.go=function(id,...args){const result=baseGo.call(this,id,...args);document.documentElement.scrollTop=0;document.body.scrollTop=0;setPageBackground(id);syncPage(id);return result;};
   setPageBackground(document.querySelector('.screen.active')?.id||'home');
+  syncPage(document.querySelector('.screen.active')?.id||'home');
   const lang=()=>window.TravelWorldI18n?.language?.()||'zh';
   const t=(zh,en)=>lang()==='en'?en:zh;
   const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
+  function clearHomeIntro(){
+    const community=document.querySelector('#home .home-community');if(!community)return;
+    community.querySelectorAll('.uk-hero,.journal-hero,.journal-home-path').forEach(node=>node.remove());
+    const tabs=community.querySelector('.home-tabs');
+    let heading=community.querySelector('.journal-community-heading');
+    if(!heading){heading=document.createElement('div');heading.className='journal-community-heading';if(tabs)tabs.before(heading);else community.append(heading);}
+    if(tabs)heading.after(tabs);
+    setText(heading.querySelector('h2')||heading.appendChild(document.createElement('h2')),t('来自旅途的真实分享','Stories from the road'));
+    if(!heading.querySelector('p'))heading.insertAdjacentHTML('beforeend','<p></p>');
+    setText(heading.querySelector('p'),t('真实地点，旅途故事。','Real places, real stories.'));
+  }
   let companionMount;
   import('../chat/ai-companions.js').then(m=>{companionMount=m.mountCompanions;companionMount();});
   const originalPublish=window.publishBuddyPlan;
@@ -21,13 +43,7 @@
     return originalPublish?.();
   };
   function decorate(){
-    const hero=document.querySelector('.uk-hero');
-    if(hero&&!hero.classList.contains('journal-hero')){
-      hero.className='uk-hero journal-hero';
-      hero.innerHTML='<button class="journal-hero-link" type="button"><img src="/assets/route-photos/page-bg-great-wall-mobile.png?v=2" alt=""><span class="journal-hero-copy"><h1 data-journal-title></h1><p data-journal-subtitle></p></span><span class="journal-hero-caption" data-journal-caption></span></button>';
-      hero.querySelector('button').onclick=()=>{window.go('map');window.loadMap?.();};
-    }
-    if(hero){setText(hero.querySelector('[data-journal-title]'),t('山海之间','Between Mountains & Sea'));setText(hero.querySelector('[data-journal-subtitle]'),t('沿途风景，日常记录。','Scenes and stories along the way.'));setText(hero.querySelector('[data-journal-caption]'),t('长城','Great Wall'));}
+    clearHomeIntro();
     const map=document.getElementById('map');
     if(map){
       const canvas=document.getElementById('mapCanvas'),card=canvas?.closest('.map-card');
