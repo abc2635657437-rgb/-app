@@ -144,6 +144,10 @@ body .ai-chat-actions button:hover::after{color:var(--ai-accent);transform:trans
 /* Questions from the traveller. */
 body .ai-chat-screen .bubble.me{align-self:flex-end;max-width:84%;margin:0;padding:11px 14px;border:0;border-radius:2px 2px 0 2px;background:var(--ai-user-bg);color:var(--ai-user-fg);font-size:14px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
 body .ai-chat-error{padding:11px 14px;border-left:2px solid var(--ai-accent);background:var(--ai-error-bg);font-size:13px;line-height:1.75;color:var(--ai-error-fg)}
+body .ai-chat-recovery{display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:84%;font-size:11px;line-height:1.5;color:var(--ai-faint)}
+body .ai-chat-recovery small{overflow-wrap:anywhere;text-align:right}
+body .ai-chat-retry{min-height:36px;padding:6px 10px;border:1px solid var(--ai-rule);background:var(--ai-raised);color:var(--ai-copy);font-size:11px}
+body .ai-chat-retry:hover{border-color:var(--ai-accent);color:var(--ai-accent)}
 
 body .ai-chat-typing{display:inline-flex;align-items:center;gap:5px;padding:7px 0}
 body .ai-chat-typing i{width:4px;height:4px;border-radius:50%;background:var(--ai-accent);animation:ai-chat-blink 1.2s infinite}

@@ -12,6 +12,22 @@
 .tw-photo-detail label { display:grid; gap:6px; }
 .tw-photo-detail form button:last-of-type { background:#b94d36; color:white; }
 .tw-photo-detail button:disabled { opacity:.5; }
+.map-search-results{display:grid;gap:8px;margin:10px 0 14px;padding:12px;border:1px solid #d9cfbb;border-radius:10px;background:#fbf6eb;color:#173946}
+.map-search-results>strong{font:600 14px/1.4 Georgia,"Noto Serif SC",serif}
+.map-search-results>p{margin:0;color:#676c67;font-size:12px;line-height:1.6}
+.map-search-result-list{display:grid;gap:6px;max-height:320px;overflow:auto}
+.map-search-result-list article{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #e6dece}
+.map-search-result-list article>div:first-child{display:grid;gap:3px;min-width:0}
+.map-search-result-list article b{font-size:13px;overflow-wrap:anywhere}
+.map-search-result-list article small{font-size:10px;line-height:1.4;color:#707670}
+.map-search-result-actions{display:flex;flex:0 0 auto;gap:5px}
+.map-search-results button{min-height:36px;padding:6px 9px;border:1px solid #d4c9b6;border-radius:7px;background:#fffdf7;color:#244653;font:inherit;font-size:11px}
+.map-search-results button:hover{border-color:#a8482f;color:#8b3d2e}
+body.journal-preview[data-time-theme="night"] .map-search-results{background:#263336;border-color:#55605a;color:#eee8d9}
+body.journal-preview[data-time-theme="night"] .map-search-results>p,body.journal-preview[data-time-theme="night"] .map-search-result-list article small{color:#c0c2b8}
+body.journal-preview[data-time-theme="night"] .map-search-result-list article{border-color:#46504c}
+body.journal-preview[data-time-theme="night"] .map-search-results button{background:#303d3f;border-color:#59635c;color:#efe8d8}
+@media(max-width:600px){.map-search-results{padding:10px}.map-search-result-list article{align-items:flex-start;flex-direction:column}.map-search-result-actions{width:100%}.map-search-results button{flex:1}}
 .tw-photo-detail { width:min(1180px,calc(100vw - 24px));max-height:92dvh;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(230px,1fr);gap:8px 20px;background:#fffdf6; }
 .tw-photo-detail:not([open]){display:none}
 .tw-photo-detail > button:first-child,.tw-photo-detail > h2{grid-column:1/-1;justify-self:start}

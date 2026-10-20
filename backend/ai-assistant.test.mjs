@@ -8,8 +8,14 @@ import { detectRegion, linksFor } from './plan-links.mjs';
 const app = express();
 app.use(express.json());
 const seen = [];
+let upstreamClientClosed = false;
 app.post('/openai', (req, res) => {
   seen.push(req.body);
+  if (req.body.messages?.some(message => String(message.content || '').includes('client-abort-test'))) {
+    const timer = setTimeout(() => res.end('data: [DONE]\n\n'), 10_000);
+    res.on('close', () => { if (!res.writableEnded) { upstreamClientClosed = true; clearTimeout(timer); } });
+    return;
+  }
   const chunks = [
     { choices: [{ index: 0, delta: { role: 'assistant', content: '' } }] },
     { choices: [{ index: 0, delta: { reasoning: 'thinking' } }] },
@@ -263,6 +269,26 @@ server.close();
   assert.ok(JSON.stringify(bounded).length <= 7200, 'the plan payload stays bounded');
   srv.close();
   console.log('AI assistant plans passed: saved itineraries reach the model, oversized payloads are bounded.');
+}
+
+// 7. Closing the caller must cancel a pending upstream request, not launch a fallback.
+{
+  upstreamClientClosed = false;
+  const { srv, url } = install(noUser);
+  const controller = new AbortController();
+  const pending = fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
+    body: JSON.stringify({ message: 'client-abort-test' }),
+    signal: controller.signal
+  }).catch(() => null);
+  await new Promise(resolve => setTimeout(resolve, 100));
+  controller.abort();
+  await pending;
+  await new Promise(resolve => setTimeout(resolve, 50));
+  assert.equal(upstreamClientClosed, true, 'the disconnected caller cancels its upstream stream');
+  srv.close();
+  console.log('AI assistant cancellation passed: disconnects release the upstream request.');
 }
 
 server.close();

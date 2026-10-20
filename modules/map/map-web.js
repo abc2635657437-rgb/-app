@@ -1,5 +1,5 @@
 (function () {
-  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=30-global-category-icons';document.head.append(photoStyles);
+  const photoStyles=document.createElement('link');photoStyles.rel='stylesheet';photoStyles.href='modules/map/photo-places.css?v=31-map-search-results';document.head.append(photoStyles);
   let map;
   let markers = [];
   let routeLayer;
@@ -8,7 +8,8 @@
   let userMarker;
   let onlineMarkers = [];
   let onlineUsers = [];
-  let nearbyPlaces=[],nearbyMarkers=[],placeTimer,placeRequest=0;
+  let nearbyPlaces=[],nearbyMarkers=[],placeTimer,placeRequest=0,placeController=null;
+  let searchSequence=0,searchController=null,searchMarkers=[];
   const backgroundData=fetch('/modules/data/place-backgrounds.json?v=4').then(r=>r.ok?r.json():{}).then(d=>d.backgrounds||{}).catch(()=>({}));
   const placePhotos=new Map();
   let photoRequest=0;
@@ -24,6 +25,147 @@
   const localized=item=>{if(window.TravelWorldI18n?.language?.()!=='en')return item;const result={...item};['name','description','country','city','bestSeason','duration','nearby','food','stay','transport','tags'].forEach(key=>{if(item[key+'_en'])result[key]=item[key+'_en'];});return result;};
   const toneOf=place=>{const c=String(place?.category||'').toLowerCase();if(/(hist|fort|monument|archae|ruin|castle|temple|church|mosque|palace|cathedral|memorial)/.test(c))return 'history';if(/(nature|lake|mountain|park|island|waterfall|glacier|reef|valley|cave|desert|forest|river|sea)/.test(c))return 'nature';if(/(city|tower|bridge|building|square|market|stadium|museum)/.test(c))return 'city';return 'other';};
   const status = text => { const el = document.getElementById('mapStatus'); if (el) el.textContent = text; };
+  function searchResultsRegion() {
+    let region = document.getElementById('mapSearchResults');
+    if (region) return region;
+    region = document.createElement('section');
+    region.id = 'mapSearchResults';
+    region.className = 'map-search-results';
+    region.setAttribute('aria-live', 'polite');
+    region.setAttribute('aria-label', langText('地点搜索结果', 'Place search results'));
+    region.hidden = true;
+    document.getElementById('mapStatus')?.after(region);
+    return region;
+  }
+  function clearSearchMarkers() { searchMarkers.forEach(marker => marker.remove()); searchMarkers = []; }
+  function normalizePlaceName(value) { return String(value || '').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, ''); }
+  function distanceKm(a, b) {
+    const rad = value => value * Math.PI / 180;
+    const dLat = rad(Number(b.latitude) - Number(a.latitude));
+    const dLon = rad(Number(b.longitude) - Number(a.longitude));
+    const x = Math.sin(dLat / 2) ** 2 + Math.cos(rad(Number(a.latitude))) * Math.cos(rad(Number(b.latitude))) * Math.sin(dLon / 2) ** 2;
+    return 6371 * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+  }
+  function showSearchResults(query, entries, options = {}) {
+    const region = searchResultsRegion();
+    region.replaceChildren();
+    region.hidden = false;
+    const heading = document.createElement('strong');
+    heading.textContent = options.title || langText('地点目录结果', 'Place catalogue results');
+    const summary = document.createElement('p');
+    summary.textContent = options.summary || '';
+    region.append(heading, summary);
+    const list = document.createElement('div');
+    list.className = 'map-search-result-list';
+    entries.forEach(entry => {
+      const row = document.createElement('article');
+      const details = document.createElement('div');
+      const name = document.createElement('b');
+      const placeName = langText(entry.name, entry.name_en || entry.name);
+      name.textContent = placeName;
+      const meta = document.createElement('small');
+      const distance = options.center ? Math.round(distanceKm(options.center, entry)) + ' km' : '';
+      meta.textContent = [langText(entry.city, entry.city_en || entry.city), entry.country || entry.countryCode, entry.category || entry.kind, distance].filter(Boolean).join(' · ');
+      details.append(name, meta);
+      const placeSource = entry.sourceUrl || entry.source_url;
+      if (placeSource) {
+        const source = document.createElement('a');
+        source.href = placeSource; source.target = '_blank'; source.rel = 'noopener noreferrer';
+        source.textContent = langText('地点来源', 'Place source');
+        details.append(source);
+      }
+      const actions = document.createElement('div');
+      actions.className = 'map-search-result-actions';
+      const locate = document.createElement('button');
+      locate.type = 'button';
+      locate.textContent = langText('地图定位', 'Locate on map');
+      locate.onclick = () => {
+        if (!map) return;
+        clearSearchMarkers();
+        const point = twp(entry);
+        const popup = document.createElement('div');
+        const popupName = document.createElement('strong');
+        popupName.textContent = placeName;
+        popup.append(popupName);
+        const sourceUrl = entry.sourceUrl || entry.source_url;
+        if (sourceUrl) {
+          const source = document.createElement('a');
+          source.href = sourceUrl; source.target = '_blank'; source.rel = 'noopener noreferrer';
+          source.textContent = langText('查看地点来源', 'View place source');
+          popup.append(document.createElement('br'), source);
+        }
+        const marker = L.marker(point, { title: placeName }).addTo(map).bindPopup(popup);
+        searchMarkers.push(marker);
+        map.setView(point, Math.max(14, map.getZoom()));
+        marker.openPopup();
+      };
+      actions.append(locate);
+      const hasInAppDetails = entry.id && (entry.globalCatalog === true || (data?.curated || []).some(item => item.id === entry.id));
+      if (hasInAppDetails) {
+        const detail = document.createElement('button');
+        detail.type = 'button';
+        detail.textContent = langText('站内详情', 'Details');
+        detail.onclick = () => openLandmark(entry.id);
+        actions.append(detail);
+      }
+      row.append(details, actions);
+      list.append(row);
+    });
+    if (entries.length) region.append(list);
+    if (options.action) region.append(options.action);
+  }
+  function matchingCatalogEntries(raw) {
+    if (!data) return [];
+    const query = normalizePlaceName(raw);
+    const all = [...(data.curated || []), ...(data.landmarks || [])];
+    const seen = new Set();
+    return all.filter(entry => {
+      const key = entry.id || entry.globalId || entry.wikidataId;
+      if (!key || seen.has(key)) return false;
+      const values = [entry.name, entry.name_en, entry.city, entry.city_en].filter(Boolean).map(normalizePlaceName);
+      if (!values.some(value => value.includes(query))) return false;
+      seen.add(key);
+      return true;
+    }).sort((a, b) => Number((data.curated || []).some(item => item.id === b.id)) - Number((data.curated || []).some(item => item.id === a.id))).slice(0, 24);
+  }
+  async function showDirectoryNear(center, raw, radiusKm, sequence, controller) {
+    const latDelta = radiusKm / 111;
+    const lonDelta = Math.min(180, radiusKm / (111 * Math.max(.15, Math.cos(Number(center.latitude) * Math.PI / 180))));
+    const bounds = [Number(center.latitude) - latDelta, Number(center.longitude) - lonDelta, Number(center.latitude) + latDelta, Number(center.longitude) + lonDelta];
+    const response = await fetch('/api/map/places?bbox=' + bounds.map(value => value.toFixed(4)).join(','), { signal: controller.signal });
+    if (!response.ok) throw new Error('directory ' + response.status);
+    const payload = await response.json();
+    if (sequence !== searchSequence) return;
+    const sourced = (payload.places || []).filter(place => distanceKm(center, place) <= radiusKm).sort((a, b) => distanceKm(center, a) - distanceKm(center, b));
+    const curated = (data?.curated || []).filter(place => distanceKm(center, place) <= radiusKm);
+    const byId = new Map();
+    [...curated, ...sourced].forEach(place => { if (place.id && !byId.has(place.id)) byId.set(place.id, place); });
+    const places = [...byId.values()].slice(0, 30);
+    if (places.length) {
+      showSearchResults(raw, places, {
+        title: langText('景点目录 · ' + places.length + ' 个地点', 'Attraction catalogue · ' + places.length + ' places'),
+        summary: langText('地图已定位到“' + raw + '”。目录结果在约 ' + radiusKm + ' 公里范围内；地名定位与景点目录是两项独立数据。', 'Map located “' + raw + '”. Catalogue results are within about ' + radiusKm + ' km; geocoding and attraction listings are separate data sources.'),
+        center
+      });
+      return;
+    }
+    const summary = document.createElement('p');
+    summary.textContent = langText('已定位“' + raw + '”，但当前景点目录在约 ' + radiusKm + ' 公里内没有收录地点。这不代表当地没有景点。', '“' + raw + '” was located, but the current attraction catalogue has no entries within about ' + radiusKm + ' km. This does not mean the area has no attractions.');
+    const expand = document.createElement('button');
+    expand.type = 'button';
+    expand.textContent = langText('扩大到 ' + (radiusKm * 2) + ' 公里重试', 'Expand to ' + (radiusKm * 2) + ' km and retry');
+    expand.onclick = () => searchPlace(raw, radiusKm * 2, center);
+    showSearchResults(raw, [], { title: langText('已找到地名，目录暂缺', 'Place located; catalogue coverage is limited'), summary, action: expand });
+  }
+  function showSearchError(raw, sequence, controller, timedOut) {
+    return error => {
+      if (sequence !== searchSequence || (controller.signal.aborted && !timedOut)) return;
+      const retry = document.createElement('button');
+      retry.type = 'button'; retry.textContent = langText('重试搜索', 'Retry search');
+      retry.onclick = () => searchPlace(raw);
+      showSearchResults(raw, [], { title: langText('搜索暂时不可用', 'Search temporarily unavailable'), summary: timedOut ? langText('搜索超时，请重试。', 'Search timed out. Please retry.') : langText('城市或地点搜索请求失败；不会把请求失败显示成“没有景点”。请检查网络后重试。', 'The place or catalogue request failed. This is not being shown as “no attractions.” Check the network and retry.'), action: retry });
+    };
+  }
   // The catalogue is WGS-84; the active basemap may not be. Re-project here.
   const tw = (pair) => (window.TravelMapProviders ? window.TravelMapProviders.focusLatLng(pair[0], pair[1]) : pair);
   const twp = (point) => (window.TravelMapProviders ? window.TravelMapProviders.focusPoint(point) : [point.latitude, point.longitude]);
@@ -232,19 +374,23 @@
     (async()=>{try{const delta=.08,bounds=[place.latitude-delta,place.longitude-delta,place.latitude+delta,place.longitude+delta],response=await fetch('/api/map/places?bbox='+bounds.join(',')),payload=await response.json();if(!response.ok)throw new Error();const places=(payload.places||[]).filter(p=>p.id!==place.id).slice(0,8);if(!places.length){photoFeedback.textContent=langText('本范围暂无其他已收录地点。','No other catalogued places in this area.');return;}const photosResponse=await fetch('/api/map/place-images?ids='+places.map(p=>p.id).join('|')),{photos}=await photosResponse.json();if(!photosResponse.ok)throw new Error();if(!dialog.isConnected)return;let count=0;places.forEach(p=>{const pic=photos[p.id];if(!pic)return;count++;const button=document.createElement('button'),img=document.createElement('img'),label=document.createElement('strong');img.src=pic.url;img.alt=langText(p.name,p.name_en);label.textContent=img.alt;button.append(img,label);button.onclick=()=>{dialog.close();window.openSourcedMapPlace(p,pic);};photoGrid.append(button);const mini=img.cloneNode();mini.className='place-mini-marker';L.marker(twp(p),{title:label.textContent,icon:L.divIcon({className:'tw-photo-place-icon',html:mini,iconSize:[46,46],iconAnchor:[23,23]})}).addTo(detailMap).on('click',button.onclick);});photoFeedback.textContent=count?langText('照片对应各自标注的地点；作者及授权见详情。','Each photograph belongs to its labelled place. Open details for author and license.'):langText('附近地点暂无已关联的授权照片。','No licensed nearby photographs are linked.');}catch(_){photoFeedback.textContent=langText('周边实拍暂不可用，请稍后重试。','Nearby photographs are unavailable. Please try again later.');}})();
   }
   window.openSourcedMapPlace=async(place,photo)=>{window.go('map');await initMap();if(map){map.setView(twp(place),14);openPhotoPlace(place,photo,[place]);}};
-  function schedulePlaces(){clearTimeout(placeTimer);renderNearbyPlaces();placeTimer=setTimeout(loadNearbyPlaces,650);}
+  function schedulePlaces(){clearTimeout(placeTimer);placeController?.abort();renderNearbyPlaces();placeTimer=setTimeout(loadNearbyPlaces,650);}
   async function loadNearbyPlaces(){
     if(!map||map.getZoom()<4)return;
     const b=map.getBounds(),s=Math.max(-85,b.getSouth()),n=Math.min(85,b.getNorth()),w=Math.max(-180,b.getWest()),e=Math.min(180,b.getEast());
     if(w>=e||s>=n||(n-s)*(e-w)>2000)return;
     const sequence=++placeRequest;
+    placeController?.abort();
+    placeController=new AbortController();
     try{
-      const response=await fetch('/api/map/places?bbox='+[s,w,n,e].map(v=>v.toFixed(3)).join(','),{signal:AbortSignal.timeout(28000)}),payload=await response.json();
+      const response=await fetch('/api/map/places?bbox='+[s,w,n,e].map(v=>v.toFixed(3)).join(','),{signal:placeController.signal}),payload=await response.json();
       if(sequence!==placeRequest)return;if(!response.ok||!Array.isArray(payload.places))throw new Error();
       nearbyPlaces=payload.places;await renderNearbyPlaces();
       let credit=document.getElementById('mapPlaceAttribution');if(!credit){credit=document.createElement('small');credit.id='mapPlaceAttribution';document.getElementById('mapStatus')?.after(credit);}credit.replaceChildren();const source=document.createElement('a');source.href='https://github.com/audiala/open-data';source.target='_blank';source.rel='noopener noreferrer';source.textContent='Data by Audiala · CC BY 4.0';credit.append(source);
-      status(langText('本范围已加载 ','Loaded ')+nearbyPlaces.length+langText(' 个地图景点（单次最多400）；继续放大查看其他地点。',' mapped attractions in this view (up to 400 per request). Zoom in for more places.'));
-    }catch(_){if(sequence===placeRequest)status(langText('更多景点暂时无法加载，已保留现有地标；移动地图可重试。','More attractions could not load. Existing landmarks remain; move the map to retry.'));}
+      status(nearbyPlaces.length
+        ? langText('当前视野加载第三方地图目录点位 ','Third-party map catalogue points in this view: ')+nearbyPlaces.length+langText(' 条（单次最多400，不代表当地全部景点）。',' (up to 400 per request; not a complete attraction count).')
+        : langText('当前视野的第三方地图目录返回 0 条；这不代表本站地标或当地景点为 0。搜索匹配的本站地点见上方列表。','The third-party map catalogue returned 0 entries in this view; this does not mean the site catalogue or local attractions are empty. Site matches remain listed above.'));
+    }catch(error){if(sequence===placeRequest&&error.name!=='AbortError')status(langText('更多景点暂时无法加载，已保留现有地标；移动地图可重试。','More attractions could not load. Existing landmarks remain; move the map to retry.'));}
   }
   async function initMap() {
     const canvas = document.getElementById('mapCanvas');
@@ -293,26 +439,65 @@
       status(langText('已打开：','Opened: ') + item.name + ' · ' + item.city + langText('。','.'));
     } catch (_) { status(langText('已打开：','Opened: ') + item.name + langText('。','.')); }
   }
-  async function searchPlace(providedQuery) {
+  async function searchPlace(providedQuery, expandedRadius, knownCenter) {
+    if (!data) await initMap();
     const input = document.getElementById('mapSearch');
     const raw = String(providedQuery || (input && input.value) || '').trim();
     const query = raw.toLowerCase();
     if (!query) return status(langText('请输入城市或景点名称。','Enter a city or landmark name.'));
     if (input && providedQuery) input.value = raw;
-    const item = (data && data.landmarks || []).find(entry => [entry.name,entry.name_en,entry.city,entry.city_en,entry.country,entry.country_en].filter(Boolean).some(value => value.toLowerCase().includes(query)));
-    if (item) return openLandmark(item.id);
+    const sequence = ++searchSequence;
+    searchController?.abort();
+    searchController = new AbortController();
+    const controller = searchController;
+    clearSearchMarkers();
+    const region = searchResultsRegion(); region.hidden = true; region.replaceChildren();
+    const matches = matchingCatalogEntries(raw);
+    if (matches.length && !knownCenter) {
+      const first = matches[0];
+      if (map) map.setView(twp(first), 13);
+      showSearchResults(raw, matches, {
+        title: langText('站内景点目录 · ' + matches.length + ' 个结果', 'In-app place catalogue · ' + matches.length + ' results'),
+        summary: langText('按本站已收录的地标与城市字段匹配；点“地图定位”或“站内详情”继续。', 'Matched against places and city fields already in this site catalogue. Choose map location or in-app details to continue.')
+      });
+      status(langText('景点目录找到 ','Catalogue found ') + matches.length + langText(' 个相关地点。',' matching places.'));
+      return;
+    }
+    let timedOut = false;
+    const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 35_000);
     try {
-      status(langText('正在在线搜索“','Searching online for “') + raw + '”…');
-      const response = await fetch('/api/map/search?q=' + encodeURIComponent(raw));
-      if (!response.ok) throw new Error('search ' + response.status);
-      const payload = await response.json(); const results = payload.results || [];
-      if (!results.length) return status(langText('没有找到“','No results found for “') + raw + '”.');
-      const result = results[0], lat = Number(result.latitude), lon = Number(result.longitude);
-      map.setView(tw([lat, lon]), 13);
-      const icon = L.divIcon({ className: 'tw-q-pin', html: '<div class="tw-q-pin__body"><span class="tw-q-pin__icon"><span class="tw-marker-dot"></span></span><span class="tw-q-pin__label">' + raw.replace(/[<>]/g, '') + '</span></div>', iconSize: [36, 36], iconAnchor: [18, 18] });
-      const marker = L.marker(tw([lat, lon]), { icon }).addTo(map).bindPopup(result.displayName).openPopup(); markers.push(marker);
-      status(langText('在线地图已定位：','Located on the map: ') + result.displayName);
-    } catch (_) { status(langText('在线搜索暂时不可用；仍可浏览已缓存的 ','Online search is temporarily unavailable. You can still browse ') + (data?.landmarks?.length || 0) + langText(' 个地标。',' cached landmarks.')); }
+      let center = knownCenter;
+      let displayName = raw;
+      if (!center) {
+        status(langText('正在搜索地名与景点目录…','Searching the place name and attraction catalogue…'));
+        const response = await fetch('/api/map/search?q=' + encodeURIComponent(raw), { signal: controller.signal });
+        if (!response.ok) throw new Error('geocode ' + response.status);
+        const payload = await response.json();
+        if (sequence !== searchSequence) return;
+        const result = (payload.results || [])[0];
+        if (!result) {
+          const retry = document.createElement('button'); retry.type = 'button'; retry.textContent = langText('重试搜索', 'Retry search'); retry.onclick = () => searchPlace(raw);
+          showSearchResults(raw, [], { title: langText('没有匹配的地名', 'No matching place name'), summary: langText('地名服务没有返回结果；这与景点目录是否覆盖是两回事。请换一个名称或重试。', 'The place-name service returned no match; that is separate from catalogue coverage. Try another name or retry.'), action: retry });
+          status(langText('没有找到该地名。','Place name not found.'));
+          return;
+        }
+        center = { latitude: Number(result.latitude), longitude: Number(result.longitude) };
+        displayName = result.displayName || raw;
+        if (!Number.isFinite(center.latitude) || !Number.isFinite(center.longitude)) throw new Error('invalid coordinates');
+        if (map) {
+          const marker = L.marker(tw([center.latitude, center.longitude]), { title: displayName });
+          const popup = document.createElement('span'); popup.textContent = displayName;
+          marker.addTo(map).bindPopup(popup).openPopup(); searchMarkers.push(marker);
+          map.setView(tw([center.latitude, center.longitude]), 13);
+        }
+      }
+      if (sequence !== searchSequence) return;
+      await showDirectoryNear(center, raw, Number(expandedRadius) || 15, sequence, controller);
+      if (sequence === searchSequence) status(langText('地名已定位：','Place located: ') + displayName + langText('。目录状态见下方列表。','; catalogue status is shown in the list below.'));
+    } catch (error) {
+      showSearchError(raw, sequence, controller, timedOut)(error);
+      if (sequence === searchSequence && !timedOut && error.name !== 'AbortError') status(langText('搜索请求失败；请重试。','Search request failed; please retry.'));
+    } finally { clearTimeout(timeout); }
   }
   function locateUser() { if (!navigator.geolocation) return status(langText('当前设备不支持定位，仍可搜索和浏览地图。','This device does not support location. You can still search and browse the map.')); status(langText('正在获取当前位置…','Getting your location…')); navigator.geolocation.getCurrentPosition(position => { const point = [position.coords.latitude, position.coords.longitude]; lastPosition = position; if (map) { map.setView(point, 14); if (userMarker) userMarker.remove(); const icon = L.divIcon({ className: 'tw-user-pin', html: '<div class="tw-user-pin__arrow">➤</div><div class="tw-user-pin__pulse"></div>', iconSize: [34, 34], iconAnchor: [17, 17] }); const myLocation=langText('我的位置','My location'); userMarker = L.marker(point, { icon, title: myLocation, zIndexOffset: 1000 }).addTo(map).bindPopup('<strong>'+myLocation+'</strong><br>'+langText('定位精度约 ','Accuracy about ')+Math.round(position.coords.accuracy || 0)+langText(' 米',' m')).openPopup(); } if (document.getElementById('mapShareLocation')?.checked) publishPresence(); status(langText('已定位到当前位置；位置仅在本次页面使用。','Location found. It is used only on this page.')); }, error => { const reason = error.code === 1 ? langText('未获得定位权限','Location permission was not granted') : langText('暂时无法获取位置','Location is temporarily unavailable'); status(reason + langText('，仍可搜索地点和浏览地图。','. You can still search and browse the map.')); }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }); }
   async function publishPresence(force = false) { const auth = window.TravelWorldAuth; if (!auth?.requireLogin()) return; if (!lastPosition) return locateUser(); if (!force && Date.now() - lastPresenceAt < 80_000) return; try { const latitude = lastPosition.coords.latitude, longitude = lastPosition.coords.longitude; const place = await fetch('/api/map/reverse?latitude=' + encodeURIComponent(latitude) + '&longitude=' + encodeURIComponent(longitude)).then(response => response.ok ? response.json() : ({})).catch(() => ({})); await auth.request('/api/map/presence', { method: 'POST', body: JSON.stringify({ latitude, longitude, country: place.country || '', city: place.city || '', sharing_enabled: true }) }); lastPresenceAt = Date.now(); status(langText('位置共享已开启','Location sharing is on') + (place.country ? ' · ' + place.country : '') + langText('，其他在线用户可看到你的 Q 版标识。','. Other online users can see your illustrated marker.')); } catch (error) { document.getElementById('mapShareLocation').checked = false; status(langText('位置共享未开启：','Location sharing could not be enabled: ') + error.message); } }

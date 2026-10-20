@@ -18,8 +18,12 @@ import { detectRegion, linksFor } from './plan-links.mjs';
 const MAX_MESSAGE = 2000;
 const MAX_TOKENS = 1400;
 const PLAN_MAX_TOKENS = 6000;
-// The traveller should not wait longer than this for a first answer.
-const PLAN_BUDGET = Number(process.env.PLAN_BUDGET_MS) > 0 ? Number(process.env.PLAN_BUDGET_MS) : 5000;
+// Bound one plan attempt without silently launching duplicate model calls.
+// The only model the free tier still serves is a 20B reasoning model: it thinks
+// before its first visible token, so a 12 s ceiling cut every itinerary off
+// before it began. The ceiling is now generous enough to finish, and the stream
+// opens up front so the wait shows as a typing indicator rather than a blank.
+const PLAN_BUDGET = Number(process.env.PLAN_BUDGET_MS) > 0 ? Number(process.env.PLAN_BUDGET_MS) : 40_000;
 const UPSTREAM_TIMEOUT = 60_000;
 const CACHE_TTL = 6 * 60 * 60 * 1000;
 const CACHE_MAX = 400;
@@ -27,6 +31,19 @@ const ANON_WINDOW = 10 * 60 * 1000;
 const ANON_LIMIT = 8;
 const MEMBER_LIMIT = 60;
 const HISTORY_TURNS = 8;
+
+// The keyless upstream answers one request per 30 s per IP, and every visitor
+// shares this server's IP. Firing a second request inside that window is a
+// guaranteed 402, so the window is tracked and the desk answers honestly
+// instead of making the visitor wait for a refusal.
+const UPSTREAM_WINDOW = Number(process.env.AI_UPSTREAM_WINDOW_MS) > 0
+  ? Number(process.env.AI_UPSTREAM_WINDOW_MS)
+  : 28_000;
+// Waiting longer than this inside one request reads as a hang, so the desk says
+// so in words instead.
+const GATE_MAX_WAIT = Number(process.env.AI_GATE_MAX_WAIT_MS) > 0
+  ? Number(process.env.AI_GATE_MAX_WAIT_MS)
+  : 9_000;
 
 // Kept short and concrete. The assistant must cover the five planning axes the
 // product is built around (衣 food/lodging/transport/play) and must not invent
@@ -54,14 +71,6 @@ const SYSTEM_PROMPT = [
 const PLAN_SYSTEM_ZH = '你是旅行顾问。先写一句有人情味的定调，不要寒暄、不要感叹号，然后只输出一张表格：每行都以 | 开头、以 | 结尾，表头必须是 天 | 时间 | 地点 | 类型 | 说明，天 这一列只写阿拉伯数字 1、2、3，不要写“第一天”。每天 6–8 行，类型从 衣、吃、喝、玩、乐、住、行 里选，尽量把 吃、喝、玩、乐、住、行 都排上，衣 在第一天安排一次就够；行 里如果适合骑车就写“骑车沿鸭川”，不要只说“前往”（行写清坐什么去下一站，例如“地铁东西线到东山站”）；只写真实存在、游客到过并能被查到的地点，不要编造小店，也不要只写寺庙；时间用 24 小时制，说明写一句给朋友的建议、不超过 20 字，不要写时长和票价。';
 const PLAN_SYSTEM_EN = 'You are a travel desk. Write one warm framing sentence with no greeting and no exclamation mark, then output only one table with the columns: day | time | place | type | note. Six to eight rows per day, and every day must cover all six types: eat, drink, play, fun, stay, move (for move, say how to get to the next stop). Only name real, well-visited places that can be looked up. Choose real street-level places — markets, noodle shops, old lanes, cafes, small restaurants — 24-hour times, and a note of advice for a friend under 20 characters, with no duration and no prices.';
 const PLAN_SYSTEM = { zh: PLAN_SYSTEM_ZH, en: PLAN_SYSTEM_EN };
-
-// Used as a single retry when the first plan attempt comes back empty.
-const PLAN_ONLY_PROMPT = [
-  'You are Travel World 同路人 travel desk. Answer in the traveller\'s language.',
-  'Write one framing sentence, then a section headed "## 日程" with exactly one pipe table and these columns: 天 | 时间 | 地点 | 类型 | 说明.',
-  'One row per stop: day number, 24-hour time, a real named place, one of 衣/食/住/行/玩, and a note under 18 characters including the duration.',
-  'Five to eight rows per day, in clock order. Nothing after the table.'
-].join(' ');
 
 const DISCLAIMER_ZH = '回答由 AI 撰写，出发前请核对价格、营业时间与安全信息。';
 const DISCLAIMER_EN = 'Written by AI. Check prices, hours and safety before you travel.';
@@ -411,6 +420,21 @@ async function relayUpstream(response, onText) {
   return finish;
 }
 
+function timedRequestSignal(parent, milliseconds) {
+  const controller = new AbortController();
+  const onAbort = () => controller.abort(parent.reason);
+  const timer = setTimeout(() => controller.abort(new DOMException('Upstream timed out', 'TimeoutError')), milliseconds);
+  if (parent.aborted) onAbort();
+  else parent.addEventListener('abort', onAbort, { once: true });
+  return {
+    signal: controller.signal,
+    dispose() {
+      clearTimeout(timer);
+      parent.removeEventListener('abort', onAbort);
+    }
+  };
+}
+
 // When the configured provider refuses (quota, 5xx, timeout) the desk falls
 // back to the keyless public endpoint rather than giving up.
 // The keyless endpoint answers a plan best with a short prompt and one shot.
@@ -441,6 +465,23 @@ function fallbackTarget() {
   };
 }
 
+// The free upstream retires model names without warning. A stale AI_MODEL 404s
+// on every request and then quietly spends the fallback's tiny quota, so a
+// rejected name is swapped for one the API still lists.
+function retiredModel(body) {
+  try {
+    const parsed = JSON.parse(body);
+    if (parsed?.error?.code === 'NOT_FOUND') return String(parsed.error.message || 'not found');
+  } catch (_) { /* plain text or empty body */ }
+  return '';
+}
+
+function quotaMessage(language, seconds) {
+  return language === 'en'
+    ? `The desk is at capacity right now. Ask again in about ${seconds} seconds.`
+    : `现在提问的人有点多，大约 ${seconds} 秒后再问一次。`;
+}
+
 function upstreamTarget(base, key) {
   const url = String(base || '').replace(/\/+$/, '');
   const compatible = /\/v\d+[a-z]*$/i.test(url) || /openai|compatible/i.test(process.env.AI_PROVIDER || '');
@@ -457,6 +498,22 @@ function upstreamTarget(base, key) {
 export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPlanModel = '', aiApiKey = '', resolvePhotos = defaultResolvePhotos }) {
   const cache = new Map();
   const recent = new Map();
+  // Mutable so a retired model name can be healed for the rest of the process.
+  let activeModel = aiModel;
+  let activePlanModel = aiPlanModel;
+  // The 30 s window belongs to the keyless endpoint. A keyed provider has its
+  // own quota and must never be throttled by it. The window is per installed
+  // app, not module-wide, so one instance cannot throttle another.
+  const upstreamGate = { until: 0 };
+  const gateApplies = !aiApiKey;
+  const gateOpen = () => Date.now() >= upstreamGate.until;
+  const closeGate = () => {
+    const until = Date.now() + UPSTREAM_WINDOW;
+    if (until > upstreamGate.until) upstreamGate.until = until;
+  };
+  const gateWaitSeconds = () => Math.max(1, Math.ceil((upstreamGate.until - Date.now()) / 1000));
+  const canCallUpstream = () => !gateApplies || gateOpen();
+  const noteUpstreamUse = () => { if (gateApplies) closeGate(); };
 
   function remember(key) {
     const now = Date.now();
@@ -506,6 +563,10 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       return res.end();
     }
 
+    const clientAbort = new AbortController();
+    const onClientClose = () => { if (!res.writableEnded) clientAbort.abort(new DOMException('Client disconnected', 'AbortError')); };
+    res.once('close', onClientClose);
+    let activeUpstreamRequest = null;
     let records = [];
     try { records = await searchTravelKnowledge(input.message); } catch (_) { records = []; }
     const knowledge = knowledgeForPrompt(records);
@@ -555,6 +616,31 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       });
     };
 
+    // Open the stream before waiting on the model. The visitor gets the typing
+    // indicator immediately, and the connection cannot idle out at a proxy while
+    // the model is still thinking.
+    if (wantsStream && !res.headersSent) {
+      openStream({ sources: records.slice(0, 4).map(item => item.sourceUrl).filter(Boolean), grounded: records.length, disclaimer });
+    }
+
+    // The keyless upstream allows one reply per 30 s per IP, and every visitor
+    // shares this server's address. Short waits are absorbed behind the already
+    // open stream; longer ones are declined in words instead of making the
+    // visitor wait for a refusal.
+    if (!canCallUpstream()) {
+      const wait = upstreamGate.until - Date.now();
+      if (wait > GATE_MAX_WAIT) {
+        const message = quotaMessage(input.language, gateWaitSeconds());
+        const sources = records.slice(0, 4).map(item => item.sourceUrl).filter(Boolean);
+        if (!wantsStream) return res.json({ answer: message, quota: true, sources, plan: null, disclaimer });
+        sseWrite(res, 'delta', { text: message });
+        sseWrite(res, 'done', { answer: message, quota: true, sources, plan: null, disclaimer });
+        return res.end();
+      }
+      await new Promise(resolve => setTimeout(resolve, wait + 250));
+      if (clientAbort.signal.aborted || res.destroyed) return;
+    }
+
     try {
       const target = upstreamTarget(aiBaseUrl, aiApiKey);
       // OpenRouter reasoning models otherwise spill their thinking into the
@@ -562,60 +648,92 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       const reasoning = /openrouter\.ai/i.test(String(aiBaseUrl)) ? { reasoning: { exclude: true } } : {};
       const budget = input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT;
       const requestBody = model => JSON.stringify({ model, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning });
-      let upstream;
-      try {
-        upstream = await fetch(target.url, {
+      // One attempt against the configured provider. Failures carry the status
+      // and body so the caller can tell a retired model from an exhausted quota.
+      const attempt = async (model, milliseconds) => {
+        activeUpstreamRequest = timedRequestSignal(clientAbort.signal, milliseconds);
+        const response = await fetch(target.url, {
           method: 'POST',
           headers: target.headers,
-          signal: AbortSignal.timeout(budget),
-          body: requestBody(input.mode === 'plan' ? (aiPlanModel || aiModel) : aiModel)
+          signal: activeUpstreamRequest.signal,
+          body: requestBody(model)
         });
-        if (!upstream.ok || !upstream.body) throw new Error('upstream ' + upstream.status);
+        if (response.ok && response.body) { noteUpstreamUse(); return response; }
+        const body = await response.text().catch(() => '');
+        const error = new Error(`upstream ${response.status}`);
+        error.status = response.status;
+        error.body = body;
+        if (response.status === 402 || response.status === 429) noteUpstreamUse();
+        throw error;
+      };
+      let upstream;
+      try {
+        const chosen = input.mode === 'plan' ? (activePlanModel || activeModel) : activeModel;
+        try {
+          upstream = await attempt(chosen, budget);
+        } catch (error) {
+          activeUpstreamRequest?.dispose();
+          activeUpstreamRequest = null;
+          if (clientAbort.signal.aborted) throw error;
+          // A retired model name costs one wasted hop, not a permanent outage.
+          const retired = retiredModel(error.body || '');
+          const fallback = fallbackTarget();
+          if (retired && fallback && chosen !== fallback.model) {
+            console.warn('ai_assistant_model_retired', JSON.stringify({ from: chosen, to: fallback.model, reason: retired.slice(0, 120) }));
+            if (input.mode === 'plan') activePlanModel = fallback.model;
+            else activeModel = fallback.model;
+            upstream = await attempt(fallback.model, budget);
+          } else {
+            throw error;
+          }
+        }
       } catch (error) {
+        activeUpstreamRequest?.dispose();
+        activeUpstreamRequest = null;
+        if (clientAbort.signal.aborted) throw error;
         const fallback = fallbackTarget();
         if (!fallback) throw error;
-        console.warn('ai_assistant_fallback', JSON.stringify({ reason: String(error?.message || error).slice(0, 80) }));
+        console.warn('ai_assistant_fallback', JSON.stringify({ mode: input.mode, error: error?.name || 'upstream_error', status: error?.status || 0 }));
         if (input.mode === 'plan') {
-          // Long structured prompts come back empty here; a compact one works.
+          // One compact fallback is cheaper and easier to cancel than a hidden retry loop.
+          activeUpstreamRequest = timedRequestSignal(clientAbort.signal, Math.max(budget, 25_000));
           const plain = await fetch(fallback.url, {
             method: 'POST',
             headers: fallback.headers,
-            signal: AbortSignal.timeout(Math.max(budget, 30000)),
+            signal: activeUpstreamRequest.signal,
             body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: 1500, stream: false, messages: [{ role: 'user', content: compactPlanPrompt(input.message) }] })
           });
-          if (!plain.ok) throw new Error('fallback ' + plain.status);
+          if (!plain.ok) {
+            if (plain.status === 402 || plain.status === 429) noteUpstreamUse();
+            throw new Error('fallback ' + plain.status);
+          }
+          noteUpstreamUse();
           const rawText = await plain.text();
           let content = '';
           try { content = JSON.parse(rawText).choices?.[0]?.message?.content || ''; } catch (_) { content = rawText; }
-          if (!content.trim()) {
-            // One more try: the free endpoint occasionally returns an empty body.
-            await new Promise(resolve => setTimeout(resolve, 800));
-            const again = await fetch(fallback.url, {
-              method: 'POST',
-              headers: fallback.headers,
-              signal: AbortSignal.timeout(Math.max(budget, 30000)),
-              body: JSON.stringify({ model: fallback.model, temperature: 0.5, max_tokens: 1500, stream: false, messages: [{ role: 'user', content: compactPlanPrompt(input.message) }] })
-            });
-            if (again.ok) {
-              const rawAgain = await again.text();
-              try { content = JSON.parse(rawAgain).choices?.[0]?.message?.content || ''; } catch (_) { content = rawAgain; }
-            }
-          }
           if (!content.trim()) throw new Error('fallback empty');
+          activeUpstreamRequest.dispose();
+          activeUpstreamRequest = null;
           upstream = syntheticStream(content);
         } else {
+          activeUpstreamRequest = timedRequestSignal(clientAbort.signal, budget);
           upstream = await fetch(fallback.url, {
             method: 'POST',
             headers: fallback.headers,
-            signal: AbortSignal.timeout(budget),
+            signal: activeUpstreamRequest.signal,
             body: JSON.stringify({ model: fallback.model, temperature: 0.3, max_tokens: MAX_TOKENS, stream: true, messages })
           });
-          if (!upstream.ok || !upstream.body) throw new Error('fallback ' + upstream.status);
+          if (!upstream.ok || !upstream.body) {
+            if (upstream.status === 402 || upstream.status === 429) noteUpstreamUse();
+            throw new Error('fallback ' + upstream.status);
+          }
+          noteUpstreamUse();
         }
       }
 
       if (wantsStream) {
-        openStream({
+        // The gate path may already have opened the stream while it waited.
+        if (!res.headersSent) openStream({
           sources: records.slice(0, 4).map(item => item.sourceUrl).filter(Boolean),
           grounded: records.length,
           disclaimer
@@ -626,30 +744,12 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
         try {
           finish = await relayUpstream(upstream, async text => { answer += text; sseWrite(res, 'delta', { text }); });
         } catch (error) {
-          // A plan that ran out of its five seconds is still worth showing.
+          if (clientAbort.signal.aborted) throw error;
           if (input.mode === 'plan' && /Timeout|Abort/i.test(String(error?.name))) truncated = true;
           else throw error;
-        }
-        if (input.mode === 'plan' && (!answer.trim() || !parsePlan(answer))) {
-          console.warn('ai_assistant_plan_retry', JSON.stringify({ finish, parsed: Boolean(parsePlan(answer)) }));
-          try {
-            const retry = await fetch(target.url, {
-              method: 'POST',
-              headers: target.headers,
-              signal: AbortSignal.timeout(UPSTREAM_TIMEOUT),
-              body: JSON.stringify({
-                model: aiModel,
-                temperature: 0.2,
-                max_tokens: 4000,
-                stream: true,
-                messages: [{ role: 'user', content: PLAN_ONLY_PROMPT + '\n\n' + input.message }],
-                ...reasoning
-              })
-            });
-            if (retry.ok && retry.body) {
-              await relayUpstream(retry, async text => { answer += text; sseWrite(res, 'delta', { text }); });
-            }
-          } catch (_) { /* fall through to the honest fallback */ }
+        } finally {
+          activeUpstreamRequest?.dispose();
+          activeUpstreamRequest = null;
         }
         if (!answer.trim()) {
           console.warn('ai_assistant_empty', JSON.stringify({ mode: input.mode, finish }));
@@ -674,19 +774,36 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
       const finish = await relayUpstream(upstream, async text => { answer += text; });
       return respond(answer.trim() || groundedFallback(records, input.language), { degraded: !answer.trim(), finish });
     } catch (error) {
-      console.warn('ai_assistant_failure', JSON.stringify({ name: error?.name || 'error', message: String(error?.message || error).slice(0, 120) }));
-      if (res.headersSent) {
-        sseWrite(res, 'delta', { text: '\n' });
-        const fallbackText = groundedFallback(records, input.language);
-        const fallbackGallery = await photoStrip(fallbackText, resolvePhotos, input, input.language);
-        sseWrite(res, 'done', { answer: fallbackText, isAI: false, degraded: true, cached: false, gallery: fallbackGallery, disclaimer });
+      if (clientAbort.signal.aborted || res.destroyed) return;
+      const exhausted = error?.status === 402 || error?.status === 429;
+      console.warn('ai_assistant_failure', JSON.stringify({ mode: input.mode, name: error?.name || 'error', status: error?.status || 0, exhausted }));
+      // A refused quota is not a network problem, and saying so saves the
+      // visitor from hunting for a fault on their own device.
+      const message = exhausted
+        ? quotaMessage(input.language, gateWaitSeconds())
+        : error?.name === 'TimeoutError'
+          ? (input.language === 'en' ? 'The request timed out. Please retry.' : '请求超时，请重试。')
+          : (input.language === 'en' ? 'The travel assistant is temporarily unavailable. Please retry.' : '行程服务暂时不可用，请稍后再试。');
+      if (wantsStream) {
+        if (!res.headersSent) openStream({ sources: [], grounded: records.length, disclaimer });
+        if (exhausted) sseWrite(res, 'delta', { text: message });
+        sseWrite(res, 'error', { error: message, quota: exhausted });
         return res.end();
       }
       return respond(groundedFallback(records, input.language), { degraded: true });
+    } finally {
+      activeUpstreamRequest?.dispose();
+      res.off('close', onClientClose);
     }
   });
 
-  app.get('/api/ai/assistant/health', (_req, res) => res.json({ ok: true, model: aiModel, endpoint: '/api/ai/assistant' }));
+  app.get('/api/ai/assistant/health', (_req, res) => res.json({
+    ok: true,
+    model: activeModel,
+    planModel: activePlanModel || activeModel,
+    endpoint: '/api/ai/assistant',
+    upstreamReadyInMs: Math.max(0, upstreamGate.until - Date.now())
+  }));
 }
 
 export default installAiAssistant;

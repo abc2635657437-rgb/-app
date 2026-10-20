@@ -34,7 +34,7 @@
     const loadRuntime = () => {
       const appendRuntime = () => {
         const runtime = document.createElement('script');
-        runtime.src = 'modules/map/map-web.js?v=36-color-atlas';
+        runtime.src = 'modules/map/map-web.js?v=37-city-catalog-search';
         runtime.onload = () => {
           window.loadMap = window.initTravelMap;
           if (document.getElementById('map')?.classList.contains('active')) window.initTravelMap?.();
@@ -98,7 +98,7 @@
     if (!card || document.getElementById('mapSearch')) return;
     const controls = document.createElement('div');
     controls.className = 'map-controls';
-    controls.innerHTML = '<input id="mapSearch" placeholder="搜索城市或地标"><button class="btn alt small" onclick="searchTravelMap()">搜索</button><button class="btn alt small" onclick="locateTravelMap()">定位</button>';
+    controls.innerHTML = '<input id="mapSearch" aria-label="搜索城市或地标" placeholder="搜索城市或地标"><button class="btn alt small" aria-label="搜索地点目录" onclick="searchTravelMap()">搜索</button><button class="btn alt small" aria-label="定位到我的位置" onclick="locateTravelMap()">定位</button>';
     card.insertBefore(controls, card.firstChild);
     const presence = document.createElement('div');
     presence.className = 'row';

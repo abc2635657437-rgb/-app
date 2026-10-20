@@ -11,7 +11,7 @@
 // escaped before a small block parser turns it into markup.
 (function () {
   var STORE = 'tw-ai-chat-v1';
-  var VERSION = '18-photo-plan';
+  var VERSION = '19-cancel-retry';
   var MAX_TURNS = 30;
   var MAX_HISTORY = 8;
   // Injected like map-web.js injects photo-places.css, so the stylesheet travels
@@ -59,7 +59,11 @@
       voiceBusy: '语音正在启动，稍等一下再点。',
       voiceReading: '朗读中 · 点按停止',
       stop: '停止',
-      stopped: '已停止。',
+      stopped: '已停止等待；原问题已保留，可以按原问题重试。',
+      stopping: '正在停止…',
+      timeout: '这次请求超时，原问题已保留，可以按原问题重试。',
+      interrupted: '上次请求没有完成；原问题已保留，可以重试。',
+      retryQuestion: '按原问题重试',
       thinking: '正在翻资料',
       sources: '参考资料',
       planning: '正在排行程',
@@ -95,10 +99,10 @@
       planIntro: '按你的时间排好了，慢慢走。',
       makeRoute: '整理成路线',
       login: '登录后不限量',
-      anon: '未登录每天 8 次。',
+      anon: '未登录每 10 分钟 8 次。',
       clear: '清空',
       retry: '重试',
-      error: '顾问暂时不在线，请稍后再问。',
+      error: '暂时不在线，请稍后再问。',
       offline: '网络似乎断开了，检查连接后再试。',
       quota: '问得有点急，稍等片刻再聊。',
       empty: '先说说要去哪里，我们从这一步开始。',
@@ -128,7 +132,11 @@
       voiceBusy: 'Voice is starting — give it a second.',
       voiceReading: 'Reading aloud · tap to stop',
       stop: 'Stop',
-      stopped: 'Stopped.',
+      stopped: 'Stopped. Your question is saved; retry it below when ready.',
+      stopping: 'Stopping…',
+      timeout: 'This request timed out. Your question is saved; you can retry it below.',
+      interrupted: 'The previous request did not finish. Your question is saved; you can retry it below.',
+      retryQuestion: 'Retry this question',
       thinking: 'Checking the notes',
       sources: 'Sources',
       planning: 'Laying out the days',
@@ -164,7 +172,7 @@
       planIntro: 'Laid out for the days you have. Take it slowly.',
       makeRoute: 'Turn into a route',
       login: 'Unlimited with an account',
-      anon: 'Anonymous: 8 questions a day.',
+      anon: 'Anonymous: 8 questions per 10 minutes.',
       clear: 'Clear',
       retry: 'Retry',
       error: 'The desk is offline. Please try again shortly.',
@@ -820,7 +828,18 @@
   }
 
   function load() {
-    try { var saved = JSON.parse(localStorage.getItem(STORE) || '[]'); turns = Array.isArray(saved) ? saved.slice(-MAX_TURNS) : []; }
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORE) || '[]');
+      turns = Array.isArray(saved) ? saved.slice(-MAX_TURNS) : [];
+      turns.forEach(function (turn) {
+        if (turn && turn.role === 'user' && turn.pending) {
+          delete turn.pending;
+          turn.retryable = true;
+          turn.error = t().interrupted;
+        }
+      });
+      save();
+    }
     catch (_) { turns = []; }
   }
   function save() { try { localStorage.setItem(STORE, JSON.stringify(turns.slice(-MAX_TURNS))); } catch (_) {} }
@@ -1019,11 +1038,33 @@
     return el;
   }
 
-  function userTurn(text) {
+  function userTurn(turn) {
     var wrap = document.createElement('div');
     wrap.className = 'ai-chat-turn is-me';
-    wrap.append(byline(t().you, 'me'), bubble('user', text));
+    wrap.append(byline(t().you, 'me'), bubble('user', turn.content));
+    if (turn.retryable) {
+      appendRecovery(wrap, turn);
+    }
     return wrap;
+  }
+
+  function appendRecovery(userEl, turn) {
+    userEl.querySelector('.ai-chat-recovery')?.remove();
+    var recovery = document.createElement('div');
+    recovery.className = 'ai-chat-recovery';
+    if (turn.error) {
+      var note = document.createElement('small');
+      note.textContent = turn.error;
+      recovery.append(note);
+    }
+    var retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'ai-chat-retry';
+    retry.textContent = t().retryQuestion;
+    retry.setAttribute('aria-label', t().retryQuestion + ': ' + turn.content);
+    retry.onclick = function () { retryQuestion(turn, userEl); };
+    recovery.append(retry);
+    userEl.append(recovery);
   }
 
   function scrollToEnd() {
@@ -1034,15 +1075,24 @@
   function setStatus(text) { if (status) status.textContent = text || ''; }
 
   // --------------------------------------------------------------------- ask
-  async function ask(question, bubbleEl) {
+  async function ask(question, bubbleEl, turn, userEl) {
+    var request = { aborted: false, timedOut: false, text: '', body: bubbleEl.querySelector('.ai-chat-body'), controller: new AbortController(), reader: null };
+    streaming = request;
+    if (composeBar) { composeBar.className = 'ai-chat-compose is-busy'; composeBar.setAttribute('aria-busy', 'true'); }
+    if (sendButton) sendButton.disabled = true;
+    if (micButton) micButton.disabled = true;
+    if (stopButton) stopButton.hidden = false;
+    var timeoutId = setTimeout(function () {
+      request.timedOut = true;
+      request.controller.abort();
+      if (request.reader) request.reader.cancel().catch(function () {});
+    }, 50000);
     var A = auth();
     var headers = { 'Content-Type': 'application/json', Accept: 'text/event-stream' };
     if (A && A.session() && A.session().access_token) headers.Authorization = 'Bearer ' + A.session().access_token;
-    var history = turns.slice(-MAX_HISTORY).map(function (turn) { return { role: turn.role, content: turn.content }; });
-    var plans = await plansWithin(1500);
+    var turnIndex = turns.indexOf(turn);
+    var history = turns.slice(0, turnIndex < 0 ? turns.length : turnIndex).slice(-MAX_HISTORY).map(function (entry) { return { role: entry.role, content: entry.content }; });
     var planMode = isPlanRequest(question);
-    streaming = { aborted: false, text: '', body: bubbleEl.querySelector('.ai-chat-body') };
-    if (composeBar) composeBar.className = 'ai-chat-compose is-busy';
 
     var answer = '';
     var sources = [];
@@ -1051,8 +1101,8 @@
     var frame = 0;
     function paint() {
       frame = 0;
-      if (!streaming || !streaming.body) return;
-      streaming.body.innerHTML = format(streaming.text || answer);
+      if (streaming !== request || !request.body) return;
+      request.body.innerHTML = format(request.text || answer);
       scrollToEnd();
     }
     function schedule() {
@@ -1061,10 +1111,12 @@
     }
 
     try {
+      var plans = await plansWithin(1500);
+      if (request.controller.signal.aborted) throw new DOMException('Request aborted', 'AbortError');
       var response = await fetch('/api/ai/assistant', {
         method: 'POST',
         headers: headers,
-        signal: AbortSignal.timeout ? AbortSignal.timeout(90000) : undefined,
+        signal: request.controller.signal,
         body: JSON.stringify({ message: question, history: history, language: language(), plans: plans, mode: planMode ? 'plan' : 'chat', stream: true })
       });
 
@@ -1077,11 +1129,12 @@
       }
 
       var reader = response.body.getReader();
+      request.reader = reader;
       var decoder = new TextDecoder();
       var buffer = '';
       for (;;) {
         var chunk = await reader.read();
-        if (chunk.done || (streaming && streaming.aborted)) break;
+        if (chunk.done || request.aborted || request.controller.signal.aborted) break;
         buffer += decoder.decode(chunk.value, { stream: true });
         var split = buffer.indexOf('\n\n');
         while (split >= 0) {
@@ -1096,10 +1149,11 @@
           if (!data) continue;
           var payload = {};
           try { payload = JSON.parse(data); } catch (_) { continue; }
+          if (event === 'error') throw new Error(payload.error || t().error);
           if (event === 'meta') sources = payload.sources || [];
           if (event === 'delta' && payload.text) {
             answer += payload.text;
-            if (streaming) { streaming.text = answer; schedule(); }
+            request.text = answer; schedule();
           }
           if (event === 'done') {
             if (payload.answer) answer = payload.answer;
@@ -1110,47 +1164,39 @@
         }
       }
 
+      if (request.aborted || request.controller.signal.aborted) throw new DOMException('Request aborted', 'AbortError');
+
       if (!answer.trim()) {
-        if (streaming && streaming.aborted) {
-          if (streaming.body) streaming.body.innerHTML = '<p class="muted">' + esc(t().stopped) + '</p>';
-          return;
-        }
-        // The stream can come back empty on a flaky upstream; one plain request
-        // costs little and usually returns the same answer.
-        try {
-          if (streaming && streaming.body) streaming.body.innerHTML = '<p class="muted">' + esc(t().retrying) + '…</p>';
-          const again = await fetch('/api/ai/assistant', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ message: question, history: history, language: language(), plans: plans, mode: planMode ? 'plan' : 'chat', stream: false })
-          });
-          if (again && again.ok && again.json) {
-            const data = await again.json();
-            if (data && data.answer) {
-              answer = data.answer;
-              if (data.plan) plan = data.plan;
-            }
-          }
-        } catch (_) { /* fall through to the honest message */ }
         if (!answer.trim()) throw new Error(t().noAnswer);
       }
     } catch (error) {
-      var text = error && error.name === 'AbortError' ? t().offline : (error && error.message ? error.message : t().error);
-      if (streaming && streaming.body) streaming.body.innerHTML = '<div class="ai-chat-error">' + esc(text) + '</div>';
-      setStatus('');
-      turns.push({ role: 'assistant', content: text });
+      var text = request.timedOut ? t().timeout : request.aborted ? t().stopped : error && error.name === 'AbortError' ? t().offline : (error && error.message ? error.message : t().error);
+      if (request.body) request.body.innerHTML = '<div class="ai-chat-error">' + esc(text) + '</div>';
+      turn.retryable = true;
+      turn.error = text;
+      delete turn.pending;
+      if (userEl && userEl.isConnected) appendRecovery(userEl, turn);
       save();
-      if (stopButton) stopButton.hidden = true;
+      setStatus('');
+      voiceTurn = false;
       return;
     } finally {
-      streaming = null;
-      if (composeBar) composeBar.className = 'ai-chat-compose';
+      clearTimeout(timeoutId);
+      if (streaming === request) streaming = null;
+      if (composeBar) { composeBar.className = 'ai-chat-compose'; composeBar.removeAttribute('aria-busy'); }
+      if (sendButton) sendButton.disabled = false;
+      if (micButton) micButton.disabled = false;
+      if (stopButton) stopButton.hidden = true;
     }
 
     // Swap the live bubble for the final one so it carries sources, the route
     // action and the editorial spacing of a finished answer.
     var finalEl = bubble('ai', answer, { sources: sources, plan: plan, gallery: gallery });
     bubbleEl.replaceWith(finalEl);
+    delete turn.retryable;
+    delete turn.error;
+    delete turn.pending;
+    userEl.querySelector('.ai-chat-recovery')?.remove();
     turns.push({ role: 'assistant', content: answer, plan: plan });
     save();
     setStatus('');
@@ -1158,6 +1204,23 @@
     scrollToEnd();
     if (voiceTurn || autoSpeak()) speakAnswer(answer);
     voiceTurn = false;
+  }
+
+  function retryQuestion(turn, userEl) {
+    if (streaming || !turn || !turn.retryable || !list) return;
+    delete turn.retryable;
+    delete turn.error;
+    turn.pending = true;
+    userEl.querySelector('.ai-chat-retry')?.remove();
+    var previous = userEl.nextElementSibling;
+    if (previous && previous.classList.contains('bubble') && previous.classList.contains('ai')) previous.remove();
+    var pending = bubble('ai', '', { typing: true });
+    userEl.after(pending);
+    save();
+    setStatus(isPlanRequest(turn.content) ? t().planning : t().thinking);
+    if (voiceState === 'listening') setVoiceState('idle');
+    scrollToEnd();
+    ask(turn.content, pending, turn, userEl);
   }
 
   // ------------------------------------------------------------------ render
@@ -1239,7 +1302,7 @@
     list.innerHTML = '';
     if (!turns.length) list.append(exampleCard());
     turns.forEach(function (turn) {
-      if (turn.role === 'user') list.append(userTurn(turn.content));
+      if (turn.role === 'user') list.append(userTurn(turn));
       else list.append(bubble(turn.role, turn.content, { makeRoute: true }));
     });
     scrollToEnd();
@@ -1283,26 +1346,31 @@
     stopSpeech();
     input.value = '';
     autoGrow();
-    turns.push({ role: 'user', content: question });
+    var turn = { role: 'user', content: question, pending: true };
+    turns.push(turn);
     save();
     // Drop the first-visit card without rebuilding the transcript, so earlier
     // answers keep their sources and route buttons.
     var card = list.querySelector('.ai-chat-hello');
     if (card) card.remove();
     setChatting(true);
-    list.append(userTurn(question));
+    var userEl = userTurn(turn);
+    list.append(userEl);
     var pending = bubble('ai', '', { typing: true });
     list.append(pending);
     setStatus(isPlanRequest(question) ? t().planning : t().thinking);
-    if (stopButton) stopButton.hidden = false;
-    if (micButton) micButton.disabled = true;
     if (voiceState === 'listening') setVoiceState('idle');
     scrollToEnd();
-    ask(question, pending);
+    ask(question, pending, turn, userEl);
   }
 
   function stop() {
-    if (streaming) { streaming.aborted = true; setStatus(''); }
+    if (streaming && !streaming.aborted) {
+      streaming.aborted = true;
+      setStatus(t().stopping);
+      streaming.controller.abort();
+      if (streaming.reader) streaming.reader.cancel().catch(function () {});
+    }
   }
 
   function clearChat() {
