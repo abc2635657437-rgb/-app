@@ -55,6 +55,8 @@ class Element {
   get innerHTML() { return this._html; }
   setAttribute(name, value) { this.attributes[name] = String(value); }
   getAttribute(name) { return this.attributes[name]; }
+  removeAttribute(name) { delete this.attributes[name]; }
+  hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name); }
   append(...nodes) { nodes.forEach(node => this.appendChild(node)); return this; }
   appendChild(node) {
     if (!node) return node;

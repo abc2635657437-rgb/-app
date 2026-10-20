@@ -643,9 +643,14 @@ export function installAiAssistant(app, { optionalUser, aiBaseUrl, aiModel, aiPl
 
     try {
       const target = upstreamTarget(aiBaseUrl, aiApiKey);
-      // OpenRouter reasoning models otherwise spill their thinking into the
-      // answer; ask for the final text only.
-      const reasoning = /openrouter\.ai/i.test(String(aiBaseUrl)) ? { reasoning: { exclude: true } } : {};
+      // The free model is a reasoning model. Left at its default effort it spends
+      // the entire token budget thinking and returns an empty answer with
+      // finish_reason "length" — measured: 4459 reasoning chars, 0 content, 18.8 s.
+      // A low-effort hint leaves room for the table and pulls first token in to
+      // about 4 s. OpenRouter wants the same wish expressed its own way.
+      const reasoning = /openrouter\.ai/i.test(String(aiBaseUrl))
+        ? { reasoning: { exclude: true, effort: 'low' } }
+        : { reasoning_effort: 'low' };
       const budget = input.mode === 'plan' ? PLAN_BUDGET : UPSTREAM_TIMEOUT;
       const requestBody = model => JSON.stringify({ model, temperature: 0.3, max_tokens: input.mode === 'plan' ? PLAN_MAX_TOKENS : MAX_TOKENS, stream: true, messages, ...reasoning });
       // One attempt against the configured provider. Failures carry the status
