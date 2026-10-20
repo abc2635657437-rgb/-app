@@ -97,12 +97,6 @@ app.use(express.json({ limit: '2mb' }));
 app.use(compressPayloads());
 const backendDir = path.dirname(fileURLToPath(import.meta.url));
 const landmarkFile = path.resolve(backendDir, '..', 'modules', 'data', 'landmarks.json');
-// The app shell lives in explore3d.html: one page with 首页 / 探索 / 发布 / 聊天 /
-// 旅友. index.html stays reachable for the legacy shell and old links.
-app.get('/', (_req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, must-revalidate');
-  res.sendFile(path.resolve(backendDir, '..', 'explore3d.html'));
-});
 // Serve the small runtime directly from the repository so deployments remain
 // independent of the package manager's node_modules layout.
 app.use('/vendor/leaflet', express.static(path.resolve(backendDir, '..', 'modules', 'vendor', 'leaflet'), { maxAge: '30d', immutable: true }));

@@ -1,42 +1,11 @@
-const CACHE = 'travel-world-offline-v118-batched-install';
-const ASSETS = ['/modules/vendor/supabase.js?v=1', '/oauth-callback.html', '/modules/chat/chat-web.js?v=14', '/modules/theme/ukiyoe.js?v=15-journal-only', '/modules/theme/ukiyoe.css?v=12', '/modules/theme/journal-preview.js?v=21-color-atlas', '/modules/theme/journal-preview.css?v=21-color-atlas', '/assets/workbuddy-globe.html', '/', '/index.html', '/modules/data/landmarks.json?v=3', '/modules/data/routes.json?v=5', '/modules/data/seasonal-destinations.json?v=2', '/modules/data/place-backgrounds.json', '/modules/services/image-service.js?v=14', '/modules/auth/auth-web.js?v=14', '/modules/community/post-ui.js?v=14', '/modules/community/home-api.js?v=14', '/modules/routes/route-web.js?v=14', '/modules/routes/route-studio.js?v=15-publish-entry', '/modules/ai/ai-voice.js?v=1', '/modules/ai/ai-chat.js?v=18-photo-plan', '/modules/map/landmark-gallery.js?v=14', '/modules/map/map-loader.js?v=28-westlake-interactive-v2', '/modules/map/map-provider.js?v=7', '/modules/map/map-web.js?v=36-color-atlas', '/modules/map/west-lake-interactive-guide.js?v=3-westlake-interactive', '/modules/map/selected-city-guide.js?v=11-westlake-interactive-v1', '/modules/map/photo-places.css?v=19-westlake-interactive-v2',  '/modules/map/map-actions.js?v=16', '/modules/discover/discover-web.js?v=18-locale-labels', '/modules/community/floating-ai.js?v=14', '/modules/buddies/buddy-web.js?v=14', '/modules/profile/profile-web.js?v=14', '/modules/i18n/i18n.js?v=15-noop-lang-guard', '/modules/navigation/global-back.js?v=14',
-  '/explore3d-explore.html',
-  '/modules/explore3d/explore3d.css?v=3',
-  '/modules/explore3d/explore3d.js?v=9',
-  '/modules/explore3d/globe.js',
-  '/modules/explore3d/rig.js',
-  '/modules/explore3d/west-lake.js',
-  '/modules/vendor/three/three.module.js',
-];
-const EXTRA_ASSETS = ['/modules/map/map-loader.js?v=28-westlake-interactive-v2', '/modules/map/map-web.js?v=36-color-atlas', '/modules/map/west-lake-interactive-guide.js?v=3-westlake-interactive', '/modules/map/selected-city-guide.js?v=11-westlake-interactive-v1', '/modules/map/photo-places.css?v=19-westlake-interactive-v2',   ];
+const CACHE = 'travel-world-offline-v114-color-atlas';
+const ASSETS = ['/modules/vendor/supabase.js?v=1', '/oauth-callback.html', '/modules/chat/chat-web.js?v=14', '/modules/theme/ukiyoe.js?v=15-journal-only', '/modules/theme/ukiyoe.css?v=12', '/modules/theme/journal-preview.js?v=21-color-atlas', '/modules/theme/journal-preview.css?v=21-color-atlas', '/assets/workbuddy-globe.html', '/', '/index.html', '/modules/data/landmarks.json?v=3', '/modules/data/routes.json?v=5', '/modules/data/seasonal-destinations.json?v=2', '/modules/data/place-backgrounds.json', '/modules/services/image-service.js?v=14', '/modules/auth/auth-web.js?v=14', '/modules/community/post-ui.js?v=14', '/modules/community/home-api.js?v=14', '/modules/routes/route-web.js?v=14', '/modules/routes/route-studio.js?v=15-publish-entry', '/modules/ai/ai-voice.js?v=1', '/modules/ai/ai-chat.js?v=18-photo-plan', '/modules/map/landmark-gallery.js?v=14', '/modules/map/map-loader.js?v=28-westlake-interactive-v2', '/modules/map/map-provider.js?v=7', '/modules/map/map-web.js?v=36-color-atlas', '/modules/map/west-lake-interactive-guide.js?v=3-westlake-interactive', '/modules/map/selected-city-guide.js?v=11-westlake-interactive-v1', '/modules/map/photo-places.css?v=19-westlake-interactive-v2', '/assets/route-photos/west-lake-gathered-background.png', '/modules/map/map-actions.js?v=16', '/modules/discover/discover-web.js?v=18-locale-labels', '/modules/community/floating-ai.js?v=14', '/modules/buddies/buddy-web.js?v=14', '/modules/profile/profile-web.js?v=14', '/modules/i18n/i18n.js?v=15-noop-lang-guard', '/modules/navigation/global-back.js?v=14'];
+const EXTRA_ASSETS = ['/modules/map/map-loader.js?v=28-westlake-interactive-v2', '/modules/map/map-web.js?v=36-color-atlas', '/modules/map/west-lake-interactive-guide.js?v=3-westlake-interactive', '/modules/map/selected-city-guide.js?v=11-westlake-interactive-v1', '/modules/map/photo-places.css?v=19-westlake-interactive-v2', '/assets/route-photos/west-lake-gathered-background.png', '/assets/route-photos/west-lake-gathered-background-portrait.png', '/assets/route-photos/page-bg-west-lake-mobile.png'];
 EXTRA_ASSETS.push('/modules/map/west-lake-interactive-guide.js?v=4-westlake-interactive');
 EXTRA_ASSETS.push('/modules/map/map-loader.js?v=36-color-atlas', '/modules/map/map-web.js?v=36-color-atlas', '/modules/map/west-lake-interactive-guide.js?v=8-shared-guide-icons', '/modules/map/selected-city-guide.js?v=11-westlake-interactive-v1', '/modules/map/global-landmark-guide.js?v=20261018-global-21-ai-images', '/modules/map/photo-places.css?v=30-global-category-icons', '/modules/data/global-landmark-guide-catalog.json?v=20261018-verified-2', '/modules/data/global-landmark-guide-assets.json?v=20261018-local-2', '/modules/data/global-landmark-guide-images.json?v=20261018-expanded-2', '/modules/data/global-guide-section-images.json?v=20261018-sections-1', '/assets/route-photos/coma-pedrosa-ai-guide.png');
 EXTRA_ASSETS.push('/modules/data/global-guide-generated-images.json?v=20261019-category-slots-24');
 EXTRA_ASSETS.push('/modules/data/global-guide-section-images.json?v=20261019-sections-6');
-// Fill the cache a few files at a time: the host throttles a burst of fifty
-// parallel requests, which used to leave most of the list uncached.
-async function precacheInBatches(cache, urls, size = 6) {
-  const failed = [];
-  for (let i = 0; i < urls.length; i += size) {
-    const batch = urls.slice(i, i + size);
-    const results = await Promise.allSettled(batch.map(url => cache.add(url)));
-    results.forEach((result, index) => {
-      if (result.status === 'rejected') failed.push(batch[index]);
-    });
-  }
-  return failed;
-}
-
-self.addEventListener('install', event => event.waitUntil(
-  caches.open(CACHE)
-    // cache.addAll is atomic: one failure discards the whole install, which
-    // silently left the site with no worker at all. Each file now stands alone.
-    .then(cache => precacheInBatches(cache, [...ASSETS, ...EXTRA_ASSETS]))
-    .then(failed => {
-      if (failed.length) console.warn('[sw] precache: ' + failed.length + ' file(s) skipped');
-      return self.skipWaiting();
-    })
-));
+self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([...ASSETS, ...EXTRA_ASSETS])).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(Promise.all([caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))), self.clients.claim()])));
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
