@@ -3,6 +3,8 @@
   const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const statusText = { pending: '待处理', accepted: '已同意', rejected: '已拒绝', cancelled: '已取消' };
   let trips = [], incoming = [], outgoing = [], chats = [], activeChatId = null, chatPollTimer = null;
+  window.getBuddyChatThreads = () => chats.map(item => ({ id: item.id, title: item.trip?.title || '同行聊天', destination: item.trip?.destination || '', unreadCount: Number(item.unread_count || 0) }));
+  window.getBuddyApplicationCounts = () => ({ incoming: incoming.length, outgoing: outgoing.length });
   function empty(text) { return '<div class="card muted">' + text + '</div>'; }
   function appCard(item, received) {
     const actions = received && item.status === 'pending' ? '<button class="btn small" onclick="decideBuddy(\'' + item.id + '\',\'accepted\')">同意</button> <button class="btn alt small" onclick="decideBuddy(\'' + item.id + '\',\'rejected\')">拒绝</button>' : (!received && item.status === 'pending' ? '<button class="btn alt small" onclick="decideBuddy(\'' + item.id + '\',\'cancelled\')">取消申请</button>' : '');
@@ -21,11 +23,14 @@
       try { [incoming, outgoing, chats] = await Promise.all([auth().request('/api/buddy/applications?direction=received'), auth().request('/api/buddy/applications?direction=sent'), auth().request('/api/chats')]); } catch (_) { incoming = []; outgoing = []; chats = []; }
     } else { incoming = []; outgoing = []; chats = []; }
     render();
+    window.dispatchEvent(new CustomEvent('tw-buddy-chats-updated', { detail: chats.map(item => ({ id: item.id, title: item.trip?.title || '同行聊天', destination: item.trip?.destination || '', unreadCount: Number(item.unread_count || 0) })) }));
   }
   window.publishBuddyPlan = async () => {
     if (!auth().requireLogin()) return;
-    const body = { title: document.getElementById('tripTitle').value.trim(), destination: document.getElementById('tripDestination').value.trim(), description: document.getElementById('tripNote').value.trim() };
-    try { await auth().request('/api/trips', { method: 'POST', body: JSON.stringify(body) }); await load(); } catch (error) { alert(error.message); }
+    const title = document.getElementById('tripTitle').value.trim(), destination = document.getElementById('tripDestination').value.trim();
+    const body = { title, destination, startDate: document.getElementById('selectedTripStart')?.value || null, endDate: document.getElementById('selectedTripEnd')?.value || null, description: document.getElementById('tripNote').value.trim() };
+    try { const saved = await auth().request('/api/trips', { method: 'POST', body: JSON.stringify(body) }); await load(); auth().toast?.('同行招募已发布'); return saved; }
+    catch (error) { const status = document.getElementById('selectedTripStatus'); if (status) status.textContent = '发布失败：' + error.message + '。草稿仍保存在本机，可重试。'; auth().toast?.('发布失败：' + error.message); return null; }
   };
   window.applyBuddy = async tripId => { if (!auth().requireLogin()) return; const message = prompt('简单介绍同行原因或旅行偏好：') ?? ''; try { await auth().request('/api/trips/' + tripId + '/applications', { method: 'POST', body: JSON.stringify({ message }) }); await load(); } catch (error) { alert(error.message); } };
   window.editBuddyTrip = async tripId => { const trip = trips.find(item => item.id === tripId); if (!trip) return; const title = prompt('旅行标题', trip.title); if (title === null) return; const destination = prompt('目的地', trip.destination); if (destination === null) return; const description = prompt('旅行说明', trip.description || ''); if (description === null) return; try { await auth().request('/api/trips/' + tripId, { method: 'PATCH', body: JSON.stringify({ title: title.trim(), destination: destination.trim(), description: description.trim() }) }); await load(); } catch (error) { alert(error.message); } };

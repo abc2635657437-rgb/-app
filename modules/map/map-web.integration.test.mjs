@@ -134,6 +134,9 @@ async function load({ timeZone = 'Europe/Paris', providers = null } = {}) {
       if (target.includes('landmarks.json')) {
         return Promise.resolve(new Response(JSON.stringify(LANDMARKS), { status: 200, headers: { 'content-type': 'application/json' } }));
       }
+      if (target.includes('global-landmark-guide-catalog.json')) {
+        return Promise.resolve(new Response('{}', { status: 404, headers: { 'content-type': 'application/json' } }));
+      }
       if (target.includes('place-backgrounds.json')) {
         return Promise.resolve(new Response(JSON.stringify({ backgrounds: {} }), { status: 200, headers: { 'content-type': 'application/json' } }));
       }

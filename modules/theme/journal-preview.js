@@ -4,7 +4,9 @@
   document.documentElement.classList.add('journal-preview');
   const css=document.createElement('link');css.rel='stylesheet';css.href='/modules/theme/journal-preview.css?v=22-soft';document.head.append(css);
   const productCss=document.createElement('link');productCss.rel='stylesheet';productCss.href='/modules/theme/mobile-product-system.css?v=1';document.head.append(productCss);
-  const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=hour<8||hour>=20?'night':'day';};
+  const selectedScreensReview=true;
+  document.body.classList.add('selected-screens-preview');
+  const applyTimeTheme=()=>{const hour=new Date().getHours();document.body.dataset.timeTheme=selectedScreensReview?'day':hour<8||hour>=20?'night':'day';};
   applyTimeTheme();window.setInterval(applyTimeTheme,60_000);
   const pageBackgrounds={map:'zhangjiajie',messages:'west-lake',friends:'erhai',profile:'potala'};
   Object.values(pageBackgrounds).forEach(name=>{const image=new Image();image.decoding='async';image.src=`/assets/route-photos/soft/page-bg-${name}-soft.jpg?v=1`;});
@@ -78,4 +80,5 @@
   const observer=new MutationObserver(schedule);decorate();observer.observe(document.querySelector('.app'),{childList:true,subtree:true});
   window.addEventListener('tw-auth-change',schedule);
   new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  import('./selected-product-ui.js?v=12').catch(error=>console.error('Selected screen UI failed to load:',error));
 }());

@@ -1,6 +1,11 @@
 (function () {
   const safe = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
   const photoFallback = '/assets/route-photos/community-photo-fallback.svg';
+  const actionIcons = {
+    like: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/></svg>',
+    comment: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.5a8 8 0 0 1-8 8 8.7 8.7 0 0 1-4-.9L3 20l1.4-4.1a8 8 0 1 1 16.1-4.4Z"/></svg>',
+    favorite: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h12a1 1 0 0 1 1 1V21l-7-4.5L5 21V4.5a1 1 0 0 1 1-1Z"/></svg>'
+  };
   const registry=new Map();
   const points = route => (route?.trip_days || []).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).flatMap(day => (day.trip_places || []).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)));
   const routeStats = route => {
@@ -17,10 +22,11 @@
     const line=sampled.map(c=>`${10+(c[0]-minX)/dx*280},${110-(c[1]-minY)/dy*90}`).join(' ');
     return '<svg class="route-sketch" viewBox="0 0 300 120" role="img" aria-label="路线缩略图"><path d="M0 82 Q70 35 130 78 T300 55" class="route-land"/><polyline points="'+line+'"/><circle cx="'+line.split(' ')[0].replace(',','" cy="')+'" r="5"/><circle cx="'+line.split(' ').at(-1).replace(',','" cy="')+'" r="5"/></svg>';
   }
-  function media(post) {
+  function media(post, options = {}) {
     const items=(post.post_media||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
     if(!items.length)return '';
-    return '<div class="post-gallery '+(items.length>1?'is-multiple':'')+'">'+items.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<button type="button" onclick="openPostMedia(\''+safe(item.public_url)+'\')" aria-label="查看完整图片"><img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'" onerror="this.onerror=null;this.src=\''+photoFallback+'\';this.alt=\'旅行照片暂不可用\';this.classList.add(\'is-fallback\')"></button>').join('')+'</div>';
+    const mode=options.homeFeed?'feed':'detail';
+    return '<div class="post-gallery '+(items.length>1?'is-multiple':'')+'">'+items.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<button type="button" class="post-media-open" data-post-media="'+mode+'" data-post-id="'+safe(post.id)+'" data-media-url="'+safe(item.public_url)+'" aria-label="'+(options.homeFeed?'轻点查看旅行分享，快速双击点赞':'查看完整图片')+'"><img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'" onerror="this.onerror=null;this.src=\''+photoFallback+'\';this.alt=\'旅行照片暂不可用\';this.classList.add(\'is-fallback\')"></button>').join('')+'</div>';
   }
   function routeCard(route) {
     if(!route)return '';
@@ -31,16 +37,107 @@
     registry.set(post.id,post);
     const profile=post.profiles||post.owner||{}, name=profile.display_name||profile.username||'旅行者', uid=window.TravelWorldAuth?.session?.()?.user?.id, comments=post.comments||[], likes=post.post_likes||[];
     const liked=likes.some(item=>item.user_id===uid), followed=options.followingIds?.has(post.author_id), favorited=options.favoriteIds?.has(post.id), own=post.author_id===uid;
-    const title=post.title?'<h3 class="post-title">'+safe(post.title)+'</h3>':'', copy=post.content?'<div class="post-copy">'+safe(post.content)+'</div>':'';
-    const ownerActions=options.ownerActions?'<div class="post-owner-actions"><button onclick="event.stopPropagation();editProfilePost(\''+post.id+'\')">编辑</button><button onclick="event.stopPropagation();deleteProfilePost(\''+post.id+'\')">删除</button></div>':'';
-    const avatar = profile.avatar_url ? '<img src="'+safe(profile.avatar_url)+'" alt="" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'post-avatar-fallback\',textContent:\'TW\'}))">' : '<span class="post-avatar-fallback">TW</span>';
-    return '<article class="post-card'+(options.compact?' home-feed-card':'')+'" data-post-id="'+post.id+'">'+media(post)+'<div class="post-content"><div class="post-author"><button class="post-author-identity" onclick="openTravelUser(\''+post.author_id+'\')">'+avatar+'<span><b class="post-author-name">'+safe(name)+'</b><small>'+safe(post.location_name||post.city||'旅行记录')+'</small></span></button>'+(!own&&options.showFollow?'<button class="post-map" onclick="toggleCommunityFollow(\''+post.author_id+'\')">'+(followed?'已关注':'关注')+'</button>':'')+'</div><button class="post-open" onclick="openPostDetail(\''+post.id+'\')" aria-label="查看帖子详情">'+title+copy+'</button>'+routeCard(post.route)+ownerActions+'<div class="post-actions"><button class="'+(liked?'is-liked':'')+'" onclick="toggleCommunityLike(\''+post.id+'\')">'+(liked?'♥':'♡')+' '+likes.length+'</button><button onclick="toggleCommunityFavorite(\''+post.id+'\')">'+(favorited?'★ 已收藏':'☆ 收藏')+'</button><span>评论 '+comments.length+'</span>'+(post.location_name?'<button onclick="openCommunityLocation(\''+safe(post.city||post.location_name)+'\')">地图</button>':'')+'</div><div class="comment-row"><input data-comment-input="'+post.id+'" placeholder="写下你的旅行感受"><button onclick="addCommunityComment(\''+post.id+'\')">评论</button></div>'+(comments.length?'<div class="post-comments">'+comments.slice(-4).map(c=>'<div>· <b>'+safe(c.profiles?.display_name||'旅行者')+'</b>：'+safe(c.content)+((c.author_id===uid||own)?'<button onclick="deleteCommunityComment(\''+c.id+'\')">删除</button>':'')+'</div>').join('')+'</div>':'')+'</div></article>';
+    const likeCount=post.like_count!=null&&Number.isFinite(Number(post.like_count))?Number(post.like_count):likes.length;
+    const pendingLike=options.pendingLike??Boolean(window.isCommunityLikePending?.(post.id));
+    const pendingFavorite=options.pendingFavorite??Boolean(window.isCommunityFavoritePending?.(post.id));
+    const pendingComment=options.pendingComment??Boolean(window.isCommunityCommentPending?.(post.id));
+    const id=safe(post.id), title=safe(post.title||'旅行记录'), copy=post.content?'<div class="post-copy">'+safe(post.content)+'</div>':'';
+    const location=post.location_name||post.city?'<span class="post-location-tag">'+safe(post.location_name||post.city)+'</span>':'';
+    const avatar=profile.avatar_url?'<img src="'+safe(profile.avatar_url)+'" alt="" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'post-avatar-fallback\',textContent:\'TW\'}))">':'<span class="post-avatar-fallback">TW</span>';
+    const author='<div class="post-author"><button type="button" class="post-author-identity" onclick="openTravelUser(\''+safe(post.author_id)+'\')">'+avatar+'<span><b class="post-author-name">'+safe(name)+'</b><small>'+safe(post.location_name||post.city||'旅行记录')+'</small></span></button>'+(!own&&options.showFollow?'<button type="button" class="post-map" onclick="toggleCommunityFollow(\''+safe(post.author_id)+'\')">'+(followed?'已关注':'关注')+'</button>':'')+'</div>';
+    const like='<button type="button" class="post-like-action '+(liked?'is-liked':'')+'" data-post-action="like" aria-label="'+(liked?'取消喜欢':'喜欢')+'，'+likeCount+' 人喜欢" aria-pressed="'+liked+'" '+(pendingLike?'disabled aria-busy="true"':'')+' onclick="toggleCommunityLike(\''+id+'\')">'+actionIcons.like+'<span>喜欢</span><span class="post-action-count">'+likeCount+'</span></button>';
+    const favorite='<button type="button" class="post-favorite-action" data-post-action="favorite" aria-label="'+(favorited?'取消收藏':'收藏')+'" aria-pressed="'+Boolean(favorited)+'" '+(pendingFavorite?'disabled aria-busy="true"':'')+' onclick="toggleCommunityFavorite(\''+id+'\')">'+actionIcons.favorite+'<span>'+(favorited?'已收藏':'收藏')+'</span></button>';
+    const commentAction='<button type="button" class="post-comment-action" data-post-action="comment" aria-label="评论，共 '+comments.length+' 条" onclick="focusTravelPostComment(\''+id+'\')">'+actionIcons.comment+'<span>评论</span><span class="post-action-count">'+comments.length+'</span></button>';
+    const commentValue=options.commentValue==null?'':String(options.commentValue);
+    const commentForm='<form class="comment-row" data-comment-form="'+id+'" onsubmit="event.preventDefault();addCommunityComment(\''+id+'\')"><input data-comment-input="'+id+'" aria-label="写下评论" maxlength="1000" autocomplete="off" placeholder="写下你的旅行感受" value="'+safe(commentValue)+'" '+(pendingComment?'disabled':'')+'><button type="submit" data-post-action="send-comment" '+(pendingComment?'disabled aria-busy="true"':'')+'>'+(pendingComment?'发送中…':'评论')+'</button></form>';
+    const commentList='<section class="post-comments" aria-labelledby="post-comments-title-'+id+'"><h2 id="post-comments-title-'+id+'">评论 · '+comments.length+'</h2>'+(comments.length?comments.map(item=>'<div><b>'+safe(item.profiles?.display_name||'旅行者')+'</b>：'+safe(item.content)+((item.author_id===uid||own)?'<button type="button" data-comment-delete="'+safe(item.id)+'" aria-label="删除这条评论">删除</button>':'')+'</div>').join(''):'<p class="comments-empty">还没有评论，写下第一条吧。</p>')+'</section>';
+    const ownerActions=options.ownerActions?'<div class="post-owner-actions"><button type="button" onclick="event.stopPropagation();editProfilePost(\''+id+'\')">编辑</button><button type="button" onclick="event.stopPropagation();deleteProfilePost(\''+id+'\')">删除</button></div>':'';
+    if(options.homeFeed){
+      const alt='查看帖子详情：'+title;
+      return '<article class="post-card home-feed-card" data-post-id="'+id+'">'+media(post,{homeFeed:true})+'<div class="post-content"><button type="button" class="post-open" data-post-open-trigger="true" onclick="openPostDetail(\''+id+'\')" aria-label="'+safe(alt)+'"><h3 class="post-title">'+title+'</h3>'+copy+location+'</button>'+routeCard(post.route)+ownerActions+'<div class="home-feed-engagement">'+author+'<div class="post-actions">'+like+'</div></div></div></article>';
+    }
+    if(options.detail){
+      const mapAction=post.location_name?'<button type="button" class="post-map" data-community-location="'+safe(post.city||post.location_name)+'">查看地图</button>':'';
+      return '<article class="post-card home-feed-card post-detail-card" data-post-id="'+id+'">'+media(post)+'<div class="post-content">'+author+'<h1 class="post-title" id="post-detail-title" data-post-title tabindex="-1">'+title+'</h1>'+copy+location+routeCard(post.route)+'<div class="post-actions">'+like+commentAction+favorite+mapAction+'</div>'+commentForm+commentList+'</div></article>';
+    }
+    return '<article class="post-card'+(options.compact?' home-feed-card':'')+'" data-post-id="'+id+'">'+media(post)+'<div class="post-content">'+author+'<button type="button" class="post-open" data-post-open-trigger="true" onclick="openPostDetail(\''+id+'\')" aria-label="查看帖子详情"><h3 class="post-title">'+title+'</h3>'+copy+'</button>'+routeCard(post.route)+ownerActions+'<div class="post-actions">'+like+commentAction+favorite+'</div>'+commentForm+commentList+'</div></article>';
+  }
+  let activeDetail=null, detailRequest=0, detailController=null;
+  function favoriteSet(){return window.getCommunityFavoriteIds?.()||new Set();}
+  function refreshPostDetail(id,options={}){
+    if(!activeDetail||String(activeDetail.id)!==String(id))return;
+    const dialog=document.getElementById('postDetailDialog'),body=dialog?.querySelector('.post-detail-content');if(!dialog?.open||!body)return;
+    const current=dialog.querySelector('[data-comment-input="'+CSS.escape(String(id))+'"]');
+    const value=options.clearComment?'':options.commentValue??current?.value??'';
+    const scrollTop=dialog.scrollTop;
+    body.innerHTML=card(activeDetail.post,{detail:true,favoriteIds:favoriteSet(),commentValue:value});
+    dialog.scrollTop=scrollTop;
+    const focus=options.focusAction==='comment'?dialog.querySelector('[data-comment-input="'+CSS.escape(String(id))+'"]'):options.focusAction?dialog.querySelector('[data-post-action="'+options.focusAction+'"]'):null;
+    focus?.focus({preventScroll:true});
   }
   window.openPostDetail=async id=>{
-    let dialog=document.getElementById('postDetailDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='postDetailDialog';dialog.className='content-dialog';document.body.appendChild(dialog);}
-    dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button><div class="muted">正在加载完整内容…</div>';dialog.showModal();
-    try{const item=await window.TravelWorldAuth.request('/api/community/posts/'+id);dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button>'+card(item,{showFollow:false});}catch(error){dialog.innerHTML='<button class="dialog-close" onclick="postDetailDialog.close()">×</button><p>'+safe(error.message)+'</p>';}
+    detailController?.abort();
+    const request=++detailRequest;
+    const controller=new AbortController(); detailController=controller;
+    const timeout=window.setTimeout(()=>controller.abort(),15000);
+    let dialog=document.getElementById('postDetailDialog');
+    if(!dialog){
+      dialog=document.createElement('dialog');dialog.id='postDetailDialog';dialog.className='post-detail-dialog';
+      dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+      dialog.addEventListener('close',()=>{detailRequest++;detailController?.abort();detailController=null;activeDetail=null;});
+      document.body.appendChild(dialog);
+    }
+    activeDetail={id,post:null};
+    dialog.setAttribute('aria-label','帖子详情');
+    dialog.innerHTML='<button type="button" class="post-detail-close" aria-label="关闭详情" onclick="closePostDetail()">×</button><div class="post-detail-content"><p role="status" class="muted">正在打开旅行分享…</p></div>';
+    if(!dialog.open)dialog.showModal();
+    try{
+      const item=await window.TravelWorldAuth.request('/api/community/posts/'+encodeURIComponent(id),{signal:controller.signal});
+      if(request!==detailRequest||!dialog.open)return;
+      activeDetail={id,post:item};
+      dialog.querySelector('.post-detail-content').innerHTML=card(item,{detail:true,favoriteIds:favoriteSet()});
+      dialog.setAttribute('aria-labelledby','post-detail-title');
+      dialog.querySelector('[data-post-title]')?.focus({preventScroll:true});
+    }catch(error){
+      if(request!==detailRequest||!dialog.open)return;
+      const escapedId=safe(id);
+      const message=error?.name==='AbortError'?'等待有点久，这条旅行分享暂时没有响应。请重试。':'这条旅行分享暂时无法打开，请检查网络后重试。';
+      dialog.querySelector('.post-detail-content').innerHTML='<div class="post-detail-error"><p role="alert">'+message+'</p><button type="button" onclick="retryPostDetail(\''+escapedId+'\')">重试</button></div>';
+    }finally{window.clearTimeout(timeout);if(detailController===controller)detailController=null;}
   };
-  window.openPostMedia=url=>{let dialog=document.getElementById('postMediaDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='postMediaDialog';dialog.className='post-media-dialog';dialog.onclick=event=>{if(event.target===dialog)dialog.close();};document.body.appendChild(dialog);}dialog.innerHTML='<button aria-label="关闭" onclick="postMediaDialog.close()">×</button><img src="'+safe(url)+'" alt="完整旅行图片">';dialog.showModal();};
-  window.TravelPostUI={safe,card,routeCard,routeStats,points,get:id=>registry.get(id)};
+  window.closePostDetail=()=>document.getElementById('postDetailDialog')?.close();
+  window.retryPostDetail=id=>window.openPostDetail(id);
+  window.focusTravelPostComment=id=>{const input=[...document.querySelectorAll('[data-comment-input]')].find(node=>node.dataset.commentInput===String(id));if(input){input.scrollIntoView({behavior:'smooth',block:'center'});input.focus({preventScroll:true});}};
+  window.openPostMedia=url=>{let dialog=document.getElementById('postMediaDialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='postMediaDialog';dialog.className='post-media-dialog';dialog.onclick=event=>{if(event.target===dialog)dialog.close();};document.body.appendChild(dialog);}dialog.innerHTML='<button type="button" aria-label="关闭" onclick="closePostMedia()">×</button><img src="'+safe(url)+'" alt="完整旅行图片">';if(!dialog.open)dialog.showModal();};
+  window.closePostMedia=()=>document.getElementById('postMediaDialog')?.close();
+  const imageOpenTimers=new WeakMap(), pointerTapTimes=new WeakMap(), pointerDoubleTaps=new WeakSet();
+  document.addEventListener('pointerdown',event=>{
+    const imageButton=event.target.closest?.('[data-post-media="feed"]');
+    if(!imageButton)return;
+    const now=Date.now(),last=pointerTapTimes.get(imageButton),timer=imageOpenTimers.get(imageButton);
+    if(last&&now-last<500){pointerTapTimes.delete(imageButton);pointerDoubleTaps.add(imageButton);if(timer){clearTimeout(timer);imageOpenTimers.delete(imageButton);}return;}
+    pointerTapTimes.set(imageButton,now);
+    window.setTimeout(()=>{if(pointerTapTimes.get(imageButton)===now)pointerTapTimes.delete(imageButton);},550);
+  },true);
+  document.addEventListener('click',event=>{
+    const target=event.target;
+    const openTrigger=target.closest?.('[data-post-open-trigger]');
+    if(openTrigger){const cardNode=openTrigger.closest('.post-card');cardNode?.querySelectorAll('[data-post-media="feed"]').forEach(button=>{const timer=imageOpenTimers.get(button);if(timer){clearTimeout(timer);imageOpenTimers.delete(button);}});}
+    const imageButton=target.closest?.('[data-post-media]');
+    if(imageButton){
+      event.preventDefault();
+      if(imageButton.dataset.postMedia!=='feed'){window.openPostMedia(imageButton.dataset.mediaUrl);return;}
+      const postId=imageButton.dataset.postId;
+      if(event.detail===0){window.openPostDetail(postId);return;}
+      if(pointerDoubleTaps.has(imageButton)){pointerDoubleTaps.delete(imageButton);window.likeCommunityPost?.(postId);return;}
+      const pending=imageOpenTimers.get(imageButton);
+      if(pending){clearTimeout(pending);imageOpenTimers.delete(imageButton);window.likeCommunityPost?.(postId);return;}
+      imageOpenTimers.set(imageButton,setTimeout(()=>{imageOpenTimers.delete(imageButton);window.openPostDetail(postId);},520));
+    }
+    const mapButton=target.closest?.('[data-community-location]');
+    if(mapButton){window.openCommunityLocation?.(mapButton.dataset.communityLocation);return;}
+    const deleteButton=target.closest?.('[data-comment-delete]');
+    if(deleteButton){window.deleteCommunityComment?.(deleteButton.dataset.commentDelete);}
+  });
+  window.TravelPostUI={safe,card,routeCard,routeStats,points,get:id=>registry.get(id),all:()=>[...registry.values()],getActiveDetail:id=>activeDetail&&String(activeDetail.id)===String(id)?activeDetail.post:null,refreshDetail:refreshPostDetail};
 }());

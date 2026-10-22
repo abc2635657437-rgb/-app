@@ -57,7 +57,7 @@ function renderSeasonal(){
     if(document.body.classList.contains('journal-preview')){
       season.options[0].textContent=copy('不限季节','All seasons');
       const head=root.closest('.where-now').querySelector('.head .muted');if(head)head.textContent=destinationSeason==='auto'?copy('实拍目的地','Photo destinations'):copy('已核实的季节精选','Verified seasonal picks');
-      if(destinationSeason==='auto'){import('./destination-directory.js?v=4').then(m=>m.renderDestinationDirectory(destinationRegion));return;}
+      if(destinationSeason==='auto'){import('./destination-directory.js?v=5').then(m=>m.renderDestinationDirectory(destinationRegion));return;}
       document.getElementById('destinationCountryControls')?.remove();
     }
     root.innerHTML=items.length?items.map(source=>{const item=localized(source);return '<article class="where-now-card image-loading" data-season="'+safe(source.id)+'"><img alt="'+safe(item.title)+'"><div><small>'+safe(item.country)+' · '+safe(item.city)+'</small><h3>'+safe(item.title)+'</h3><p>'+safe(item.reason)+'</p><b>'+safe(item.experience)+'</b><em>'+safe(item.seasonalFood)+'</em><button onclick="openSeasonalDestination(\''+safe(source.id)+'\')">'+copy('查看路线','View route')+' →</button></div></article>';}).join(''):'<p class="muted">'+copy('该区域精选内容仍在核实；地图中可继续查看地点。','Curated content for this region is being verified. Explore places on the map.')+'</p>';

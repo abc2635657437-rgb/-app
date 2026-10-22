@@ -1,14 +1,21 @@
-let country='',page=0,requestId=0,lastRegion='',root;
+let country='',page=0,requestId=0,lastRegion='',activeCategory='',root;
 const t=(zh,en)=>window.TravelWorldI18n?.language?.()==='en'?en:zh;
 const english=()=>window.TravelWorldI18n?.language?.()==='en';
-export async function renderDestinationDirectory(region){
+const categoryIds=new Set(['natural','city','culture','island','old-town']);
+export function filterDestinationCategory(category=''){
+  const next=categoryIds.has(category)?category:'';
+  if(next!==activeCategory){activeCategory=next;country='';page=0;}
+  return renderDestinationDirectory(lastRegion||'world');
+}
+window.filterDestinationCategory=filterDestinationCategory;
+export async function renderDestinationDirectory(region=lastRegion||'world'){
   root=document.getElementById('whereNowGrid');if(!root)return;
   if(region!==lastRegion){lastRegion=region;country='';page=0;}
   const sequence=++requestId;root.replaceChildren();
   let controls=document.getElementById('destinationCountryControls');if(!controls){controls=document.createElement('div');controls.id='destinationCountryControls';root.before(controls);}controls.replaceChildren();
   const feedback=document.createElement('p');feedback.className='destination-feedback';feedback.setAttribute('role','status');feedback.textContent=t('正在载入真实地点与照片…','Loading sourced places and photographs…');root.append(feedback);
   try{
-    const response=await fetch('/api/map/destinations?region='+encodeURIComponent(region)+'&country='+country+'&page='+page),data=await response.json();if(sequence!==requestId)return;if(!response.ok)throw new Error();
+    const response=await fetch('/api/map/destinations?region='+encodeURIComponent(region)+'&country='+country+'&page='+page+'&category='+encodeURIComponent(activeCategory)),data=await response.json();if(sequence!==requestId)return;if(!response.ok)throw new Error();
     const names=new Intl.DisplayNames([t('zh','en')],{type:'region'}),label=document.createElement('label');label.textContent=t('国家 / 地区','Country / region');const select=document.createElement('select');select.setAttribute('aria-label',label.textContent);
     [['',t('全部国家 / 地区','All countries / regions')],...data.countries.map(code=>[code,names.of(code)])].forEach(([value,text])=>{const option=document.createElement('option');option.value=value;option.textContent=text;option.selected=value===country;select.append(option);});select.onchange=()=>{country=select.value;page=0;renderDestinationDirectory(region);};label.append(select);controls.append(label);
     const total=document.createElement('small');total.textContent=data.total+t(' 个有来源的地点 · 景点目录，非完整行程',' sourced places · place directory, not full itineraries');controls.append(total);

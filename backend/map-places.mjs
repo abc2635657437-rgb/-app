@@ -46,6 +46,20 @@ export function regionPlaces(places,region,country=''){
   return places.filter(p=>(regionCountries[region]||[]).includes(p.countryCode)&&(!country||p.countryCode===country));
 }
 
+const destinationCategoryGroups={
+  natural:new Set(['amusement-park','beach','botanical-garden','cave','garden','island','lake','mountain','park','waterfall','zoo']),
+  city:new Set(['bridge','canal','city-gate','fountain','lighthouse','market','square','tower']),
+  culture:new Set(['archaeological-site','attraction','castle','cathedral','cemetery','church','fortification','memorial','monastery','monument','mosque','museum','opera-house','palace','religious-site','shinto-shrine','ship','statue','synagogue','temple','theatre']),
+  island:new Set(['beach','island']),
+  'old-town':new Set(['archaeological-site','castle','city-gate','fortification','market','palace','square','temple'])
+};
+export function destinationCategoryMatches(place,category=''){
+  return !category||destinationCategoryGroups[category]?.has(String(place.category||'').toLocaleLowerCase())===true;
+}
+export function destinationCategoryPlaces(places,category=''){
+  return places.filter(place=>destinationCategoryMatches(place,category));
+}
+
 export function popularCityPlaces(places,region='world',country='',limit=1000){
   const cities=new Map();
   for(const place of places){
@@ -70,13 +84,13 @@ function cacheSet(key,value){if(cache.size>=CACHE_MAX)cache.delete(cache.keys().
 
 export function installMapPlaces(app){
   app.get('/api/map/destinations',async(req,res)=>{
-    const region=String(req.query.region||'china'),country=String(req.query.country||''),page=Number(req.query.page||0);
-    if(!regionCountries[region]||(country&&!/^[A-Z]{2}$/.test(country))||!Number.isInteger(page)||page<0||page>2000)return res.status(400).json({error:'Invalid destination filter'});
+    const region=String(req.query.region||'china'),country=String(req.query.country||''),category=String(req.query.category||''),page=Number(req.query.page||0);
+    if(!regionCountries[region]||(country&&!/^[A-Z]{2}$/.test(country))||(category&&!destinationCategoryGroups[category])||!Number.isInteger(page)||page<0||page>2000)return res.status(400).json({error:'Invalid destination filter'});
     try{
-      const idx=await placeIndex(),popular=popularCityPlaces(idx.catalog.places,region,'',1000),matches=regionPlaces(popular,region,country);
+      const idx=await placeIndex(),popular=popularCityPlaces(idx.catalog.places,region,'',1000),matches=destinationCategoryPlaces(regionPlaces(popular,region,country),category);
       const countries=[...new Set(popular.map(p=>p.countryCode))].sort();
       res.set('Cache-Control','public, max-age=120');
-      res.json({places:matches.slice(page*8,page*8+8).map(p=>({...p,sourceUrl:'https://www.wikidata.org/wiki/'+p.id})),total:matches.length,countries,page,pageSize:8,license:idx.catalog.license,attribution:idx.catalog.attribution,rankBasis:'Source-provided rank from the curated Wikidata-derived place catalogue; it is not visitor-count data.'});
+      res.json({places:matches.slice(page*8,page*8+8).map(p=>({...p,sourceUrl:'https://www.wikidata.org/wiki/'+p.id})),total:matches.length,countries,page,pageSize:8,category,license:idx.catalog.license,attribution:idx.catalog.attribution,rankBasis:'Source-provided rank from the curated Wikidata-derived place catalogue; it is not visitor-count data.'});
     }catch(_){res.status(503).json({error:'Destination directory unavailable'});}
   });
   app.get('/api/map/places',async(req,res)=>{
