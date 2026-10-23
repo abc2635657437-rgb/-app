@@ -25,8 +25,16 @@
   function media(post, options = {}) {
     const items=(post.post_media||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
     if(!items.length)return '';
+    const displayItems=options.homeFeed?items.slice(0,1):items;
     const mode=options.homeFeed?'feed':'detail';
-    return '<div class="post-gallery '+(items.length>1?'is-multiple':'')+'">'+items.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<button type="button" class="post-media-open" data-post-media="'+mode+'" data-post-id="'+safe(post.id)+'" data-media-url="'+safe(item.public_url)+'" aria-label="'+(options.homeFeed?'轻点查看旅行分享，快速双击点赞':'查看完整图片')+'"><img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'" onerror="this.onerror=null;this.src=\''+photoFallback+'\';this.alt=\'旅行照片暂不可用\';this.classList.add(\'is-fallback\')"></button>').join('')+'</div>';
+    if(options.detail){
+      const english=window.TravelWorldI18n?.language?.()==='en';
+      const slides=items.map((item,index)=>'<div class="post-gallery-slide" role="group" aria-roledescription="slide" aria-label="'+(index+1)+' '+(english?'of':'共')+' '+items.length+'">'+(item.media_type==='video'?'<video controls preload="metadata" aria-label="'+(english?'Travel video ':'旅行视频 ')+(index+1)+'" src="'+safe(item.public_url)+'"></video>':'<button type="button" class="post-media-open" data-post-media="detail" data-post-id="'+safe(post.id)+'" data-media-url="'+safe(item.public_url)+'" aria-label="'+(english?'Open photo ':'查看第 ')+(index+1)+(english?'':' 张图片')+'"><img loading="lazy" decoding="async" draggable="false" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'" onerror="this.onerror=null;this.src=\''+photoFallback+'\';this.alt=\'旅行照片暂不可用\';this.classList.add(\'is-fallback\')"></button>')+'</div>').join('');
+      const pagination=items.length>1?'<nav class="post-gallery-pagination" aria-label="'+(english?'Photo pagination':'照片分页')+'">'+items.map((_,index)=>'<button type="button" data-post-gallery-index="'+index+'" aria-label="'+(english?'Item ':'第 ')+(index+1)+(english?' of ':' 项，共 ')+items.length+(english?'':' 项')+'" aria-current="'+(index===0)+'"><span></span></button>').join('')+'</nav>':'';
+      const status=(english?'Item 1 of ':'第 1 项，共 ')+items.length+(english?'':' 项');
+      return '<div class="post-gallery post-gallery-carousel '+(items.length>1?'is-multiple':'is-single')+'" data-post-gallery="true"><div class="post-gallery-track" data-post-gallery-track role="region" aria-roledescription="carousel" aria-label="'+(english?'Travel photos':'旅行照片轮播')+'" tabindex="0">'+slides+'</div>'+pagination+'<span class="post-gallery-announcement" data-post-gallery-status aria-live="polite">'+status+'</span></div>';
+    }
+    return '<div class="post-gallery '+(displayItems.length>1?'is-multiple':'')+'">'+displayItems.map((item,index)=>item.media_type==='video'?'<video controls preload="metadata" src="'+safe(item.public_url)+'"></video>':'<button type="button" class="post-media-open" data-post-media="'+mode+'" data-post-id="'+safe(post.id)+'" data-media-url="'+safe(item.public_url)+'" aria-label="'+(options.homeFeed?'轻点查看旅行分享，快速双击点赞':'查看完整图片')+'"><img loading="lazy" decoding="async" src="'+safe(item.public_url)+'" alt="'+safe(post.title||`旅行照片 ${index+1}`)+'" onerror="this.onerror=null;this.src=\''+photoFallback+'\';this.alt=\'旅行照片暂不可用\';this.classList.add(\'is-fallback\')"></button>').join('')+'</div>';
   }
   function routeCard(route) {
     if(!route)return '';
@@ -58,11 +66,72 @@
     }
     if(options.detail){
       const mapAction=post.location_name?'<button type="button" class="post-map" data-community-location="'+safe(post.city||post.location_name)+'">查看地图</button>':'';
-      return '<article class="post-card home-feed-card post-detail-card" data-post-id="'+id+'">'+media(post)+'<div class="post-content">'+author+'<h1 class="post-title" id="post-detail-title" data-post-title tabindex="-1">'+title+'</h1>'+copy+location+routeCard(post.route)+'<div class="post-actions">'+like+commentAction+favorite+mapAction+'</div>'+commentForm+commentList+'</div></article>';
+      return '<article class="post-card home-feed-card post-detail-card" data-post-id="'+id+'">'+media(post,{detail:true})+'<div class="post-content">'+author+'<h1 class="post-title" id="post-detail-title" data-post-title tabindex="-1">'+title+'</h1>'+copy+location+routeCard(post.route)+'<div class="post-actions">'+like+commentAction+favorite+mapAction+'</div>'+commentForm+commentList+'</div></article>';
     }
     return '<article class="post-card'+(options.compact?' home-feed-card':'')+'" data-post-id="'+id+'">'+media(post)+'<div class="post-content">'+author+'<button type="button" class="post-open" data-post-open-trigger="true" onclick="openPostDetail(\''+id+'\')" aria-label="查看帖子详情"><h3 class="post-title">'+title+'</h3>'+copy+'</button>'+routeCard(post.route)+ownerActions+'<div class="post-actions">'+like+commentAction+favorite+'</div>'+commentForm+commentList+'</div></article>';
   }
   let activeDetail=null, detailRequest=0, detailController=null;
+  function setupPostGalleries(root){
+    root?.querySelectorAll?.('.post-gallery-carousel:not([data-gallery-ready])').forEach(gallery=>{
+      const track=gallery.querySelector('[data-post-gallery-track]');
+      const slides=[...(track?.children||[])];
+      if(!track||!slides.length)return;
+      gallery.dataset.galleryReady='true';
+      const dots=[...gallery.querySelectorAll('[data-post-gallery-index]')];
+      const status=gallery.querySelector('[data-post-gallery-status]');
+      let frame=0,drag=null;
+      const announce=()=>{
+        frame=0;
+        const width=track.clientWidth||1,index=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/width)));
+        dots.forEach((dot,i)=>dot.setAttribute('aria-current',String(i===index)));
+        if(status)status.textContent=window.TravelWorldI18n?.language?.()==='en'?'Item '+(index+1)+' of '+slides.length:'第 '+(index+1)+' 项，共 '+slides.length+' 项';
+      };
+      const goTo=index=>{
+        const bounded=Math.max(0,Math.min(slides.length-1,index));
+        track.scrollTo({left:slides[bounded].offsetLeft,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+        announce();
+      };
+      track.addEventListener('scroll',()=>{if(!frame)frame=window.requestAnimationFrame(announce);},{passive:true});
+      gallery.addEventListener('click',event=>{
+        const dot=event.target.closest?.('[data-post-gallery-index]');
+        if(dot)goTo(Number(dot.dataset.postGalleryIndex));
+      });
+      gallery.addEventListener('keydown',event=>{
+        if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+        const index=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/(track.clientWidth||1))));
+        const next=event.key==='ArrowLeft'?index-1:event.key==='ArrowRight'?index+1:event.key==='Home'?0:slides.length-1;
+        event.preventDefault();goTo(next);
+      });
+      track.addEventListener('pointerdown',event=>{
+        if(event.pointerType!=='mouse'||event.button!==0||event.target.closest?.('video,.post-gallery-pagination'))return;
+        drag={pointerId:event.pointerId,startX:event.clientX,startScroll:track.scrollLeft,moved:false,captured:false};
+      });
+      track.addEventListener('pointermove',event=>{
+        if(!drag||drag.pointerId!==event.pointerId)return;
+        const delta=event.clientX-drag.startX;
+        if(!drag.moved&&Math.abs(delta)<5)return;
+        drag.moved=true;track.classList.add('is-dragging');
+        if(!drag.captured){track.setPointerCapture?.(event.pointerId);drag.captured=true;}
+        track.scrollLeft=drag.startScroll-delta;event.preventDefault();
+      });
+      const finishDrag=event=>{
+        if(!drag||drag.pointerId!==event.pointerId)return;
+        if(drag.moved)gallery.dataset.suppressClickUntil=String(Date.now()+450);
+        track.classList.remove('is-dragging');drag=null;
+      };
+      track.addEventListener('pointerup',finishDrag);
+      track.addEventListener('pointercancel',finishDrag);
+      track.addEventListener('lostpointercapture',()=>{track.classList.remove('is-dragging');drag=null;});
+      announce();
+    });
+  }
+  document.addEventListener('click',event=>{
+    const gallery=event.target.closest?.('.post-gallery-carousel');
+    if(!gallery)return;
+    if(Number(gallery.dataset.suppressClickUntil||0)>Date.now()){
+      event.preventDefault();event.stopPropagation();gallery.dataset.suppressClickUntil='0';return;
+    }
+  },true);
   function favoriteSet(){return window.getCommunityFavoriteIds?.()||new Set();}
   function refreshPostDetail(id,options={}){
     if(!activeDetail||String(activeDetail.id)!==String(id))return;
@@ -71,6 +140,7 @@
     const value=options.clearComment?'':options.commentValue??current?.value??'';
     const scrollTop=dialog.scrollTop;
     body.innerHTML=card(activeDetail.post,{detail:true,favoriteIds:favoriteSet(),commentValue:value});
+    setupPostGalleries(body);
     dialog.scrollTop=scrollTop;
     const focus=options.focusAction==='comment'?dialog.querySelector('[data-comment-input="'+CSS.escape(String(id))+'"]'):options.focusAction?dialog.querySelector('[data-post-action="'+options.focusAction+'"]'):null;
     focus?.focus({preventScroll:true});
@@ -96,6 +166,7 @@
       if(request!==detailRequest||!dialog.open)return;
       activeDetail={id,post:item};
       dialog.querySelector('.post-detail-content').innerHTML=card(item,{detail:true,favoriteIds:favoriteSet()});
+      setupPostGalleries(dialog.querySelector('.post-detail-content'));
       dialog.setAttribute('aria-labelledby','post-detail-title');
       dialog.querySelector('[data-post-title]')?.focus({preventScroll:true});
     }catch(error){

@@ -1,7 +1,7 @@
 (function () {
   const css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = '/modules/theme/selected-product-ui.css?v=19';
+  css.href = '/modules/theme/selected-product-ui.css?v=22-home-reference-replica';
   document.head.append(css);
   const t = (zh, en) => window.TravelWorldI18n?.language?.() === 'en' ? en : zh;
   const auth = () => window.TravelWorldAuth;
