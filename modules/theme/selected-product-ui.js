@@ -1,7 +1,7 @@
 (function () {
   const css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = '/modules/theme/selected-product-ui.css?v=12';
+  css.href = '/modules/theme/selected-product-ui.css?v=19';
   document.head.append(css);
   const t = (zh, en) => window.TravelWorldI18n?.language?.() === 'en' ? en : zh;
   const auth = () => window.TravelWorldAuth;
@@ -12,6 +12,7 @@
   let stops = [];
   let buddyGroupChats = window.getBuddyChatThreads?.() || [];
   let chatFilter = 'all';
+  let buddyApplicationDirection = 'received';
   const icon = {
     home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
     map: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></svg>',
@@ -138,18 +139,29 @@
       if (kicker) { kicker.before(topLine); topLine.append(kicker); }
     }
     ensureProfileButton(topLine);
-    setExploreView(document.body.dataset.exploreMode || 'list', false);
+    setExploreView(document.body.dataset.exploreMode || 'map', false);
+    const compactMapTools = () => {
+      const card = map.querySelector('.map-card-primary');
+      if (!card) return;
+      const controls = card.querySelector('.map-controls');
+      const presence = card.querySelector('#mapShareLocation')?.closest('.row');
+      if (!controls && !presence) return;
+      let tools = card.querySelector('.selected-map-tools');
+      if (!tools) {
+        tools = document.createElement('details');
+        tools.className = 'selected-map-tools';
+        tools.innerHTML = '<summary>' + t('地图工具','Map tools') + '</summary>';
+        card.insertBefore(tools, controls || presence || card.querySelector('#mapCanvas'));
+      }
+      if (controls && controls.parentElement !== tools) tools.append(controls);
+      if (presence && presence.parentElement !== tools) tools.append(presence);
+    };
+    compactMapTools();
     const where = document.getElementById('whereNow');
     if (where) {
       const title = where.querySelector('.head h2');
-      if (title) title.textContent = t('目的地灵感','Destination inspiration');
-      let subtitle = where.querySelector('.selected-destination-subtitle');
-      if (!subtitle && title) {
-        subtitle = document.createElement('p');
-        subtitle.className = 'selected-destination-subtitle';
-        subtitle.textContent = t('从山川湖海到人文古迹，发现下一段旅程的灵感。','From mountains and coastlines to culture and history, find inspiration for your next journey.');
-        title.after(subtitle);
-      }
+      if (title) title.textContent = t('目的地','Destinations');
+      where.querySelector('.selected-destination-subtitle')?.remove();
       const heading = where.querySelector('.head');
       heading?.querySelector('small')?.setAttribute('hidden', '');
       let mapLink = heading?.querySelector('.selected-explore-map-link');
@@ -186,6 +198,7 @@
       }
       const categoryLabels = { all: ['全部','All'], natural: ['自然','Nature'], city: ['城市','City'], culture: ['文化','Culture'], island: ['海岛','Islands'], 'old-town': ['古镇','Old towns'] };
       categoryTabs.querySelectorAll('[data-destination-category]').forEach(button => { button.textContent = t(...categoryLabels[button.dataset.destinationCategory]); });
+      if (intro.nextElementSibling !== categoryTabs) intro.after(categoryTabs);
       let extraFilters = map.querySelector('.selected-explore-extra-filters');
       if (!extraFilters) {
         extraFilters = document.createElement('details');
@@ -222,7 +235,7 @@
     const next = mode === 'map' ? 'map' : 'list';
     document.body.dataset.exploreMode = next;
     document.querySelectorAll('[data-explore-view]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.exploreView === next)));
-    if (next === 'map') window.loadMap?.();
+    if (next === 'map' && document.getElementById('map')?.classList.contains('active')) window.loadMap?.();
     if (scroll) document.querySelector('.selected-explore-intro')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -283,9 +296,14 @@
     if (!request) {
       request = document.createElement('button');
       request.type = 'button'; request.className = 'selected-request-card';
-      request.innerHTML = '<span class="selected-request-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M2.5 21v-1.5A6.5 6.5 0 0 1 9 13a6.5 6.5 0 0 1 6.5 6.5V21M19 8v8M15 12h8"/></svg></span><span><b>消息申请</b><small>查看新的好友申请或同行邀请</small></span><span aria-hidden="true">›</span>';
+      request.innerHTML = '<span class="selected-request-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M2.5 21v-1.5A6.5 6.5 0 0 1 9 13a6.5 6.5 0 0 1 6.5 6.5V21M19 8v8M15 12h8"/></svg></span><span><b>' + esc(t('旅友申请','Trip requests')) + '</b><small>' + esc(t('集中查看收到与发出的同行申请','View incoming and sent trip requests together')) + '</small></span><span aria-hidden="true">›</span>';
       tabs.after(request);
-      request.onclick = () => { window.go('friends'); document.getElementById('incomingApplications')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+      request.onclick = () => {
+        window.go('friends');
+        window.setTimeout(() => {
+          if (!window.openBuddyApplications?.('received')) document.getElementById('incomingApplications')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 40);
+      };
     }
     let privateBlock = messages.querySelector('#selectedPrivateBlock');
     if (!privateBlock) {
@@ -377,6 +395,68 @@
     renderStops();
   }
 
+  function setBuddyApplicationDirection(friends, direction) {
+    buddyApplicationDirection = direction === 'sent' ? 'sent' : 'received';
+    friends.querySelectorAll('[data-buddy-application-tab]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.buddyApplicationTab === buddyApplicationDirection)));
+    friends.querySelectorAll('[data-buddy-application-panel]').forEach(panel => { panel.hidden = panel.dataset.buddyApplicationPanel !== buddyApplicationDirection; });
+  }
+
+  function setupBuddyApplicationHub(friends) {
+    const incoming = friends.querySelector('#incomingApplications');
+    const outgoing = friends.querySelector('#outgoingApplications');
+    if (!incoming || !outgoing) return null;
+
+    let hub = friends.querySelector('#selectedBuddyApplicationHub');
+    if (!hub) {
+      hub = document.createElement('section');
+      hub.id = 'selectedBuddyApplicationHub';
+      hub.className = 'selected-buddy-applications';
+      hub.tabIndex = -1;
+      hub.setAttribute('aria-labelledby', 'selectedBuddyApplicationsTitle');
+      hub.innerHTML = '<div class="selected-application-heading"><div><span class="selected-application-kicker">TRAVEL APPLICATIONS</span><h2 id="selectedBuddyApplicationsTitle">' + esc(t('旅友申请','Travel requests')) + '</h2><p>' + esc(t('收到的邀请和已发出的申请，都在这里查看。','Incoming and sent trip requests, together in one place.')) + '</p></div></div><div class="journal-tabs selected-application-tabs" role="group" aria-label="' + esc(t('申请类型','Request type')) + '"><button type="button" data-buddy-application-tab="received" aria-pressed="true" aria-controls="selectedBuddyApplicationsReceived"><span>' + esc(t('收到的申请','Received')) + '</span><span class="selected-application-count" data-application-count="received" hidden></span></button><button type="button" data-buddy-application-tab="sent" aria-pressed="false" aria-controls="selectedBuddyApplicationsSent"><span>' + esc(t('发出的申请','Sent')) + '</span><span class="selected-application-count" data-application-count="sent" hidden></span></button></div><div id="selectedBuddyApplicationsReceived" class="selected-buddy-application-panel" data-buddy-application-panel="received" role="region" aria-label="' + esc(t('收到的申请','Received requests')) + '"></div><div id="selectedBuddyApplicationsSent" class="selected-buddy-application-panel" data-buddy-application-panel="sent" role="region" aria-label="' + esc(t('发出的申请','Sent requests')) + '" hidden></div>';
+      const plans = friends.querySelector('#buddyPlans');
+      if (plans) plans.after(hub); else outgoing.after(hub);
+      hub.querySelectorAll('[data-buddy-application-tab]').forEach(button => {
+        button.addEventListener('click', () => setBuddyApplicationDirection(friends, button.dataset.buddyApplicationTab));
+      });
+    }
+
+    [
+      [incoming, '我收到的申请'],
+      [outgoing, '我发出的申请']
+    ].forEach(([list, label]) => {
+      const legacyHeading = list.previousElementSibling;
+      if (legacyHeading?.classList.contains('head') && legacyHeading.textContent.includes(label)) legacyHeading.remove();
+    });
+
+    const receivedPanel = hub.querySelector('[data-buddy-application-panel="received"]');
+    const sentPanel = hub.querySelector('[data-buddy-application-panel="sent"]');
+    if (incoming.parentElement !== receivedPanel) receivedPanel.append(incoming);
+    if (outgoing.parentElement !== sentPanel) sentPanel.append(outgoing);
+
+    const signedIn = Boolean(auth()?.session?.()?.user?.id);
+    const counts = window.getBuddyApplicationCounts?.() || {};
+    hub.querySelectorAll('[data-application-count]').forEach(badge => {
+      const direction = badge.dataset.applicationCount;
+      const count = Number(counts[direction === 'received' ? 'incoming' : 'outgoing'] || 0);
+      badge.textContent = signedIn ? String(Number.isFinite(count) ? count : 0) : '';
+      badge.hidden = !signedIn;
+    });
+    setBuddyApplicationDirection(friends, buddyApplicationDirection);
+
+    window.openBuddyApplications = direction => {
+      const currentHub = document.getElementById('selectedBuddyApplicationHub');
+      const currentFriends = document.getElementById('friends');
+      if (!currentHub || !currentFriends) return false;
+      setBuddyApplicationDirection(currentFriends, direction);
+      currentHub.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      currentHub.focus({ preventScroll: true });
+      return true;
+    };
+
+    return hub;
+  }
+
   function setupTrip() {
     const friends = document.getElementById('friends');
     const title = friends?.querySelector('.journal-buddy-heading');
@@ -446,6 +526,38 @@
     const filters = friends.querySelector('.journal-trip-filters');
     const tripListHead = [...friends.querySelectorAll('.head')].find(node => /可申请同行|申请同行/.test(node.textContent));
     if (filters && tripListHead && filters.nextElementSibling !== tripListHead) tripListHead.after(filters);
+    setupBuddyApplicationHub(friends);
+
+    const buddyChats = friends.querySelector('#buddyChats');
+    if (buddyChats) {
+      buddyChats.hidden = true;
+      const buddyChatsHeading = buddyChats.previousElementSibling;
+      if (buddyChatsHeading?.classList.contains('head')) buddyChatsHeading.hidden = true;
+    }
+    const emptyRecruitment = friends.querySelector('#buddyPlans > .card.muted');
+    if (emptyRecruitment && emptyRecruitment.dataset.selectedEmptyState !== 'true') {
+      emptyRecruitment.dataset.selectedEmptyState = 'true';
+      emptyRecruitment.classList.add('selected-buddy-empty');
+      emptyRecruitment.setAttribute('aria-labelledby', 'selectedBuddyEmptyTitle');
+      emptyRecruitment.replaceChildren();
+      emptyRecruitment.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 260 120" aria-hidden="true" focusable="false"><path d="M35 92 73 78l28 11 36-20 26 14 34-12 29 18" fill="none" stroke="#d7e0e0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 100h200" fill="none" stroke="#e6e6df" stroke-width="2" stroke-linecap="round"/><g fill="none" stroke="#91a3a8" stroke-linecap="round" stroke-linejoin="round"><path d="M62 37h61v9H62zM70 46v36M115 46v36M64 61h57" stroke-width="3"/><path d="M93 17v20m-9-10h18" stroke-width="3"/><path d="M145 45c0-10 8-18 18-18s18 8 18 18v44h-37z" fill="#f2e8d9" stroke-width="3"/><path d="M154 46v-6a9 9 0 0 1 18 0v6M153 59h20M153 68h20M153 77h13" stroke-width="2.5"/><path d="M141 53c-7 0-12 6-12 13v12c0 7 5 12 12 12m45-37c7 0 12 6 12 13v12c0 7-5 12-12 12" stroke-width="2.5"/></g><path d="M156 93h29" stroke="#d4c2a8" stroke-width="3" stroke-linecap="round"/></svg>');
+      const title = document.createElement('strong');
+      title.id = 'selectedBuddyEmptyTitle';
+      title.textContent = t('暂时没有公开招募的旅行','No open trips yet');
+      const copy = document.createElement('p');
+      copy.textContent = t('发布你的行程，寻找志同道合的旅伴吧。','Share your trip and meet travelers with a similar plan.');
+      const publishTrip = document.createElement('button');
+      publishTrip.type = 'button';
+      publishTrip.className = 'selected-buddy-empty-publish';
+      publishTrip.textContent = t('发布同行','Publish a trip');
+      publishTrip.onclick = () => {
+        composer.open = true;
+        extra.open = true;
+        tripTitle?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        window.setTimeout(() => tripTitle?.focus({ preventScroll: true }), 180);
+      };
+      emptyRecruitment.append(title, copy, publishTrip);
+    }
 
     let mainFields = card.querySelector('.selected-trip-main-fields');
     if (!mainFields) mainFields = document.createElement('div'), mainFields.className = 'selected-trip-main-fields';

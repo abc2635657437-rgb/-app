@@ -40,7 +40,17 @@ export async function renderDestinationDirectory(region=lastRegion||'world'){
       const location=document.createElement('small');
       location.textContent=isEnglish?[countryName,place.destinationCity||place.city].filter(Boolean).join(' · '):countryName;
       caption.append(title,location);card.append(media,caption);
-      card.onclick=()=>window.openSourcedMapPlace?.({...place,destinationCity:place.destinationCity},photo);
+      card.setAttribute('aria-label',t('打开'+displayName+'目的地详情','Open destination details for '+displayName));
+      card.onclick=()=>{
+        const sourcedPlace={...place,destinationCity:place.destinationCity};
+        if(typeof window.openSourcedMapPlace==='function')window.openSourcedMapPlace(sourcedPlace,photo);
+        else if(typeof window.openSelectedCityGuide==='function')window.openSelectedCityGuide(sourcedPlace,photo);
+        else{
+          let message=root.querySelector('.destination-feedback');
+          if(!message){message=document.createElement('p');message.className='destination-feedback';root.prepend(message);}
+          message.setAttribute('role','alert');message.textContent=t('目的地详情暂时无法打开，请稍后重试。','Destination details are temporarily unavailable. Please try again.');
+        }
+      };
       image.onload=()=>media.classList.remove('is-loading');
       image.onerror=()=>{media.remove();const note=document.createElement('small');note.className='destination-photo-missing';note.textContent=t('照片暂不可用','Photograph unavailable');card.prepend(note);};
       root.append(card);

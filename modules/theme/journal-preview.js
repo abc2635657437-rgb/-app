@@ -52,7 +52,7 @@
       if(card&&card.parentElement!==map)map.insertBefore(card,map.querySelector('#mapExplore'));
       setText(map.querySelector('.title'),t('探索','Explore'));
       map.querySelector('.sub')?.setAttribute('hidden','');
-      const plan=document.querySelector('#mapExplore>#dest')?.closest('.card')||document.getElementById('dest')?.closest('.card');if(plan)plan.hidden=true;
+      const plan=document.querySelector('#mapExplore>#dest')?.closest('.card')||document.getElementById('dest')?.closest('.card');if(plan)plan.hidden=new URLSearchParams(location.search).get('preview')!=='apple-home';
     }
     const friends=document.getElementById('friends');
     if(friends&&!friends.querySelector('.journal-buddy-heading')){
@@ -80,5 +80,5 @@
   const observer=new MutationObserver(schedule);decorate();observer.observe(document.querySelector('.app'),{childList:true,subtree:true});
   window.addEventListener('tw-auth-change',schedule);
   new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-  import('./selected-product-ui.js?v=12').catch(error=>console.error('Selected screen UI failed to load:',error));
+  import('./selected-product-ui.js?v=19').catch(error=>console.error('Selected screen UI failed to load:',error));
 }());
